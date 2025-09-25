@@ -9,9 +9,9 @@ import {
 
 export default function Footer() {
   return (
-    <footer className='bg-white text-gray-800 py-8 px-6'>
+    <footer className='bg-white text-gray-800 py-8 px-6 pl-20'>
       {/* Nội dung chính */}
-      <div className='flex flex-col md:flex-row justify-between gap-8 mb-6'>
+      <div className='flex  justify-between items-center gap-8 mb-6 '>
         {/* Giới thiệu */}
         <div className='flex-1'>
           <h2 className='font-bold text-lg'>EVShare</h2>

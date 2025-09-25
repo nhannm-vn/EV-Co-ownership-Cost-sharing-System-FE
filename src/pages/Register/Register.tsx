@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 export default function Register() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-400 via-white to-teal-500 flex items-center justify-center '>
@@ -63,9 +65,9 @@ export default function Register() {
 
               <p className='text-center text-sm text-gray-400'>
                 Already have an account?{' '}
-                <a href='#' className='text-ev hover:underline'>
+                <Link to='/login' className='text-ev hover:underline'>
                   Sign in
-                </a>
+                </Link>
               </p>
             </form>
           </div>
