@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 export default function Login() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-400 via-white to-teal-500 flex items-center justify-center '>
@@ -44,9 +46,9 @@ export default function Login() {
 
               <p className='text-center text-sm text-gray-400'>
                 Don’t have an account?{' '}
-                <a href='#' className='text-ev hover:underline'>
+                <Link to='/register' className='text-ev hover:underline'>
                   Sign up
-                </a>
+                </Link>
               </p>
             </form>
           </div>
