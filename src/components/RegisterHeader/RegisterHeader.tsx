@@ -15,7 +15,7 @@ function RegisterHeader() {
             to='/login'
             className={({ isActive }) =>
               classNames(
-                ' font-semibold  text-center w-32 text-[14px] px-5 py-3 rounded transition duration-300 hover:bg-[#17a984] mr-2',
+                ' font-semibold  text-center w-32 text-[14px] px-5 py-3 rounded  transition duration-300 hover:bg-[#17a984] mr-2',
                 {
                   'text-[#fff] bg-[#1CC29F]': isActive,
                   'text-gray-600': !isActive
@@ -29,7 +29,7 @@ function RegisterHeader() {
             to='/register'
             className={({ isActive }) =>
               classNames(
-                ' font-semibold  text-center w-32 text-[14px] px-5 py-3 rounded transition duration-300 hover:bg-[#17a984]',
+                ' font-semibold  text-center w-32 text-[14px] px-5 py-3 rounded transition duration-300  hover:bg-[#17a984]',
                 {
                   'text-[#fff] bg-[#1CC29F]': isActive,
                   'text-gray-600': !isActive
