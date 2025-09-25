@@ -1,4 +1,5 @@
-import { Link } from 'react-router'
+import classNames from 'classnames'
+import { NavLink } from 'react-router'
 
 function RegisterHeader() {
   return (
@@ -10,15 +11,34 @@ function RegisterHeader() {
         </div>
 
         <div className='flex  justify-between items-center'>
-          <Link to='/' className='text-[#1CC29F] px-6 py-2 rounded'>
+          <NavLink
+            to='/login'
+            className={({ isActive }) =>
+              classNames(
+                ' font-semibold  text-center w-32 text-[14px] px-5 py-3 rounded transition duration-300 hover:bg-[#17a984] mr-2',
+                {
+                  'text-[#fff] bg-[#1CC29F]': isActive,
+                  'text-gray-600': !isActive
+                }
+              )
+            }
+          >
             Login
-          </Link>
-          <Link
-            to='/'
-            className='text-[#fff] font-semibold bg-[#1CC29F] text-center w-32 text-[14px] px-5 py-3 rounded transition duration-300 hover:bg-[#17a984]'
+          </NavLink>
+          <NavLink
+            to='/register'
+            className={({ isActive }) =>
+              classNames(
+                ' font-semibold  text-center w-32 text-[14px] px-5 py-3 rounded transition duration-300 hover:bg-[#17a984]',
+                {
+                  'text-[#fff] bg-[#1CC29F]': isActive,
+                  'text-gray-600': !isActive
+                }
+              )
+            }
           >
             Register
-          </Link>
+          </NavLink>
         </div>
       </div>
     </header>
