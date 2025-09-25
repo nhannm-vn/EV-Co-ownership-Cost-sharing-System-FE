@@ -1,8 +1,12 @@
 export default function ForgotPassword() {
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className='flex flex-col items-center justify-center py-24 bg-gradient-to-br from-emerald-200 via-white to-teal-200'>
       <div className='mb-4'>
-        <img src='src/assets/RegisterLogo.png' alt='Forgot Password' className='mx-auto w-24 h-24 object-contain' />
+        <img
+          src='src/assets/z7049220448378_8b2ec9fc4f2ed8a19a620e26db5eb64f.jpg'
+          alt='Forgot Password'
+          className='mx-auto w-28 h-28 object-contain'
+        />
       </div>
       <div className='mb-6 text-center'>
         <h1 className='text-2xl font-bold mb-2'>Reset your password</h1>
