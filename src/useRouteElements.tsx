@@ -1,9 +1,23 @@
 import { createBrowserRouter } from 'react-router'
-import RegisterHeader from './components/RegisterHeader'
+import RegisterLayout from './layouts/RegisterLayout'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: <RegisterHeader />
+    path: '/login',
+    element: (
+      <RegisterLayout>
+        <Login />
+      </RegisterLayout>
+    )
+  },
+  {
+    path: '/register',
+    element: (
+      <RegisterLayout>
+        <Register />
+      </RegisterLayout>
+    )
   }
 ])
