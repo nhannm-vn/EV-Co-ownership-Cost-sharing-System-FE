@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import path from '../../constants/path'
 
 export default function Login() {
   return (
@@ -46,12 +47,12 @@ export default function Login() {
 
               <p className='text-center text-sm text-gray-400'>
                 Don’t have an account?{' '}
-                <Link to='/register' className='text-ev hover:underline'>
+                <Link to={path.register} className='text-ev hover:underline'>
                   Sign up
                 </Link>
               </p>
               <div className='text-center text-sm text-gray-400'>
-                <Link to='/forgot-password' className='text-ev hover:underline'>
+                <Link to={path.forgotPassword} className='text-ev hover:underline'>
                   Forgot password?
                 </Link>
               </div>
