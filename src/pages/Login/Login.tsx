@@ -1,6 +1,6 @@
 export default function Login() {
   return (
-    <div className='min-h-screen bg-slate-900 flex items-center justify-center'>
+    <div className='min-h-screen bg-gradient-to-br from-emerald-400 via-white to-teal-500 flex items-center justify-center '>
       <div className='container'>
         <div className='grid grid-cols-1 lg:grid-cols-2 min-h-[650px] rounded-2xl overflow-hidden shadow-2xl'>
           {/* Left image */}
@@ -14,7 +14,7 @@ export default function Login() {
 
               {/* Email */}
               <div>
-                <label className='block mb-2 text-sm font-medium text-gray-300'>Email</label>
+                <label className='text-left block mb-2 text-sm font-medium text-gray-300'>Email</label>
                 <input
                   type='email'
                   className='w-full rounded-lg border border-gray-600 bg-slate-800/50 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-ev transition'
@@ -25,7 +25,7 @@ export default function Login() {
 
               {/* Password */}
               <div>
-                <label className='block mb-2 text-sm font-medium text-gray-300'>Password</label>
+                <label className='text-left block mb-2 text-sm font-medium text-gray-300'>Password</label>
                 <input
                   type='password'
                   className='w-full rounded-lg border border-gray-600 bg-slate-800/50 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-ev transition'
