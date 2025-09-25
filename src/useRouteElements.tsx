@@ -3,6 +3,7 @@ import RegisterLayout from './layouts/RegisterLayout'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
+import ForgotPassword from './pages/Forgot-password'
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,14 @@ export const router = createBrowserRouter([
     element: (
       <RegisterLayout>
         <Register />
+      </RegisterLayout>
+    )
+  },
+  {
+    path: '/forgot-password',
+    element: (
+      <RegisterLayout>
+        <ForgotPassword />
       </RegisterLayout>
     )
   }
