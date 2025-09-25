@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import path from '../../constants/path'
 
 export default function Register() {
   return (
@@ -65,7 +66,7 @@ export default function Register() {
 
               <p className='text-center text-sm text-gray-400'>
                 Already have an account?{' '}
-                <Link to='/login' className='text-ev hover:underline'>
+                <Link to={path.login} className='text-ev hover:underline'>
                   Sign in
                 </Link>
               </p>
