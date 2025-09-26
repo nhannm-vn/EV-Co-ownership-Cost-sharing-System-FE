@@ -3,7 +3,7 @@ import { ArrowRightOutlined } from '@ant-design/icons'
 import classnames from 'classnames'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import FAQItem from './components/FAQItems/FAQItem'
+import FAQItem from './components/FAQItems'
 
 export default function Learnmore() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(categories[0].id) // state lưu id hiển thị arrow cho chuẩn

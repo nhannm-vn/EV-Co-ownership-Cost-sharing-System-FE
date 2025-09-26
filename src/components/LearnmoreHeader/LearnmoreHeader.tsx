@@ -12,7 +12,7 @@ export default function LearnmoreHeader() {
             alt='logo'
             className='block w-full h-full object-contain'
           />
-          <div className='ml-2 text-lg font-semibold text-black text-[14px]'>EVShare</div>
+          <div className='ml-2 text-lg font-semibold text-slate-100 text-[14px]'>EVShare</div>
         </Link>
 
         <div className='flex  justify-between items-center'>
