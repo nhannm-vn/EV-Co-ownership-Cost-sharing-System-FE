@@ -11,7 +11,7 @@ export default function Learnmore() {
 
   return (
     <div>
-      <motion.h2
+      <motion.div
         className='bg-slate-100 text-center py-24 '
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -19,9 +19,9 @@ export default function Learnmore() {
         viewport={{ once: true, amount: 0.6 }}
       >
         <h2 className='font-sans font-bold text-5xl text-gray-900'>Frequently Asked Questions</h2>
-      </motion.h2>
+      </motion.div>
 
-      <motion.p
+      <motion.div
         className='flex gap-8 bg-[#E6E6E6] w-full  mx-auto px-48  py-10'
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -81,7 +81,7 @@ export default function Learnmore() {
             return null
           })}
         </div>
-      </motion.p>
+      </motion.div>
     </div>
   )
 }
