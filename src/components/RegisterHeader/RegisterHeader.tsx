@@ -23,7 +23,7 @@ function RegisterHeader() {
             to={path.login}
             className={({ isActive }) =>
               classNames(
-                ' font-semibold text-center w-32 text-[14px] px-5 py-3 rounded  transition duration-300 hover:bg-[#17a984] mr-2',
+                ' font-semibold border border-gray-300 text-center w-32 text-[14px]  py-3 rounded-lg  transition duration-300 hover:bg-[#17a984] mr-2',
                 {
                   'text-[#fff] bg-gradient-to-r from-ev to-cyan-500 px-6': isActive,
                   'text-gray-600': !isActive
@@ -37,11 +37,11 @@ function RegisterHeader() {
             to={path.register}
             className={({ isActive }) =>
               classNames(
-                ' font-semibold  text-center w-32 text-[14px] px-5 py-3 rounded transition duration-300  hover:bg-[#17a984]',
+                ' font-semibold border border-gray-300 text-center w-32 text-[14px] py-3 rounded-lg transition duration-300  hover:bg-[#17a984]',
                 {
                   'text-[#fff] bg-gradient-to-r from-ev to-cyan-500 px-6': isActive,
                   'text-gray-600': !isActive,
-                  'text-[#fff] bg-gradient-to-r from-ev to-cyan-500 px-6 ': route.pathname === '/'
+                  'text-[#fff] bg-gradient-to-r from-ev to-cyan-500 px-6 ': route.pathname === path.home
                 }
               )
             }

@@ -10,6 +10,15 @@ export default {
       colors: {
         orange: '#ee4d2d',
         ev: '#1CC29F'
+      },
+      keyframes: {
+        electricity: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '100%': { backgroundPosition: '200% 50%' }
+        }
+      },
+      animation: {
+        electricity: 'electricity 3s linear infinite'
       }
     }
   },

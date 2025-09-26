@@ -9,7 +9,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className='bg-white text-gray-800 py-8 px-6 pl-20'>
+    <footer className='bg-white text-gray-800 py-12 px-6 pl-20'>
       {/* Nội dung chính */}
       <div className='flex  justify-between items-center gap-8 mb-6 '>
         {/* Giới thiệu */}
