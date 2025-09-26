@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 
 export default function HomeAnimation() {
   return (
-    <section className='relative min-h-[87vh] flex items-center justify-center bg-gradient-to-br from-teal-300 via-cyan-200 to-white overflow-hidden'>
+    <section className='relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-teal-300 via-cyan-200 to-white overflow-hidden'>
       {/* Floating background blob */}
       <motion.div
         className='absolute -top-20 -left-20 w-96 h-96 bg-emerald-500/40 rounded-full blur-3xl'
