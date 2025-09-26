@@ -4,10 +4,11 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import ForgotPassword from './pages/Forgot-password'
+import path from './constants/path'
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: path.home,
     element: (
       <RegisterLayout>
         <Home />
@@ -16,7 +17,7 @@ export const router = createBrowserRouter([
     index: true
   },
   {
-    path: '/login',
+    path: path.login,
     element: (
       <RegisterLayout>
         <Login />
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: '/register',
+    path: path.register,
     element: (
       <RegisterLayout>
         <Register />
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
     )
   },
   {
-    path: '/forgot-password',
+    path: path.forgotPassword,
     element: (
       <RegisterLayout>
         <ForgotPassword />
