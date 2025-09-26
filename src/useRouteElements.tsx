@@ -5,6 +5,8 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import ForgotPassword from './pages/Forgot-password'
 import path from './constants/path'
+import LearnmoreLayout from './layouts/LearnmoreLayout'
+import Learnmore from './pages/Learnmore'
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ export const router = createBrowserRouter([
       <RegisterLayout>
         <ForgotPassword />
       </RegisterLayout>
+    )
+  },
+  {
+    path: path.learnMore,
+    element: (
+      <LearnmoreLayout>
+        <Learnmore />
+      </LearnmoreLayout>
     )
   }
 ])

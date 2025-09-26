@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router'
+import path from '../../../../constants/path'
 
 export default function HomeAnimation() {
   return (
@@ -38,18 +40,18 @@ export default function HomeAnimation() {
             transition={{ delay: 0.6, duration: 0.8 }}
             className='mt-8 flex gap-4 justify-center lg:justify-start'
           >
-            <a
-              href='#get-started'
+            <Link
+              to={path.register}
               className='px-6 py-3 rounded-lg bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700 transition'
             >
               Get Started
-            </a>
-            <a
-              href='#learn-more'
+            </Link>
+            <Link
+              to={path.learnMore}
               className='px-6 py-3 rounded-lg bg-white text-emerald-600 font-semibold shadow border border-emerald-600 hover:bg-emerald-50 transition'
             >
               Learn More
-            </a>
+            </Link>
           </motion.div>
         </div>
 
