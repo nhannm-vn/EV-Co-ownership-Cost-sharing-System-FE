@@ -21,7 +21,7 @@ export default function Learnmore() {
 
   return (
     <Fragment>
-      <FAQWrapper classInput='bg-slate-100 text-center py-16'>
+      <FAQWrapper classInput='bg-slate-100 text-center py-12'>
         <FAQTitle />
       </FAQWrapper>
       <FAQWrapper>

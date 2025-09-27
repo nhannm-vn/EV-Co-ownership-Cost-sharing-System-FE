@@ -8,7 +8,7 @@ interface Props {
 
 export default function FAQMainContext({ faqs, activeFaq }: Props) {
   return (
-    <div className=' flex-1 space-y-8 pt-6 '>
+    <div className=' flex-1 space-y-8 pt-7 h-[700px]'>
       {Object.entries(faqs).map(([sectionName, faqsArray], sectionIndex) => {
         // nếu đã chọn category rồi thì mới hiển thị  section khớp
         if (sectionName === activeFaq) {
