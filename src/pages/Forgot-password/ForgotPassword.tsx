@@ -3,7 +3,7 @@ export default function ForgotPassword() {
     <div className='flex flex-col items-center justify-center py-24 bg-gradient-to-br from-emerald-200 via-white to-teal-200'>
       <div className='mb-4'>
         <img
-          src='src/assets/z7049220448378_8b2ec9fc4f2ed8a19a620e26db5eb64f.jpg'
+          src='src/assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
           alt='Forgot Password'
           className='mx-auto w-28 h-28 object-contain'
         />

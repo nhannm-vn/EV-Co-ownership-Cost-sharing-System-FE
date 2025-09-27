@@ -1,8 +1,4 @@
-type Category = {
-  id: number
-  name: string
-  key: string
-}
+import type { Category, FagSection } from '../../../types/page/learnmore.types'
 
 const categories: Category[] = [
   { id: 1, name: 'Understanding EV-Share', key: 'Understanding-EV-Share' },
@@ -11,14 +7,6 @@ const categories: Category[] = [
   { id: 4, name: 'Car Usage Policy', key: 'Car-Usage-Policy' },
   { id: 5, name: 'Challans / Accident / Thefts', key: 'Challans-Accident-Thefts' }
 ]
-type FAQ = {
-  question: string
-  answer: string
-}
-
-type FagSection = {
-  [key: string]: FAQ[]
-}
 
 const faqs: FagSection = {
   'Understanding-EV-Share': [

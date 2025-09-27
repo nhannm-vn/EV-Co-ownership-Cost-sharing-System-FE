@@ -10,10 +10,16 @@ type FAQItemProps = {
 
 export default function FAQItem({ faq }: FAQItemProps) {
   const [open, setOpen] = useState(false)
+
+  const handleChange = () => {
+    setOpen(!open)
+  }
+
   return (
     <div className='rounded-lg overflow-hidden my-7 shadow-md'>
       <button
-        onClick={() => setOpen(!open)} // nếu bấm vào set thành true
+        // nếu bấm vào set thành true
+        onClick={handleChange}
         className={
           'w-full px-6 py-3 min-h-[64px] bg-[#232529] rounded-xl text-white font-bold text-lg text-left whitespace-nowrap flex items-center justify-between'
         }

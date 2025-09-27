@@ -62,7 +62,7 @@ export default function HomeAnimation() {
           transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
         >
           <img
-            src='src/assets/z7049220448378_8b2ec9fc4f2ed8a19a620e26db5eb64f.jpg'
+            src='src/assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
             alt='EV Car'
             className='w-[75%] max-w-md rounded-xl shadow-2xl'
           />
