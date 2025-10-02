@@ -15,10 +15,16 @@ export default {
         electricity: {
           '0%': { backgroundPosition: '0% 50%' },
           '100%': { backgroundPosition: '200% 50%' }
+        },
+        gradientFlow: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' }
         }
       },
       animation: {
-        electricity: 'electricity 3s linear infinite'
+        electricity: 'electricity 3s linear infinite',
+        gradientFlow: 'gradientFlow 20s ease infinite'
       }
     }
   },
