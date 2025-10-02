@@ -8,6 +8,8 @@ import path from './constants/path'
 import LearnmoreLayout from './layouts/LearnmoreLayout'
 import Learnmore from './pages/Learnmore'
 import NotFound from './pages/NotFound'
+import MainLayout from './layouts/MainLayout'
+import Dashboard from './pages/Dashboard'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -34,6 +36,14 @@ function useRouteElements() {
         <RegisterLayout>
           <Register />
         </RegisterLayout>
+      )
+    },
+    {
+      path: path.dashBoard,
+      element: (
+        <MainLayout>
+          <Dashboard />
+        </MainLayout>
       )
     },
     {
