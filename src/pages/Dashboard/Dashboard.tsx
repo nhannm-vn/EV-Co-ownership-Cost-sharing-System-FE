@@ -1,11 +1,11 @@
-'use client'
 import { motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 
 export default function Dashboard() {
   // Hiệu ứng particles
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-
+  // Xài uffect để giúp lúc nào vào thì hiệu ứng này cũng sẽ chạy hết
+  //và nó sẽ chạy lần đầu tiên khi component render
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -79,7 +79,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className='text-5xl font-extrabold text-center mb-12 tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-400 to-emerald-300 animate-pulse drop-shadow-[0_0_25px_rgba(34,211,238,0.8)]'
+          className='text-5xl font-extrabold text-center mb-14 tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-400 to-emerald-300 animate-pulse drop-shadow-[0_0_25px_rgba(34,211,238,0.8)]'
         >
           ⚡ EV Tech Dashboard
         </motion.h1>

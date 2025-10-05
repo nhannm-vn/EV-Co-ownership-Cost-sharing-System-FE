@@ -267,8 +267,8 @@ export default function Header() {
               style={accountFloatingStyles}
               // before:content-[""]: Tạo phần tử giả ::before (cầu nối vô hình) cao 8px phía trên dropdown
               // Giúp di chuột từ account xuống dropdown dễ dàng hơn, không bị đóng khi qua khoảng trống
-              className='bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[200px] z-50 
-                         before:content-[""] before:absolute before:-top-2 before:left-0 before:right-0 before:h-2'
+              className='bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[180px] ml-5 z-50 
+                         before:content-[""]  before:absolute before:-top-2 before:left-0 before:right-0 before:h-2 '
             >
               <div className='px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors text-gray-800 font-medium'>
                 Tài Khoản Của Tôi
