@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
+import DashboardTitle from './components/DashboardTitle'
+import DashboardCardList from './components/DashboardCardList'
 
 export default function Dashboard() {
   // Hiệu ứng particles
@@ -75,92 +76,9 @@ export default function Dashboard() {
 
       {/* Nội dung Dashboard */}
       <div className='relative z-10 max-w-6xl w-full px-6 py-12'>
-        <motion.h1
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className='text-5xl font-extrabold text-center mb-14 tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-400 to-emerald-300 animate-pulse drop-shadow-[0_0_25px_rgba(34,211,238,0.8)]'
-        >
-          ⚡ EV Tech Dashboard
-        </motion.h1>
-
+        <DashboardTitle />
         {/* 3 ô chức năng */}
-        <motion.div
-          initial='hidden'
-          animate='show'
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.2
-              }
-            }
-          }}
-          className='grid md:grid-cols-3 gap-10'
-        >
-          {/* Create Group */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } }}
-            whileHover={{
-              scale: 1.07,
-              boxShadow: '0 0 35px rgba(34,211,238,0.8)'
-            }}
-            className='flex flex-col bg-gray-900/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 text-center border border-cyan-400/60 transition-all'
-          >
-            <h2 className='text-2xl font-semibold text-cyan-300 mb-4 drop-shadow-[0_0_10px_#22d3ee]'>Create Group</h2>
-            <p className='text-gray-300 mb-6'>Tạo nhóm mới để quản lý và chia sẻ thông tin về xe điện.</p>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className='mt-auto px-5 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-medium shadow-lg hover:shadow-cyan-400/50 transition transform hover:-translate-y-1'
-            >
-              Create
-            </motion.button>
-          </motion.div>
-
-          {/* View Groups */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } }}
-            whileHover={{
-              scale: 1.07,
-              boxShadow: '0 0 35px rgba(168,85,247,0.8)'
-            }}
-            className='flex flex-col bg-gray-900/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 text-center border border-purple-400/60 transition-all'
-          >
-            <h2 className='text-2xl font-semibold text-purple-300 mb-4 drop-shadow-[0_0_10px_#a855f7]'>View Groups</h2>
-            <p className='text-gray-300 mb-6'>Xem danh sách các nhóm xe điện mà bạn đã tham gia.</p>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className='mt-auto px-5 py-2.5 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-medium shadow-lg hover:shadow-purple-400/50 transition transform hover:-translate-y-1'
-            >
-              View
-            </motion.button>
-          </motion.div>
-
-          {/* Enter Code */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } }}
-            whileHover={{
-              scale: 1.07,
-              boxShadow: '0 0 35px rgba(34,197,94,0.8)'
-            }}
-            className='flex flex-col bg-gray-900/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 text-center border border-emerald-400/60 transition-all'
-          >
-            <h2 className='text-2xl font-semibold text-emerald-300 mb-4 drop-shadow-[0_0_10px_#22c55e]'>Enter Code</h2>
-            <p className='text-gray-300 mb-6'>Nhập mã nhóm để tham gia vào cộng đồng EV của bạn.</p>
-            <input
-              type='text'
-              placeholder='Enter code'
-              className='w-full px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition'
-            />
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className='mt-auto px-5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-medium shadow-lg hover:shadow-emerald-400/50 transition transform hover:-translate-y-1'
-            >
-              Join
-            </motion.button>
-          </motion.div>
-        </motion.div>
+        <DashboardCardList />
       </div>
     </div>
   )
