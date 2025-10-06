@@ -22,11 +22,11 @@ export const groupListData = [
     name: 'VF9 - Đà Lạt',
     status: 'Active',
     description: 'Nhóm đồng sở hữu xe VF9 chuyên dùng cho du lịch cuối tuần tại Đà Lạt.'
-  },
-  {
-    id: 'GR005',
-    name: 'VF6 - Cần Thơ',
-    status: 'Pending',
-    description: 'Nhóm đang chờ xét duyệt tỷ lệ sở hữu giữa các thành viên.'
   }
+  // {
+  //   id: 'GR005',
+  //   name: 'VF6 - Cần Thơ',
+  //   status: 'Pending',
+  //   description: 'Nhóm đang chờ xét duyệt tỷ lệ sở hữu giữa các thành viên.'
+  // }
 ]
