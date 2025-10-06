@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import DashboardCardElement from './DashboardCardElement'
+import path from '../../../../constants/path'
 
 export default function DashboardCardList() {
   return (
@@ -25,6 +26,7 @@ export default function DashboardCardList() {
           classHColor: 'drop-shadow-[0_0_10px_#22d3ee] text-cyan-300',
           classButtonColor: 'bg-cyan-500 hover:bg-cyan-600 hover:shadow-cyan-400/50'
         }}
+        moveLink=''
         content={{
           title: 'Create Group',
           body: 'Tạo nhóm mới để quản lý và chia sẻ thông tin về xe điện.',
@@ -40,6 +42,7 @@ export default function DashboardCardList() {
           classHColor: 'drop-shadow-[0_0_10px_#a855f7] text-purple-300',
           classButtonColor: 'bg-purple-500 hover:bg-purple-600 hover:shadow-purple-400/50'
         }}
+        moveLink={path.viewGroups}
         content={{
           title: 'View Groups',
           body: 'Xem danh sách các nhóm xe điện mà bạn đã tham gia.',
@@ -55,6 +58,7 @@ export default function DashboardCardList() {
           classHColor: 'drop-shadow-[0_0_10px_#22c55e] text-emerald-300',
           classButtonColor: 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-400/50'
         }}
+        moveLink=''
         content={{
           title: 'Enter Code', //
           body: 'Nhập mã nhóm để tham gia vào cộng đồng EV của bạn.',

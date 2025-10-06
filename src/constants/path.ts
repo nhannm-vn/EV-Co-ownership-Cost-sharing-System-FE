@@ -4,7 +4,8 @@ const path = {
   register: '/register',
   forgotPassword: '/forgot-password',
   learnMore: '/learn-more',
-  dashBoard: '/dashboard'
+  dashBoard: '/dashboard',
+  viewGroups: '/viewGroups'
 } as const
 
 export default path
