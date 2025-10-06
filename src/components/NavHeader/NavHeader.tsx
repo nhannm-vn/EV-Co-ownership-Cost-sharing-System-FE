@@ -56,10 +56,7 @@ function NavHeader() {
   return (
     <div className='flex items-center gap-3'>
       {/* Notification */}
-      <div
-        onMouseEnter={handleSetState(setIsNotificationOpen)} //
-        onMouseLeave={handleSetState(setIsNotificationOpen)}
-      >
+      <div onMouseEnter={() => setIsNotificationOpen(true)} onMouseLeave={() => setIsNotificationOpen(false)}>
         <div ref={notificationRefs.setReference} className='relative'>
           <BellOutlined className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 cursor-pointer hover:scale-110' />
           {notificationCount > 0 && (
@@ -74,15 +71,15 @@ function NavHeader() {
             ref={notificationRefs.setFloating}
             style={notificationFloatingStyles}
             className='bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[280px] z-50 
-                   before:content-[""] before:absolute before:-top-2 before:left-0 before:right-0 before:h-2'
+                   before:content-[""] before:absolute before:-top-6 before:left-0 before:right-0 before:h-6'
           >
             {notifications.length > 0 && (
               // Container thông báo với scroll logic động
               <div
                 className={`${
                   enableNotificationScroll
-                    ? // Khi enable scroll: có max-height 300px + custom scrollbar
-                      'max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'
+                    ? // Khi enable scroll: có max-height 450px + custom scrollbar (tăng từ 300px để có nhiều không gian hơn)
+                      'max-h-[450px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'
                     : // Khi chưa enable: không có scroll, height tự động theo content (5 items)
                       ''
                 }`}
@@ -95,7 +92,7 @@ function NavHeader() {
                 {getDisplayedNotifications().map((notification) => (
                   <div
                     key={notification.id.toString()}
-                    className={`px-4 py-3 hover:bg-gray-100 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0 ${
+                    className={`px-4 py-3 hover:bg-gray-300 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0 ${
                       // nếu chưa đọc thì nền xanh chữ đen  , đã đọc chữ nhạt hơn xíu
                       !notification.isRead ? 'bg-blue-50 text-gray-900' : 'text-gray-800'
                     }`}
@@ -154,8 +151,8 @@ function NavHeader() {
         // Bọc cả trigger và dropdown trong 1 div
         // Hover vào bất kỳ đâu trong div này (account hoặc dropdown) đều giữ dropdown mở
         // Chỉ khi rời ra ngoài hoàn toàn thì mới đóng
-        onMouseEnter={handleSetState(setIsAccountOpen)}
-        onMouseLeave={handleSetState(setIsAccountOpen)}
+        onMouseEnter={() => setIsAccountOpen(true)}
+        onMouseLeave={() => setIsAccountOpen(false)}
       >
         <div ref={accountRefs.setReference}>
           <Space className='cursor-pointer'>
@@ -175,15 +172,15 @@ function NavHeader() {
             // before:content-[""]: Tạo phần tử giả ::before (cầu nối vô hình) cao 8px phía trên dropdown
             // Giúp di chuột từ account xuống dropdown dễ dàng hơn, không bị đóng khi qua khoảng trống
             className='bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[180px] ml-5 z-50 
-                   before:content-[""]  before:absolute before:-top-2 before:left-0 before:right-0 before:h-2 '
+                   before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 '
           >
-            <div className='px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors text-gray-800 font-medium'>
+            <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
               Tài Khoản Của Tôi
             </div>
-            <div className='px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors text-gray-800 font-medium'>
+            <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
               Đơn Mua
             </div>
-            <div className='px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors text-gray-800 font-medium border-t border-gray-200'>
+            <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium border-t border-gray-200'>
               Đăng Xuất
             </div>
           </div>
