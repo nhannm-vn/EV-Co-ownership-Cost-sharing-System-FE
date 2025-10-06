@@ -10,6 +10,7 @@ import Learnmore from './pages/Learnmore'
 import NotFound from './pages/NotFound'
 import MainLayout from './layouts/MainLayout'
 import Dashboard from './pages/Dashboard'
+import Viewgroups from './pages/Viewgroups'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -52,6 +53,14 @@ function useRouteElements() {
         <RegisterLayout>
           <ForgotPassword />
         </RegisterLayout>
+      )
+    },
+    {
+      path: path.viewGroups,
+      element: (
+        <MainLayout>
+          <Viewgroups />
+        </MainLayout>
       )
     },
     {

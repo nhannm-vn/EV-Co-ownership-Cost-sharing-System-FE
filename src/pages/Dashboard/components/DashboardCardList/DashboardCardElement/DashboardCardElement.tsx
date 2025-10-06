@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
+import { Link } from 'react-router'
 
 interface Props {
   children?: ReactNode
+  moveLink: string
   content: {
     title: string
     body: string
@@ -16,7 +18,7 @@ interface Props {
   }
 }
 
-export default function DashboardCardElement({ color, content, children }: Props) {
+export default function DashboardCardElement({ color, content, children, moveLink }: Props) {
   return (
     <motion.div
       variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } }}
@@ -29,13 +31,13 @@ export default function DashboardCardElement({ color, content, children }: Props
       <h2 className={`text-2xl font-semibold mb-4 ${color.classHColor}`}>{content.title}</h2>
       <p className='text-gray-300 mb-6'>{content.body}</p>
       {children}
-      <motion.button
-        whileTap={{ scale: 0.9 }}
+      <Link
+        to={moveLink}
         className={`mt-auto px-5 py-2.5 rounded-lg text-white font-medium shadow-lg transition transform hover:-translate-y-1
           ${color.classButtonColor}`}
       >
-        {content.button}
-      </motion.button>
+        <motion.button whileTap={{ scale: 0.9 }}>{content.button}</motion.button>
+      </Link>
     </motion.div>
   )
 }
