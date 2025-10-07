@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound'
 import MainLayout from './layouts/MainLayout'
 import Dashboard from './pages/Dashboard'
 import Viewgroups from './pages/Viewgroups'
+import User from './pages/User'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -69,6 +70,14 @@ function useRouteElements() {
         <LearnmoreLayout>
           <Learnmore />
         </LearnmoreLayout>
+      )
+    },
+    {
+      path: path.user,
+      element: (
+        <MainLayout>
+          <User />
+        </MainLayout>
       )
     },
     {

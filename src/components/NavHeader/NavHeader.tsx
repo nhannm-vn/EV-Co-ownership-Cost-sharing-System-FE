@@ -4,6 +4,8 @@ import { useState } from 'react'
 import formatTimeAgo from '../../utils/caculatimeNotification'
 import { notifications } from '../Header/data/test-data'
 import useCustomFloating from '../../hooks/useCustomFloating'
+import { Link } from 'react-router'
+import path from '../../constants/path'
 
 // type AccountFloatingStyles = React.CSSProperties
 // interface Props {
@@ -175,13 +177,13 @@ function NavHeader() {
                    before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 '
           >
             <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
-              Tài Khoản Của Tôi
+              <Link to={path.user}>Tài Khoản Của Tôi</Link>
             </div>
             <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
-              Đơn Mua
+              <Link to=''>Đơn Mua</Link>
             </div>
             <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium border-t border-gray-200'>
-              Đăng Xuất
+              <Link to=''>Đăng Xuất</Link>
             </div>
           </div>
         )}
