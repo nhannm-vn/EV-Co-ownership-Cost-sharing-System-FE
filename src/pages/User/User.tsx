@@ -1,31 +1,31 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Input, DatePicker } from 'antd'
-import dayjs from 'dayjs'
+import Profile from './components/Profile'
+import ChangePassword from './components/ChangePassword'
 
 const currentUser = {
   id: 99,
   name: 'Nguyen Minh Nhan',
   email: 'nhamnmse182080@fpt.edu.vn',
   phone: '0947474747',
-  dob: '1998-05-20',
+  dob: '2004-17-17',
   location: 'Rach Gia',
   avatar: 'src/assets/react.svg',
   role: 'Co-owner'
 }
 
-type ProfileInputs = {
+export type ChangePasswordInputs = {
+  currentPassword: string
+  newPassword: string
+  confirmPassword: string
+}
+
+export type ProfileInputs = {
   name: string
   phone: string
   dob: string
   location: string
-}
-
-type ChangePasswordInputs = {
-  currentPassword: string
-  newPassword: string
-  confirmPassword: string
 }
 
 export default function User() {
@@ -47,22 +47,13 @@ export default function User() {
     }
   })
 
-  const onProfileSubmit = (data: ProfileInputs) => {
-    console.log('Profile updated:', { ...data, avatar: avatarPreview })
-    alert('Profile info updated!')
-  }
-
   // Security form
   const {
-    register,
-    handleSubmit,
+    register: registerChangePassword,
+    handleSubmit: handleChangePasswordSubmit,
     watch,
-    formState: { errors }
+    formState: { errors: changePasswordErrors }
   } = useForm<ChangePasswordInputs>()
-  const onSubmit = (data: ChangePasswordInputs) => {
-    console.log('Change password', data)
-    alert('Password updated!')
-  }
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-black text-slate-100 p-8 flex justify-center'>
@@ -137,139 +128,22 @@ export default function User() {
 
         {/* Profile Info */}
         {tab === 'profile' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className='mt-8'
-          >
-            <h3 className='text-xl font-semibold mb-4'>Edit Profile Info</h3>
-            <form onSubmit={handleProfileSubmit(onProfileSubmit)} className='space-y-5'>
-              <div>
-                <label className='block text-sm mb-1 text-slate-300'>Username</label>
-                <Input
-                  {...registerProfile('name', { required: 'Required' })}
-                  className='w-full px-4 py-2 rounded-xl 
-                      bg-gray-900 border border-gray-700 
-                      text-slate-200 placeholder-slate-500
-                      focus:text-black 
-                      transition-colors'
-                />
-                {profileErrors.name && <p className='text-red-400 text-sm'>{profileErrors.name.message}</p>}
-              </div>
-
-              <div>
-                <label className='block text-sm mb-1 text-slate-300'>Phone</label>
-                <Input
-                  {...registerProfile('phone', { required: 'Required' })}
-                  className='w-full px-4 py-2 rounded-xl 
-                      bg-gray-900 border border-gray-700 
-                      text-slate-200 placeholder-slate-500
-                      focus:text-black 
-                      transition-colors'
-                />
-                {profileErrors.phone && <p className='text-red-400 text-sm'>{profileErrors.phone.message}</p>}
-              </div>
-
-              <div>
-                <label className='block text-sm mb-1 text-slate-300'>Date of Birth</label>
-                <DatePicker
-                  defaultValue={dayjs(currentUser.dob)}
-                  onChange={(date) => setValue('dob', date?.format('YYYY-MM-DD') || '')}
-                  className='
-                      w-full px-4 py-2 rounded-xl
-                      bg-gray-900 border border-gray-700
-                      text-slate-200 placeholder-slate-500
-                      focus-within:bg-white focus-within:text-black
-                      transition-colors
-                    '
-                  style={{ width: '100%' }}
-                />
-              </div>
-
-              <div>
-                <label className='block text-sm mb-1 text-slate-300'>Location</label>
-                <Input
-                  {...registerProfile('location', { required: 'Required' })}
-                  className='w-full px-4 py-2 rounded-xl 
-                      bg-gray-900 border border-gray-700 
-                      text-slate-200 placeholder-slate-500
-                      focus:text-black 
-                      transition-colors'
-                />
-                {profileErrors.location && <p className='text-red-400 text-sm'>{profileErrors.location.message}</p>}
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                type='submit'
-                className='w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 shadow-lg shadow-violet-500/40 hover:shadow-cyan-400/50'
-              >
-                Update Profile
-              </motion.button>
-            </form>
-          </motion.div>
+          <Profile
+            handleProfileSubmit={handleProfileSubmit}
+            registerProfile={registerProfile}
+            profileErrors={profileErrors}
+            setValue={setValue}
+          />
         )}
 
         {/* Security */}
         {tab === 'security' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className='mt-8'
-          >
-            <h3 className='text-xl font-semibold mb-4'>Change Password</h3>
-            <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
-              <div>
-                <label className='block text-sm mb-1 text-slate-300'>Current Password</label>
-                <Input.Password
-                  {...register('currentPassword', { required: 'Required' })}
-                  style={{ boxShadow: 'none' }} //Tắt bóng sáng focus
-                  className='w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-900 text-white [&>input]:text-white [&>input:focus]:text-black transition-colors
-                    !shadow-none focus:!shadow-none'
-                />
-                {errors.currentPassword && <p className='text-red-400 text-sm'>{errors.currentPassword.message}</p>}
-              </div>
-
-              <div>
-                <label className='block text-sm mb-1 text-slate-300'>New Password</label>
-                <Input.Password
-                  {...register('newPassword', {
-                    required: 'Required',
-                    minLength: { value: 6, message: 'Min 6 chars' }
-                  })}
-                  style={{ boxShadow: 'none' }} //Tắt bóng sáng focus
-                  className='w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-900 text-white [&>input]:text-white [&>input:focus]:text-black transition-colors
-                    !shadow-none focus:!shadow-none'
-                />
-                {errors.newPassword && <p className='text-red-400 text-sm'>{errors.newPassword.message}</p>}
-              </div>
-
-              <div>
-                <label className='block text-sm mb-1 text-slate-300'>Confirm Password</label>
-                <Input.Password
-                  {...register('confirmPassword', {
-                    validate: (val) => val === watch('newPassword') || 'Passwords do not match'
-                  })}
-                  style={{ boxShadow: 'none' }} //Tắt bóng sáng focus
-                  className='w-full px-4 py-2 rounded-xl border border-gray-700 bg-gray-900 text-white [&>input]:text-white [&>input:focus]:text-black transition-colors
-                    !shadow-none focus:!shadow-none'
-                />
-                {errors.confirmPassword && <p className='text-red-400 text-sm'>{errors.confirmPassword.message}</p>}
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                type='submit'
-                className='w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 shadow-lg shadow-violet-500/40 hover:shadow-cyan-400/50'
-              >
-                Update Password
-              </motion.button>
-            </form>
-          </motion.div>
+          <ChangePassword
+            handleChangePasswordSubmit={handleChangePasswordSubmit}
+            registerChangePassword={registerChangePassword}
+            changePasswordErrors={changePasswordErrors}
+            watch={watch}
+          />
         )}
       </motion.div>
     </div>
