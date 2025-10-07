@@ -1,6 +1,8 @@
 import { Table, Tag, Tooltip, Avatar, Card } from 'antd'
 import { UsergroupAddOutlined } from '@ant-design/icons'
 import { groupListData } from '../../data/test-data'
+import { useNavigate } from 'react-router'
+import path from '../../../../constants/path'
 
 // ===== CONSTANTS =====
 const STATUS_COLORS: Record<string, string> = {
@@ -83,6 +85,7 @@ const columns = [
 
 // ===== MAIN COMPONENT =====
 export default function DataTable() {
+  const navigate = useNavigate()
   return (
     <Card className='shadow-lg min-h-96'>
       <Table
@@ -92,6 +95,11 @@ export default function DataTable() {
         pagination={false}
         scroll={{ x: 800 }}
         size='large'
+        onRow={(_) => ({
+          onClick: () => {
+            navigate(path.dashBoard)
+          }
+        })}
       />
     </Card>
   )
