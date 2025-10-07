@@ -9,35 +9,37 @@ export default function HeroSection() {
     groupListData.filter((group) => group.status.toLowerCase() === status.toLowerCase()).length
 
   return (
-    <Card className='mb-6 bg-blue-600 text-white'>
-      <div className='text-center py-6'>
-        <h1 className='text-3xl font-bold mb-2'>EV Groups Management</h1>
-        <p className='text-blue-100 mb-6'>View all electric vehicle sharing groups</p>
+    <Card className='mb-6 bg-gradient-to-br from-slate-800/80 via-indigo-800/80 to-purple-800/80 border-indigo-400/30 shadow-[0_0_30px_rgba(79,70,229,0.4)] backdrop-blur-lg'>
+      <div className='text-center py-8'>
+        <h1 className='text-4xl font-bold mb-3 text-white drop-shadow-lg bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent'>
+          EV Groups Management
+        </h1>
+        <p className='text-slate-200 mb-8 text-lg'>View all electric vehicle sharing groups</p>
 
         {/* Thống kê trạng thái */}
-        <div className='flex justify-center items-center gap-6 flex-wrap'>
+        <div className='flex justify-center items-center gap-8 flex-wrap'>
           {/* Total Groups */}
-          <div className='bg-blue-500/30 backdrop-blur-sm px-4 py-3 rounded-lg border border-white/30 w-28 text-center'>
-            <div className='text-2xl font-bold text-white'>{getTotalGroups()}</div>
-            <div className='text-sm text-blue-100'>Total Groups</div>
+          <div className='bg-slate-700/40 backdrop-blur-md px-6 py-4 rounded-xl border border-slate-500/30 w-32 text-center hover:bg-slate-600/40 transition-all duration-300 shadow-lg'>
+            <div className='text-3xl font-bold text-white'>{getTotalGroups()}</div>
+            <div className='text-sm text-slate-300 font-medium'>Total Groups</div>
           </div>
 
           {/* Active Groups */}
-          <div className='bg-green-500/25 backdrop-blur-sm px-4 py-3 rounded-lg border border-green-400/60 w-28 text-center'>
-            <div className='text-2xl font-bold text-green-300'>{getStatusGroup('active')()}</div>
-            <div className='text-sm text-green-200'>Active</div>
+          <div className='bg-green-600/30 backdrop-blur-md px-6 py-4 rounded-xl border border-green-400/40 w-32 text-center hover:bg-green-600/40 transition-all duration-300 shadow-lg'>
+            <div className='text-3xl font-bold text-green-200'>{getStatusGroup('active')()}</div>
+            <div className='text-sm text-green-300 font-medium'>Active</div>
           </div>
 
           {/* Pending Groups */}
-          <div className='bg-yellow-500/25 backdrop-blur-sm px-4 py-3 rounded-lg border border-yellow-400/60 w-28 text-center'>
-            <div className='text-2xl font-bold text-yellow-300'>{getStatusGroup('pending')()}</div>
-            <div className='text-sm text-yellow-200'>Pending</div>
+          <div className='bg-yellow-600/30 backdrop-blur-md px-6 py-4 rounded-xl border border-yellow-400/40 w-32 text-center hover:bg-yellow-600/40 transition-all duration-300 shadow-lg'>
+            <div className='text-3xl font-bold text-yellow-200'>{getStatusGroup('pending')()}</div>
+            <div className='text-sm text-yellow-300 font-medium'>Pending</div>
           </div>
 
           {/* Rejected Groups */}
-          <div className='bg-red-500/25 backdrop-blur-sm px-4 py-3 rounded-lg border border-red-400/60 w-28 text-center'>
-            <div className='text-2xl font-bold text-red-300'>{getStatusGroup('reject')()}</div>
-            <div className='text-sm text-red-200'>Rejected</div>
+          <div className='bg-red-600/30 backdrop-blur-md px-6 py-4 rounded-xl border border-red-400/40 w-32 text-center hover:bg-red-600/40 transition-all duration-300 shadow-lg'>
+            <div className='text-3xl font-bold text-red-200'>{getStatusGroup('reject')()}</div>
+            <div className='text-sm text-red-300 font-medium'>Rejected</div>
           </div>
         </div>
       </div>
