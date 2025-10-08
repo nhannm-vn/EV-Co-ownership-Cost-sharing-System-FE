@@ -12,6 +12,7 @@ import MainLayout from './layouts/MainLayout'
 import Dashboard from './pages/Dashboard'
 import Viewgroups from './pages/Viewgroups'
 import User from './pages/User'
+import OTPInput from './pages/UI-OTP'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -87,6 +88,10 @@ function useRouteElements() {
           <NotFound />
         </RegisterLayout>
       )
+    },
+    {
+      path: '/demoOTP',
+      element: <OTPInput />
     }
   ])
   return routeElements
