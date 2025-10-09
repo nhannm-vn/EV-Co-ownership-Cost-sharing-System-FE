@@ -1,11 +1,18 @@
-import { BellOutlined, GlobalOutlined, UserOutlined } from '@ant-design/icons'
+import {
+  BellOutlined,
+  GlobalOutlined,
+  UserOutlined,
+  SafetyCertificateOutlined,
+  LockOutlined,
+  LogoutOutlined
+} from '@ant-design/icons'
 import { Avatar, Space } from 'antd'
 import { useState } from 'react'
-import formatTimeAgo from '../../utils/caculatimeNotification'
-import { notifications } from '../Header/data/test-data'
-import useCustomFloating from '../../hooks/useCustomFloating'
 import { Link } from 'react-router'
 import path from '../../constants/path'
+import useCustomFloating from '../../hooks/useCustomFloating'
+import formatTimeAgo from '../../utils/caculatimeNotification'
+import { notifications } from '../Header/data/test-data'
 
 // type AccountFloatingStyles = React.CSSProperties
 // interface Props {
@@ -58,7 +65,7 @@ function NavHeader() {
   return (
     <div className='flex items-center gap-3'>
       {/* Notification */}
-      <div onMouseEnter={() => setIsNotificationOpen(true)} onMouseLeave={() => setIsNotificationOpen(false)}>
+      <div onMouseEnter={handleSetState(setIsNotificationOpen)} onMouseLeave={handleSetState(setIsNotificationOpen)}>
         <div ref={notificationRefs.setReference} className='relative'>
           <BellOutlined className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 cursor-pointer hover:scale-110' />
           {notificationCount > 0 && (
@@ -153,8 +160,8 @@ function NavHeader() {
         // Bọc cả trigger và dropdown trong 1 div
         // Hover vào bất kỳ đâu trong div này (account hoặc dropdown) đều giữ dropdown mở
         // Chỉ khi rời ra ngoài hoàn toàn thì mới đóng
-        onMouseEnter={() => setIsAccountOpen(true)}
-        onMouseLeave={() => setIsAccountOpen(false)}
+        onMouseEnter={handleSetState(setIsAccountOpen)}
+        onMouseLeave={handleSetState(setIsAccountOpen)}
       >
         <div ref={accountRefs.setReference}>
           <Space className='cursor-pointer'>
@@ -173,17 +180,54 @@ function NavHeader() {
             style={accountFloatingStyles}
             // before:content-[""]: Tạo phần tử giả ::before (cầu nối vô hình) cao 8px phía trên dropdown
             // Giúp di chuột từ account xuống dropdown dễ dàng hơn, không bị đóng khi qua khoảng trống
-            className='bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[180px] ml-5 z-50 
-                   before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 '
+            className='bg-gradient-to-br from-white via-gray-50 to-gray-100 rounded-xl shadow-2xl border border-gray-200/50 py-3 min-w-[220px] ml-5 z-[60] 
+                   before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 backdrop-blur-sm'
           >
-            <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
-              <Link to={path.profile}>Tài Khoản Của Tôi</Link>
+            {/* Header with user info */}
+            <div className='px-4 py-3 border-b border-gray-200/70 bg-gradient-to-r from-blue-50 to-indigo-50'>
+              <div className='flex items-center gap-3'>
+                <div className='w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center'>
+                  <UserOutlined className='text-white text-sm' />
+                </div>
+                <div>
+                  <div className='text-sm font-semibold text-gray-800'>dn@gmail.com</div>
+                  <div className='text-xs text-gray-500'>Thành viên</div>
+                </div>
+              </div>
             </div>
-            <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
-              <Link to=''>Đơn Mua</Link>
+
+            {/* Menu items */}
+            <div className='py-2'>
+              <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
+                <Link to={path.user} className='flex items-center gap-3'>
+                  <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' />
+                  <span className='group-hover:text-blue-600 transition-colors'>Tài Khoản Của Tôi</span>
+                </Link>
+              </div>
+
+              <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
+                <Link to='' className='flex items-center gap-3'>
+                  <SafetyCertificateOutlined className='text-green-500 group-hover:text-green-600 transition-colors' />
+                  <span className='group-hover:text-green-600 transition-colors'>Cập nhật GPLX & CCCD</span>
+                </Link>
+              </div>
+
+              <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
+                <Link to='' className='flex items-center gap-3'>
+                  <LockOutlined className='text-orange-500 group-hover:text-orange-600 transition-colors' />
+                  <span className='group-hover:text-orange-600 transition-colors'>Đổi mật khẩu</span>
+                </Link>
+              </div>
             </div>
-            <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium border-t border-gray-200'>
-              <Link to=''>Đăng Xuất</Link>
+
+            {/* Logout section */}
+            <div className='border-t border-gray-200/70 mt-2'>
+              <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
+                <Link to='' className='flex items-center gap-3'>
+                  <LogoutOutlined className='text-red-500 group-hover:text-red-600 transition-colors' />
+                  <span className='group-hover:text-red-600 transition-colors'>Đăng Xuất</span>
+                </Link>
+              </div>
             </div>
           </div>
         )}
