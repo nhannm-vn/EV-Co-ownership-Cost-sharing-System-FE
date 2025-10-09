@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard'
 import Viewgroups from './pages/Viewgroups'
 import OTPInput from './pages/UI-OTP'
 import MyAccount from './pages/MyAccount'
+import ChangePassword from './pages/ChangePassword'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -78,6 +79,14 @@ function useRouteElements() {
       element: (
         <MainLayout>
           <MyAccount />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.changePassword,
+      element: (
+        <MainLayout>
+          <ChangePassword />
         </MainLayout>
       )
     },

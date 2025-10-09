@@ -14,18 +14,6 @@ import useCustomFloating from '../../hooks/useCustomFloating'
 import formatTimeAgo from '../../utils/caculatimeNotification'
 import { notifications } from '../Header/data/test-data'
 
-// type AccountFloatingStyles = React.CSSProperties
-// interface Props {
-//   refs: {
-//     accountRefs: UseFloatingReturn['refs']
-//     notificationRefs: UseFloatingReturn['refs']
-//   }
-//   floatingStyles: {
-//     accountFloatingStyles: AccountFloatingStyles
-//     notificationFloatingStyles: AccountFloatingStyles
-//   }
-// }
-
 function NavHeader() {
   // set trạng thái cho ngôn ngữ
   const [lang, setLang] = useState('Tiếng Việt')
@@ -180,7 +168,7 @@ function NavHeader() {
             style={accountFloatingStyles}
             // before:content-[""]: Tạo phần tử giả ::before (cầu nối vô hình) cao 8px phía trên dropdown
             // Giúp di chuột từ account xuống dropdown dễ dàng hơn, không bị đóng khi qua khoảng trống
-            className='bg-gradient-to-br from-white via-gray-50 to-gray-100 rounded-xl shadow-2xl border border-gray-200/50 py-3 min-w-[220px] ml-5 z-[60] 
+            className='bg-gradient-to-br from-white via-gray-50 to-gray-100 rounded-xl shadow-2xl border border-gray-200/50 py-3 min-w-[220px] ml-10 z-[60] 
                    before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 backdrop-blur-sm'
           >
             {/* Header with user info */}
@@ -199,7 +187,7 @@ function NavHeader() {
             {/* Menu items */}
             <div className='py-2'>
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
-                <Link to={path.user} className='flex items-center gap-3'>
+                <Link to={path.profile} className='flex items-center gap-3'>
                   <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' />
                   <span className='group-hover:text-blue-600 transition-colors'>Tài Khoản Của Tôi</span>
                 </Link>
@@ -213,7 +201,7 @@ function NavHeader() {
               </div>
 
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
-                <Link to='' className='flex items-center gap-3'>
+                <Link to={path.changePassword} className='flex items-center gap-3'>
                   <LockOutlined className='text-orange-500 group-hover:text-orange-600 transition-colors' />
                   <span className='group-hover:text-orange-600 transition-colors'>Đổi mật khẩu</span>
                 </Link>
