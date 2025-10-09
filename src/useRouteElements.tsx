@@ -11,8 +11,8 @@ import NotFound from './pages/NotFound'
 import MainLayout from './layouts/MainLayout'
 import Dashboard from './pages/Dashboard'
 import Viewgroups from './pages/Viewgroups'
-import User from './pages/User'
 import OTPInput from './pages/UI-OTP'
+import MyAccount from './pages/MyAccount'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -74,10 +74,10 @@ function useRouteElements() {
       )
     },
     {
-      path: path.user,
+      path: path.profile,
       element: (
         <MainLayout>
-          <User />
+          <MyAccount />
         </MainLayout>
       )
     },

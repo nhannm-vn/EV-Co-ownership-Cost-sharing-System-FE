@@ -177,7 +177,7 @@ function NavHeader() {
                    before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 '
           >
             <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
-              <Link to={path.user}>Tài Khoản Của Tôi</Link>
+              <Link to={path.profile}>Tài Khoản Của Tôi</Link>
             </div>
             <div className='px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors text-gray-800 font-medium'>
               <Link to=''>Đơn Mua</Link>
