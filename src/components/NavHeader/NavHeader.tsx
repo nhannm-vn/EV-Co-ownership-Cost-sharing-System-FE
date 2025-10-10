@@ -24,8 +24,10 @@ function NavHeader() {
   // trạng thái cho phép scroll để xem thêm thông báo
   const [enableNotificationScroll, setEnableNotificationScroll] = useState(false)
 
-  // hàm giúp set các state boolean
-  const handleSetState = (func: React.Dispatch<React.SetStateAction<boolean>>) => () => {
+  // hàm giúp set các state boolean với prevent default để tránh giật dropdown
+  const handleSetState = (func: React.Dispatch<React.SetStateAction<boolean>>) => (e: React.MouseEvent) => {
+    e.preventDefault() // ngăn hành vi mặc định của sự kiện
+    e.stopPropagation() // ngăn không cho sự kiện nổi bọt lên các phần tử cha
     func((prev) => !prev)
   }
 
@@ -53,7 +55,7 @@ function NavHeader() {
   return (
     <div className='flex items-center gap-3'>
       {/* Notification */}
-      <div onMouseEnter={handleSetState(setIsNotificationOpen)} onMouseLeave={handleSetState(setIsNotificationOpen)}>
+      <div onMouseEnter={() => setIsNotificationOpen(true)} onMouseLeave={() => setIsNotificationOpen(false)}>
         <div ref={notificationRefs.setReference} className='relative'>
           <BellOutlined className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 cursor-pointer hover:scale-110' />
           {notificationCount > 0 && (
@@ -71,14 +73,14 @@ function NavHeader() {
                    before:content-[""] before:absolute before:-top-6 before:left-0 before:right-0 before:h-6'
           >
             {notifications.length > 0 && (
-              // Container thông báo với scroll logic động
+              // Container thông báo với scroll logic động và smooth transition
               <div
-                className={`${
+                className={`transition-all duration-500 ease-in-out ${
                   enableNotificationScroll
                     ? // Khi enable scroll: có max-height 450px + custom scrollbar (tăng từ 300px để có nhiều không gian hơn)
-                      'max-h-[450px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'
+                      'max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'
                     : // Khi chưa enable: không có scroll, height tự động theo content (5 items)
-                      ''
+                      'max-h-[400px]'
                 }`}
               >
                 {/* 
