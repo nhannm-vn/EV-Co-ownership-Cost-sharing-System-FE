@@ -1,41 +1,59 @@
+import { motion } from 'framer-motion'
+
 export default function ForgotPassword() {
   return (
-    <div className='flex flex-col items-center justify-center py-24 bg-gradient-to-br from-emerald-200 via-white to-teal-200'>
-      <div className='mb-4'>
-        <img
+    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-500 font-sans'>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className='flex flex-col items-center justify-center p-8 rounded-2xl shadow-2xl bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl text-white w-[380px]'
+      >
+        {/* Logo */}
+        <motion.img
           src='src/assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
           alt='Forgot Password'
-          className='mx-auto w-28 h-28 object-contain'
+          className='w-24 h-24 mb-5 object-contain'
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
         />
-      </div>
-      <div className='mb-6 text-center'>
-        <h1 className='text-2xl font-bold mb-2'>Reset your password</h1>
-        <p className='text-gray-600 text-sm'>Enter your email address and we'll send OTP to reset your password</p>
-      </div>
-      <div className='w-full max-w-xs bg-white p-6 rounded-lg shadow-md'>
-        <div className='flex border-b border-gray-200 mb-5'>
-          <label className='flex-1 py-2 font-bold border-b-2 border-teal-400 bg-transparent cursor-pointer text-gray-900'>
-            E-mail
-          </label>
-        </div>
-        <form>
-          <label className='block mb-2 text-gray-700 text-sm font-medium'>Your email address</label>
+
+        {/* Text */}
+        <h1 className='text-2xl font-bold mb-2 bg-gradient-to-r from-teal-300 to-blue-400 bg-clip-text text-transparent'>
+          Reset your password
+        </h1>
+        <p className='text-sm text-gray-300 text-center mb-6'>
+          Enter your email address and we’ll send an OTP to reset your password
+        </p>
+
+        {/* Form */}
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className='w-full'
+        >
+          <label className='block mb-2 text-gray-200 text-sm font-medium'>Your email address</label>
           <input
             type='email'
-            className='w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-300'
+            className='w-full p-2 mb-4 rounded-md border border-gray-600 bg-slate-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400'
             placeholder='Enter your email'
             required
             name='email'
             autoComplete='email'
           />
-          <button
+
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             type='submit'
-            className='w-full bg-teal-400 hover:bg-teal-500 text-white rounded-md py-2 font-bold text-lg transition-colors'
+            className='w-full bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-300 hover:to-blue-400 text-white font-bold py-2 rounded-md shadow-md transition-all'
           >
-            Reset password
-          </button>
-        </form>
-      </div>
+            Reset Password
+          </motion.button>
+        </motion.form>
+      </motion.div>
     </div>
   )
 }
