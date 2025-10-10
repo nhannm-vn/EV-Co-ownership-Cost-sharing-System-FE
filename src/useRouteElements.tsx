@@ -14,6 +14,7 @@ import Viewgroups from './pages/Viewgroups'
 import OTPInput from './pages/UI-OTP'
 import MyAccount from './pages/MyAccount'
 import ChangePassword from './pages/ChangePassword'
+import UploadLicense from './pages/UploadLicense'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -87,6 +88,14 @@ function useRouteElements() {
       element: (
         <MainLayout>
           <ChangePassword />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.uploadLicense,
+      element: (
+        <MainLayout>
+          <UploadLicense />
         </MainLayout>
       )
     },

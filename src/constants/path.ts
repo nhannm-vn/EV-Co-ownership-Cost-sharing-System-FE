@@ -8,7 +8,8 @@ const path = {
   forgotPassword: '/forgot-password',
   learnMore: '/learn-more',
   dashBoard: '/dashboard',
-  viewGroups: '/viewGroups'
+  viewGroups: '/viewGroups',
+  uploadLicense: '/uploadLicense'
 } as const
 
 export default path
