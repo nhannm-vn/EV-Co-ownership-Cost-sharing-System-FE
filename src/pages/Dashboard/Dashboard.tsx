@@ -26,10 +26,11 @@ export default function Dashboard() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach((p, i) => {
-        // neon glow xanh tím
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 8)
-        gradient.addColorStop(0, 'rgba(96,165,250,0.9)') // xanh dương sáng
-        gradient.addColorStop(1, 'rgba(139,92,246,0)') // tím mờ
+        // neon glow tím
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 10)
+        gradient.addColorStop(0, 'rgba(168,85,247,0.95)') // tím sáng neon
+        gradient.addColorStop(0.4, 'rgba(147,51,234,0.7)') // tím trung
+        gradient.addColorStop(1, 'rgba(126,34,206,0)') // fade tím nhạt
         ctx.fillStyle = gradient
 
         ctx.beginPath()
@@ -41,12 +42,12 @@ export default function Dashboard() {
         if (p.x < 0 || p.x > canvas.width) p.dx *= -1
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1
 
-        // line nối particles
+        // line nối particles (tím mờ dần)
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j]
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y)
           if (dist < 120) {
-            ctx.strokeStyle = `rgba(167,139,250,${1 - dist / 120})` // tím nhạt neon
+            ctx.strokeStyle = `rgba(168,85,247,${1 - dist / 120})`
             ctx.lineWidth = 0.6
             ctx.beginPath()
             ctx.moveTo(p.x, p.y)
@@ -73,17 +74,17 @@ export default function Dashboard() {
             100% { background-position: 0% 50%; }
           }
           .moving-gradient {
-            background: linear-gradient(270deg, #1e1b4b, #2563eb, #3b82f6, #8b5cf6, #9333ea);
+            background: linear-gradient(270deg, #2e1065, #4c1d95, #6d28d9, #9333ea, #a855f7);
             background-size: 600% 600%;
-            animation: gradientFlow 22s ease infinite;
+            animation: gradientFlow 18s ease infinite;
           }
         `}
       </style>
 
       {/* Background gradient + overlay */}
       <div className='absolute inset-0 moving-gradient'></div>
-      <div className='absolute inset-0 bg-black/60 backdrop-blur-md'></div>
-      <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(96,165,250,0.3),rgba(139,92,246,0.25),transparent_75%)]'></div>
+      <div className='absolute inset-0 bg-black/50 backdrop-blur-md'></div>
+      <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.3),rgba(168,85,247,0.2),transparent_70%)]'></div>
 
       {/* Particles */}
       <canvas

@@ -6,6 +6,7 @@ import { changePasswordSchema, type ChangePasswordSchema } from '../../utils/rul
 import FieldInput from './components/FieldInput'
 
 export default function ChangePassword() {
+  // Khởi tạo react-hook-form với schema validation từ Yup
   const {
     register,
     handleSubmit,
@@ -14,46 +15,53 @@ export default function ChangePassword() {
     resolver: yupResolver(changePasswordSchema)
   })
 
-  //state logic giúp xử lí đóng bật xem mật khẩu
+  // State quản lý ẩn/hiện password cho từng field
   const [show, setShow] = useState({
     currentPassword: false,
     newPassword: false,
     confirmPassword: false
   })
 
-  //field này sẽ là một trong "currentPassword" | "newPassword" | "confirmPassword"
-  //con mắt của thằng nào bị chạm vào thì sẽ setState lại
+  // Toggle ẩn/hiện cho từng field (current, new, confirm)
   const toggleShow = (field: keyof typeof show) => {
     setShow((prev) => ({ ...prev, [field]: !prev[field] }))
   }
 
+  // Hàm submit form
   const onSubmit = (data: ChangePasswordSchema) => {
     console.log('Form Submitted:', data)
-    // TODO: call API đổi mật khẩu
+    // TODO: gọi API đổi mật khẩu ở đây
   }
 
   return (
     <div
+      // Nền gradient tím đồng bộ với theme UploadLicense & ProfilePage
       className='min-h-screen flex items-center justify-center 
-                    bg-gradient-to-br from-slate-950 via-purple-950 to-indigo-950 p-6'
+                 bg-gradient-to-br from-[#2b1650] via-[#4b2d82] to-[#7042b8] p-6'
     >
+      {/* Form có hiệu ứng motion fade-in + slide-up */}
       <motion.form
         onSubmit={handleSubmit(onSubmit)}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className='w-full max-w-md bg-white/10 backdrop-blur-xl 
-                   rounded-2xl shadow-2xl border border-white/10 p-8 space-y-6'
+        // Form trong suốt + bo tròn + border tím nhạt + bóng mờ tím lung linh
+        className='w-full max-w-md bg-white/5 backdrop-blur-xl 
+                   rounded-2xl border border-violet-400/30 
+                   shadow-[0_0_35px_rgba(139,92,246,0.5)] 
+                   p-8 space-y-6'
       >
+        {/* Title của form */}
         <h2
-          className='text-2xl font-bold text-center 
-                       bg-gradient-to-r from-indigo-400 to-purple-400 
-                       bg-clip-text text-transparent'
+          className='text-3xl font-extrabold text-center 
+             text-white drop-shadow-[0_0_15px_rgba(192,132,252,0.6)] font-sans'
         >
-          Đổi mật khẩu
+          Change Password
         </h2>
 
+        {/* Nhóm input */}
         <div className='space-y-4'>
+          {/* Input mật khẩu hiện tại */}
           <FieldInput
             label='Current Password'
             name='currentPassword'
@@ -63,6 +71,7 @@ export default function ChangePassword() {
             toggleShow={toggleShow}
             error={errors.currentPassword?.message}
           />
+          {/* Input mật khẩu mới */}
           <FieldInput
             label='New Password'
             name='newPassword'
@@ -72,6 +81,7 @@ export default function ChangePassword() {
             toggleShow={toggleShow}
             error={errors.newPassword?.message}
           />
+          {/* Input xác nhận mật khẩu */}
           <FieldInput
             label='Confirm Password'
             name='confirmPassword'
@@ -83,15 +93,19 @@ export default function ChangePassword() {
           />
         </div>
 
+        {/* Nút submit */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type='submit'
+          // Gradient tím đậm -> tím sáng -> hồng tím, hover lung linh hơn
           className='w-full py-3 rounded-xl font-semibold text-white 
-                     bg-gradient-to-r from-indigo-600 via-purple-700 to-indigo-600
-                     shadow-lg shadow-purple-900/40 hover:shadow-purple-700/60 transition-all'
+                     bg-gradient-to-r from-violet-700 via-purple-600 to-fuchsia-700
+                     shadow-[0_0_25px_rgba(167,139,250,0.7)]
+                     hover:shadow-[0_0_35px_rgba(192,132,252,0.9)]
+                     hover:scale-[1.02] active:scale-95 transition-all'
         >
-          Xác nhận đổi mật khẩu
+          Confirm
         </motion.button>
       </motion.form>
     </div>
