@@ -14,7 +14,7 @@ import Viewgroups from './pages/Viewgroups'
 import OTPInput from './pages/UI-OTP'
 import MyAccount from './pages/MyAccount'
 import ChangePassword from './pages/ChangePassword'
-import UploadLicense from './pages/UploadLicense'
+import CreateGroups from './pages/Creategroups'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -110,6 +110,14 @@ function useRouteElements() {
     {
       path: '/demoOTP',
       element: <OTPInput />
+    },
+    {
+      path: path.createGroups,
+      element: (
+        <MainLayout>
+          <CreateGroups />
+        </MainLayout>
+      )
     }
   ])
   return routeElements

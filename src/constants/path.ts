@@ -9,7 +9,7 @@ const path = {
   learnMore: '/learn-more',
   dashBoard: '/dashboard',
   viewGroups: '/viewGroups',
-  uploadLicense: '/uploadLicense'
+  createGroups: '/createGroups'
 } as const
 
 export default path
