@@ -19,7 +19,7 @@ export const userInfoSchema = yup.object().shape({
   location: yup.string().required('Location is required').min(3, 'Location must be at least 3 characters')
 })
 
-export const sercuritySchema = yup.object().shape({
+export const changePasswordSchema = yup.object({
   currentPassword: yup
     .string()
     .required('Current password is required')
@@ -39,4 +39,4 @@ export const sercuritySchema = yup.object().shape({
 
 export type UserInfoSchema = yup.InferType<typeof userInfoSchema>
 
-export type SercuritySchema = yup.InferType<typeof sercuritySchema>
+export type ChangePasswordSchema = yup.InferType<typeof changePasswordSchema>
