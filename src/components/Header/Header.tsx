@@ -8,7 +8,7 @@ export default function Header() {
       {/* Logo */}
       <Link to={path.dashBoard} className='flex w-28 h-28 items-center mr-24 transition-transform hover:scale-90'>
         <img
-          src='src/assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
+          src='/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
           alt='logo'
           className='block w-full h-full object-contain'
         />

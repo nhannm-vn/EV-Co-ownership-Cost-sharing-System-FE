@@ -53,9 +53,9 @@ function useRouteElements() {
     {
       path: path.forgotPassword,
       element: (
-        <RegisterLayout>
+        <MainLayout>
           <ForgotPassword />
-        </RegisterLayout>
+        </MainLayout>
       )
     },
     {
