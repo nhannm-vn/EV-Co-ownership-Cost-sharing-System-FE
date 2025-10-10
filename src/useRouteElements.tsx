@@ -15,6 +15,7 @@ import OTPInput from './pages/UI-OTP'
 import MyAccount from './pages/MyAccount'
 import ChangePassword from './pages/ChangePassword'
 import CreateGroups from './pages/Creategroups'
+import UploadLicense from './pages/UploadLicense'
 
 function useRouteElements() {
   const routeElements = useRoutes([
