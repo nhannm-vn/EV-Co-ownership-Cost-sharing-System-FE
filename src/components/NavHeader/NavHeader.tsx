@@ -202,7 +202,7 @@ function NavHeader() {
                 </Link>
               </div>
 
-              <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
+              <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-yellow-100  cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.changePassword} className='flex items-center gap-3'>
                   <LockOutlined className='text-orange-500 group-hover:text-orange-600 transition-colors' />
                   <span className='group-hover:text-orange-600 transition-colors'>Đổi mật khẩu</span>
