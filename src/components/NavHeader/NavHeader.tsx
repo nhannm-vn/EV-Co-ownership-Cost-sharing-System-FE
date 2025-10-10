@@ -196,7 +196,7 @@ function NavHeader() {
               </div>
 
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
-                <Link to='' className='flex items-center gap-3'>
+                <Link to={path.uploadLicense} className='flex items-center gap-3'>
                   <SafetyCertificateOutlined className='text-green-500 group-hover:text-green-600 transition-colors' />
                   <span className='group-hover:text-green-600 transition-colors'>Cập nhật GPLX & CCCD</span>
                 </Link>

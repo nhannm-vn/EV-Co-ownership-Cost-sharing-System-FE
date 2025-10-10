@@ -92,6 +92,14 @@ function useRouteElements() {
       )
     },
     {
+      path: path.uploadLicense,
+      element: (
+        <MainLayout>
+          <UploadLicense />
+        </MainLayout>
+      )
+    },
+    {
       path: '*',
       element: (
         <RegisterLayout>
