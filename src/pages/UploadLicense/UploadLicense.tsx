@@ -1,66 +1,119 @@
 import { useMemo, useState } from 'react'
+import { motion } from 'framer-motion'
 import Field from './components/Field'
 
-//Định nghĩa type cho hai loại giấy tờ
+// Định nghĩa type cho 2 loại giấy tờ: GPLX & CCCD
 export type DocType = 'gplx' | 'cccd'
 
 export default function UploadLicense() {
-  //Tạo state lưu hai loại giấy tờ
+  // State lưu file cho 2 loại giấy tờ
   const [docs, setDocs] = useState<Record<DocType, File | null>>({
     gplx: null,
     cccd: null
   })
 
-  //Check xem có đầy đủ cả 2 loại giấy tờ không
+  // Kiểm tra xem đã upload đủ 2 loại chưa
   const isReady = useMemo(() => Boolean(docs.gplx && docs.cccd), [docs])
 
-  //hàm nhận vào loại thấy tờ và set state lại
+  // Hàm thay đổi file cho từng loại giấy tờ
   const handleFileChange = (type: DocType, file: File | null) => {
     setDocs((prev) => ({ ...prev, [type]: file }))
   }
 
-  //hàm hiển thị khi submit thành công
+  // Hàm submit form
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     return !isReady ? alert('Vui lòng upload đủ GPLX và CCCD!') : alert('Upload thành công!')
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1e093d] via-[#2b0f57] to-[#3a0e72] p-4'>
-      {/* Form dùng để quản lí và có thể submit lên server */}
-      <form
+    <div
+      //Nền gradient tím lung linh huyền ảo
+      className='min-h-screen flex items-center justify-center 
+                 bg-gradient-to-br from-[#2a0e37] via-[#5b239d] to-[#8b5cf6]
+                 p-6'
+    >
+      {/* Form chính */}
+      <motion.form
         onSubmit={handleSubmit}
-        className='bg-white/5 backdrop-blur-lg border border-violet-600/40 
-                   rounded-xl shadow-[0_0_30px_rgba(109,40,217,0.6)] 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className='bg-white/5 backdrop-blur-lg 
+                   border border-violet-400/40 
+                   rounded-2xl 
+                   shadow-[0_0_40px_rgba(139,92,246,0.7)] 
                    p-6 w-full max-w-md space-y-6'
       >
-        <h1
-          className='text-2xl font-bold text-center bg-clip-text text-transparent 
-                       bg-gradient-to-r from-fuchsia-200 via-violet-300 to-purple-400
-                       drop-shadow-[0_0_10px_rgba(147,51,234,0.6)]'
+        {/* Title nổi bật với chữ trắng + glow tím */}
+        <motion.h1
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className='text-3xl font-extrabold text-center 
+                     text-white drop-shadow-[0_0_15px_rgba(192,132,252,0.6)] 
+                     font-sans'
         >
-          Upload Giấy Tờ
-        </h1>
-        <p className='text-center text-violet-300/70 text-xs'>Vui lòng tải lên GPLX và CCCD</p>
+          Upload License
+        </motion.h1>
 
-        {/* Hai component đã tách ra nhận vào lần lượt các state và hàm setState để up load cái hình và lưu lại được*/}
-        <Field type='gplx' label='Giấy phép lái xe (GPLX)' handleFileChange={handleFileChange} docs={docs} />
-        <Field type='cccd' label='Căn cước công dân (CCCD)' handleFileChange={handleFileChange} docs={docs} />
+        {/* Sub text hướng dẫn */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className='text-center font-serif text-white/80 text-sm'
+        >
+          Vui lòng tải lên GPLX và CCCD
+        </motion.p>
 
-        <button
+        {/* Component upload file cho từng loại giấy tờ */}
+        <motion.div
+          initial='hidden'
+          animate='visible'
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.15 }
+            }
+          }}
+          className='space-y-4'
+        >
+          {/* Map qua object chứa hai loại giấy tờ để bỏ vào trong component custom để hiện ra */}
+          {[
+            { type: 'gplx' as DocType, label: 'Giấy phép lái xe (GPLX)' },
+            { type: 'cccd' as DocType, label: 'Căn cước công dân (CCCD)' }
+          ].map((field, idx) => (
+            <motion.div
+              key={idx}
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              transition={{ duration: 0.4 }}
+            >
+              <Field type={field.type} label={field.label} handleFileChange={handleFileChange} docs={docs} />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Button submit */}
+        <motion.button
+          whileHover={{ scale: isReady ? 1.05 : 1 }}
+          whileTap={{ scale: isReady ? 0.95 : 1 }}
           type='submit'
-          // Mình sẽ cho con chuột cấm nếu như chưa tải đủ thì không cho chọn
           disabled={!isReady}
-          className='w-full py-2.5 rounded-lg text-sm font-semibold
-                     bg-gradient-to-r from-violet-700 via-purple-700 to-fuchsia-700 
-                     text-white shadow-[0_0_25px_rgba(109,40,217,0.7)] 
-                     hover:shadow-[0_0_35px_rgba(147,51,234,0.8)]
-                     hover:scale-[1.02] active:scale-95 transition
+          className='w-full py-3 rounded-lg text-sm font-semibold
+                     bg-gradient-to-r from-violet-700 via-purple-600 to-fuchsia-600 
+                     text-white 
+                     shadow-[0_0_25px_rgba(167,139,250,0.8)] 
+                     hover:shadow-[0_0_35px_rgba(216,180,254,0.9)]
+                     hover:scale-[1.03] active:scale-95 transition
                      disabled:opacity-50 disabled:cursor-not-allowed'
         >
           Xác nhận Upload
-        </button>
-      </form>
+        </motion.button>
+      </motion.form>
     </div>
   )
 }
