@@ -2,7 +2,26 @@ import * as yup from 'yup'
 
 //File này sẽ chứa các rule validate cho form
 
-export const userInfoSchema = yup.object().shape({
+export const loginSchema = yup.object({
+  email: yup.string().email('Invalid email').required('Email is required'),
+  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required')
+})
+
+export const registerSchema = yup.object({
+  username: yup.string().min(3, 'Username must be at least 3 characters').required('Username is required'),
+  email: yup.string().email('Invalid email').required('Email is required'),
+  phone: yup
+    .string()
+    .matches(/^[0-9]{9,11}$/, 'Phone must be 9–11 digits')
+    .required('Phone is required'),
+  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required')
+})
+
+export const userInfoSchema = yup.object({
   name: yup
     .string()
     .required('Name is required')
@@ -36,6 +55,10 @@ export const changePasswordSchema = yup.object({
     .required('Please confirm your password')
     .oneOf([yup.ref('newPassword')], 'ConfirmPassword must match Password')
 })
+
+export type LoginSchema = yup.InferType<typeof loginSchema>
+
+export type RegisterSchema = yup.InferType<typeof registerSchema>
 
 export type UserInfoSchema = yup.InferType<typeof userInfoSchema>
 
