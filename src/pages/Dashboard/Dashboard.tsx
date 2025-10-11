@@ -29,8 +29,8 @@ export default function Dashboard() {
         // neon glow tím
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 10)
         gradient.addColorStop(0, 'rgba(168,85,247,0.95)') // tím sáng neon
-        gradient.addColorStop(0.4, 'rgba(147,51,234,0.7)') // tím trung
-        gradient.addColorStop(1, 'rgba(126,34,206,0)') // fade tím nhạt
+        gradient.addColorStop(0.4, 'rgba(110, 36, 180, 0.7)') // tím trung
+        gradient.addColorStop(1, 'rgba(126,34,206,0.1)') // fade tím nhạt
         ctx.fillStyle = gradient
 
         ctx.beginPath()
