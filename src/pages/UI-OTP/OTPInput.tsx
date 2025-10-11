@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, ReloadOutlined, CheckCircleOutlined } from '@ant-design/icons'
-import { useOTPLogic } from './hooks/useOTPLogic'
+import { useOTPLogic } from '../../hooks/useOTPInput'
 
 // Props của component - hoàn toàn độc lập
 interface OTPInputProps {
