@@ -28,9 +28,9 @@ export default function UploadLicense() {
 
   return (
     <div
-      //Nền gradient tím lung linh huyền ảo
+      //Nền gradient teal (xanh ngọc bích) đồng bộ với CreateGroups - năng lượng xe điện
       className='min-h-screen flex items-center justify-center 
-                 bg-gradient-to-br from-[#2a0e37] via-[#5b239d] to-[#8b5cf6]
+                 bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688]
                  p-6'
     >
       {/* Form chính */}
@@ -40,18 +40,18 @@ export default function UploadLicense() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className='bg-white/5 backdrop-blur-lg 
-                   border border-violet-400/40 
+                   border-2 border-teal-400 
                    rounded-2xl 
-                   shadow-[0_0_40px_rgba(139,92,246,0.7)] 
+                   shadow-[0_0_40px_rgba(20,184,166,0.7)] 
                    p-6 w-full max-w-md space-y-6'
       >
-        {/* Title nổi bật với chữ trắng + glow tím */}
+        {/* Title nổi bật với chữ trắng + glow teal */}
         <motion.h1
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
           className='text-3xl font-extrabold text-center 
-                     text-white drop-shadow-[0_0_15px_rgba(192,132,252,0.6)] 
+                     text-white drop-shadow-[0_0_15px_rgba(94,234,212,0.6)] 
                      font-sans'
         >
           Upload License
@@ -104,10 +104,10 @@ export default function UploadLicense() {
           type='submit'
           disabled={!isReady}
           className='w-full py-3 rounded-lg text-sm font-semibold
-                     bg-gradient-to-r from-violet-700 via-purple-600 to-fuchsia-600 
+                     bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 
                      text-white 
-                     shadow-[0_0_25px_rgba(167,139,250,0.8)] 
-                     hover:shadow-[0_0_35px_rgba(216,180,254,0.9)]
+                     shadow-[0_0_25px_rgba(20,184,166,0.8)] 
+                     hover:shadow-[0_0_35px_rgba(94,234,212,0.9)]
                      hover:scale-[1.03] active:scale-95 transition
                      disabled:opacity-50 disabled:cursor-not-allowed'
         >

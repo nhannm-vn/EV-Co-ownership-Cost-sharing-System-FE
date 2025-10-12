@@ -26,11 +26,11 @@ export default function Dashboard() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach((p, i) => {
-        // neon glow tím
+        // neon glow teal (xanh ngọc bích)
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 10)
-        gradient.addColorStop(0, 'rgba(168,85,247,0.95)') // tím sáng neon
-        gradient.addColorStop(0.4, 'rgba(110, 36, 180, 0.7)') // tím trung
-        gradient.addColorStop(1, 'rgba(126,34,206,0.1)') // fade tím nhạt
+        gradient.addColorStop(0, 'rgba(94,234,212,0.95)') // teal sáng neon (teal-300)
+        gradient.addColorStop(0.4, 'rgba(20,184,166,0.7)') // teal trung (teal-500)
+        gradient.addColorStop(1, 'rgba(13,148,136,0.1)') // fade teal nhạt (teal-600)
         ctx.fillStyle = gradient
 
         ctx.beginPath()
@@ -42,12 +42,12 @@ export default function Dashboard() {
         if (p.x < 0 || p.x > canvas.width) p.dx *= -1
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1
 
-        // line nối particles (tím mờ dần)
+        // line nối particles (teal mờ dần)
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j]
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y)
           if (dist < 120) {
-            ctx.strokeStyle = `rgba(168,85,247,${1 - dist / 120})`
+            ctx.strokeStyle = `rgba(94,234,212,${1 - dist / 120})`
             ctx.lineWidth = 0.6
             ctx.beginPath()
             ctx.moveTo(p.x, p.y)
@@ -65,7 +65,7 @@ export default function Dashboard() {
 
   return (
     <div className='relative min-h-screen flex items-center justify-center overflow-hidden font-sans'>
-      {/* Gradient động */}
+      {/* Gradient động teal */}
       <style>
         {`
           @keyframes gradientFlow {
@@ -74,7 +74,7 @@ export default function Dashboard() {
             100% { background-position: 0% 50%; }
           }
           .moving-gradient {
-            background: linear-gradient(270deg, #2e1065, #4c1d95, #6d28d9, #9333ea, #a855f7);
+            background: linear-gradient(270deg, #003d3d, #005f5f, #008080, #14b8a6, #5eead4);
             background-size: 600% 600%;
             animation: gradientFlow 18s ease infinite;
           }
@@ -84,7 +84,7 @@ export default function Dashboard() {
       {/* Background gradient + overlay */}
       <div className='absolute inset-0 moving-gradient'></div>
       <div className='absolute inset-0 bg-black/50 backdrop-blur-md'></div>
-      <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.3),rgba(168,85,247,0.2),transparent_70%)]'></div>
+      <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(20,184,166,0.3),rgba(94,234,212,0.2),transparent_70%)]'></div>
 
       {/* Particles */}
       <canvas

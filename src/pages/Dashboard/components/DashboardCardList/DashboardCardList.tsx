@@ -16,15 +16,16 @@ export default function DashboardCardList() {
           }
         }
       }}
-      className='grid md:grid-cols-3 gap-10'
+      className='grid md:grid-cols-3 gap-8'
     >
       {/* Create Group */}
       <DashboardCardElement
         color={{
-          boxShadow: 'rgba(34,211,238,0.8)',
-          classDivBorder: 'border-cyan-400/60',
-          classHColor: 'drop-shadow-[0_0_10px_#22d3ee] text-cyan-300',
-          classButtonColor: 'bg-cyan-500 hover:bg-cyan-600 hover:shadow-cyan-400/50'
+          boxShadow: 'rgba(20,184,166,0.5)',
+          classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
+          classHColor: 'drop-shadow-[0_0_15px_rgba(20,184,166,0.5)] text-teal-200',
+          classButtonColor:
+            'bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-[0_4px_20px_rgba(20,184,166,0.4)] hover:shadow-[0_6px_30px_rgba(20,184,166,0.6)] transition-all duration-300'
         }}
         moveLink={path.createGroups}
         content={{
@@ -37,10 +38,11 @@ export default function DashboardCardList() {
       {/* View Groups */}
       <DashboardCardElement
         color={{
-          boxShadow: 'rgba(168,85,247,0.8)',
-          classDivBorder: 'border-purple-400/60',
-          classHColor: 'drop-shadow-[0_0_10px_#a855f7] text-purple-300',
-          classButtonColor: 'bg-purple-500 hover:bg-purple-600 hover:shadow-purple-400/50'
+          boxShadow: 'rgba(20,184,166,0.5)',
+          classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
+          classHColor: 'drop-shadow-[0_0_15px_rgba(20,184,166,0.5)] text-teal-200',
+          classButtonColor:
+            'bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-[0_4px_20px_rgba(20,184,166,0.4)] hover:shadow-[0_6px_30px_rgba(20,184,166,0.6)] transition-all duration-300'
         }}
         moveLink={path.viewGroups}
         content={{
@@ -53,23 +55,26 @@ export default function DashboardCardList() {
       {/* Enter Code */}
       <DashboardCardElement
         color={{
-          boxShadow: 'rgba(34,197,94,0.8)',
-          classDivBorder: 'border-emerald-400/60',
-          classHColor: 'drop-shadow-[0_0_10px_#22c55e] text-emerald-300',
-          classButtonColor: 'bg-emerald-500 hover:bg-emerald-600 hover:shadow-emerald-400/50'
+          boxShadow: 'rgba(20,184,166,0.5)',
+          classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
+          classHColor: 'drop-shadow-[0_0_15px_rgba(20,184,166,0.5)] text-teal-200',
+          classButtonColor:
+            'bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-[0_4px_20px_rgba(20,184,166,0.4)] hover:shadow-[0_6px_30px_rgba(20,184,166,0.6)] transition-all duration-300'
         }}
         moveLink=''
         content={{
-          title: 'Enter Code', //
+          title: 'Enter Code',
           body: 'Nhập mã nhóm để tham gia vào cộng đồng EV của bạn.',
           button: 'Join'
         }}
       >
-        <input
-          type='text'
-          placeholder='Enter code'
-          className='w-full px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition'
-        />
+        <div className='relative mb-4'>
+          <input
+            type='text'
+            placeholder='Enter group code'
+            className='w-full px-5 py-3 rounded-lg border-2 border-teal-400/50 bg-slate-900/60 text-teal-100 placeholder-teal-300/50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-300 backdrop-blur-sm shadow-inner'
+          />
+        </div>
       </DashboardCardElement>
     </motion.div>
   )
