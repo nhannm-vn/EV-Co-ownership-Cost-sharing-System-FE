@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { motion } from 'framer-motion'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
-import { motion } from 'framer-motion'
 import { createGroupSchema, type CreateGroupSchema } from '../../utils/rule'
 import FileUpload from './components/FileUpload'
 import Header from './components/Header'
@@ -28,10 +28,17 @@ export default function CreateGroups() {
     formState: { errors }
   } = useForm<CreateGroupSchema>({
     resolver: yupResolver(createGroupSchema),
-    mode: 'onSubmit'
+    mode: 'onSubmit',
+    defaultValues: {
+      // phải set mặc định là null  để hiển thị đúng trong file upload
+      // nếu khong set null thì nó sẽ fileList mà mảng trả ra true sai logic
+      vehicleImage: null,
+      registrationImage: null
+    }
   })
-
+  // không dùng useState mà dùng watch tránh hiện tượng render lại nhiều lần
   const vehicleImage = watch('vehicleImage')
+
   const registrationImage = watch('registrationImage')
 
   // Submit form data
@@ -80,7 +87,7 @@ export default function CreateGroups() {
               <div className='grid grid-cols-2 gap-3'>
                 <TextInput
                   label='Biển số xe'
-                  placeholder='29A-12345'
+                  placeholder='29A-123.45'
                   register={register('licensePlate')}
                   error={errors.licensePlate?.message}
                 />
@@ -96,18 +103,16 @@ export default function CreateGroups() {
               <div className='grid grid-cols-2 gap-3'>
                 <FileUpload
                   label='Hình ảnh xe'
-                  file={vehicleImage || null}
+                  file={vehicleImage?.item(0) || null}
                   register={register('vehicleImage')}
-                  onChange={(e) => setValue('vehicleImage', e.target.files?.[0] || null)}
                   onRemove={() => setValue('vehicleImage', null)}
                   color='teal'
                   error={errors.vehicleImage?.message}
                 />
                 <FileUpload
                   label='Hình cà vẹt xe'
-                  file={registrationImage || null}
+                  file={registrationImage?.item(0) || null}
                   register={register('registrationImage')}
-                  onChange={(e) => setValue('registrationImage', e.target.files?.[0] || null)}
                   onRemove={() => setValue('registrationImage', null)}
                   color='teal'
                   error={errors.registrationImage?.message}
