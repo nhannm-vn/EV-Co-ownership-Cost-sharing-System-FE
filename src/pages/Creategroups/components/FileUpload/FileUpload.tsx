@@ -1,5 +1,4 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { type ChangeEvent } from 'react'
 import type { UseFormRegisterReturn } from 'react-hook-form'
 
 interface IFileUpload {
@@ -7,7 +6,6 @@ interface IFileUpload {
   file: File | null
   //hàm xử lí khi chọn file
   register: UseFormRegisterReturn
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
   // hàm xử lí khi xóa file
   onRemove: () => void
   // màu teal (xanh ngọc bích)
@@ -15,20 +13,28 @@ interface IFileUpload {
   error?: string
 }
 
-export default function FileUpload({ label, file, register, onChange, onRemove, error }: IFileUpload) {
+export default function FileUpload({ label, file, register, onRemove, error }: IFileUpload) {
+  console.log(file)
+
   return (
     <div>
       <label className='block text-xs font-medium text-gray-300 mb-1.5'>
         {label} <span className='text-teal-400'>*</span>
       </label>
-
       {/* Upload button */}
       {/* nếu chưa có file thì hiển thị */}
+
       {!file ? (
         // group là để hover vào icon nó phóng to lên thằng cha thay đổi thì con thay đổi theo
         // khi cha đổi màu viền thì con phóng to theo
         // phải bọc vào label vì input type file nó ẩn nên phải bọc vào label để khi click vào label là click vào input file
-        <label className='cursor-pointer border-2 border-dashed border-teal-500/50 hover:border-teal-400 rounded-lg p-3 text-center bg-slate-800/30 h-20 flex flex-col items-center justify-center group'>
+        <label
+          className={`cursor-pointer rounded-lg p-3 text-center bg-slate-800/30 h-20 flex flex-col items-center justify-center group ${
+            error
+              ? 'border-2 border-dashed border-red-500 hover:border-red-400'
+              : 'border-2 border-dashed border-teal-500/50 hover:border-teal-400'
+          }`}
+        >
           <div className='w-8 h-8 bg-gradient-to-br from-teal-600 to-teal-500 rounded-lg flex items-center justify-center mb-1 group-hover:scale-110 transition'>
             {/* text-base là font-size mặc định 16px */}
             <UploadOutlined className='text-white text-base' />
@@ -40,7 +46,6 @@ export default function FileUpload({ label, file, register, onChange, onRemove, 
             {...register}
             onChange={(e) => {
               register.onChange(e) // gọi onChange của react-hook-form
-              onChange(e) // gọi onChange custom
             }}
             className='hidden'
           />

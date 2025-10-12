@@ -39,27 +39,6 @@ export const userInfoSchema = yup.object({
   location: yup.string().required('Location is required').min(3, 'Location must be at least 3 characters')
 })
 
-// rule cho file hình ảnh và pdf
-const imageFileSchema = yup
-  // vì yup không hỗ trợ kiểu file nên phải đẻ mix nền dih
-  .mixed<File>()
-  // không được để trong file
-  .required('File is required')
-  .nullable() // Cho phép null khi chưa chọn file
-  .test('fileType', 'Only PDF or Image allowed', (value) => {
-    // nếu không có file thì dừng luôn
-    if (!value) return false
-    // nếu đúng định dạng thì return true
-    return ['application/pdf', 'image/jpeg', 'image/png'].includes(value.type)
-  })
-  // kiểm tra kích thước file
-  .test('fileSize', 'File is too large (max 5MB)', (value) => {
-    // nếu không có value thì return luôn
-    if (!value) return false
-    // nếu bé hơn 5mb thì oke
-    return value.size <= 5 * 1024 * 1024
-  })
-
 export const changePasswordSchema = yup.object({
   currentPassword: yup
     .string()
@@ -78,13 +57,28 @@ export const changePasswordSchema = yup.object({
     .oneOf([yup.ref('newPassword')], 'ConfirmPassword must match Password')
 })
 
+// rule cho file hình ảnh và pdf
+const imageFileSchema = yup
+  // vì yup không hỗ trợ kiểu file nên phải đẻ mix nền dih
+  .mixed<FileList>()
+  // không được để trong file
+  .required('Please select a file')
+  .nullable() // Cho phép null khi chưa chọn file
+  // kiểm tra kích thước file
+  .test('fileSize', 'File size is too large (maximum 5MB)', (value) => {
+    // nếu không có value thì return luôn
+    if (!value || value.length === 0) return false
+    // nếu bé hơn 5mb thì oke
+    return value[0].size <= 5 * 1024 * 1024
+  })
+
 export const createGroupSchema = yup.object({
   groupName: yup.string().required('Group name is required').min(3, 'Group name must be at least 3 characters'),
 
   licensePlate: yup
     .string()
     .required('License plate is required')
-    .test('validCarPlate', 'Biển số ô tô không đúng định dạng', (value) => {
+    .test('validCarPlate', 'Invalid license plate format', (value) => {
       // nếu không có value thì dừng luôn
       if (!value) return false
 
@@ -113,11 +107,15 @@ export const createGroupSchema = yup.object({
     // không cho bỏ trống
     .required('Chassis number is required')
     // regex kiểm tra khung xe
-    .matches(regex.CHASSISNUMBER, 'Số khung xe phải có 17 ký tự và không chứa I, O, Q'),
+    .matches(regex.CHASSISNUMBER, 'Chassis number must be 17 characters and cannot contain I, O, Q'),
 
   // nhập số lượng thành viên tối thiểu 2 phút
-  maxMembers: yup.number().required('Max members is required').min(2, 'Max members must be at least 2'),
-  // đoạn script tối đ  a 100 kí tự
+  maxMembers: yup
+    .number()
+    .typeError('Minimum 2 members required')
+    .required('Number of members is required')
+    .min(2, 'Minimum 2 members required'),
+  // đoạn script tối đa 100 ký tự
   description: yup.string().required('Description is required').max(100, 'Description must be at most 100 characters'),
 
   vehicleImage: imageFileSchema,
