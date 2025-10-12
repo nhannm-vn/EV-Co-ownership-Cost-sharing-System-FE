@@ -16,6 +16,7 @@ import MyAccount from './pages/MyAccount'
 import ChangePassword from './pages/ChangePassword'
 import CreateGroups from './pages/Creategroups'
 import UploadLicense from './pages/UploadLicense'
+import OwnershipRatio from './pages/OwnershipRatio'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -117,6 +118,14 @@ function useRouteElements() {
       element: (
         <MainLayout>
           <CreateGroups />
+        </MainLayout>
+      )
+    },
+    {
+      path: '/ownershipRatio',
+      element: (
+        <MainLayout>
+          <OwnershipRatio />
         </MainLayout>
       )
     }
