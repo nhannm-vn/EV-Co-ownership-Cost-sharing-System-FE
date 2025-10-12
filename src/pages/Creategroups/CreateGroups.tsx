@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
+import { motion } from 'framer-motion'
 import { createGroupSchema, type CreateGroupSchema } from '../../utils/rule'
 import FileUpload from './components/FileUpload'
 import Header from './components/Header'
@@ -25,7 +26,10 @@ export default function CreateGroups() {
     watch,
     setValue,
     formState: { errors }
-  } = useForm<CreateGroupSchema>({ resolver: yupResolver(createGroupSchema), mode: 'onSubmit' })
+  } = useForm<CreateGroupSchema>({
+    resolver: yupResolver(createGroupSchema),
+    mode: 'onSubmit'
+  })
 
   const vehicleImage = watch('vehicleImage')
   const registrationImage = watch('registrationImage')
@@ -38,16 +42,32 @@ export default function CreateGroups() {
 
   // ==================== RENDER ====================
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4'>
-      <div className='max-w-2xl w-full'>
-        {/* Card with gradient border */}
-        <div className='bg-gradient-to-br from-purple-600 via-purple-500 to-violet-500 p-[2px] rounded-xl shadow-2xl'>
-          <div className='bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-6'>
+    // 🌊 Nền xanh ngọc bích năng lượng xe điện: tươi sáng, sạch, hiện đại
+    <div className='min-h-screen bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] flex items-center justify-center p-6'>
+      <motion.div
+        className='max-w-2xl w-full'
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
+        {/* Card viền ánh sáng xanh ngọc bích điện tử */}
+        <motion.div
+          whileHover={{ scale: 1.01 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+          className='bg-gradient-to-br from-[#0d9488] via-[#14b8a6] to-[#5eead4] p-[2px] rounded-2xl shadow-[0_0_35px_rgba(20,184,166,0.6)]'
+        >
+          <div className='bg-gradient-to-br from-[#011f26] via-[#013a3a] to-[#025959] rounded-2xl p-7'>
             {/* Header */}
             <Header />
 
             {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className='space-y-3.5'>
+            <motion.form
+              onSubmit={handleSubmit(onSubmit)}
+              className='space-y-4'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
               {/* Group name */}
               <TextInput
                 label='Tên Group'
@@ -80,7 +100,7 @@ export default function CreateGroups() {
                   register={register('vehicleImage')}
                   onChange={(e) => setValue('vehicleImage', e.target.files?.[0] || null)}
                   onRemove={() => setValue('vehicleImage', null)}
-                  color='purple'
+                  color='teal'
                   error={errors.vehicleImage?.message}
                 />
                 <FileUpload
@@ -89,7 +109,7 @@ export default function CreateGroups() {
                   register={register('registrationImage')}
                   onChange={(e) => setValue('registrationImage', e.target.files?.[0] || null)}
                   onRemove={() => setValue('registrationImage', null)}
-                  color='violet'
+                  color='teal'
                   error={errors.registrationImage?.message}
                 />
               </div>
@@ -111,16 +131,22 @@ export default function CreateGroups() {
               />
 
               {/* Submit button */}
-              <button
+              <motion.button
                 type='submit'
-                className='w-full bg-gradient-to-r from-purple-600 to-violet-600 text-white py-2.5 rounded-lg font-bold text-sm hover:shadow-lg hover:shadow-purple-500/50 transition'
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0 0 35px rgba(45, 212, 191, 0.7)'
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className='w-full bg-gradient-to-r from-[#0d9488] via-[#14b8a6] to-[#5eead4] text-white py-3 rounded-xl font-bold text-lg tracking-wide hover:opacity-95 transition-all duration-300'
               >
                 Tạo Group
-              </button>
-            </form>
+              </motion.button>
+            </motion.form>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   )
 }

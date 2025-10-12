@@ -26,7 +26,7 @@ export default function DashboardCardList() {
           classHColor: 'drop-shadow-[0_0_10px_#22d3ee] text-cyan-300',
           classButtonColor: 'bg-cyan-500 hover:bg-cyan-600 hover:shadow-cyan-400/50'
         }}
-        moveLink=''
+        moveLink={path.createGroups}
         content={{
           title: 'Create Group',
           body: 'Tạo nhóm mới để quản lý và chia sẻ thông tin về xe điện.',
