@@ -15,9 +15,9 @@ export default function ProfilePage() {
 
   return (
     <div
-      // Nền gradient tím đồng bộ với UploadLicense
+      // Nền gradient teal (xanh ngọc bích) đồng bộ với CreateGroups - năng lượng xe điện
       className='min-h-screen flex items-center justify-center p-6 font-sans 
-                 bg-gradient-to-br from-[#2b1650] via-[#4b2d82] to-[#7042b8]'
+                 bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688]'
     >
       {/* Card Profile với hiệu ứng fade-in + scale nhẹ */}
       <motion.div
@@ -25,8 +25,8 @@ export default function ProfilePage() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className='w-full max-w-md bg-white/5 backdrop-blur-xl 
-                   rounded-2xl p-8 shadow-[0_0_40px_rgba(139,92,246,0.7)] 
-                   border border-violet-400/30 space-y-6'
+                   rounded-2xl p-8 shadow-[0_0_40px_rgba(20,184,166,0.7)] 
+                   border-2 border-teal-400 space-y-6'
       >
         {/* Avatar + Username */}
         <motion.div
@@ -37,8 +37,8 @@ export default function ProfilePage() {
         >
           <motion.div
             className='w-28 h-28 rounded-full overflow-hidden 
-                       shadow-[0_0_25px_rgba(168,85,247,0.8)] 
-                       border-2 border-violet-400/70'
+                       shadow-[0_0_25px_rgba(20,184,166,0.8)] 
+                       border-2 border-teal-400'
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 200 }}
           >
@@ -47,7 +47,7 @@ export default function ProfilePage() {
 
           <motion.h2
             className='text-3xl font-extrabold text-center text-white 
-                       drop-shadow-[0_0_15px_rgba(192,132,252,0.6)]'
+                       drop-shadow-[0_0_15px_rgba(94,234,212,0.6)]'
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}

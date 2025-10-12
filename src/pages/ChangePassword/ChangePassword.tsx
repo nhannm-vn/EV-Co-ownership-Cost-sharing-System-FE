@@ -35,9 +35,9 @@ export default function ChangePassword() {
 
   return (
     <div
-      // Nền gradient tím đồng bộ với theme UploadLicense & ProfilePage
+      // Nền gradient teal (xanh ngọc bích) đồng bộ với CreateGroups - năng lượng xe điện
       className='min-h-screen flex items-center justify-center 
-                 bg-gradient-to-br from-[#2b1650] via-[#4b2d82] to-[#7042b8] p-6'
+                 bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] p-6'
     >
       {/* Form có hiệu ứng motion fade-in + slide-up */}
       <motion.form
@@ -45,16 +45,16 @@ export default function ChangePassword() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        // Form trong suốt + bo tròn + border tím nhạt + bóng mờ tím lung linh
+        // Form trong suốt + bo tròn + border teal đậm + bóng mờ teal lung linh
         className='w-full max-w-md bg-white/5 backdrop-blur-xl 
-                   rounded-2xl border border-violet-400/30 
-                   shadow-[0_0_35px_rgba(139,92,246,0.5)] 
+                   rounded-2xl border-2 border-teal-400 
+                   shadow-[0_0_35px_rgba(20,184,166,0.7)] 
                    p-8 space-y-6'
       >
         {/* Title của form */}
         <h2
           className='text-3xl font-extrabold text-center 
-             text-white drop-shadow-[0_0_15px_rgba(192,132,252,0.6)] font-sans'
+             text-white drop-shadow-[0_0_15px_rgba(94,234,212,0.6)] font-sans'
         >
           Change Password
         </h2>
@@ -98,11 +98,11 @@ export default function ChangePassword() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type='submit'
-          // Gradient tím đậm -> tím sáng -> hồng tím, hover lung linh hơn
+          // Gradient teal đậm -> teal sáng, hover lung linh hơn
           className='w-full py-3 rounded-xl font-semibold text-white 
-                     bg-gradient-to-r from-violet-700 via-purple-600 to-fuchsia-700
-                     shadow-[0_0_25px_rgba(167,139,250,0.7)]
-                     hover:shadow-[0_0_35px_rgba(192,132,252,0.9)]
+                     bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500
+                     shadow-[0_0_25px_rgba(20,184,166,0.8)]
+                     hover:shadow-[0_0_35px_rgba(94,234,212,0.9)]
                      hover:scale-[1.02] active:scale-95 transition-all'
         >
           Confirm

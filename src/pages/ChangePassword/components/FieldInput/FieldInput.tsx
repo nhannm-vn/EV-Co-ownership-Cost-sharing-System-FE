@@ -31,17 +31,17 @@ function FieldInput({ label, name, type, error, show, toggleShow, register }: IF
           {...register(name)}
           placeholder={label}
           className={`w-full px-4 py-3 rounded-xl 
-                 bg-gradient-to-r from-indigo-950 via-purple-950 to-slate-950
-                 border ${error ? 'border-red-500' : 'border-indigo-600/50'} 
+                 bg-gradient-to-r from-teal-950 via-teal-900 to-slate-950
+                 border ${error ? 'border-red-500' : 'border-teal-600/50'} 
                  text-white placeholder-gray-500
                  focus:outline-none focus:ring-2 ${
-                   error ? 'focus:ring-red-400' : 'focus:ring-indigo-400'
+                   error ? 'focus:ring-red-400' : 'focus:ring-teal-400'
                  } focus:border-transparent`}
         />
         <button
           type='button'
           onClick={() => toggleShow(type)}
-          className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-indigo-300'
+          className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-teal-300'
         >
           <EyeIcon open={show[type]} />
         </button>

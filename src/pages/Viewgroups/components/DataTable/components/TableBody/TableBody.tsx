@@ -30,7 +30,7 @@ export default function TableBody() {
              * border-b - Viền dưới
              * border-slate-700/20 - Viền xám đen với độ trong suốt 20%
              */
-            className='hover:bg-slate-700/30 transition-colors cursor-pointer border-b border-slate-700/20'
+            className='hover:bg-slate-700/100 transition-colors cursor-pointer border-b border-slate-700/20'
             onClick={handleRowClick}
           >
             {/* Group ID */}
@@ -41,15 +41,15 @@ export default function TableBody() {
               <span
                 /*
                  * font-mono - Font chữ monospace như code
-                 * text-cyan-300 - Màu chữ cyan sáng
+                 * text-teal-300 - Màu chữ teal sáng
                  * font-bold - Chữ đậm
                  * bg-slate-700/50 - Nền xám đen với độ trong suốt 50%
                  * px-3 py-2 - Padding 12px ngang, 8px dọc
                  * rounded-lg - Bo góc lớn 8px
-                 * border border-cyan-400/30 - Viền cyan với độ trong suốt 30%
+                 * border border-teal-400/30 - Viền teal với độ trong suốt 30%
                  * shadow-sm - Bóng đổ nhỏ
                  */
-                className='font-mono text-cyan-300 font-bold bg-slate-700/50 px-3 py-2 rounded-lg border border-cyan-400/30 shadow-sm'
+                className='font-mono text-teal-300 font-bold bg-slate-700/50 px-3 py-2 rounded-lg border border-teal-400/30 shadow-sm'
               >
                 #{group.id}
               </span>
@@ -72,11 +72,11 @@ export default function TableBody() {
                   size='large'
                   /*
                    * bg-gradient-to-br - Gradient từ trên-trái xuống dưới-phải
-                   * from-indigo-500 to-purple-600 - Từ màu indigo sang purple
+                   * from-teal-500 to-teal-600 - Từ màu teal sáng sang teal đậm
                    * border-2 - Viền dày 2px
-                   * border-indigo-400/40 - Viền indigo với độ trong suốt 40%
+                   * border-teal-400/40 - Viền teal với độ trong suốt 40%
                    */
-                  className='bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-indigo-400/40'
+                  className='bg-gradient-to-br from-teal-500 to-teal-600 border-2 border-teal-400/40'
                   icon={<UsergroupAddOutlined />}
                 />
                 <div>

@@ -11,16 +11,16 @@ function Field({ type, label, handleFileChange, docs }: IField) {
   {
     const colors =
       type === 'gplx'
-        ? { border: 'border-violet-500/60', text: 'text-violet-200', icon: 'text-violet-300' }
-        : { border: 'border-purple-500/60', text: 'text-purple-200', icon: 'text-purple-300' }
+        ? { border: 'border-teal-500/60', text: 'text-teal-200', icon: 'text-teal-300' }
+        : { border: 'border-teal-600/60', text: 'text-teal-100', icon: 'text-teal-200' }
 
     return (
       <div className='space-y-2'>
-        <span className='block text-sm font-medium text-violet-200'>{label}</span>
+        <span className='block text-sm font-medium text-teal-200'>{label}</span>
         <label
           className={`flex flex-col items-center justify-center border-2 border-dashed ${colors.border}
-                      rounded-lg p-4 bg-violet-950/40 hover:bg-violet-900/50
-                      hover:shadow-[0_0_18px_rgba(109,40,217,0.6)] transition cursor-pointer`}
+                      rounded-lg p-4 bg-teal-950/40 hover:bg-teal-900/50
+                      hover:shadow-[0_0_18px_rgba(20,184,166,0.6)] transition cursor-pointer`}
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'
