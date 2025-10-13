@@ -1,4 +1,4 @@
-import { formatPrice } from '../../../../utils/formatPrice'
+import { formatPrice } from '../../../../../../utils/formatPrice'
 
 function Summary({ members, value }: { members: number; value: number }) {
   return (

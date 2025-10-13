@@ -1,22 +1,29 @@
 import { useRoutes } from 'react-router'
-import RegisterLayout from './layouts/RegisterLayout'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Home from './pages/Home'
-import ForgotPassword from './pages/Forgot-password'
 import path from './constants/path'
+import GroupPageLayout from './layouts/GroupPageLayout'
 import LearnmoreLayout from './layouts/LearnmoreLayout'
-import Learnmore from './pages/Learnmore'
-import NotFound from './pages/NotFound'
 import MainLayout from './layouts/MainLayout'
-import Dashboard from './pages/Dashboard'
-import Viewgroups from './pages/Viewgroups'
-import OTPInput from './pages/UI-OTP'
-import MyAccount from './pages/MyAccount'
+import RegisterLayout from './layouts/RegisterLayout'
 import ChangePassword from './pages/ChangePassword'
 import CreateGroups from './pages/Creategroups'
+import Dashboard from './pages/Dashboard'
+import ForgotPassword from './pages/Forgot-password'
+import GroupPage from './pages/GroupPage'
+import CreateContract from './pages/GroupPage/pages/CreateContract'
+import MemberGroup from './pages/GroupPage/pages/MemberGroup'
+import Home from './pages/Home'
+import Learnmore from './pages/Learnmore'
+import Login from './pages/Login'
+import MyAccount from './pages/MyAccount'
+import NotFound from './pages/NotFound'
+
+import Register from './pages/Register'
+import OTPInput from './pages/UI-OTP'
 import UploadLicense from './pages/UploadLicense'
-import OwnershipRatio from './pages/OwnershipRatio'
+import Viewgroups from './pages/Viewgroups'
+import OwnershipRatio from './pages/GroupPage/pages/OwnershipRatio'
+import InviteMember from './pages/GroupPage/pages/InviteMember/InviteMember'
+import DashboardGP from './pages/GroupPage/pages/Dashboard'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -121,13 +128,29 @@ function useRouteElements() {
         </MainLayout>
       )
     },
+    // {
+    //   path: '/ownershipRatio',
+    //   element: (
+    //     <MainLayout>
+    //       <OwnershipRatio />
+    //     </MainLayout>
+    //   )
+    // },
     {
-      path: '/ownershipRatio',
-      element: (
-        <MainLayout>
-          <OwnershipRatio />
-        </MainLayout>
-      )
+      path: '/group',
+      element: <GroupPageLayout />,
+      children: [
+        {
+          element: <GroupPage />,
+          children: [
+            { index: true, element: <DashboardGP /> },
+            { path: 'createContract', element: <CreateContract /> },
+            { path: 'viewMembers', element: <MemberGroup /> },
+            { path: 'inviteMembers', element: <InviteMember /> },
+            { path: 'ownershipRatio', element: <OwnershipRatio /> }
+          ]
+        }
+      ]
     }
   ])
   return routeElements
