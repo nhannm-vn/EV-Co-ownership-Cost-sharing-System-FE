@@ -14,7 +14,7 @@ interface IFileUpload {
 }
 
 export default function FileUpload({ label, file, register, onRemove, error }: IFileUpload) {
-  // console.log(file)
+  console.log(file)
 
   return (
     <div>
@@ -63,8 +63,8 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
                   className='text-base text-teal-400 flex-shrink-0'
                 />
                 {/* truncate là cắt ngắn văn bản nếu quá dài */}
-                <p className='text-xs text-gray-300 truncate'>
-                  {f.name}{' '}
+                <p className='flex items-center flex-1 min-w-0'>
+                  <p className='text-xs text-gray-300 truncate flex-1'>{f.name}</p>
                   <button
                     type='button'
                     onClick={() => onRemove(f)}
