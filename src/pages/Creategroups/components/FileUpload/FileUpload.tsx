@@ -62,7 +62,7 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
                   // flex-shrink-0 để icon không bị co lại khi tên file dài
                   className='text-base text-teal-400 flex-shrink-0'
                 />
-                {/* truncate là cắt ngắn văn bản nếu quá dài */}
+                {/* truncate là cắt ngắn văn bản nếu quá dài đẩy mất cái button */}
                 <p className='flex items-center flex-1 min-w-0'>
                   <p className='text-xs text-gray-300 truncate flex-1'>{f.name}</p>
                   <button

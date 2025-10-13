@@ -1,4 +1,4 @@
-import { formatPriceVN } from '../../../../utils/formatPrice'
+import { formatPriceVN } from '../../../../../../utils/formatPrice'
 
 interface IMember {
   name: string
