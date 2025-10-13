@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import DashboardTitle from './components/DashboardTitle'
 import DashboardCardList from './components/DashboardCardList'
+import DashboardTitle from './components/DashboardTitle'
 
 export default function Dashboard() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
