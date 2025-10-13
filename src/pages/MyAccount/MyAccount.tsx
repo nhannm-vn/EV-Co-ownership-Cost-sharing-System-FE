@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion'
 import DocCard from './Components/DocCard'
 import Field from './Components/Field'
+import Avatar from './Components/Avatar/Avatar'
+import Username from './Components/Username'
+import GroupStatus from './Components/GroupStatus'
+import ActivitiBadge from './Components/ActivityBadge'
+import Icon from './Components/Icon'
 
 export default function ProfilePage() {
   //Demo data
@@ -9,99 +14,161 @@ export default function ProfilePage() {
     avatar: 'https://opensource.fb.com/img/projects/react.jpg',
     email: 'lupin3@gmail.com',
     phone: '+84 912 345 678',
-    cccd: null,
-    gplx: null
+    // Documents với 2 mặt
+    cccd: {
+      front:
+        'https://cdnphoto.dantri.com.vn/F3UzGpXRmU_lyCDPJQzrXZstLME=/thumb_w/990/2021/06/09/chodocx-1623207689539.jpeg', // URL mặt trước CCCD
+      back: 'https://ben.com.vn/tin-tuc/wp-content/uploads/2021/12/anh-che-cho-hai-huoc-cho-dien-thoai-4.jpg' // URL mặt sau CCCD
+    },
+    gplx: {
+      front: null, // URL mặt trước GPLX
+      back: null // URL mặt sau GPLX
+    },
+    totalGroups: 3,
+    status: 'Active'
   }
 
   return (
     <div
       // Nền gradient teal (xanh ngọc bích) đồng bộ với CreateGroups - năng lượng xe điện
       className='min-h-screen flex items-center justify-center p-6 font-sans 
-                 bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688]'
+                 bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] relative overflow-hidden'
     >
-      {/* Card Profile với hiệu ứng fade-in + scale nhẹ */}
+      {/* Thằng này chứa hiệu ứng cho background */}
+      <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className='absolute top-20 right-20 w-96 h-96 bg-teal-500/30 rounded-full blur-3xl'
+        />
+        <motion.div
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className='absolute bottom-20 left-20 w-96 h-96 bg-teal-600/30 rounded-full blur-3xl'
+        />
+      </div>
+
+      {/* Card Profile Layout Ngang */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className='w-full max-w-md bg-white/5 backdrop-blur-xl 
-                   rounded-2xl p-8 shadow-[0_0_40px_rgba(20,184,166,0.7)] 
-                   border-2 border-teal-400 space-y-6'
+        className='w-full max-w-6xl bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-2xl 
+                   rounded-3xl shadow-[0_0_60px_rgba(20,184,166,0.5)] 
+                   border-2 border-teal-400/50 overflow-hidden relative z-10'
       >
-        {/* Avatar + Username */}
-        <motion.div
-          className='flex flex-col items-center space-y-3'
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
+        {/* Decorative top gradient */}
+        <div className='absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-400 via-cyan-400 to-teal-400' />
+
+        <div className='grid lg:grid-cols-3 gap-8 p-8'>
+          {/* Left Section - Avatar & Name */}
           <motion.div
-            className='w-28 h-28 rounded-full overflow-hidden 
-                       shadow-[0_0_25px_rgba(20,184,166,0.8)] 
-                       border-2 border-teal-400'
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: 'spring', stiffness: 200 }}
+            initial={{ x: -30, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className='lg:col-span-1 flex flex-col items-center justify-center space-y-6 
+                       bg-gradient-to-br from-teal-600/20 to-teal-800/20 rounded-2xl p-8 
+                       border border-teal-400/30'
           >
-            <img src={profile.avatar} alt='avatar' className='w-full h-full object-cover' />
+            {/* Avatar */}
+            <Avatar avatar={profile.avatar} />
+
+            {/* Username */}
+            <Username username={profile.username} />
+
+            {/* Stats - Groups & Status */}
+            <GroupStatus totalGroups={profile.totalGroups} status={profile.status} />
+
+            {/* Activity Badge */}
+            <ActivitiBadge />
           </motion.div>
 
-          <motion.h2
-            className='text-3xl font-extrabold text-center text-white 
-                       drop-shadow-[0_0_15px_rgba(94,234,212,0.6)]'
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            {profile.username}
-          </motion.h2>
-        </motion.div>
-
-        {/* Info fields với hiệu ứng stagger */}
-        {/* map qua data để render ra các field hiển thị */}
-        <motion.div
-          className='space-y-4'
-          initial='hidden'
-          animate='visible'
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.15
-              }
-            }
-          }}
-        >
-          {[
-            // glow là thuộc tính giúp biết được thằng nào sẽ có màu trắng thằng nào sẽ nhấp nháy
-            { label: 'Email', value: profile.email, glow: true },
-            { label: 'Phone', value: profile.phone, glow: true },
-            { label: 'CCCD', value: '0123456789' },
-            { label: 'GPLX', value: '79A-123456' }
-          ].map((field, idx) => (
+          {/* Right Section - Info & Documents */}
+          <div className='lg:col-span-2 space-y-6'>
+            {/* Personal Info */}
             <motion.div
-              key={idx}
-              variants={{
-                hidden: { opacity: 0, y: 15 },
-                visible: { opacity: 1, y: 0 }
-              }}
-              transition={{ duration: 0.4 }}
+              initial={{ x: 30, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
             >
-              <Field {...field} />
+              <Icon title={'Personal Information'}>
+                <svg width='20' height='20' viewBox='0 0 24 24' fill='none' className='text-white'>
+                  <circle cx='12' cy='8' r='4' fill='currentColor' />
+                  <path
+                    d='M4 20c0-4 3.5-7 8-7s8 3 8 7'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    fill='currentColor'
+                  />
+                </svg>
+              </Icon>
+              {/* Info Grid */}
+              <motion.div
+                className='grid md:grid-cols-2 gap-4'
+                initial='hidden'
+                animate='visible'
+                variants={{
+                  hidden: {},
+                  visible: {
+                    transition: {
+                      staggerChildren: 0.1
+                    }
+                  }
+                }}
+              >
+                {[
+                  { label: 'Email', value: profile.email, glow: true },
+                  { label: 'Phone', value: profile.phone, glow: true },
+                  { label: 'CCCD', value: '0123456789' },
+                  { label: 'GPLX', value: '79A-123456' }
+                ].map((field, idx) => (
+                  <motion.div
+                    key={idx}
+                    variants={{
+                      hidden: { opacity: 0, y: 15 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <Field {...field} />
+                  </motion.div>
+                ))}
+              </motion.div>
             </motion.div>
-          ))}
-        </motion.div>
 
-        {/* Documents với hiệu ứng fade-in 
-        Hai cái khung để hiển thị hình ảnh*/}
-        <motion.div
-          className='grid grid-cols-1 gap-4 pt-4'
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          <DocCard title='CCCD' image={profile.cccd} />
-          <DocCard title='GPLX' image={profile.gplx} />
-        </motion.div>
+            {/* Documents Section */}
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <Icon title={'License'}>
+                <svg width='20' height='20' viewBox='0 0 24 24' fill='none' className='text-white'>
+                  <path
+                    d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    fill='currentColor'
+                    fillOpacity='0.3'
+                  />
+                  <path
+                    d='M14 2v6h6'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </Icon>
+              {/* Documents Grid */}
+              <div className='grid md:grid-cols-2 gap-4'>
+                <DocCard title='CCCD' imageFront={profile.cccd.front} imageBack={profile.cccd.back} />
+                <DocCard title='GPLX' imageFront={profile.gplx.front} imageBack={profile.gplx.back} />
+              </div>
+            </motion.div>
+          </div>
+        </div>
       </motion.div>
     </div>
   )
