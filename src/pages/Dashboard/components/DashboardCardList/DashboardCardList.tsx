@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import DashboardCardElement from './DashboardCardElement'
 import path from '../../../../constants/path'
+import DashboardCardElement from './DashboardCardElement'
 
 export default function DashboardCardList() {
   return (
