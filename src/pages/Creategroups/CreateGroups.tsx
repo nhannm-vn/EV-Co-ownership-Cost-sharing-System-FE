@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { createGroupSchema, type CreateGroupSchema } from '../../utils/rule'
 import FileUpload from './components/FileUpload'
 import Header from './components/Header'
-import NumberInput from './components/NumberInput'
 import TextAreaInput from './components/TextAreaInput'
 import TextInput from './components/TextInput'
 
@@ -26,7 +25,7 @@ export default function CreateGroups() {
     watch,
     setValue,
     formState: { errors }
-  } = useForm<CreateGroupSchema>({
+  } = useForm({
     resolver: yupResolver(createGroupSchema),
     mode: 'onSubmit',
     defaultValues: {
@@ -100,32 +99,42 @@ export default function CreateGroups() {
               </div>
 
               {/* Image uploads */}
+              {/* phải  dùng kiểu File[] mới có thể dùng map với filter , fileList không dùng được */}
+
               <div className='grid grid-cols-2 gap-3'>
                 <FileUpload
                   label='Hình ảnh xe'
-                  file={vehicleImage?.item(0) || null}
+                  file={vehicleImage || null}
                   register={register('vehicleImage')}
-                  onRemove={() => setValue('vehicleImage', null)}
+                  onRemove={(file) => {
+                    if (vehicleImage) {
+                      const dt = new DataTransfer()
+                      Array.from(vehicleImage)
+                        .filter((f) => f !== file)
+                        .forEach((f) => dt.items.add(f))
+                      setValue('vehicleImage', dt.files.length ? dt.files : null)
+                    }
+                  }}
                   color='teal'
                   error={errors.vehicleImage?.message}
                 />
                 <FileUpload
                   label='Hình cà vẹt xe'
-                  file={registrationImage?.item(0) || null}
+                  file={registrationImage || null}
                   register={register('registrationImage')}
-                  onRemove={() => setValue('registrationImage', null)}
+                  onRemove={(file) => {
+                    if (registrationImage) {
+                      const dt = new DataTransfer()
+                      Array.from(registrationImage)
+                        .filter((f) => f !== file)
+                        .forEach((f) => dt.items.add(f))
+                      setValue('registrationImage', dt.files.length ? dt.files : null)
+                    }
+                  }}
                   color='teal'
                   error={errors.registrationImage?.message}
                 />
               </div>
-
-              {/* Max members - without arrows */}
-              <NumberInput
-                label='Số thành viên tối đa'
-                placeholder='Nhập số thành viên'
-                register={register('maxMembers')}
-                error={errors.maxMembers?.message}
-              />
 
               {/* Description */}
               <TextAreaInput

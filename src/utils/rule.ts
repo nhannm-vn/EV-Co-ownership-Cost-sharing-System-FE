@@ -57,19 +57,32 @@ export const changePasswordSchema = yup.object({
     .oneOf([yup.ref('newPassword')], 'ConfirmPassword must match Password')
 })
 
-// rule cho file hình ảnh và pdf
+// rule cho file hình ảnh
+const MAX_SIZE = 2 * 1024 * 1024 // 2MB
+const MAX_FILE = 3
 const imageFileSchema = yup
   // vì yup không hỗ trợ kiểu file nên phải đẻ mix nền dih
   .mixed<FileList>()
-  // không được để trong file
-  .required('Please select a file')
+
   .nullable() // Cho phép null khi chưa chọn file
+  // không được để trong file trống
+  .test('required', 'File is required', (value) => {
+    // nếu không có value thì return luôn
+    if (!value || value.length === 0) return false
+    return true
+  })
+  .test('MaxCount', `You can upload up to ${MAX_FILE} files`, (value) => {
+    // nếu không có value thì return luôn
+    if (!value || value.length === 0) return false
+    // nếu  update dưới hoặc 3 thì oke
+    return value.length <= MAX_FILE
+  })
   // kiểm tra kích thước file
-  .test('fileSize', 'File size is too large (maximum 5MB)', (value) => {
+  .test('fileSize', 'File size is too large (maximum 2MB)', (value) => {
     // nếu không có value thì return luôn
     if (!value || value.length === 0) return false
     // nếu bé hơn 5mb thì oke
-    return value[0].size <= 5 * 1024 * 1024
+    return value[0].size <= MAX_SIZE
   })
 
 export const createGroupSchema = yup.object({
