@@ -16,9 +16,8 @@ export default function ProfilePage() {
     phone: '+84 912 345 678',
     // Documents với 2 mặt
     cccd: {
-      front:
-        'https://cdnphoto.dantri.com.vn/F3UzGpXRmU_lyCDPJQzrXZstLME=/thumb_w/990/2021/06/09/chodocx-1623207689539.jpeg', // URL mặt trước CCCD
-      back: 'https://ben.com.vn/tin-tuc/wp-content/uploads/2021/12/anh-che-cho-hai-huoc-cho-dien-thoai-4.jpg' // URL mặt sau CCCD
+      front: 'https://ben.com.vn/tin-tuc/wp-content/uploads/2021/12/anh-che-cho-hai-huoc-cho-dien-thoai-4.jpg', // URL mặt trước CCCD
+      back: 'https://cdnphoto.dantri.com.vn/F3UzGpXRmU_lyCDPJQzrXZstLME=/thumb_w/990/2021/06/09/chodocx-1623207689539.jpeg' // URL mặt sau CCCD
     },
     gplx: {
       front: 'https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/anh-meo-bua-50.jpg', // URL mặt trước GPLX
