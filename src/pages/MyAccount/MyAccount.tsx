@@ -21,8 +21,8 @@ export default function ProfilePage() {
       back: 'https://ben.com.vn/tin-tuc/wp-content/uploads/2021/12/anh-che-cho-hai-huoc-cho-dien-thoai-4.jpg' // URL mặt sau CCCD
     },
     gplx: {
-      front: null, // URL mặt trước GPLX
-      back: null // URL mặt sau GPLX
+      front: 'https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/anh-meo-bua-50.jpg', // URL mặt trước GPLX
+      back: 'https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474087eGM/anh-meo-giao-su-sieu-bua_114727591.jpg' // URL mặt sau GPLX
     },
     totalGroups: 3,
     status: 'Active'
