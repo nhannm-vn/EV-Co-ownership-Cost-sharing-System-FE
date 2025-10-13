@@ -3,18 +3,18 @@ import type { UseFormRegisterReturn } from 'react-hook-form'
 
 interface IFileUpload {
   label: string
-  file: File | null
+  file: FileList | null
   //hàm xử lí khi chọn file
   register: UseFormRegisterReturn
   // hàm xử lí khi xóa file
-  onRemove: () => void
+  onRemove: (file: File) => void
   // màu teal (xanh ngọc bích)
   color: 'teal'
   error?: string
 }
 
 export default function FileUpload({ label, file, register, onRemove, error }: IFileUpload) {
-  console.log(file)
+  // console.log(file)
 
   return (
     <div>
@@ -24,7 +24,7 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
       {/* Upload button */}
       {/* nếu chưa có file thì hiển thị */}
 
-      {!file ? (
+      {!file || file.length === 0 ? (
         // group là để hover vào icon nó phóng to lên thằng cha thay đổi thì con thay đổi theo
         // khi cha đổi màu viền thì con phóng to theo
         // phải bọc vào label vì input type file nó ẩn nên phải bọc vào label để khi click vào label là click vào input file
@@ -43,6 +43,7 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
           <input
             type='file'
             accept='image/*'
+            multiple
             {...register}
             onChange={(e) => {
               register.onChange(e) // gọi onChange của react-hook-form
@@ -53,23 +54,27 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
       ) : (
         // File info display
         <div className='bg-slate-800/50 border border-slate-700 rounded-lg p-3'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-2 flex-1 min-w-0'>
-              <UploadOutlined
-                // flex-shrink-0 để icon không bị co lại khi tên file dài
-                className='text-base text-teal-400 flex-shrink-0'
-              />
-              {/* truncate là cắt ngắn văn bản nếu quá dài */}
-              <p className='text-xs text-white truncate'>{file.name}</p>
-            </div>
-            <button
-              type='button'
-              onClick={onRemove}
-              className='text-red-400 hover:text-red-300 text-xs ml-2 flex-shrink-0'
-            >
-              Xóa
-            </button>
-          </div>
+          {file &&
+            file.length > 0 &&
+            Array.from(file).map((f, index) => (
+              <div key={index} className='flex items-center gap-2 flex-1 min-w-0 mb-4 '>
+                <UploadOutlined
+                  // flex-shrink-0 để icon không bị co lại khi tên file dài
+                  className='text-base text-teal-400 flex-shrink-0'
+                />
+                {/* truncate là cắt ngắn văn bản nếu quá dài */}
+                <p className='text-xs text-gray-300 truncate'>
+                  {f.name}{' '}
+                  <button
+                    type='button'
+                    onClick={() => onRemove(f)}
+                    className='text-red-400 hover:text-red-300 text-xs ml-2 flex-shrink-0'
+                  >
+                    Xóa
+                  </button>
+                </p>
+              </div>
+            ))}
         </div>
       )}
       {error && <p className='text-xs text-red-400 mt-1'>{error}</p>}
