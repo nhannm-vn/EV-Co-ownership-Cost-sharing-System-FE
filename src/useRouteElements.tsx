@@ -17,13 +17,13 @@ import Login from './pages/Login'
 import MyAccount from './pages/MyAccount'
 import NotFound from './pages/NotFound'
 
+import CoOwnershipPercentage from './pages/GroupPage/pages/Co-ownershipPercentage/CoOwnershipPercentage'
+import DashboardGP from './pages/GroupPage/pages/DashboardGP'
+import OwnershipRatio from './pages/GroupPage/pages/OwnershipRatio'
 import Register from './pages/Register'
 import OTPInput from './pages/UI-OTP'
 import UploadLicense from './pages/UploadLicense'
 import Viewgroups from './pages/Viewgroups'
-import OwnershipRatio from './pages/GroupPage/pages/OwnershipRatio'
-import InviteMember from './pages/GroupPage/pages/InviteMember/InviteMember'
-import DashboardGP from './pages/GroupPage/pages/DashboardGP'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -146,7 +146,7 @@ function useRouteElements() {
             { index: true, element: <DashboardGP /> },
             { path: 'createContract', element: <CreateContract /> },
             { path: 'viewMembers', element: <MemberGroup /> },
-            { path: 'inviteMembers', element: <InviteMember /> },
+            { path: 'ownershipPercentage', element: <CoOwnershipPercentage /> },
             { path: 'ownershipRatio', element: <OwnershipRatio /> }
           ]
         }
