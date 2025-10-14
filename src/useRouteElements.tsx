@@ -23,7 +23,7 @@ import UploadLicense from './pages/UploadLicense'
 import Viewgroups from './pages/Viewgroups'
 import OwnershipRatio from './pages/GroupPage/pages/OwnershipRatio'
 import InviteMember from './pages/GroupPage/pages/InviteMember/InviteMember'
-import DashboardGP from './pages/GroupPage/pages/Dashboard'
+import DashboardGP from './pages/GroupPage/pages/DashboardGP'
 
 function useRouteElements() {
   const routeElements = useRoutes([
