@@ -137,14 +137,6 @@ function useRouteElements() {
         </MainLayout>
       )
     },
-    // {
-    //   path: '/ownershipRatio',
-    //   element: (
-    //     <MainLayout>
-    //       <OwnershipRatio />
-    //     </MainLayout>
-    //   )
-    // },
     {
       path: '/group',
       element: <GroupPageLayout />,
