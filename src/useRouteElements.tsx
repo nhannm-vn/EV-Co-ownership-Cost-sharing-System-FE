@@ -24,6 +24,7 @@ import Register from './pages/Register'
 import OTPInput from './pages/UI-OTP'
 import UploadLicense from './pages/UploadLicense'
 import Viewgroups from './pages/Viewgroups'
+import IssueReport from './pages/IssueReport'
 
 function useRouteElements() {
   const routeElements = useRoutes([
