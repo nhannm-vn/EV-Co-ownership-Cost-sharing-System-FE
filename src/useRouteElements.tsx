@@ -24,6 +24,7 @@ import Viewgroups from './pages/Viewgroups'
 import OwnershipRatio from './pages/GroupPage/pages/OwnershipRatio'
 import InviteMember from './pages/GroupPage/pages/InviteMember/InviteMember'
 import DashboardGP from './pages/GroupPage/pages/Dashboard'
+import IssueReport from './pages/IssueReport'
 
 function useRouteElements() {
   const routeElements = useRoutes([
@@ -119,6 +120,14 @@ function useRouteElements() {
     {
       path: '/demoOTP',
       element: <OTPInput />
+    },
+    {
+      path: '/issueReport',
+      element: (
+        <MainLayout>
+          <IssueReport />
+        </MainLayout>
+      )
     },
     {
       path: path.createGroups,
