@@ -55,7 +55,7 @@ export default function CoOwnerSideBar() {
 
           <li>
             <NavLink
-              to='/group/inviteMembers'
+              to='/group/ownershipPercentage'
               className={({ isActive }) =>
                 [
                   base,
@@ -64,7 +64,7 @@ export default function CoOwnerSideBar() {
                 ].join(' ')
               }
             >
-              <span>Invite Member</span>
+              <span>Enter Co-ownership Percentage</span>
             </NavLink>
           </li>
           <li>
