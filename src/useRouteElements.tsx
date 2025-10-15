@@ -121,6 +121,14 @@ function useRouteElements() {
       element: <OTPInput />
     },
     {
+      path: '/issueReport',
+      element: (
+        <MainLayout>
+          <IssueReport />
+        </MainLayout>
+      )
+    },
+    {
       path: path.createGroups,
       element: (
         <MainLayout>
