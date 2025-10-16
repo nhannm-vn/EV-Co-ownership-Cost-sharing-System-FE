@@ -1,9 +1,13 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { motion } from 'framer-motion'
 import path from '../../constants/path'
 import { loginSchema, type LoginSchema } from '../../utils/rule'
+import { useMutation } from '@tanstack/react-query'
+import authApi from '../../apis/auth.api'
+import { useContext } from 'react'
+import { AppContext } from '../../contexts/app.context'
 
 export default function Login() {
   const {
@@ -14,9 +18,27 @@ export default function Login() {
     resolver: yupResolver(loginSchema)
   })
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log('Login Data:', data)
-  }
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
+
+  // loginMutation sử dụng react-query dùng để fetch api đăng ký tài khoảng
+  const loginMutation = useMutation({
+    mutationFn: (body: LoginSchema) => authApi.login(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    console.log('Payload gửi lên:', data)
+    loginMutation.mutate(data, {
+      // *Data trong onSuccess là data trả về từ server sau khi call api
+      onSuccess: (data) => {
+        console.log('Login thành công:', data)
+        // Mục đích set luôn là để cho nó đồng bộ luôn chứ lúc đầu nó đâu có sẵn mà lấy từ LS
+        //phải ctrl r mới có sẽ bị bất đồng bộ
+        setIsAuthenticated(true)
+        navigate('/dashBoard')
+      }
+    })
+  })
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-400 via-cyan-500 to-indigo-600'>
@@ -38,7 +60,7 @@ export default function Login() {
           {/* Right form */}
           <div className='flex items-center justify-center bg-gradient-to-br from-slate-900/80 via-slate-800/80 to-slate-900/80 backdrop-blur-lg p-10'>
             <motion.form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={onSubmit}
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
