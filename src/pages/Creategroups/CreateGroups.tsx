@@ -7,6 +7,7 @@ import FileUpload from './components/FileUpload'
 import Header from './components/Header'
 import TextAreaInput from './components/TextAreaInput'
 import TextInput from './components/TextInput'
+import NumberInput from './components/NumberInput'
 
 // ==================== TYPES ====================
 // định nghĩa kiểu dữ liệu form
@@ -135,6 +136,12 @@ export default function CreateGroups() {
                   error={errors.registrationImage?.message}
                 />
               </div>
+              <NumberInput
+                label='Số thành viên'
+                placeholder='Nhập số thành viên'
+                register={register('maxMembers')}
+                error={errors.maxMembers?.message}
+              />
 
               {/* Description */}
               <TextAreaInput
