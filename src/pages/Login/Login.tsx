@@ -27,7 +27,7 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: (body: LoginSchema) => authApi.login(body)
   })
-
+  // Khi nào mà cần truyền thêm gì lên thì phải sử dụng mutate tách riêng ra
   const onSubmit = handleSubmit((data) => {
     console.log('Payload gửi lên:', data)
     loginMutation.mutate(data, {

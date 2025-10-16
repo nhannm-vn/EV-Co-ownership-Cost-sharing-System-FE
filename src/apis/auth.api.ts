@@ -10,6 +10,17 @@ const authApi = {
   }) => {
     return http.post<AuthResponse>('api/auth/login', body)
   },
+  // logout
+  logout: (accessToken: string) => {
+    return http.post(
+      'api/auth/logout',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    )
 
   // register
   register: (body: {
