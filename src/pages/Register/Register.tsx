@@ -1,8 +1,11 @@
-import { Link } from 'react-router'
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router'
+import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
+import { setAccessTokenToLS } from '../../utils/auth'
 import { registerSchema, type RegisterSchema } from '../../utils/rule'
 
 export default function Register() {
@@ -14,9 +17,24 @@ export default function Register() {
     resolver: yupResolver(registerSchema)
   })
 
-  const onSubmit = (data: RegisterSchema) => {
-    console.log('Register Data:', data)
-  }
+  // const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
+
+  const registerMutation = useMutation({
+    mutationFn: (body: RegisterSchema) => authApi.register(body)
+  })
+
+  const onSubmit = handleSubmit((response: RegisterSchema) => {
+    registerMutation.mutate(response, {
+      onSuccess: (response) => {
+        console.log('Register successfully:', response)
+        console.log(response.data.accessToken)
+        setAccessTokenToLS(response.data.accessToken as string)
+        // setIsAuthenticated(true)
+        navigate(path.OTP)
+      }
+    })
+  })
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-400 via-cyan-500 to-indigo-600'>
@@ -30,7 +48,7 @@ export default function Register() {
           {/* Left form */}
           <div className='flex items-center justify-center bg-gradient-to-br from-slate-900/80 via-slate-800/80 to-slate-900/80 backdrop-blur-lg p-10'>
             <motion.form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={onSubmit}
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -41,16 +59,16 @@ export default function Register() {
               </h2>
               <p className='text-center text-gray-300'>Register a new account</p>
 
-              {/* Username */}
+              {/* Full Name */}
               <div>
-                <label className='block mb-2 text-sm font-medium text-gray-300'>Username</label>
+                <label className='block mb-2 text-sm font-medium text-gray-300'>Full Name</label>
                 <input
-                  {...register('username')}
+                  {...register('fullName')}
                   type='text'
                   className='w-full rounded-lg border border-gray-600 bg-slate-800/50 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition'
-                  placeholder='Enter your username'
+                  placeholder='Enter your full name'
                 />
-                {errors.username && <p className='text-red-400 text-sm mt-1'>{errors.username.message}</p>}
+                {errors.fullName && <p className='text-red-400 text-sm mt-1'>{errors.fullName.message}</p>}
               </div>
 
               {/* Email */}

@@ -20,7 +20,10 @@ const path = {
   createContract: 'createContract', // Relative path
   viewMembers: 'viewMembers', // Relative path
   ownershipPercentage: 'ownershipPercentage', // Relative path
-  ownershipRatio: 'ownershipRatio' // Relative path
+  ownershipRatio: 'ownershipRatio', // Relative path
+
+  //OTP
+  OTP: '/demoOTP'
 } as const
 
 export default path
