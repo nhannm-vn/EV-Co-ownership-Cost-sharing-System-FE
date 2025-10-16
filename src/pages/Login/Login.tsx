@@ -9,6 +9,7 @@ import authApi from '../../apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 import { setAccessTokenToLS } from '../../utils/auth'
+import { toast } from 'react-toastify'
 
 export default function Login() {
   const {
@@ -31,13 +32,16 @@ export default function Login() {
     console.log('Payload gửi lên:', data)
     loginMutation.mutate(data, {
       // *Data trong onSuccess là data trả về từ server sau khi call api
-      onSuccess: (data) => {
+      onSuccess: (response) => {
         console.log('Login thành công:', data)
         // Mục đích set luôn là để cho nó đồng bộ luôn chứ lúc đầu nó đâu có sẵn mà lấy từ LS
         //phải ctrl r mới có sẽ bị bất đồng bộ
-        console.log(data.data.data?.accessToken)
-        setAccessTokenToLS(data.data.data?.accessToken as string)
+        console.log(response.data?.accessToken)
+        setAccessTokenToLS(response.data?.accessToken as string)
         setIsAuthenticated(true)
+        toast.success('Login successful', {
+          autoClose: 3000
+        })
         navigate(path.dashBoard)
       },
       onError: (error) => {
