@@ -25,7 +25,7 @@ export default function OwnershipRatio() {
   ]
 
   return (
-    <div className='min-h-screen bg-gradient-to-br border rounded-md border-gray-900 shadow-sm from-slate-900 m-20 via-teal-950 to-slate-900 p-6'>
+    <div className='min-h-screen bg-gradient-to-br border px-20 rounded-3xl border-gray-900 shadow-2xl from-slate-900 m-20 via-teal-950 to-slate-900 p-6'>
       <div className='max-w-7xl mt-10 mx-auto'>
         {/* Header */}
         <HeaderTitle />
