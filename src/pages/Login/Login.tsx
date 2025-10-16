@@ -33,11 +33,10 @@ export default function Login() {
       // *Data trong onSuccess là data trả về từ server sau khi call api
       onSuccess: (data) => {
         console.log('Login thành công:', data)
-        if (data) {
-          setAccessTokenToLS(data.data.data?.access_token as string)
-        }
         // Mục đích set luôn là để cho nó đồng bộ luôn chứ lúc đầu nó đâu có sẵn mà lấy từ LS
         //phải ctrl r mới có sẽ bị bất đồng bộ
+        console.log(data.data.data?.accessToken)
+        setAccessTokenToLS(data.data.data?.accessToken as string)
         setIsAuthenticated(true)
         navigate(path.dashBoard)
       },
