@@ -1,15 +1,12 @@
+import { Outlet } from 'react-router'
 import Footer from '../../components/Footer'
 import LearnmoreHeader from '../../components/LearnmoreHeader'
 
-interface Props {
-  children?: React.ReactNode
-}
-
-export default function LearnmoreLayout({ children }: Props) {
+export default function LearnmoreLayout() {
   return (
     <div>
       <LearnmoreHeader />
-      {children}
+      <Outlet />
       <Footer />
     </div>
   )
