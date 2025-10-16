@@ -9,6 +9,18 @@ const authApi = {
     password: string
   }) => {
     return http.post<AuthResponse>('api/auth/login', body)
+  },
+  // logout
+  logout: (accessToken: string) => {
+    return http.post(
+      'api/auth/logout',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    )
   }
 }
 

@@ -7,12 +7,17 @@ import {
   LogoutOutlined
 } from '@ant-design/icons'
 import { Avatar, Space } from 'antd'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router'
 import path from '../../constants/path'
 import useCustomFloating from '../../hooks/useCustomFloating'
 import formatTimeAgo from '../../utils/caculatimeNotification'
 import { notifications } from '../Header/data/test-data'
+import { useMutation } from '@tanstack/react-query'
+import authApi from '../../apis/auth.api'
+import { clearLS, getAccessTokenFromLS } from '../../utils/auth'
+import { AppContext } from '../../contexts/app.context'
+import { toast } from 'react-toastify'
 
 function NavHeader() {
   // set trạng thái cho ngôn ngữ
@@ -23,6 +28,9 @@ function NavHeader() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   // trạng thái cho phép scroll để xem thêm thông báo
   const [enableNotificationScroll, setEnableNotificationScroll] = useState(false)
+
+  // lấy state global từ contextApi
+  const { setIsAuthenticated } = useContext(AppContext)
 
   // hàm giúp set các state boolean với prevent default để tránh giật dropdown
   const handleSetState = (func: React.Dispatch<React.SetStateAction<boolean>>) => (e: React.MouseEvent) => {
@@ -51,6 +59,30 @@ function NavHeader() {
     setOpen: setIsNotificationOpen,
     placement: 'bottom-start'
   })
+
+  //call api logout
+  // ***Mình không cần navigate vì khi set về false thì nó sẽ tự chuyển cho mình về login
+  // Component
+  const logoutMutation = useMutation({
+    mutationFn: authApi.logout
+  })
+
+  const handleLogout = () => {
+    const accessToken = getAccessTokenFromLS()
+
+    logoutMutation.mutate(accessToken, {
+      //Truyền token gốc (không có "Bearer")
+      onSuccess: () => {
+        //Set lại biến này để move ra trang ngoài
+        setIsAuthenticated(false)
+        //Xóa trên localstorage
+        clearLS()
+        toast.success('Logout successfully!', {
+          autoClose: 4000
+        })
+      }
+    })
+  }
 
   return (
     <div className='flex items-center gap-3'>
@@ -213,10 +245,10 @@ function NavHeader() {
             {/* Logout section */}
             <div className='border-t border-gray-200/70 mt-2'>
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
-                <Link to='' className='flex items-center gap-3'>
+                <div onClick={handleLogout} className='flex items-center gap-3'>
                   <LogoutOutlined className='text-red-500 group-hover:text-red-600 transition-colors' />
                   <span className='group-hover:text-red-600 transition-colors'>Đăng Xuất</span>
-                </Link>
+                </div>
               </div>
             </div>
           </div>
