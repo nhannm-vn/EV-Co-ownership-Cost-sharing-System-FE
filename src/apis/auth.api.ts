@@ -21,6 +21,16 @@ const authApi = {
         }
       }
     )
+
+  // register
+  register: (body: {
+    fullName: string //
+    email: string
+    phone: string
+    password: string
+    confirmPassword: string
+  }) => {
+    return http.post<AuthResponse>('api/auth/register/request-otp', body)
   }
 }
 
