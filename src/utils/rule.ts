@@ -125,9 +125,10 @@ export const createGroupSchema = yup.object({
   // nhập số lượng thành viên tối thiểu 2 phút
   maxMembers: yup
     .number()
-    .typeError('Minimum 2 members required')
-    .required('Number of members is required')
-    .min(2, 'Minimum 2 members required'),
+    .typeError('Value must be a number')
+    .required('This field is required')
+    .min(2, 'Minimum value is 2')
+    .max(5, 'Maximum value is 5'),
   // đoạn script tối đa 100 ký tự
   description: yup.string().required('Description is required').max(100, 'Description must be at most 100 characters'),
 
