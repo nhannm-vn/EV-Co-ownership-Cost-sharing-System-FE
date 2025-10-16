@@ -9,7 +9,7 @@ export const loginSchema = yup.object({
 })
 
 export const registerSchema = yup.object({
-  username: yup.string().min(3, 'Username must be at least 3 characters').required('Username is required'),
+  fullName: yup.string().min(3, 'Full Name must be at least 3 characters').required('Full Name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   phone: yup
     .string()

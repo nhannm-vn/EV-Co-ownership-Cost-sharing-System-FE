@@ -35,8 +35,8 @@ export default function Login() {
         console.log('Login thành công:', data)
         // Mục đích set luôn là để cho nó đồng bộ luôn chứ lúc đầu nó đâu có sẵn mà lấy từ LS
         //phải ctrl r mới có sẽ bị bất đồng bộ
-        console.log(data.data.data?.accessToken)
-        setAccessTokenToLS(data.data.data?.accessToken as string)
+        console.log(data.data.accessToken)
+        setAccessTokenToLS(data.data.accessToken as string)
         setIsAuthenticated(true)
         navigate(path.dashBoard)
       },
