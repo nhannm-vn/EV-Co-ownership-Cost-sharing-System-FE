@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router'
-import Footer from '../../components/Footer'
-import RegisterHeader from '../../components/RegisterHeader'
+import RegisterHeader from '../../components/RegisterHeader/RegisterHeader'
+import Footer from '../../components/Footer/Footer'
 
 function RegisterLayout() {
   return (

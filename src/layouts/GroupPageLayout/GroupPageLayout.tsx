@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import Footer from '../../components/Footer'
+
 import HeaderGroup from '../../components/HeaderGroup'
+import Footer from '../../components/Footer/Footer'
 // interface Props {
 //   children?: React.ReactNode
 // }
