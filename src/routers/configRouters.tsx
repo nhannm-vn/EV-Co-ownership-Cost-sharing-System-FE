@@ -1,4 +1,5 @@
-import { createBrowserRouter, RouterProvider } from 'react-router'
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
+import { useContext } from 'react'
 import path from '../constants/path'
 import RegisterLayout from '../layouts/RegisterLayout'
 import Home from '../pages/Home'
@@ -24,34 +25,53 @@ import MemberGroup from '../pages/GroupPage/pages/MemberGroup'
 import CoOwnershipPercentage from '../pages/GroupPage/pages/Co-ownershipPercentage/CoOwnershipPercentage'
 import OwnershipRatio from '../pages/GroupPage/pages/OwnershipRatio'
 import GroupPage from '../pages/GroupPage'
+import { AppContext } from '../contexts/app.context'
+
+// Protected Route: Đã login mới vào được
+function ProtectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+  return isAuthenticated ? <Outlet /> : <Navigate to={path.login} replace />
+}
+
+// Rejected Route: Đã login rồi thì không cho vào login/register nữa
+function RejectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+  return !isAuthenticated ? <Outlet /> : <Navigate to={path.dashBoard} replace />
+}
 
 function Routers() {
   const routers = createBrowserRouter([
-    // RegisterLayout routes
+    // RejectedRoute - Routes cho người chưa đăng nhập (home, login, register, forgot password)
     {
-      path: path.home,
-      element: <RegisterLayout />,
+      path: '/',
+      element: <RejectedRoute />,
       children: [
         {
-          index: true,
-          element: <Home />
-        },
-        {
-          path: path.login,
-          element: <Login />
-        },
-        {
-          path: path.register,
-          element: <Register />
-        },
-        {
-          path: path.forgotPassword,
-          element: <ForgotPassword />
+          path: '',
+          element: <RegisterLayout />,
+          children: [
+            {
+              index: true,
+              element: <Home />
+            },
+            {
+              path: path.login,
+              element: <Login />
+            },
+            {
+              path: path.register,
+              element: <Register />
+            },
+            {
+              path: path.forgotPassword,
+              element: <ForgotPassword />
+            }
+          ]
         }
       ]
     },
 
-    // LearnmoreLayout routes
+    // LearnmoreLayout - Public route (ai cũng vào được)
     {
       path: path.learnMore,
       element: <LearnmoreLayout />,
@@ -63,89 +83,94 @@ function Routers() {
       ]
     },
 
-    // MainLayout - Dashboard routes
+    // ProtectedRoute - MainLayout (phải login mới vào được)
     {
-      path: path.dashBoard,
-      element: <MainLayout />,
+      path: '/',
+      element: <ProtectedRoute />,
       children: [
         {
-          index: true,
-          element: <Dashboard />
-        },
-        {
-          path: path.viewGroups,
-          element: <Viewgroups />
-        },
-        {
-          path: path.createGroups,
-          element: <CreateGroups />
-        },
-        {
-          path: path.issueReport,
-          element: <IssueReport />
-        },
-        {
-          path: path.profile,
-          element: <MyAccount />
-        },
-        {
-          path: path.uploadLicense,
-          element: <UploadLicense />
-        },
-        {
-          path: path.changePassword,
-          element: <ChangePassword />
-        }
-      ]
-    },
-
-    // GroupPageLayout routes
-    {
-      path: path.group,
-      element: <GroupPageLayout />,
-      children: [
-        {
-          element: <GroupPage />,
+          path: path.dashBoard,
+          element: <MainLayout />,
           children: [
             {
               index: true,
-              element: <DashboardGP />
+              element: <Dashboard />
             },
             {
-              path: path.createContract,
-              element: <CreateContract />
+              path: path.viewGroups,
+              element: <Viewgroups />
             },
             {
-              path: path.viewMembers,
-              element: <MemberGroup />
+              path: path.createGroups,
+              element: <CreateGroups />
             },
             {
-              path: path.ownershipPercentage,
-              element: <CoOwnershipPercentage />
+              path: path.issueReport,
+              element: <IssueReport />
             },
             {
-              path: path.ownershipRatio,
-              element: <OwnershipRatio />
+              path: path.profile,
+              element: <MyAccount />
+            },
+            {
+              path: path.uploadLicense,
+              element: <UploadLicense />
+            },
+            {
+              path: path.changePassword,
+              element: <ChangePassword />
+            }
+          ]
+        },
+
+        // GroupPageLayout - cũng phải login
+        {
+          path: path.group,
+          element: <GroupPageLayout />,
+          children: [
+            {
+              element: <GroupPage />,
+              children: [
+                {
+                  index: true,
+                  element: <DashboardGP />
+                },
+                {
+                  path: path.createContract,
+                  element: <CreateContract />
+                },
+                {
+                  path: path.viewMembers,
+                  element: <MemberGroup />
+                },
+                {
+                  path: path.ownershipPercentage,
+                  element: <CoOwnershipPercentage />
+                },
+                {
+                  path: path.ownershipRatio,
+                  element: <OwnershipRatio />
+                }
+              ]
             }
           ]
         }
       ]
     },
 
-    // Standalone routes
+    // Standalone routes - Demo OTP (public)
     {
       path: '/demoOTP',
       element: <OTPInput />
     },
 
-    // 404 Not Found/ còn phải xử lý thêm trường hợp
-    //đã đăng nhạp và chưa đăng nhập
+    // 404 Not Found
     {
       path: '*',
       element: <RegisterLayout />,
       children: [
         {
-          path: '*', // Không dùng index: true
+          path: '*',
           element: <NotFound />
         }
       ]
