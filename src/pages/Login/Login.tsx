@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
+import { setAccessTokenToLS } from '../../utils/auth'
 
 export default function Login() {
   const {
@@ -32,10 +33,16 @@ export default function Login() {
       // *Data trong onSuccess là data trả về từ server sau khi call api
       onSuccess: (data) => {
         console.log('Login thành công:', data)
+        if (data) {
+          setAccessTokenToLS(data.data.data?.access_token as string)
+        }
         // Mục đích set luôn là để cho nó đồng bộ luôn chứ lúc đầu nó đâu có sẵn mà lấy từ LS
         //phải ctrl r mới có sẽ bị bất đồng bộ
         setIsAuthenticated(true)
-        navigate('/dashBoard')
+        navigate(path.dashBoard)
+      },
+      onError: (error) => {
+        console.log('Login thất bại:', error)
       }
     })
   })

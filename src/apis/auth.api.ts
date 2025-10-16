@@ -8,7 +8,7 @@ const authApi = {
     email: string //
     password: string
   }) => {
-    return http.post<AuthResponse>('login', body)
+    return http.post<AuthResponse>('api/auth/login', body)
   }
 }
 
