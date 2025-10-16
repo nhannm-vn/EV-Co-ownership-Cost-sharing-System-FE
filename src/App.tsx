@@ -1,13 +1,13 @@
 import './App.css'
-import useRouteElements from './useRouteElements'
+import Routers from './routers/configRouters'
 import { ToastContainer } from 'react-toastify'
 
 function App() {
-  const routeElements = useRouteElements()
+  const routers = Routers()
 
   return (
     <div>
-      {routeElements}
+      {routers}
       <ToastContainer />
     </div>
   )
