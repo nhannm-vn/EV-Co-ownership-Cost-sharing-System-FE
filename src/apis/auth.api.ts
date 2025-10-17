@@ -1,5 +1,5 @@
 import type { AuthResponse } from '../types/api/auth.type'
-import type { SuccessResponse } from '../types/api/utils.type'
+
 import http from '../utils/http'
 
 // Gom thành obj cho tiện dễ xài
@@ -31,12 +31,16 @@ const authApi = {
     password: string
     confirmPassword: string
   }) => {
-    return http.post<SuccessResponse<AuthResponse>>('api/auth/register/request-otp', body)
+    return http.post<AuthResponse>('api/auth/register/request-otp', body)
   },
 
   // verify register OTP
   verifyRegisterOTP: (body: { otp: string }) => {
     return http.post<AuthResponse>('api/auth/register/verify-otp', body)
+  },
+  // resend OTP
+  resendRegisterOTP: (body: { email: string }) => {
+    return http.post<AuthResponse>('api/auth/register/resend-otp', body)
   }
 }
 

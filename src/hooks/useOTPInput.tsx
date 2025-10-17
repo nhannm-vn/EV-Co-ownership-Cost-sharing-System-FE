@@ -101,7 +101,7 @@ export const useOTPLogic = ({ length = 6, onComplete }: UseOTPLogicProps = {}) =
   }
 
   // hàm gửi lại OTP
-  const handleResend = () => {
+  const resetOTP = () => {
     // cho dếm ngược lại 60s
     setCountdown(60)
     // không cho gửi lại nữa
@@ -110,8 +110,6 @@ export const useOTPLogic = ({ length = 6, onComplete }: UseOTPLogicProps = {}) =
     setOtp(new Array(length).fill(''))
     // đưa con trỏ về ô đầu tiên
     inputRefs.current[0]?.focus()
-    // thông báo người dùng đã gửi lại OTP
-    alert('Mã OTP đã được gửi lại!')
   }
 
   const handleBack = () => {
@@ -134,7 +132,7 @@ export const useOTPLogic = ({ length = 6, onComplete }: UseOTPLogicProps = {}) =
     handleChange,
     handleKeyDown,
     handlePaste,
-    handleResend,
+    resetOTP,
     handleBack
   }
 }

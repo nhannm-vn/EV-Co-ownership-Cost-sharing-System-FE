@@ -1,4 +1,4 @@
 export interface SuccessResponse<Data> {
-  message?: string
   data?: Data
+  status?: number
 }
