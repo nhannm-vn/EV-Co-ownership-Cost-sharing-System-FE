@@ -2,6 +2,7 @@ import { ArrowLeftOutlined, CheckCircleOutlined, ReloadOutlined } from '@ant-des
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
 import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
 import { AppContext } from '../../contexts/app.context'
@@ -15,33 +16,29 @@ interface OTPInputProps {
 }
 
 function OTPInput({ length = 6 }: OTPInputProps) {
-  // State để quản lý trạng thái loading khi gọi API
-
   // Sử dụng custom hook để quản lý tất cả logic
+  // hàm xử lí khi xác thực OTP
 
   const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
-  // hàm xử lí khi xác thực OTP
   const OTPMutation = useMutation({
     mutationFn: (otp: string) =>
       authApi.verifyRegisterOTP({
         otp: otp
-      }),
-
-    onSuccess: (response) => {
-      console.log('OTP verified successfully:', response.data)
-      console.log(response.data?.accessToken)
-      setAccessTokenToLS(response.data?.accessToken as string)
-      setIsAuthenticated(true)
-      navigate(path.dashBoard)
-    }
+      })
   })
-
   const handleVerify = (otp: string) => {
-    OTPMutation.mutate(otp)
+    OTPMutation.mutate(otp, {
+      onSuccess: (response) => {
+        // console.log('OTP verified successfully:', response.data)
+        // console.log(response.data?.accessToken)
+        setAccessTokenToLS(response.data?.accessToken as string)
+        setIsAuthenticated(true)
+        navigate(path.dashBoard)
+      }
+    })
   }
 
-  const isVerifying = OTPMutation.isPending
   const {
     otp,
     countdown,
@@ -51,20 +48,33 @@ function OTPInput({ length = 6 }: OTPInputProps) {
     handleChange,
     handleKeyDown,
     handlePaste,
-    handleResend,
+    resetOTP,
     handleBack
   } = useOTPLogic({ length, onComplete: handleVerify })
 
-  const onSubmit = () => {
-    if (checkComplete(otp)) {
-      handleVerify(otp.join(''))
-    }
-  }
+  const isVerifying = OTPMutation.isPending
 
   const location = useLocation()
 
-  const { message } = location.state || { message: '' }
-  console.log(message)
+  const { message, email } = location.state || { message: '', email: '' }
+  // console.log(message, email)
+
+  // resend OTP
+  const resendOTPMutation = useMutation({
+    mutationFn: (email: string) => authApi.resendRegisterOTP({ email: email })
+  })
+
+  const handleResend = () => {
+    if (!email) {
+      toast.error('Email không tồn tại, không thể gửi lại OTP')
+      return
+    }
+    resetOTP()
+    resendOTPMutation.mutate(email, {
+      onSuccess: () => toast.success('Mã OTP đã được gửi lại'),
+      onError: () => toast.error('Gửi lại OTP thất bại, vui lòng thử lại')
+    })
+  }
 
   return (
     // min-h-screen chiều cao tối thiểu (full Page)
@@ -93,8 +103,10 @@ function OTPInput({ length = 6 }: OTPInputProps) {
             <div className='w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-teal-500/20'>
               <CheckCircleOutlined className='text-4xl text-white' />
             </div>
-            <h1 className='text-2xl font-bold text-slate-100 mb-2'>Xác thực OTP</h1>
-            <p className='text-teal-300 font-semibold text-base'>{message}</p>
+            <h1 className='text-2xl font-bold text-white mb-2'>Xác thực OTP</h1>
+            <p className='text-teal-300 font-semibold text-base'>
+              {message} : {email}
+            </p>
           </div>
 
           {/* Input Fields - UI viết inline, không tách component */}
@@ -143,7 +155,7 @@ function OTPInput({ length = 6 }: OTPInputProps) {
             type='button'
             // luôn bật chứ không làm vô hiệu nó đi (nhưng vẫn check complete để style)
             disabled={!checkComplete(otp) || isVerifying}
-            onClick={onSubmit}
+            onClick={() => handleVerify(otp.join(''))}
             className={`
               w-full h-12 rounded-xl font-semibold text-base mb-6 border-0 transition-all duration-300 relative overflow-hidden
               ${
@@ -180,14 +192,6 @@ function OTPInput({ length = 6 }: OTPInputProps) {
               </p>
             )}
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className='text-center mt-6'>
-          <p className='text-slate-400 text-xs'>
-            Bằng cách tiếp tục, bạn đồng ý với{' '}
-            <span className='text-cyan-400 hover:text-cyan-300 cursor-pointer'>Điều khoản dịch vụ</span> của chúng tôi
-          </p>
         </div>
       </div>
     </div>

@@ -8,4 +8,6 @@ export type AuthResponse = {
   refreshToken?: string
   expires?: string
   user?: User
+  email?: string
+  message?: string
 }
