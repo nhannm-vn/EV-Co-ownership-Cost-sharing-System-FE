@@ -26,6 +26,7 @@ import CoOwnershipPercentage from '../pages/GroupPage/pages/Co-ownershipPercenta
 import OwnershipRatio from '../pages/GroupPage/pages/OwnershipRatio'
 import GroupPage from '../pages/GroupPage'
 import { AppContext } from '../contexts/app.context'
+import ResetPassword from '../pages/ResetPassword'
 
 // Protected Route: Đã login mới vào được
 function ProtectedRoute() {
@@ -65,6 +66,10 @@ function Routers() {
             {
               path: path.forgotPassword,
               element: <ForgotPassword />
+            },
+            {
+              path: path.resetPassword,
+              element: <ResetPassword />
             }
           ]
         }
