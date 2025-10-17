@@ -6,8 +6,20 @@ import Username from './Components/Username'
 import GroupStatus from './Components/GroupStatus'
 import ActivitiBadge from './Components/ActivityBadge'
 import Icon from './Components/Icon'
+import { useEffect, useState } from 'react'
+import userApi from '../../apis/user.api'
+import type { UserGetProfile } from '../../types/api/user.type'
 
 export default function ProfilePage() {
+  const [user, setUser] = useState<UserGetProfile | null>(null)
+  useEffect(() => {
+    userApi.getProfile().then((response) => {
+      setUser(response.data)
+    })
+  }, [])
+
+  console.log(user)
+
   //Demo data
   const profile = {
     username: 'Lupin III',
@@ -73,13 +85,19 @@ export default function ProfilePage() {
             <Avatar avatar={profile.avatar} />
 
             {/* Username */}
-            <Username username={profile.username} />
+            <Username username={user?.fullName as string} />
 
             {/* Stats - Groups & Status */}
-            <GroupStatus totalGroups={profile.totalGroups} status={profile.status} />
+            <GroupStatus
+              totalGroups={user?.statistics.groupsJoined as number}
+              status={user?.statistics.accountStatus as string}
+            />
 
             {/* Activity Badge */}
-            <ActivitiBadge />
+            <ActivitiBadge
+              status={user?.statistics.accountStatus as string}
+              time={user?.statistics.memberSince as string}
+            />
           </motion.div>
 
           {/* Right Section - Info & Documents */}
@@ -117,10 +135,8 @@ export default function ProfilePage() {
                 }}
               >
                 {[
-                  { label: 'Email', value: profile.email, glow: true },
-                  { label: 'Phone', value: profile.phone, glow: true },
-                  { label: 'CCCD', value: '0123456789' },
-                  { label: 'GPLX', value: '79A-123456' }
+                  { label: 'Email', value: user?.email as string, glow: true },
+                  { label: 'Phone', value: user?.phoneNumber as string, glow: true }
                 ].map((field, idx) => (
                   <motion.div
                     key={idx}
@@ -162,8 +178,16 @@ export default function ProfilePage() {
               </Icon>
               {/* Documents Grid */}
               <div className='grid md:grid-cols-2 gap-4'>
-                <DocCard title='CCCD' imageFront={profile.cccd.front} imageBack={profile.cccd.back} />
-                <DocCard title='GPLX' imageFront={profile.gplx.front} imageBack={profile.gplx.back} />
+                <DocCard
+                  title='CCCD'
+                  imageFront={user?.documents.citizenIdImages[0] as string}
+                  imageBack={user?.documents.citizenIdImages[1] as string}
+                />
+                <DocCard
+                  title='GPLX'
+                  imageFront={user?.documents.driverLicenseImages[0] as string}
+                  imageBack={user?.documents.driverLicenseImages[1] as string}
+                />
               </div>
             </motion.div>
           </div>

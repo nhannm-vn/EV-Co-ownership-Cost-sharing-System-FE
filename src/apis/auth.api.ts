@@ -21,7 +21,7 @@ const authApi = {
         }
       }
     )
-
+  },
   // register
   register: (body: {
     fullName: string //
