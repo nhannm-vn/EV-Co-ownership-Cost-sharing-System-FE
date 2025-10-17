@@ -25,8 +25,14 @@ export default function Register() {
   const onSubmit = handleSubmit((response: RegisterSchema) => {
     registerMutation.mutate(response, {
       onSuccess: (response) => {
-        // console.log('Register successfully:', response.data.email, response.data.message)
-        navigate(path.OTP, { state: { message: response.data.message, email: response.data.email } })
+        console.log('Register successfully:', response)
+        navigate(path.OTP, {
+          state: {
+            message: response.data.message, //
+            email: response.data.email,
+            type: response.data.type
+          }
+        })
       },
 
       onError: (error) => {
