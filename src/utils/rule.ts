@@ -40,10 +40,7 @@ export const userInfoSchema = yup.object({
 })
 
 export const changePasswordSchema = yup.object({
-  currentPassword: yup
-    .string()
-    .required('Current password is required')
-    .min(6, 'Password must be at least 6 characters'),
+  oldPassword: yup.string().required('Old password is required').min(6, 'Password must be at least 6 characters'),
 
   newPassword: yup
     .string()
