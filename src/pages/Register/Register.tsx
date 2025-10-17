@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
 import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
-import { setAccessTokenToLS } from '../../utils/auth'
 import { registerSchema, type RegisterSchema } from '../../utils/rule'
 
 export default function Register() {
@@ -17,7 +16,6 @@ export default function Register() {
     resolver: yupResolver(registerSchema)
   })
 
-  // const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
 
   const registerMutation = useMutation({
@@ -27,11 +25,13 @@ export default function Register() {
   const onSubmit = handleSubmit((response: RegisterSchema) => {
     registerMutation.mutate(response, {
       onSuccess: (response) => {
-        console.log('Register successfully:', response)
-        console.log(response.data.accessToken)
-        setAccessTokenToLS(response.data.accessToken as string)
-        // setIsAuthenticated(true)
-        navigate(path.OTP)
+        console.log('Register successfully:', response.data.message)
+
+        navigate(path.OTP, { state: { message: response.data.message } })
+      },
+
+      onError: (error) => {
+        console.log(error.message)
       }
     })
   })
