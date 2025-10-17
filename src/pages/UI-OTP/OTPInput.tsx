@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, CheckCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import authApi from '../../apis/auth.api'
@@ -19,12 +19,17 @@ function OTPInput({ length = 6 }: OTPInputProps) {
   // Sử dụng custom hook để quản lý tất cả logic
   // hàm xử lí khi xác thực OTP
 
+  const location = useLocation()
+
+  const { message, email, type: initialType } = location.state || { message: '', email: '', type: '' }
+  const [type, setType] = useState<string>(initialType || '')
   const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
   const OTPMutation = useMutation({
     mutationFn: (otp: string) =>
       authApi.verifyRegisterOTP({
-        otp: otp
+        otp: otp,
+        type: type
       })
   })
   const handleVerify = (otp: string) => {
@@ -54,9 +59,6 @@ function OTPInput({ length = 6 }: OTPInputProps) {
 
   const isVerifying = OTPMutation.isPending
 
-  const location = useLocation()
-
-  const { message, email } = location.state || { message: '', email: '' }
   // console.log(message, email)
 
   // resend OTP
@@ -71,7 +73,12 @@ function OTPInput({ length = 6 }: OTPInputProps) {
     }
     resetOTP()
     resendOTPMutation.mutate(email, {
-      onSuccess: () => toast.success('Mã OTP đã được gửi lại'),
+      onSuccess: (response) => {
+        toast.success('Mã OTP đã được gửi lại')
+        if (response.data?.type) {
+          setType(response.data.type)
+        }
+      },
       onError: () => toast.error('Gửi lại OTP thất bại, vui lòng thử lại')
     })
   }

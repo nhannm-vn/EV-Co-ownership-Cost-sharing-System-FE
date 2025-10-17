@@ -35,8 +35,8 @@ const authApi = {
   },
 
   // verify register OTP
-  verifyRegisterOTP: (body: { otp: string }) => {
-    return http.post<AuthResponse>('api/auth/register/verify-otp', body)
+  verifyRegisterOTP: (body: { otp: string; type: string }) => {
+    return http.post<AuthResponse>('api/auth/verify-otp', body)
   },
   // resend OTP
   resendRegisterOTP: (body: { email: string }) => {

@@ -10,4 +10,5 @@ export type AuthResponse = {
   user?: User
   email?: string
   message?: string
+  type?: string
 }
