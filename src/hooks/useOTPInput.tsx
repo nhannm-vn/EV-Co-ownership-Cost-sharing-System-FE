@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 
 interface UseOTPLogicProps {
   length?: number
+  // hàm này được gọi khi OTP được nhập đầy đủ
+  onComplete?: (otp: string) => void
 }
 
-export const useOTPLogic = ({ length = 6 }: UseOTPLogicProps = {}) => {
+export const useOTPLogic = ({ length = 6, onComplete }: UseOTPLogicProps = {}) => {
   // States
   // tạo ra một mảng OTP , có phần tử là chuỗi rỗng
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(''))
@@ -12,10 +14,8 @@ export const useOTPLogic = ({ length = 6 }: UseOTPLogicProps = {}) => {
   const [countdown, setCountdown] = useState(60)
   // trạng thái cho phép gửi lại OTP
   const [canResend, setCanResend] = useState(false)
-  // trạng thái đã xác thực OTP
-  const [isVerifying, setIsVerifying] = useState(false)
 
-  // mảng các ô input quản lú điều khiển các ô nhập input
+  // mảng các ô input quản lýs điều khiển các ô nhập input
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   // hàm đếm ngược 1 phút
@@ -50,7 +50,8 @@ export const useOTPLogic = ({ length = 6 }: UseOTPLogicProps = {}) => {
 
     // kiểm tra nếu nhập đủ rồi thì gọi hàm check OTP - dùng helper function
     if (checkComplete(newOtp)) {
-      handleVerify(newOtp.join(''))
+      // báo complete OTP
+      onComplete?.(newOtp.join(''))
     }
   }
 
@@ -94,7 +95,7 @@ export const useOTPLogic = ({ length = 6 }: UseOTPLogicProps = {}) => {
       setOtp(newOtp)
       // kiểm tra nếu đủ rồi thì gọi hàm checkOTP - dùng helper function thay vì duplicate code
       if (checkComplete(newOtp)) {
-        handleVerify(newOtp.join(''))
+        onComplete?.(newOtp.join(''))
       }
     }
   }
@@ -113,31 +114,6 @@ export const useOTPLogic = ({ length = 6 }: UseOTPLogicProps = {}) => {
     alert('Mã OTP đã được gửi lại!')
   }
 
-  const handleVerify = async (otpCode?: string) => {
-    // nếu có OTP thì check OTP đó , không có thì thành chuỗi rỗng
-    const otpString = otpCode || otp.join('')
-    // nếu chưa đủ độ dài báo lỗi
-    if (otpString.length !== length) {
-      alert('Vui lòng nhập đầy đủ mã OTP')
-      return
-    }
-    // chuyển trạng thái xác thực
-    setIsVerifying(true)
-
-    try {
-      // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      alert('Xác thực thành công!')
-
-      // Handle success navigation here
-    } catch {
-      alert('Mã OTP không đúng. Vui lòng thử lại!')
-    } finally {
-      setIsVerifying(false)
-    }
-  }
-
   const handleBack = () => {
     // cho người dùng quay lại trang trước đó
     window.history.back()
@@ -148,7 +124,7 @@ export const useOTPLogic = ({ length = 6 }: UseOTPLogicProps = {}) => {
     otp,
     countdown,
     canResend,
-    isVerifying,
+
     checkComplete,
 
     // Refs
@@ -159,7 +135,6 @@ export const useOTPLogic = ({ length = 6 }: UseOTPLogicProps = {}) => {
     handleKeyDown,
     handlePaste,
     handleResend,
-    handleVerify,
     handleBack
   }
 }
