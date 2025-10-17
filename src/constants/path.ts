@@ -4,6 +4,7 @@ const path = {
   register: '/register',
   forgotPassword: '/forgot-password',
   learnMore: '/learn-more',
+  resetPassword: '/resetPassword',
 
   // Dashboard và các route con
   dashBoard: '/dashboard',

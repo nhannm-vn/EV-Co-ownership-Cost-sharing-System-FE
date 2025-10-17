@@ -57,6 +57,14 @@ export const changePasswordSchema = yup.object({
     .oneOf([yup.ref('newPassword')], 'ConfirmPassword must match Password')
 })
 
+export const resetPasswordSchema = yup.object({
+  newPassword: yup.string().required('Vui lòng nhập mật khẩu mới').min(6, 'Mật khẩu ít nhất 6 ký tự'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('newPassword')], 'Mật khẩu nhập lại không khớp')
+    .required('Vui lòng xác nhận mật khẩu mới')
+})
+
 // rule cho file hình ảnh
 const MAX_SIZE = 2 * 1024 * 1024 // 2MB
 const MAX_FILE = 3
@@ -141,6 +149,8 @@ export type LoginSchema = yup.InferType<typeof loginSchema>
 export type RegisterSchema = yup.InferType<typeof registerSchema>
 
 export type UserInfoSchema = yup.InferType<typeof userInfoSchema>
+
+export type ResetPasswordType = yup.InferType<typeof resetPasswordSchema>
 
 export type ChangePasswordSchema = yup.InferType<typeof changePasswordSchema>
 
