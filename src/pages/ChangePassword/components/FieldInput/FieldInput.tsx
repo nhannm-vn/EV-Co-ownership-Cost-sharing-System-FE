@@ -9,13 +9,13 @@ interface IFieldInput {
   type: keyof ChangePasswordSchema
   error?: string
   show: {
-    currentPassword: boolean
+    oldPassword: boolean
     newPassword: boolean
     confirmPassword: boolean
   }
-  toggleShow: (field: 'currentPassword' | 'newPassword' | 'confirmPassword') => void
+  toggleShow: (field: 'oldPassword' | 'newPassword' | 'confirmPassword') => void
   register: UseFormRegister<{
-    currentPassword: string
+    oldPassword: string
     newPassword: string
     confirmPassword: string
   }>

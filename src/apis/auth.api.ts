@@ -41,6 +41,10 @@ const authApi = {
   // resend OTP
   resendRegisterOTP: (body: { email: string }) => {
     return http.post<AuthResponse>('api/auth/register/resend-otp', body)
+  },
+  // change password
+  changePassword: (body: { oldPassword: string; newPassword: string; confirmPassword: string }) => {
+    return http.post<AuthResponse>('api/auth/change-password', body)
   }
 }
 

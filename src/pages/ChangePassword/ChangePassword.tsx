@@ -1,11 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import authApi from '../../apis/auth.api'
 import { changePasswordSchema, type ChangePasswordSchema } from '../../utils/rule'
-import FieldInput from './components/FieldInput'
 import Button from './components/Button/Button'
+import FieldInput from './components/FieldInput'
 import HeaderSection from './components/HeaderSection'
+import { toast } from 'react-toastify'
+import path from '../../constants/path'
 
 export default function ChangePassword() {
   // Khởi tạo react-hook-form với schema validation từ Yup
@@ -19,7 +24,7 @@ export default function ChangePassword() {
 
   // State quản lý ẩn/hiện password cho từng field
   const [show, setShow] = useState({
-    currentPassword: false,
+    oldPassword: false,
     newPassword: false,
     confirmPassword: false
   })
@@ -29,11 +34,33 @@ export default function ChangePassword() {
     setShow((prev) => ({ ...prev, [field]: !prev[field] }))
   }
 
-  // Hàm submit form
-  const onSubmit = (data: ChangePasswordSchema) => {
-    console.log('Form Submitted:', data)
-    // TODO: gọi API đổi mật khẩu ở đây
-  }
+  // call API
+
+  const navigate = useNavigate()
+
+  const changePasswordMutation = useMutation({
+    mutationFn: (body: ChangePasswordSchema) => authApi.changePassword(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    console.log('Payload gửi lên:', data)
+
+    changePasswordMutation.mutate(data, {
+      onSuccess: (response) => {
+        console.log('Change password thành công:', response)
+        toast.success('Change password successful', {
+          autoClose: 2000
+        })
+        navigate(path.dashBoard)
+      },
+      onError: (error) => {
+        toast.error('Change password failed', {
+          autoClose: 2000
+        })
+        console.log('Change password thất bại:', error)
+      }
+    })
+  })
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] p-6 relative overflow-hidden'>
@@ -71,7 +98,7 @@ export default function ChangePassword() {
 
         {/* Form */}
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
           className='relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-2xl rounded-3xl border-2 border-teal-400/50 shadow-[0_0_60px_rgba(20,184,166,0.4)] p-8 space-y-8 overflow-hidden'
         >
           {/* Top Border Glow */}
@@ -98,13 +125,13 @@ export default function ChangePassword() {
           >
             <motion.div variants={{ hidden: { x: -30, opacity: 0 }, visible: { x: 0, opacity: 1 } }}>
               <FieldInput
-                label='Current Password'
-                name='currentPassword'
-                type='currentPassword'
+                label='Old Password'
+                name='oldPassword'
+                type='oldPassword'
                 register={register}
                 show={show}
                 toggleShow={toggleShow}
-                error={errors.currentPassword?.message}
+                error={errors.oldPassword?.message}
               />
             </motion.div>
 
