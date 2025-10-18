@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: 'https://evshare-gab7f6eqg0ctauf6.southeastasia-01.azurewebsites.net/',
+  baseUrl: import.meta.env.VITE_API_URL,
   // Khai báo max size upload ảnh tính theo bytes
   maxSizeUploadAvatar: 1048576
 }
