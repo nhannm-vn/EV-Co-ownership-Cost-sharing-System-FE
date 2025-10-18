@@ -141,6 +141,13 @@ export const createGroupSchema = yup.object({
   registrationImage: imageFileSchema
 })
 
+// forgot password
+export const forgotPasswordSchema = yup.object({
+  email: yup.string().email('Invalid email').required('Email is required')
+})
+
+export type ForgotPasswordType = yup.InferType<typeof forgotPasswordSchema>
+
 export type LoginSchema = yup.InferType<typeof loginSchema>
 
 export type RegisterSchema = yup.InferType<typeof registerSchema>

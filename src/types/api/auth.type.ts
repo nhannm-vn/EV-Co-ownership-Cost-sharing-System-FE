@@ -11,4 +11,5 @@ export type AuthResponse = {
   email?: string
   message?: string
   type?: string
+  resetToken?: string
 }

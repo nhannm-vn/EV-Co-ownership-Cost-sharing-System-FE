@@ -1,7 +1,18 @@
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import { useForm } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import authApi from '../../apis/auth.api'
+import path from '../../constants/path'
 import { resetPasswordSchema, type ResetPasswordType } from '../../utils/rule'
+
+interface IResetPassword {
+  resetToken: string
+  newPassword: string
+  confirmPassword: string
+}
 
 function ResetPassword() {
   const {
@@ -12,9 +23,31 @@ function ResetPassword() {
     resolver: yupResolver(resetPasswordSchema)
   })
 
+  const resetPasswordMutation = useMutation({
+    mutationFn: (body: IResetPassword) => authApi.resetPassword(body)
+  })
+
+  const navigate = useNavigate()
+
+  const location = useLocation()
+
   const onSubmit = handleSubmit((data) => {
-    // Bạn call API đổi mật khẩu ở đây!
-    console.log('Data đổi mật khẩu:', data)
+    resetPasswordMutation.mutate(
+      {
+        resetToken: location.state?.resetToken, //
+        newPassword: data.newPassword,
+        confirmPassword: data.confirmPassword
+      },
+      {
+        onSuccess: (response) => {
+          toast.success(response.data.message)
+          navigate(path.login)
+        },
+        onError: (error) => {
+          console.log('Reset password failed:', error)
+        }
+      }
+    )
   })
 
   return (
