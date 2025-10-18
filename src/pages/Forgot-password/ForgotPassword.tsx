@@ -1,6 +1,41 @@
+import { useMutation } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import authApi from '../../apis/auth.api'
+import { forgotPasswordSchema, type ForgotPasswordType } from '../../utils/rule'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigate } from 'react-router'
+import path from '../../constants/path'
 
 export default function ForgotPassword() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ForgotPasswordType>({
+    resolver: yupResolver(forgotPasswordSchema)
+  })
+  const navigate = useNavigate()
+
+  const forgotPasswordMutation = useMutation({
+    mutationFn: (email: string) => authApi.forgotPassword({ email })
+  })
+
+  const onSubmit = handleSubmit((data: ForgotPasswordType) => {
+    forgotPasswordMutation.mutate(data.email, {
+      onSuccess: (response) => {
+        console.log('Forgot password request successful:', response)
+        navigate(path.OTP, {
+          state: {
+            message: response.data.message, //
+            email: response.data.email,
+            type: response.data.type
+          }
+        })
+      }
+    })
+  })
+
   return (
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-500 font-sans'>
       <motion.div
@@ -40,17 +75,18 @@ export default function ForgotPassword() {
             className='w-full p-2 mb-4 rounded-md border border-gray-600 bg-slate-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400'
             placeholder='Enter your email'
             required
-            name='email'
             autoComplete='email'
+            {...register('email')}
           />
-
+          {errors.email && <p className='text-red-400 text-sm mb-3'>{errors.email.message}</p>}
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             type='submit'
+            onClick={onSubmit}
             className='w-full bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-300 hover:to-blue-400 text-white font-bold py-2 rounded-md shadow-md transition-all'
           >
-            Reset Password
+            {forgotPasswordMutation.isPending ? 'Sending...' : 'Reset Password'}
           </motion.button>
         </motion.form>
       </motion.div>

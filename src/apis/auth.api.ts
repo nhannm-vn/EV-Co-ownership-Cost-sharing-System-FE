@@ -35,16 +35,25 @@ const authApi = {
   },
 
   // verify register OTP
-  verifyRegisterOTP: (body: { otp: string; type: string }) => {
+  verifyOTP: (body: { otp: string; type: string }) => {
     return http.post<AuthResponse>('api/auth/verify-otp', body)
   },
   // resend OTP
-  resendRegisterOTP: (body: { email: string }) => {
-    return http.post<AuthResponse>('api/auth/register/resend-otp', body)
+  resendOTP: (body: { email: string; type: string }) => {
+    return http.post<AuthResponse>('api/auth/resend-otp', body)
   },
   // change password
   changePassword: (body: { oldPassword: string; newPassword: string; confirmPassword: string }) => {
     return http.post<AuthResponse>('api/auth/change-password', body)
+  },
+
+  // forgot password
+  forgotPassword: (body: { email: string }) => {
+    return http.post<AuthResponse>('api/auth/forgot-password', body)
+  },
+  // reset password
+  resetPassword: (body: { resetToken: string; newPassword: string; confirmPassword: string }) => {
+    return http.post<AuthResponse>('api/auth/forgot-password/reset-password', body)
   }
 }
 

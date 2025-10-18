@@ -27,7 +27,7 @@ function OTPInput({ length = 6 }: OTPInputProps) {
   const navigate = useNavigate()
   const OTPMutation = useMutation({
     mutationFn: (otp: string) =>
-      authApi.verifyRegisterOTP({
+      authApi.verifyOTP({
         otp: otp,
         type: type
       })
@@ -37,9 +37,21 @@ function OTPInput({ length = 6 }: OTPInputProps) {
       onSuccess: (response) => {
         // console.log('OTP verified successfully:', response.data)
         // console.log(response.data?.accessToken)
-        setAccessTokenToLS(response.data?.accessToken as string)
-        setIsAuthenticated(true)
-        navigate(path.dashBoard)
+        if (type === 'REGISTRATION') {
+          toast.success('Xác thực OTP thành công')
+          setAccessTokenToLS(response.data?.accessToken as string)
+          setIsAuthenticated(true)
+          navigate(path.dashBoard)
+        } else if (type === 'PASSWORD_RESET') {
+          toast.success('Xác thực OTP thành công, vui lòng đặt lại mật khẩu mới')
+          console.log(response.data?.resetToken)
+
+          navigate(path.resetPassword, {
+            state: {
+              resetToken: response.data?.resetToken // chuyền resetToken qua trang đặt lại mật khẩu mới
+            }
+          })
+        }
       }
     })
   }
@@ -63,7 +75,7 @@ function OTPInput({ length = 6 }: OTPInputProps) {
 
   // resend OTP
   const resendOTPMutation = useMutation({
-    mutationFn: (email: string) => authApi.resendRegisterOTP({ email: email })
+    mutationFn: (email: string) => authApi.resendOTP({ email: email, type: type })
   })
 
   const handleResend = () => {
