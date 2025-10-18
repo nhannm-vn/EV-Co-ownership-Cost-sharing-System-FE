@@ -1,44 +1,32 @@
-import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
-import { useContext } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import path from '../constants/path'
-import RegisterLayout from '../layouts/RegisterLayout'
-import Home from '../pages/Home'
-import Login from '../pages/Login'
-import Register from '../pages/Register'
+import GroupPageLayout from '../layouts/GroupPageLayout'
+import LearnmoreLayout from '../layouts/LearnmoreLayout'
 import MainLayout from '../layouts/MainLayout'
+import RegisterLayout from '../layouts/RegisterLayout'
+import ChangePassword from '../pages/ChangePassword'
+import CreateGroups from '../pages/Creategroups'
 import Dashboard from '../pages/Dashboard'
 import ForgotPassword from '../pages/Forgot-password'
-import Viewgroups from '../pages/Viewgroups'
-import LearnmoreLayout from '../layouts/LearnmoreLayout'
-import Learnmore from '../pages/Learnmore'
-import MyAccount from '../pages/MyAccount'
-import ChangePassword from '../pages/ChangePassword'
-import UploadLicense from '../pages/UploadLicense'
-import NotFound from '../pages/NotFound'
-import OTPInput from '../pages/UI-OTP'
-import IssueReport from '../pages/IssueReport'
-import CreateGroups from '../pages/Creategroups'
-import GroupPageLayout from '../layouts/GroupPageLayout'
-import DashboardGP from '../pages/GroupPage/pages/DashboardGP'
-import CreateContract from '../pages/GroupPage/pages/CreateContract'
-import MemberGroup from '../pages/GroupPage/pages/MemberGroup'
-import CoOwnershipPercentage from '../pages/GroupPage/pages/Co-ownershipPercentage/CoOwnershipPercentage'
-import OwnershipRatio from '../pages/GroupPage/pages/OwnershipRatio'
 import GroupPage from '../pages/GroupPage'
-import { AppContext } from '../contexts/app.context'
+import CoOwnershipPercentage from '../pages/GroupPage/pages/Co-ownershipPercentage/CoOwnershipPercentage'
+import CreateContract from '../pages/GroupPage/pages/CreateContract'
+import DashboardGP from '../pages/GroupPage/pages/DashboardGP'
+import MemberGroup from '../pages/GroupPage/pages/MemberGroup'
+import OwnershipRatio from '../pages/GroupPage/pages/OwnershipRatio'
+import Home from '../pages/Home'
+import IssueReport from '../pages/IssueReport'
+import Learnmore from '../pages/Learnmore'
+import Login from '../pages/Login'
+import MyAccount from '../pages/MyAccount'
+import NotFound from '../pages/NotFound'
+import Register from '../pages/Register'
 import ResetPassword from '../pages/ResetPassword'
-
-// Protected Route: Đã login mới vào được
-function ProtectedRoute() {
-  const { isAuthenticated } = useContext(AppContext)
-  return isAuthenticated ? <Outlet /> : <Navigate to={path.login} replace />
-}
-
-// Rejected Route: Đã login rồi thì không cho vào login/register nữa
-function RejectedRoute() {
-  const { isAuthenticated } = useContext(AppContext)
-  return !isAuthenticated ? <Outlet /> : <Navigate to={path.dashBoard} replace />
-}
+import OTPInput from '../pages/UI-OTP'
+import UploadLicense from '../pages/UploadLicense'
+import Viewgroups from '../pages/Viewgroups'
+import ProtectedRoute from './PrivateRouters/ProtectedRoute'
+import RejectedRoute from './PrivateRouters/RejectedRoute'
 
 function Routers() {
   const routers = createBrowserRouter([

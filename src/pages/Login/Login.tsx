@@ -10,6 +10,7 @@ import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 import { setAccessTokenToLS } from '../../utils/auth'
 import { toast } from 'react-toastify'
+import classNames from 'classnames'
 
 export default function Login() {
   const {
@@ -40,7 +41,7 @@ export default function Login() {
         setAccessTokenToLS(response.data?.accessToken as string)
         setIsAuthenticated(true)
         toast.success('Login successful', {
-          autoClose: 3000
+          autoClose: 1000
         })
         navigate(path.dashBoard)
       },
@@ -110,7 +111,13 @@ export default function Login() {
                 whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(34,211,238,0.6)' }}
                 whileTap={{ scale: 0.95 }}
                 type='submit'
-                className='w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300'
+                className={classNames({
+                  'w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300 cursor-not-allowed':
+                    loginMutation.isPending,
+                  'w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300':
+                    !loginMutation.isPending
+                })}
+                disabled={loginMutation.isPending}
               >
                 Login
               </motion.button>

@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router'
 import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
 import { registerSchema, type RegisterSchema } from '../../utils/rule'
+import classNames from 'classnames'
 
 export default function Register() {
   const {
@@ -131,7 +132,13 @@ export default function Register() {
                 whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(34,211,238,0.6)' }}
                 whileTap={{ scale: 0.95 }}
                 type='submit'
-                className='w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300'
+                className={classNames({
+                  'w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300 cursor-not-allowed':
+                    registerMutation.isPending,
+                  'w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300 ':
+                    registerMutation.isPending
+                })}
+                disabled={registerMutation.isPending}
               >
                 Register
               </motion.button>

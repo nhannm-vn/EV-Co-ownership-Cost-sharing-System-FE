@@ -49,13 +49,13 @@ export default function ChangePassword() {
       onSuccess: (response) => {
         console.log('Change password thành công:', response)
         toast.success('Change password successful', {
-          autoClose: 2000
+          autoClose: 1000
         })
         navigate(path.dashBoard)
       },
       onError: (error) => {
         toast.error('Change password failed', {
-          autoClose: 2000
+          autoClose: 1000
         })
         console.log('Change password thất bại:', error)
       }
