@@ -18,6 +18,7 @@ import authApi from '../../apis/auth.api'
 import { clearLS, getAccessTokenFromLS } from '../../utils/auth'
 import { AppContext } from '../../contexts/app.context'
 import { toast } from 'react-toastify'
+import classNames from 'classnames'
 
 function NavHeader() {
   // set trạng thái cho ngôn ngữ
@@ -78,7 +79,7 @@ function NavHeader() {
         //Xóa trên localstorage
         clearLS()
         toast.success('Logout successfully!', {
-          autoClose: 4000
+          autoClose: 1000
         })
       }
     })
@@ -245,7 +246,13 @@ function NavHeader() {
             {/* Logout section */}
             <div className='border-t border-gray-200/70 mt-2'>
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
-                <div onClick={handleLogout} className='flex items-center gap-3'>
+                <div
+                  onClick={handleLogout}
+                  className={classNames({
+                    'flex items-center gap-3 cursor-not-allowed pointer-events-none': logoutMutation.isPending,
+                    'flex items-center gap-3 ': !logoutMutation.isPending
+                  })}
+                >
                   <LogoutOutlined className='text-red-500 group-hover:text-red-600 transition-colors' />
                   <span className='group-hover:text-red-600 transition-colors'>Đăng Xuất</span>
                 </div>
