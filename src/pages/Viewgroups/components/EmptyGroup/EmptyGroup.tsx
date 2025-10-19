@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router'
 import path from '../../../../constants/path'
+import logo from '../../../../assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
 
 export default function EmptyGroup() {
   return (
@@ -47,7 +48,7 @@ export default function EmptyGroup() {
           >
             <div className='absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.15),transparent)]' />
             <div>
-              <img src='src/assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png' alt='error_image' />
+              <img src={logo} alt='error_image' />
             </div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}

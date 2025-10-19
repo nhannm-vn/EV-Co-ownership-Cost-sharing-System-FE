@@ -3,11 +3,19 @@ import { motion } from 'framer-motion'
 import DataTable from './components/DataTable'
 import EmptyGroup from './components/EmptyGroup'
 import HeroSection from './components/HeroSection'
-import { groupListData } from './data/test-data'
+import type { CreateGroupMember } from '../../types/api/user.type'
+import { useLocation } from 'react-router'
+interface IlocationState {
+  newGroup: CreateGroupMember
+}
 
 export default function Viewgroups() {
-  if (groupListData.length === 0) return <EmptyGroup />
+  const location = useLocation()
 
+  const state = location.state as IlocationState
+  if (!state || !state.newGroup) {
+    return <EmptyGroup />
+  }
   return (
     <motion.div
       initial={{ opacity: 0 }}

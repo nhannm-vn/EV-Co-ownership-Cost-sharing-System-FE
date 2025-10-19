@@ -20,7 +20,7 @@ export default function TableBody() {
   const statusStyle = getStatusStyle(state.newGroup.status)
 
   const truncatedDescription =
-    state.newGroup.description.length > 50
+    state?.newGroup.description.length > 50
       ? `${state.newGroup.description.substring(0, 50)}...`
       : state.newGroup.description
 

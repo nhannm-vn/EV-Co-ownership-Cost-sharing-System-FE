@@ -68,6 +68,7 @@ export interface CreateGroupMember {
   groupName: string
   status: 'PENDING' | 'ACTIVE' | 'REJECTED'
   description: string
+}
 export interface UploadImage {
   message: string
   front: {
