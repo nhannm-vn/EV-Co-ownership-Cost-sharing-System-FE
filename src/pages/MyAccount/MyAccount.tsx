@@ -14,30 +14,12 @@ export default function ProfilePage() {
   const [user, setUser] = useState<UserGetProfile | null>(null)
   useEffect(() => {
     userApi.getProfile().then((response) => {
+      console.log(response.data)
       setUser(response.data)
     })
   }, [])
 
   console.log(user)
-
-  //Demo data
-  const profile = {
-    username: 'Lupin III',
-    avatar: 'https://opensource.fb.com/img/projects/react.jpg',
-    email: 'lupin3@gmail.com',
-    phone: '+84 912 345 678',
-    // Documents với 2 mặt
-    cccd: {
-      front: 'https://ben.com.vn/tin-tuc/wp-content/uploads/2021/12/anh-che-cho-hai-huoc-cho-dien-thoai-4.jpg', // URL mặt trước CCCD
-      back: 'https://cdnphoto.dantri.com.vn/F3UzGpXRmU_lyCDPJQzrXZstLME=/thumb_w/990/2021/06/09/chodocx-1623207689539.jpeg' // URL mặt sau CCCD
-    },
-    gplx: {
-      front: 'https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/anh-meo-bua-50.jpg', // URL mặt trước GPLX
-      back: 'https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474087eGM/anh-meo-giao-su-sieu-bua_114727591.jpg' // URL mặt sau GPLX
-    },
-    totalGroups: 3,
-    status: 'Active'
-  }
 
   return (
     <div
@@ -82,7 +64,11 @@ export default function ProfilePage() {
                        border border-teal-400/30'
           >
             {/* Avatar */}
-            <Avatar avatar={profile.avatar} />
+            <Avatar
+              avatar={
+                'https://cdn-media.sforum.vn/storage/app/media/HuynhUy/React%20l%C3%A0%20g%C3%ACH%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20chi%20ti%E1%BA%BFt%20cho%20ng%C6%B0%E1%BB%9Di%20m%E1%BB%9Bi%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u/react-la-gi-1.jpg'
+              }
+            />
 
             {/* Username */}
             <Username username={user?.fullName as string} />
@@ -180,13 +166,17 @@ export default function ProfilePage() {
               <div className='grid md:grid-cols-2 gap-4'>
                 <DocCard
                   title='CCCD'
-                  imageFront={user?.documents.citizenIdImages[0] as string}
-                  imageBack={user?.documents.citizenIdImages[1] as string}
+                  imageFront={user?.documents.citizenIdImages?.front?.imageUrl || ''}
+                  imageBack={user?.documents.citizenIdImages?.back?.imageUrl || ''}
+                  statusFront={user?.documents.citizenIdImages?.front?.status || ''}
+                  statusBack={user?.documents.citizenIdImages?.back?.status || ''}
                 />
                 <DocCard
                   title='GPLX'
-                  imageFront={user?.documents.driverLicenseImages[0] as string}
-                  imageBack={user?.documents.driverLicenseImages[1] as string}
+                  imageFront={user?.documents.driverLicenseImages?.front?.imageUrl || ''}
+                  imageBack={user?.documents.driverLicenseImages?.back?.imageUrl || ''}
+                  statusFront={user?.documents.driverLicenseImages?.front?.status || ''}
+                  statusBack={user?.documents.driverLicenseImages?.back?.status || ''}
                 />
               </div>
             </motion.div>

@@ -21,12 +21,56 @@ export interface UserGetProfile {
   status: string
   createdAt: string
   documents: {
-    citizenIdImages: string[]
-    driverLicenseImages: string[]
+    citizenIdImages: {
+      front: {
+        documentId: number
+        imageUrl: string
+        reviewNote: string
+        status: string
+        uploadedAt: string
+      }
+      back: {
+        documentId: number
+        imageUrl: string
+        reviewNote: string
+        status: string
+        uploadedAt: string
+      }
+    }
+    driverLicenseImages: {
+      front: {
+        documentId: number
+        imageUrl: string
+        reviewNote: string
+        status: string
+        uploadedAt: string
+      }
+      back: {
+        documentId: number
+        imageUrl: string
+        reviewNote: string
+        status: string
+        uploadedAt: string
+      }
+    }
   }
   statistics: {
     groupsJoined: number
     accountStatus: string
     memberSince: string
+  }
+}
+
+export interface UploadImage {
+  message: string
+  front: {
+    imageUrl: string
+    status: string
+    documentId: number
+  }
+  back: {
+    imageUrl: string
+    status: string
+    documentId: number
   }
 }
