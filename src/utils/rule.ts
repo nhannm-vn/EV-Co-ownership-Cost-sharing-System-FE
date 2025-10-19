@@ -93,6 +93,12 @@ const imageFileSchema = yup
 export const createGroupSchema = yup.object({
   groupName: yup.string().required('Group name is required').min(3, 'Group name must be at least 3 characters'),
 
+  assetValue: yup
+    .mixed()
+    .test('required', 'Vui lòng nhập giá tiền', (value) => value !== undefined && value !== null && value !== '')
+    .test('is-number', 'Giá tiền phải là số', (value) => !isNaN(Number(value)))
+    .test('positive', 'Giá tiền phải lớn hơn 0', (value) => Number(value) > 0),
+
   licensePlate: yup
     .string()
     .required('License plate is required')
