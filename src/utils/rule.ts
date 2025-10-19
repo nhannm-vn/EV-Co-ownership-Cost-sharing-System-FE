@@ -64,7 +64,7 @@ export const resetPasswordSchema = yup.object({
 
 // rule cho file hình ảnh
 const MAX_SIZE = 2 * 1024 * 1024 // 2MB
-const MAX_FILE = 3
+const MAX_FILE = 2
 const imageFileSchema = yup
   // vì yup không hỗ trợ kiểu file nên phải đẻ mix nền dih
   .mixed<FileList>()
@@ -94,10 +94,11 @@ export const createGroupSchema = yup.object({
   groupName: yup.string().required('Group name is required').min(3, 'Group name must be at least 3 characters'),
 
   assetValue: yup
-    .mixed()
-    .test('required', 'Vui lòng nhập giá tiền', (value) => value !== undefined && value !== null && value !== '')
-    .test('is-number', 'Giá tiền phải là số', (value) => !isNaN(Number(value)))
-    .test('positive', 'Giá tiền phải lớn hơn 0', (value) => Number(value) > 0),
+    .number()
+    .typeError('Giá tiền phải là số')
+    .required('Vui lòng nhập giá tiền')
+    .positive('Giá tiền phải lớn hơn 0')
+    .defined(), // đảm bảo giá trị được định nghĩa,
 
   licensePlate: yup
     .string()
@@ -139,7 +140,8 @@ export const createGroupSchema = yup.object({
     .typeError('Value must be a number')
     .required('This field is required')
     .min(2, 'Minimum value is 2')
-    .max(5, 'Maximum value is 5'),
+    .max(5, 'Maximum value is 5')
+    .defined(),
   // đoạn script tối đa 100 ký tự
   description: yup.string().required('Description is required').max(100, 'Description must be at most 100 characters'),
 

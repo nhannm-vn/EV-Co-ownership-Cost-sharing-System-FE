@@ -1,5 +1,6 @@
 // file chứa những method call api cho user/co-owner
 
+import type { CreateGroupMember, UserGetProfile } from '../types/api/user.type'
 import type { UploadImage, UserGetProfile } from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
@@ -16,6 +17,9 @@ const userApi = {
     })
   },
 
+  CreateGroup: (body: FormData) => {
+    return http.post<CreateGroupMember>('api/groups/with-vehicle', body, {
+      headers: {
   uploadLicense(frontFile: File, backFile: File) {
     const accessToken = getAccessTokenFromLS()
     const formData = new FormData()
