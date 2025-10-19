@@ -6,6 +6,8 @@ interface AppContextInterface {
   isAuthenticated: boolean
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
   reset: () => void
+  emailAccount: string
+  setEmailAccount: React.Dispatch<React.SetStateAction<string>>
 }
 
 // initialState giúp coi ban đầu sẽ lưu gì
@@ -13,7 +15,9 @@ const initialAppContext: AppContextInterface = {
   // Nếu lấy ra được access_token thì sẽ là true, còn là '' thì ép kiểu về false
   isAuthenticated: Boolean(getAccessTokenFromLS()),
   setIsAuthenticated: () => null,
-  reset: () => null
+  reset: () => null,
+  emailAccount: '',
+  setEmailAccount: () => null
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -21,6 +25,7 @@ export const AppContext = createContext<AppContextInterface>(initialAppContext)
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
+  const [emailAccount, setEmailAccount] = useState<string>(initialAppContext.emailAccount)
 
   const reset = () => {
     setIsAuthenticated(false)
@@ -32,7 +37,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         isAuthenticated,
         setIsAuthenticated,
-        reset
+        reset,
+        emailAccount,
+        setEmailAccount
       }}
     >
       {children}
