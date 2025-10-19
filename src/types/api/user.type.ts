@@ -30,3 +30,10 @@ export interface UserGetProfile {
     memberSince: string
   }
 }
+
+export interface CreateGroupMember {
+  groupId: number
+  groupName: string
+  status: 'PENDING' | 'ACTIVE' | 'REJECTED'
+  description: string
+}

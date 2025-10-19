@@ -14,8 +14,6 @@ interface IFileUpload {
 }
 
 export default function FileUpload({ label, file, register, onRemove, error }: IFileUpload) {
-  console.log(file)
-
   return (
     <div>
       <label className='block text-xs font-medium text-gray-300 mb-1.5'>
@@ -63,7 +61,7 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
                   className='text-base text-teal-400 flex-shrink-0'
                 />
                 {/* truncate là cắt ngắn văn bản nếu quá dài đẩy mất cái button */}
-                <p className='flex items-center flex-1 min-w-0'>
+                <div className='flex items-center flex-1 min-w-0'>
                   <p className='text-xs text-gray-300 truncate flex-1'>{f.name}</p>
                   <button
                     type='button'
@@ -72,7 +70,7 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
                   >
                     Xóa
                   </button>
-                </p>
+                </div>
               </div>
             ))}
         </div>
