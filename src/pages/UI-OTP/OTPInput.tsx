@@ -8,6 +8,7 @@ import path from '../../constants/path'
 import { AppContext } from '../../contexts/app.context'
 import { useOTPLogic } from '../../hooks/useOTPInput'
 import { setAccessTokenToLS } from '../../utils/auth'
+import Skeleton from '../../components/Skeleton'
 
 // Props của component - hoàn toàn độc lập
 interface OTPInputProps {
@@ -38,12 +39,16 @@ function OTPInput({ length = 6 }: OTPInputProps) {
         // console.log('OTP verified successfully:', response.data)
         // console.log(response.data?.accessToken)
         if (type === 'REGISTRATION') {
-          toast.success('Xác thực OTP thành công')
+          toast.success('Xác thực OTP thành công', {
+            autoClose: 1000
+          })
           setAccessTokenToLS(response.data?.accessToken as string)
           setIsAuthenticated(true)
           navigate(path.dashBoard)
         } else if (type === 'PASSWORD_RESET') {
-          toast.success('Xác thực OTP thành công, vui lòng đặt lại mật khẩu mới')
+          toast.success('Xác thực OTP thành công, vui lòng đặt lại mật khẩu mới', {
+            autoClose: 1000
+          })
           console.log(response.data?.resetToken)
 
           navigate(path.resetPassword, {
@@ -80,25 +85,31 @@ function OTPInput({ length = 6 }: OTPInputProps) {
 
   const handleResend = () => {
     if (!email) {
-      toast.error('Email không tồn tại, không thể gửi lại OTP')
+      toast.error('Email không tồn tại, không thể gửi lại OTP', {
+        autoClose: 1000
+      })
       return
     }
     resetOTP()
     resendOTPMutation.mutate(email, {
       onSuccess: (response) => {
-        toast.success('Mã OTP đã được gửi lại')
+        toast.success('Mã OTP đã được gửi lại', {
+          autoClose: 1000
+        })
         if (response.data?.type) {
           setType(response.data.type)
         }
       },
-      onError: () => toast.error('Gửi lại OTP thất bại, vui lòng thử lại')
+      onError: () =>
+        toast.error('Gửi lại OTP thất bại, vui lòng thử lại', {
+          autoClose: 1000
+        })
     })
   }
 
-  return (
-    // min-h-screen chiều cao tối thiểu (full Page)
-    // bg-gradient-to-br nền chạy từ trái sang br là botton right
-
+  return OTPMutation.isPending ? (
+    <Skeleton />
+  ) : (
     <div className='min-h-screen bg-gradient-to-br from-[#0d2524] to-[#0f3433] flex flex-col items-center justify-center p-4 font-sans'>
       {/* Container chính */}
       <div className='relative w-full max-w-md'>
@@ -150,17 +161,17 @@ function OTPInput({ length = 6 }: OTPInputProps) {
                 // dùng khi người dùng copy dán
                 onPaste={handlePaste}
                 className={`
-                  w-12 h-14 text-center text-xl font-bold border-2 rounded-xl
-                  bg-slate-800/50 backdrop-blur-sm text-white placeholder-slate-500
-                  transition-all duration-300 focus:outline-none
-                  
-                  ${
-                    //  nếu đã nhập kí tự thì viền màu xanh và có shadow, chưa nhập thì viền xám và hover có hiệu ứng
-                    digit
-                      ? 'border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-slate-700/70'
-                      : 'border-slate-600 hover:border-slate-500 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.3)]'
-                  }
-                `}
+        w-12 h-14 text-center text-xl font-bold border-2 rounded-xl
+        bg-slate-800/50 backdrop-blur-sm text-white placeholder-slate-500
+        transition-all duration-300 focus:outline-none
+        
+        ${
+          //  nếu đã nhập kí tự thì viền màu xanh và có shadow, chưa nhập thì viền xám và hover có hiệu ứng
+          digit
+            ? 'border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-slate-700/70'
+            : 'border-slate-600 hover:border-slate-500 focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+        }
+      `}
                 placeholder=''
                 // hỗ trợ tự động điền trên mobile
                 autoComplete='one-time-code'
@@ -176,14 +187,14 @@ function OTPInput({ length = 6 }: OTPInputProps) {
             disabled={!checkComplete(otp) || isVerifying}
             onClick={() => handleVerify(otp.join(''))}
             className={`
-              w-full h-12 rounded-xl font-semibold text-base mb-6 border-0 transition-all duration-300 relative overflow-hidden
-              ${
-                checkComplete(otp)
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 shadow-[0_0_20px_rgba(6,182,212,0.4)] text-white cursor-pointer'
-                  : 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-gray-300 cursor-not-allowed'
-              }
-              ${isVerifying ? 'opacity-80' : ''}
-            `}
+    w-full h-12 rounded-xl font-semibold text-base mb-6 border-0 transition-all duration-300 relative overflow-hidden
+    ${
+      checkComplete(otp)
+        ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 shadow-[0_0_20px_rgba(6,182,212,0.4)] text-white cursor-pointer'
+        : 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-gray-300 cursor-not-allowed'
+    }
+    ${isVerifying ? 'opacity-80' : ''}
+  `}
           >
             {/* thêm cái này hiển thị vòng xoay xoay khi đang verify */}
             {isVerifying && (
