@@ -136,7 +136,7 @@ export default function Register() {
                   'w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300 cursor-not-allowed':
                     registerMutation.isPending,
                   'w-full rounded-lg bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg transition-transform duration-300 ':
-                    registerMutation.isPending
+                    !registerMutation.isPending
                 })}
                 disabled={registerMutation.isPending}
               >
