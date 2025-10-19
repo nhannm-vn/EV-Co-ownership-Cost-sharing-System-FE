@@ -24,7 +24,10 @@ const path = {
   ownershipRatio: 'ownershipRatio', // Relative path
 
   //OTP
-  OTP: '/demoOTP'
+  OTP: '/demoOTP',
+
+  // admin and staff dashboard
+  adminDashboard: '/manager'
 } as const
 
 export default path
