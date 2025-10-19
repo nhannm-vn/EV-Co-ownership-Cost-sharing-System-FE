@@ -1,16 +1,17 @@
-import { Link, useNavigate } from 'react-router'
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { motion } from 'framer-motion'
-import path from '../../constants/path'
-import { loginSchema, type LoginSchema } from '../../utils/rule'
 import { useMutation } from '@tanstack/react-query'
-import authApi from '../../apis/auth.api'
+import classNames from 'classnames'
+import { motion } from 'framer-motion'
 import { useContext } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
+import authApi from '../../apis/auth.api'
+import path from '../../constants/path'
 import { AppContext } from '../../contexts/app.context'
 import { setAccessTokenToLS } from '../../utils/auth'
-import { toast } from 'react-toastify'
-import classNames from 'classnames'
+import { loginSchema, type LoginSchema } from '../../utils/rule'
+import Skeleton from '../../components/Skeleton'
 
 export default function Login() {
   const {
@@ -51,7 +52,9 @@ export default function Login() {
     })
   })
 
-  return (
+  return loginMutation.isPending ? (
+    <Skeleton />
+  ) : (
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-400 via-cyan-500 to-indigo-600'>
       <motion.div
         initial={{ opacity: 0, y: 40 }}

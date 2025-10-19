@@ -1,6 +1,6 @@
+import { ToastContainer } from 'react-toastify'
 import './App.css'
 import Routers from './routers/configRouters'
-import { ToastContainer } from 'react-toastify'
 
 function App() {
   const routers = Routers()

@@ -40,7 +40,9 @@ function ResetPassword() {
       },
       {
         onSuccess: (response) => {
-          toast.success(response.data.message)
+          toast.success(response.data.message, {
+            autoClose: 1000
+          })
           navigate(path.login)
         },
         onError: (error) => {
