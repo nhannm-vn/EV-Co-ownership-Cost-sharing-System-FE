@@ -9,9 +9,6 @@ import TextAreaInput from './components/TextAreaInput'
 import TextInput from './components/TextInput'
 import NumberInput from './components/NumberInput'
 
-// ==================== TYPES ====================
-// định nghĩa kiểu dữ liệu form
-
 // ==================== MAIN COMPONENT ====================
 export default function CreateGroups() {
   // //  trạng thái cho các file hình ảnh của xe  để lưu trữ
@@ -49,7 +46,7 @@ export default function CreateGroups() {
 
   // ==================== RENDER ====================
   return (
-    // 🌊 Nền xanh ngọc bích năng lượng xe điện: tươi sáng, sạch, hiện đại
+    // Nền xanh ngọc bích năng lượng xe điện: tươi sáng, sạch, hiện đại
     <div className='min-h-screen bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] flex items-center justify-center p-6'>
       <motion.div
         className='max-w-2xl w-full'
@@ -76,12 +73,20 @@ export default function CreateGroups() {
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               {/* Group name */}
-              <TextInput
-                label='Tên Group'
-                placeholder='Nhập tên group'
-                register={register('groupName')}
-                error={errors.groupName?.message}
-              />
+              <div className='grid grid-cols-2 gap-3'>
+                <TextInput
+                  label='Tên Group'
+                  placeholder='Nhập tên group'
+                  register={register('groupName')}
+                  error={errors.groupName?.message}
+                />
+                <TextInput
+                  label='Nhập giá trị tài sản'
+                  placeholder='Nhập giá tiền (VNĐ)'
+                  register={register('assetValue')}
+                  error={errors.assetValue?.message}
+                />
+              </div>
 
               {/* License plate and chassis number */}
               <div className='grid grid-cols-2 gap-3'>
