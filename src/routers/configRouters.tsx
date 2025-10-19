@@ -27,6 +27,10 @@ import UploadLicense from '../pages/UploadLicense'
 import Viewgroups from '../pages/Viewgroups'
 import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
+import AdminDashboard from '../pages/AdminDashboard'
+import Demo1 from '../pages/AdminDashboard/pages/Demo1'
+import Demo2 from '../pages/AdminDashboard/pages/Demo2'
+import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -165,6 +169,26 @@ function Routers() {
         {
           path: '*',
           element: <NotFound />
+        }
+      ]
+    },
+
+    // dashboard quản lý của admin và staff sẽ được thêm ở đây sau
+    {
+      path: path.adminDashboard,
+      element: <AdminDashboard />,
+      children: [
+        {
+          index: true,
+          element: <Demo1 />
+        },
+        {
+          path: 'demo2',
+          element: <Demo2 />
+        },
+        {
+          path: 'demo3',
+          element: <Demo3 />
         }
       ]
     }
