@@ -5,18 +5,17 @@ interface IDocCard {
   title: string
   imageFront: string | null // Mặt trước
   imageBack: string | null // Mặt sau
+  statusFront: string // trang thai duyet hinh
+  statusBack: string // trang thai duyet hinh
 }
 
-function DocCard({ title, imageFront, imageBack }: IDocCard) {
+function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDocCard) {
   const [isFlipped, setIsFlipped] = useState(false)
-
-  // Xác định trạng thái cho từng mặt
-  const isUploadedFront = !!imageFront
-  const isUploadedBack = !!imageBack
 
   // Hiển thị ảnh tương ứng với mặt đang xem
   const currentImage = isFlipped ? imageBack : imageFront
-  const currentStatus = isFlipped ? isUploadedBack : isUploadedFront
+  const currentStatus = isFlipped ? statusBack : statusFront
+  const isApproved = currentStatus === 'APPROVED'
   const currentSide = isFlipped ? 'Mặt sau' : 'Mặt trước'
 
   return (
@@ -25,67 +24,78 @@ function DocCard({ title, imageFront, imageBack }: IDocCard) {
         whileHover={{ scale: 1.02, y: -2 }}
         className='relative w-full rounded-2xl overflow-hidden border-2 border-teal-400/30 bg-gradient-to-br from-slate-800/60 to-slate-900/60 shadow-lg transition-all hover:border-teal-400/60'
       >
-        {/* Status Dot - Chấm màu theo mặt đang xem */}
-        <div className='absolute top-3 right-3 z-10'>
-          <div
-            className={`w-3 h-3 rounded-full ${currentStatus ? 'bg-green-500' : 'bg-red-500'} shadow-lg`}
-            style={{
-              boxShadow: currentStatus ? '0 0 10px rgba(34, 197, 94, 0.8)' : '0 0 10px rgba(239, 68, 68, 0.8)'
-            }}
-          />
-        </div>
-
-        {/* Title */}
-        <div className='p-4 text-center border-b border-teal-400/30 bg-slate-900/50'>
-          <div className='flex items-center justify-between'>
-            <div className='flex-1 text-left'>
-              <h4 className='text-teal-300 text-lg font-bold'>{title}</h4>
+        {/* Title với Status Badge và Flip Button */}
+        <div className='p-4 border-b border-teal-400/30 bg-slate-900/50'>
+          <div className='flex items-start justify-between gap-3'>
+            {/* Left: Title và Side Info */}
+            <div className='flex-1 min-w-0'>
+              <h4 className='text-teal-300 text-lg font-bold truncate'>{title}</h4>
               <p className='text-teal-400/70 text-xs mt-1'>{currentSide}</p>
             </div>
 
-            {/* Flip Button */}
-            <button
-              onClick={() => setIsFlipped(!isFlipped)}
-              className='ml-3 p-2 rounded-lg bg-teal-500/20 border border-teal-400/30 hover:bg-teal-500/30 transition-all group'
-              title={`Xem ${isFlipped ? 'mặt trước' : 'mặt sau'}`}
-            >
-              <svg
-                width='20'
-                height='20'
-                viewBox='0 0 24 24'
-                fill='none'
-                className='text-teal-300 group-hover:rotate-180 transition-transform duration-500'
+            {/* Right: Status Badge và Flip Button */}
+            <div className='flex items-center gap-2 flex-shrink-0'>
+              {/* Status Badge */}
+              <div
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-sm ${
+                  isApproved ? 'bg-green-500/20 border border-green-400/40' : 'bg-red-500/20 border border-red-400/40'
+                }`}
               >
-                <path
-                  d='M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
+                <div
+                  className={`w-2 h-2 rounded-full ${isApproved ? 'bg-green-500' : 'bg-red-500'}`}
+                  style={{
+                    boxShadow: isApproved ? '0 0 10px rgba(34, 197, 94, 0.8)' : '0 0 10px rgba(239, 68, 68, 0.8)'
+                  }}
                 />
-                <path
-                  d='M21 3v5h-5'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-                <path
-                  d='M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-                <path
-                  d='M3 21v-5h5'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
-            </button>
+                <span className={`text-xs font-semibold ${isApproved ? 'text-green-400' : 'text-red-400'}`}>
+                  {isApproved ? 'Active' : 'Pending'}
+                </span>
+              </div>
+
+              {/* Flip Button */}
+              <button
+                onClick={() => setIsFlipped(!isFlipped)}
+                className='p-2 rounded-lg bg-teal-500/20 border border-teal-400/30 hover:bg-teal-500/30 transition-all group'
+                title={`Xem ${isFlipped ? 'mặt trước' : 'mặt sau'}`}
+              >
+                <svg
+                  width='20'
+                  height='20'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  className='text-teal-300 group-hover:rotate-180 transition-transform duration-500'
+                >
+                  <path
+                    d='M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <path
+                    d='M21 3v5h-5'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <path
+                    d='M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                  <path
+                    d='M3 21v-5h5'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
