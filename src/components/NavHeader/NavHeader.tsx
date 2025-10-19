@@ -31,7 +31,7 @@ function NavHeader() {
   const [enableNotificationScroll, setEnableNotificationScroll] = useState(false)
 
   // lấy state global từ contextApi
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, emailAccount } = useContext(AppContext)
 
   // hàm giúp set các state boolean với prevent default để tránh giật dropdown
   const handleSetState = (func: React.Dispatch<React.SetStateAction<boolean>>) => (e: React.MouseEvent) => {
@@ -192,7 +192,7 @@ function NavHeader() {
               className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 hover:scale-110 bg-gray-700/60'
               icon={<UserOutlined />}
             />
-            <span className='text-gray-300 font-medium'>dn@gmail.com</span>
+            <span className='text-gray-300 font-medium'>{emailAccount}</span>
           </Space>
         </div>
 
@@ -213,7 +213,7 @@ function NavHeader() {
                   <UserOutlined className='text-white text-sm' />
                 </div>
                 <div>
-                  <div className='text-sm font-semibold text-gray-800'>dn@gmail.com</div>
+                  <div className='text-sm font-semibold text-gray-800'>{emailAccount}</div>
                   <div className='text-xs text-gray-500'>Thành viên</div>
                 </div>
               </div>

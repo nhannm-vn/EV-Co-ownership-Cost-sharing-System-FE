@@ -7,6 +7,7 @@ export const setAccessTokenToLS = (accessToken: string) => {
 
 export const clearLS = () => {
   localStorage.removeItem('accessToken')
+  localStorage.removeItem('emailAccount')
   const clearLSEvent = new Event('clearLS')
   LocalStorageEventTarget.dispatchEvent(clearLSEvent)
 }

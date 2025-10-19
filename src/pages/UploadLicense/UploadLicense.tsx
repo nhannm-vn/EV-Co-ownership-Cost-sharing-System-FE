@@ -35,7 +35,7 @@ export default function UploadLicense() {
       console.log('Upload GPLX thành công:', data)
       setUploadSuccess((prev) => ({ ...prev, gplx: true }))
       toast.success('Upload GPLX successfully!', {
-        autoClose: 3000
+        autoClose: 1500
       })
     },
     onError: (error) => {
@@ -52,7 +52,7 @@ export default function UploadLicense() {
       console.log('Upload CCCD thành công:', data)
       setUploadSuccess((prev) => ({ ...prev, cccd: true }))
       toast.success('Upload CCCD successfully!', {
-        autoClose: 3000
+        autoClose: 1500
       })
     },
     onError: (error) => {
