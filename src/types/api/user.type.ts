@@ -11,6 +11,41 @@ export interface User {
   updatedAt: string
 }
 
+interface Documents {
+  citizenIdImages: {
+    front: {
+      documentId: number
+      imageUrl: string
+      reviewNote: string
+      status: string
+      uploadedAt: string
+    }
+    back: {
+      documentId: number
+      imageUrl: string
+      reviewNote: string
+      status: string
+      uploadedAt: string
+    }
+  }
+  driverLicenseImages: {
+    front: {
+      documentId: number
+      imageUrl: string
+      reviewNote: string
+      status: string
+      uploadedAt: string
+    }
+    back: {
+      documentId: number
+      imageUrl: string
+      reviewNote: string
+      status: string
+      uploadedAt: string
+    }
+  }
+}
+
 export interface UserGetProfile {
   userId: number
   fullName: string
@@ -20,40 +55,7 @@ export interface UserGetProfile {
   roleName: string
   status: string
   createdAt: string
-  documents: {
-    citizenIdImages: {
-      front: {
-        documentId: number
-        imageUrl: string
-        reviewNote: string
-        status: string
-        uploadedAt: string
-      }
-      back: {
-        documentId: number
-        imageUrl: string
-        reviewNote: string
-        status: string
-        uploadedAt: string
-      }
-    }
-    driverLicenseImages: {
-      front: {
-        documentId: number
-        imageUrl: string
-        reviewNote: string
-        status: string
-        uploadedAt: string
-      }
-      back: {
-        documentId: number
-        imageUrl: string
-        reviewNote: string
-        status: string
-        uploadedAt: string
-      }
-    }
-  }
+  documents: Documents
   statistics: {
     groupsJoined: number
     accountStatus: string
