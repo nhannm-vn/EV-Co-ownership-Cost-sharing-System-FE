@@ -6,9 +6,10 @@ interface IField {
   label: string
   handleFileChange: (type: DocType, side: DocSide, file: File | null) => void
   docs: Record<DocType, DocFiles>
+  disabled?: boolean
 }
 
-function Field({ type, side, label, handleFileChange, docs }: IField) {
+function Field({ type, side, label, handleFileChange, docs, disabled = false }: IField) {
   const file = docs[type][side]
   const hasFile = Boolean(file)
 
@@ -19,27 +20,28 @@ function Field({ type, side, label, handleFileChange, docs }: IField) {
         {hasFile && (
           <span className='text-xs text-green-400 flex items-center gap-1'>
             <span className='w-2 h-2 bg-green-500 rounded-full' />
-            Đã tải
+            Đã chọn
           </span>
         )}
       </div>
 
       <label
-        className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 transition-all cursor-pointer
+        className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 transition-all
                     ${
-                      hasFile
-                        ? 'border-green-500/60 bg-green-950/30 hover:bg-green-950/40'
-                        : 'border-teal-500/40 bg-teal-950/20 hover:bg-teal-950/30'
+                      disabled
+                        ? 'border-gray-600 bg-gray-800/20 cursor-not-allowed opacity-50'
+                        : hasFile
+                          ? 'border-green-500/60 bg-green-950/30 hover:bg-green-950/40 cursor-pointer'
+                          : 'border-teal-500/40 bg-teal-950/20 hover:bg-teal-950/30 cursor-pointer'
                     }`}
       >
-        {/* Icon */}
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
           viewBox='0 0 24 24'
           strokeWidth={2}
           stroke='currentColor'
-          className={`h-10 w-10 mb-2 ${hasFile ? 'text-green-300' : 'text-teal-300'}`}
+          className={`h-10 w-10 mb-2 ${disabled ? 'text-gray-500' : hasFile ? 'text-green-300' : 'text-teal-300'}`}
         >
           {hasFile ? (
             <path
@@ -56,8 +58,9 @@ function Field({ type, side, label, handleFileChange, docs }: IField) {
           )}
         </svg>
 
-        {/* Text - Fix: Thêm optional chaining cho file.name */}
-        <span className={`text-sm font-medium ${hasFile ? 'text-green-200' : 'text-teal-200'}`}>
+        <span
+          className={`text-sm font-medium ${disabled ? 'text-gray-400' : hasFile ? 'text-green-200' : 'text-teal-200'}`}
+        >
           {hasFile ? file?.name : 'Chọn hoặc kéo thả ảnh'}
         </span>
         <span className='text-xs text-gray-400 mt-1'>PNG, JPG (Max 5MB)</span>
@@ -66,6 +69,7 @@ function Field({ type, side, label, handleFileChange, docs }: IField) {
           type='file'
           accept='image/*'
           onChange={(e) => handleFileChange(type, side, e.target.files?.[0] ?? null)}
+          disabled={disabled}
           className='sr-only'
         />
       </label>
