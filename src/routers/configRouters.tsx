@@ -27,14 +27,16 @@ import UploadLicense from '../pages/UploadLicense'
 import Viewgroups from '../pages/Viewgroups'
 import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
+
 import AdminDashboard from '../pages/AdminDashboard'
 import Demo1 from '../pages/AdminDashboard/pages/Demo1'
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
+import RoleCheck from './CheckRole/CheckRole'
 
 function Routers() {
   const routers = createBrowserRouter([
-    // RejectedRoute - Routes cho người chưa đăng nhập (home, login, register, forgot password)
+    // ... (Phần RejectedRoute và LearnmoreLayout giữ nguyên, không thay đổi)
     {
       path: '/',
       element: <RejectedRoute />,
@@ -43,111 +45,74 @@ function Routers() {
           path: '',
           element: <RegisterLayout />,
           children: [
-            {
-              index: true,
-              element: <Home />
-            },
-            {
-              path: path.login,
-              element: <Login />
-            },
-            {
-              path: path.register,
-              element: <Register />
-            },
-            {
-              path: path.forgotPassword,
-              element: <ForgotPassword />
-            },
-            {
-              path: path.resetPassword,
-              element: <ResetPassword />
-            }
+            { index: true, element: <Home /> },
+            { path: path.login, element: <Login /> },
+            { path: path.register, element: <Register /> },
+            { path: path.forgotPassword, element: <ForgotPassword /> },
+            { path: path.resetPassword, element: <ResetPassword /> }
           ]
         }
       ]
     },
-
-    // LearnmoreLayout - Public route (ai cũng vào được)
     {
       path: path.learnMore,
       element: <LearnmoreLayout />,
-      children: [
-        {
-          index: true,
-          element: <Learnmore />
-        }
-      ]
+      children: [{ index: true, element: <Learnmore /> }]
     },
 
-    // ProtectedRoute - MainLayout (phải login mới vào được)
+    // ProtectedRoute - CỔNG CHÍNH (Phải login)
     {
       path: '/',
-      element: <ProtectedRoute />,
+      element: <ProtectedRoute />, // <-- BẢO VỆ CẤP 1 (Check Login)
       children: [
+        // --- NHÓM 1: DÀNH CHO 'CO_OWNER' (User thường) ---
         {
-          path: path.dashBoard,
-          element: <MainLayout />,
+          // BẢO VỆ CẤP 2 (Check Role)
+          element: <RoleCheck allowedRoles={['CO_OWNER']} />,
           children: [
             {
-              index: true,
-              element: <Dashboard />
+              path: path.dashBoard, // /dashboard
+              element: <MainLayout />,
+              children: [
+                { index: true, element: <Dashboard /> },
+                { path: path.viewGroups, element: <Viewgroups /> },
+                { path: path.createGroups, element: <CreateGroups /> },
+                { path: path.issueReport, element: <IssueReport /> },
+                { path: path.profile, element: <MyAccount /> },
+                { path: path.uploadLicense, element: <UploadLicense /> },
+                { path: path.changePassword, element: <ChangePassword /> }
+              ]
             },
             {
-              path: path.viewGroups,
-              element: <Viewgroups />
-            },
-            {
-              path: path.createGroups,
-              element: <CreateGroups />
-            },
-            {
-              path: path.issueReport,
-              element: <IssueReport />
-            },
-            {
-              path: path.profile,
-              element: <MyAccount />
-            },
-            {
-              path: path.uploadLicense,
-              element: <UploadLicense />
-            },
-            {
-              path: path.changePassword,
-              element: <ChangePassword />
+              path: path.group, // /group
+              element: <GroupPageLayout />,
+              children: [
+                {
+                  element: <GroupPage />,
+                  children: [
+                    { index: true, element: <DashboardGP /> },
+                    { path: path.createContract, element: <CreateContract /> },
+                    { path: path.viewMembers, element: <MemberGroup /> },
+                    { path: path.ownershipPercentage, element: <CoOwnershipPercentage /> },
+                    { path: path.ownershipRatio, element: <OwnershipRatio /> }
+                  ]
+                }
+              ]
             }
           ]
         },
 
-        // GroupPageLayout - cũng phải login
         {
-          path: path.group,
-          element: <GroupPageLayout />,
+          // BẢO VỆ CẤP 2 (Check Role)
+          element: <RoleCheck allowedRoles={['STAFF']} />,
           children: [
             {
-              element: <GroupPage />,
+              path: path.adminDashboard, // /admin
+              element: <AdminDashboard />,
               children: [
-                {
-                  index: true,
-                  element: <DashboardGP />
-                },
-                {
-                  path: path.createContract,
-                  element: <CreateContract />
-                },
-                {
-                  path: path.viewMembers,
-                  element: <MemberGroup />
-                },
-                {
-                  path: path.ownershipPercentage,
-                  element: <CoOwnershipPercentage />
-                },
-                {
-                  path: path.ownershipRatio,
-                  element: <OwnershipRatio />
-                }
+                { index: true, element: <Demo1 /> },
+                { path: 'checkLicense', element: <CheckLicense /> },
+                { path: 'demo3', element: <Demo3 /> }
               ]
             }
           ]
@@ -155,43 +120,18 @@ function Routers() {
       ]
     },
 
-    // Standalone routes - Demo OTP (public)
+    // ... (Phần /demoOTP và 404 Not Found giữ nguyên, không thay đổi)
     {
       path: '/demoOTP',
       element: <OTPInput />
     },
-
-    // 404 Not Found
     {
       path: '*',
       element: <RegisterLayout />,
-      children: [
-        {
-          path: '*',
-          element: <NotFound />
-        }
-      ]
-    },
-
-    // dashboard quản lý của admin và staff sẽ được thêm ở đây sau
-    {
-      path: path.adminDashboard,
-      element: <AdminDashboard />,
-      children: [
-        {
-          index: true,
-          element: <Demo1 />
-        },
-        {
-          path: 'checkLicense',
-          element: <CheckLicense />
-        },
-        {
-          path: 'demo3',
-          element: <Demo3 />
-        }
-      ]
+      children: [{ path: '*', element: <NotFound /> }]
     }
+
+    // !!! QUAN TRỌNG: KHỐI ADMIN CŨ Ở ĐÂY ĐÃ ĐƯỢC XÓA ĐI
   ])
 
   return <RouterProvider router={routers} />
