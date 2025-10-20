@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -15,6 +16,7 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
   const currentImage = isFlipped ? imageBack : imageFront
   const currentStatus = isFlipped ? statusBack : statusFront
   const isApproved = currentStatus === 'APPROVED'
+  const isRejected = currentStatus === 'REJECTED'
   const currentSide = isFlipped ? 'Mặt sau' : 'Mặt trước'
 
   return (
@@ -34,20 +36,32 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
             <div className='flex items-center gap-2 flex-shrink-0'>
               {/* Status Badge */}
               <div
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-sm ${
-                  isApproved
-                    ? 'bg-green-500/20 border border-green-400/40'
-                    : 'bg-yellow-500/20 border border-yellow-400/40'
-                }`}
+                className={classNames('flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-sm', {
+                  'bg-green-500/20 border border-green-400/40': isApproved,
+                  'bg-yellow-500/20 border border-yellow-400/40': !isApproved && !isRejected,
+                  'bg-red-500/20 border border-red-400/40': isRejected
+                })}
               >
                 <div
-                  className={`w-2 h-2 rounded-full ${isApproved ? 'bg-green-500' : 'bg-yellow-500'}`}
+                  className={classNames('w-2 h-2 rounded-full', {
+                    'bg-green-500': isApproved,
+                    'bg-yellow-500': !isApproved && !isRejected,
+                    'bg-red-500': isRejected
+                  })}
                   style={{
-                    boxShadow: isApproved ? '0 0 10px rgba(34, 197, 94, 0.8)' : '0 0 10px rgba(241, 209, 27, 0.8)'
+                    boxShadow: isApproved
+                      ? '0 0 10px rgba(34, 197, 94, 0.8)'
+                      : isRejected
+                        ? '0 0 10px rgba(239, 68, 68, 0.8)'
+                        : '0 0 10px rgba(241, 209, 27, 0.8)'
                   }}
                 />
-                <span className={`text-xs font-semibold ${isApproved ? 'text-green-400' : 'text-yellow-500'}`}>
-                  {isApproved ? 'Active' : 'Pending'}
+                <span
+                  className={`text-xs font-semibold ${
+                    isApproved ? 'text-green-400' : isRejected ? 'text-red-400' : 'text-yellow-500'
+                  }`}
+                >
+                  {isApproved ? 'Active' : isRejected ? 'Rejected' : 'Pending'}
                 </span>
               </div>
 
@@ -98,7 +112,7 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
           </div>
         </div>
 
-        {/* Image hoặc Placeholder - MỜ mặc định, RÕ khi hover */}
+        {/* Image hoặc Placeholder - Mờ mặc định, Rõ khi hover */}
         {currentImage ? (
           <div className='relative w-full h-56 group'>
             {/* ✅ Thêm blur mặc định, bỏ blur khi hover */}
@@ -108,7 +122,7 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
               className='w-full h-full object-cover blur-md group-hover:blur-none transition-all duration-300'
             />
 
-            {/* Overlay gradient - MỜ hơn khi hover */}
+            {/* Overlay gradient - Mờ hơn khi hover */}
             <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/30 transition-all duration-300' />
 
             {/* Side indicator */}
