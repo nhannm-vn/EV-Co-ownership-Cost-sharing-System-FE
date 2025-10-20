@@ -29,7 +29,7 @@ import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
 import AdminDashboard from '../pages/AdminDashboard'
 import Demo1 from '../pages/AdminDashboard/pages/Demo1'
-import Demo2 from '../pages/AdminDashboard/pages/Demo2'
+import Demo2 from '../pages/AdminDashboard/pages/CheckLicense'
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 
 function Routers() {
