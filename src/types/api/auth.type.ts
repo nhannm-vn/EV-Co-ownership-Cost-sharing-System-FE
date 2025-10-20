@@ -2,6 +2,8 @@
 
 import type { User } from './user.type'
 
+type Role = 'CO_OWNER' | 'STAFF'
+
 // AuthResponse là kiểu dữ liệu mà server  trả về cụ thể cho register/login luôn
 export type AuthResponse = {
   accessToken?: string
@@ -12,4 +14,5 @@ export type AuthResponse = {
   message?: string
   type?: string
   resetToken?: string
+  role?: Role
 }
