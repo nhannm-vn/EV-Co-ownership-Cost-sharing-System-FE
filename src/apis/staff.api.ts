@@ -1,4 +1,4 @@
-import type { GroupStaffList, UserOfStaff } from '../types/api/staff.type'
+import type { GroupImage, GroupStaffList, UserOfStaff } from '../types/api/staff.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -19,9 +19,13 @@ const staffApi = {
       }
     })
   },
-
+  // lấy danh sách group để duyệt
   getAllGroupStaff() {
     return http.get<GroupStaffList>('api/groups/staff/all')
+  },
+  // lấy hình ảnh group để duyệt
+  getGroupImages(groupId: number) {
+    return http.get<GroupImage[]>(`api/staff/vehicle-images/groups/${groupId}/images`)
   }
 }
 

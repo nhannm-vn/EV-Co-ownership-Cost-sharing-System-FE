@@ -48,3 +48,11 @@ export interface groupStaffItem {
 export interface GroupStaffList {
   content: groupStaffItem[]
 }
+
+// ảnh
+export interface GroupImage {
+  imageId: number
+  imageUrl: string
+  imageType: string
+  approvalStatus: string
+}
