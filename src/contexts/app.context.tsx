@@ -1,5 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState } from 'react'
-import { getAccessTokenFromLS, getEmailAccountFromLS } from '../utils/auth'
+import { getAccessTokenFromLS, getEmailAccountFromLS, getRoleFromLS } from '../utils/auth'
 
 // Định nghĩa context lưu dữ liệu kiểu gì hoặc nói cách khác là định nghĩa cho initialState
 interface AppContextInterface {
@@ -8,6 +9,8 @@ interface AppContextInterface {
   reset: () => void
   emailAccount: string
   setEmailAccount: React.Dispatch<React.SetStateAction<string>>
+  role: string
+  setRole: React.Dispatch<React.SetStateAction<string>>
 }
 
 // initialState giúp coi ban đầu sẽ lưu gì
@@ -17,7 +20,9 @@ const initialAppContext: AppContextInterface = {
   setIsAuthenticated: () => null,
   reset: () => null,
   emailAccount: getEmailAccountFromLS(),
-  setEmailAccount: () => null
+  setEmailAccount: () => null,
+  role: getRoleFromLS(),
+  setRole: () => null
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -26,6 +31,7 @@ export const AppContext = createContext<AppContextInterface>(initialAppContext)
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
   const [emailAccount, setEmailAccount] = useState<string>(initialAppContext.emailAccount)
+  const [role, setRole] = useState<string>(initialAppContext.role)
 
   const reset = () => {
     setIsAuthenticated(false)
@@ -39,7 +45,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated,
         reset,
         emailAccount,
-        setEmailAccount
+        setEmailAccount,
+        role,
+        setRole
       }}
     >
       {children}

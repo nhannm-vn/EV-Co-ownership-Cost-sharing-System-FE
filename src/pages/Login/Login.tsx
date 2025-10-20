@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
 import { AppContext } from '../../contexts/app.context'
-import { setAccessTokenToLS, setEmailAccountToLS } from '../../utils/auth'
+import { setAccessTokenToLS, setEmailAccountToLS, setRoleToLS } from '../../utils/auth'
 import { loginSchema, type LoginSchema } from '../../utils/rule'
 import Skeleton from '../../components/Skeleton'
 
@@ -40,6 +40,7 @@ export default function Login() {
         //phải ctrl r mới có sẽ bị bất đồng bộ
         console.log(response.data?.accessToken)
         setAccessTokenToLS(response.data?.accessToken as string)
+        setRoleToLS(response.data?.role as string)
         console.log(data?.email)
         setEmailAccountToLS(data?.email)
         setIsAuthenticated(true)

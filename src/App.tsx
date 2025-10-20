@@ -3,11 +3,9 @@ import './App.css'
 import Routers from './routers/configRouters'
 
 function App() {
-  const routers = Routers()
-
   return (
     <div>
-      {routers}
+      <Routers />
       <ToastContainer />
     </div>
   )
