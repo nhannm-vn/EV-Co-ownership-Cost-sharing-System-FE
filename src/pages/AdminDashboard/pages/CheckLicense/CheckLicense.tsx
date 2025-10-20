@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { UserOfStaff } from '../../../../types/api/staff.type'
+import staffApi from '../../../../apis/staff.api'
 
 type Status = 'PENDING' | 'APPROVED' | 'REJECTED'
 type DocType = 'cccd' | 'gplx'
@@ -78,6 +80,13 @@ const DOC_CONFIG = {
 export default function CheckLicense() {
   const [members, setMembers] = useState<Member[]>(mockMembers)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+
+  const [users, setUsers] = useState<UserOfStaff | null>(null)
+  useEffect(() => {
+    staffApi.getUsersPendingLicense().then((response) => {
+      console.log(response.data)
+    })
+  }, [])
 
   const updateStatus = (memberId: string, docType: DocType, side: Side, status: Status) => {
     setMembers((prev) =>
