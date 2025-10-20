@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import staffApi from '../../../../apis/staff.api'
 import type { groupStaffItem } from '../../../../types/api/staff.type'
+import { useState } from 'react'
+import PropupImage from './components/PopupImage'
 
 const statusStyles = {
   PENDING: 'bg-yellow-100 text-yellow-800',
@@ -16,12 +18,15 @@ const statusText = {
 
 type GroupStatus = keyof typeof statusStyles
 export default function Demo1() {
+  const [selectedGroup, setSelectedGroup] = useState<groupStaffItem | null>(null)
   const groupListQuery = useQuery({
     queryKey: ['groupList'],
     queryFn: staffApi.getAllGroupStaff
   })
 
-  const groupRequestsData: groupStaffItem[] = groupListQuery.data?.data?.content || []
+  const groupData: groupStaffItem[] = groupListQuery.data?.data?.content || []
+
+  console.log(groupData)
 
   function StatusBadge({ status }: { status: GroupStatus }) {
     return (
@@ -41,9 +46,10 @@ export default function Demo1() {
           <div className='bg-white p-6 rounded-lg shadow-lg'>
             <h2 className='text-xl font-semibold mb-4 border-b pb-2'>Danh sách chờ duyệt</h2>
             <div className='space-y-3'>
-              {groupRequestsData.map((group) => (
+              {groupData.map((group) => (
                 <div
                   key={group.groupId}
+                  onClick={() => setSelectedGroup(group)}
                   className='p-4 rounded-lg border cursor-pointer transition-all duration-200 flex justify-between items-center hover:bg-blue-50 hover:border-blue-300 hover:shadow-md'
                 >
                   {/* Mục 1: Tên nhóm (Tự động ở bên trái) */}
@@ -63,6 +69,8 @@ export default function Demo1() {
           </div>
         </main>
       </div>
+
+      {selectedGroup && <PropupImage group={selectedGroup} onClose={() => setSelectedGroup(null)} />}
     </div>
   )
 }
