@@ -1,7 +1,9 @@
 import { Card } from 'antd'
-import { groupListData } from '../../data/test-data'
+import { useContext } from 'react'
+import { GroupContext } from '../../../../hooks/useGroupList'
 
 export default function HeroSection() {
+  const groupListData = useContext(GroupContext)
   // Tính toán số lượng groups theo trạng thái
   const getTotalGroups = () => groupListData.length
 

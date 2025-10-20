@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { Fragment } from 'react/jsx-runtime'
-import userApi from '../../apis/user.api'
+import groupApi from '../../apis/group.api'
 import Skeleton from '../../components/Skeleton'
 import path from '../../constants/path'
 import { createGroupSchema, type CreateGroupSchema } from '../../utils/rule'
@@ -46,17 +46,13 @@ export default function CreateGroups() {
   const navigate = useNavigate()
   // xử lí call API
   const groupMutation = useMutation({
-    mutationFn: (body: FormData) => userApi.CreateGroup(body),
+    mutationFn: (body: FormData) => groupApi.CreateGroup(body),
     onSuccess: (response) => {
       console.log('Create group successful:', response?.data)
       toast.success('đăng kí tạo group thành công!')
       const fullPath = `${path.dashBoard}/${path.viewGroups}`
 
-      navigate(fullPath, {
-        state: {
-          newGroup: response?.data
-        }
-      })
+      navigate(fullPath)
     },
     onError: (error) => {
       toast.error('đăng kí tạo group thất bại. Vui lòng thử lại!')

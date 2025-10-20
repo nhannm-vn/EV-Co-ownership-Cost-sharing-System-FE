@@ -1,21 +1,21 @@
 'use client'
+import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import Skeleton from '../../components/Skeleton'
+
+import groupApi from '../../apis/group.api'
+import { GroupContext } from '../../hooks/useGroupList'
 import DataTable from './components/DataTable'
-import EmptyGroup from './components/EmptyGroup'
 import HeroSection from './components/HeroSection'
-import type { CreateGroupMember } from '../../types/api/user.type'
-import { useLocation } from 'react-router'
-interface IlocationState {
-  newGroup: CreateGroupMember
-}
 
 export default function Viewgroups() {
-  const location = useLocation()
+  const groupListQuery = useQuery({
+    queryKey: ['all-groups'],
+    queryFn: groupApi.viewGroup
+  })
 
-  const state = location.state as IlocationState
-  if (!state || !state.newGroup) {
-    return <EmptyGroup />
-  }
+  const allGroupList = groupListQuery?.data?.data?.content
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -28,24 +28,29 @@ export default function Viewgroups() {
       <div className='absolute inset-0'>
         <div
           className='absolute top-1/2 left-1/2 w-[900px] h-[900px] -translate-x-1/2 -translate-y-1/2 
-                        bg-teal-500/30 blur-[120px] rounded-full'
+                     bg-teal-500/30 blur-[120px] rounded-full'
         ></div>
-        <div className='absolute top-0 right-0 w-[500px] h-[500px] bg-teal-400/20 blur-[100px] rounded-full '></div>
+        <div className='absolute top-0 right-0 w-[500px] h-[500px] bg-teal-400/20 blur-[100px] rounded-full'></div>
       </div>
 
-      {/* nội dung */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
-        className='relative z-10 w-full max-w-6xl mx-auto p-8 mt-16 mb-16
-                   bg-white/10 backdrop-blur-lg rounded-2xl border-2 border-teal-400 shadow-[0_0_50px_rgba(20,184,166,0.6)] '
-      >
-        <HeroSection />
-        <div className='mt-6'>
-          <DataTable />
-        </div>
-      </motion.div>
+      {groupListQuery.isLoading ? (
+        <Skeleton />
+      ) : (
+        <GroupContext.Provider value={allGroupList || []}>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+            className='relative z-10 w-full max-w-6xl mx-auto p-8 mt-16 mb-16
+                     bg-white/10 backdrop-blur-lg rounded-2xl border-2 border-teal-400 shadow-[0_0_50px_rgba(20,184,166,0.6)] '
+          >
+            <HeroSection />
+            <div className='mt-6'>
+              <DataTable />{' '}
+            </div>
+          </motion.div>
+        </GroupContext.Provider>
+      )}
     </motion.div>
   )
 }

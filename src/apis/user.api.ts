@@ -1,6 +1,6 @@
 // file chứa những method call api cho user/co-owner
 
-import type { CreateGroupMember, UploadImage, UserGetProfile } from '../types/api/user.type'
+import type { UploadImage, UserGetProfile } from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -12,15 +12,6 @@ const userApi = {
     return http.get<UserGetProfile>('api/user/profile', {
       headers: {
         Authorization: `Bearer ${accessToken}`
-      }
-    })
-  },
-
-  CreateGroup: (body: FormData) => {
-    return http.post<CreateGroupMember>('api/groups/with-vehicle', body, {
-      headers: {
-        // SỬA 5: Sửa lại header cho đúng
-        'Content-Type': 'multipart/form-data'
       }
     })
   },
