@@ -29,8 +29,8 @@ import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
 import AdminDashboard from '../pages/AdminDashboard'
 import Demo1 from '../pages/AdminDashboard/pages/Demo1'
-import Demo2 from '../pages/AdminDashboard/pages/CheckLicense'
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
+import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -183,8 +183,8 @@ function Routers() {
           element: <Demo1 />
         },
         {
-          path: 'demo2',
-          element: <Demo2 />
+          path: 'checkLicense',
+          element: <CheckLicense />
         },
         {
           path: 'demo3',
