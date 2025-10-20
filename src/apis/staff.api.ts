@@ -3,6 +3,7 @@ import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
 const accessToken = getAccessTokenFromLS()
+type ReviewAction = 'APPROVE' | 'REJECT'
 
 const staffApi = {
   getUsers() {
@@ -18,6 +19,18 @@ const staffApi = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+
+  reviewDocument(documentId: number, action: ReviewAction) {
+    return http.post(
+      `/api/staff/documents/review/${documentId}`,
+      { action },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    )
   },
 
   getAllGroupStaff() {
