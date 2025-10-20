@@ -3,16 +3,15 @@ import { useState } from 'react'
 
 interface IDocCard {
   title: string
-  imageFront: string | null // Mặt trước
-  imageBack: string | null // Mặt sau
-  statusFront: string // trang thai duyet hinh
-  statusBack: string // trang thai duyet hinh
+  imageFront: string | null
+  imageBack: string | null
+  statusFront: string
+  statusBack: string
 }
 
 function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDocCard) {
   const [isFlipped, setIsFlipped] = useState(false)
 
-  // Hiển thị ảnh tương ứng với mặt đang xem
   const currentImage = isFlipped ? imageBack : imageFront
   const currentStatus = isFlipped ? statusBack : statusFront
   const isApproved = currentStatus === 'APPROVED'
@@ -27,27 +26,27 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
         {/* Title với Status Badge và Flip Button */}
         <div className='p-4 border-b border-teal-400/30 bg-slate-900/50'>
           <div className='flex items-start justify-between gap-3'>
-            {/* Left: Title và Side Info */}
             <div className='flex-1 min-w-0'>
               <h4 className='text-teal-300 text-lg font-bold truncate'>{title}</h4>
               <p className='text-teal-400/70 text-xs mt-1'>{currentSide}</p>
             </div>
 
-            {/* Right: Status Badge và Flip Button */}
             <div className='flex items-center gap-2 flex-shrink-0'>
               {/* Status Badge */}
               <div
                 className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-sm ${
-                  isApproved ? 'bg-green-500/20 border border-green-400/40' : 'bg-red-500/20 border border-red-400/40'
+                  isApproved
+                    ? 'bg-green-500/20 border border-green-400/40'
+                    : 'bg-yellow-500/20 border border-yellow-400/40'
                 }`}
               >
                 <div
-                  className={`w-2 h-2 rounded-full ${isApproved ? 'bg-green-500' : 'bg-red-500'}`}
+                  className={`w-2 h-2 rounded-full ${isApproved ? 'bg-green-500' : 'bg-yellow-500'}`}
                   style={{
-                    boxShadow: isApproved ? '0 0 10px rgba(34, 197, 94, 0.8)' : '0 0 10px rgba(239, 68, 68, 0.8)'
+                    boxShadow: isApproved ? '0 0 10px rgba(34, 197, 94, 0.8)' : '0 0 10px rgba(241, 209, 27, 0.8)'
                   }}
                 />
-                <span className={`text-xs font-semibold ${isApproved ? 'text-green-400' : 'text-red-400'}`}>
+                <span className={`text-xs font-semibold ${isApproved ? 'text-green-400' : 'text-yellow-500'}`}>
                   {isApproved ? 'Active' : 'Pending'}
                 </span>
               </div>
@@ -99,14 +98,20 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
           </div>
         </div>
 
-        {/* Image or Placeholder - Hiển thị ảnh tương ứng hoặc placeholder */}
+        {/* Image hoặc Placeholder - MỜ mặc định, RÕ khi hover */}
         {currentImage ? (
-          <div className='relative w-full h-56'>
-            <img src={currentImage} alt={`${title} - ${currentSide}`} className='w-full h-full object-cover' />
-            {/* Overlay gradient */}
-            <div className='absolute inset-0 bg-gradient-to-t from-black/50 to-transparent' />
+          <div className='relative w-full h-56 group'>
+            {/* ✅ Thêm blur mặc định, bỏ blur khi hover */}
+            <img
+              src={currentImage}
+              alt={`${title} - ${currentSide}`}
+              className='w-full h-full object-cover blur-md group-hover:blur-none transition-all duration-300'
+            />
 
-            {/* Side indicator on image */}
+            {/* Overlay gradient - MỜ hơn khi hover */}
+            <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/30 transition-all duration-300' />
+
+            {/* Side indicator */}
             <div className='absolute bottom-3 left-3 px-3 py-1 bg-black/70 backdrop-blur-sm rounded-full border border-teal-400/30'>
               <span className='text-teal-300 text-xs font-semibold'>{currentSide}</span>
             </div>

@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
 import { AppContext } from '../../contexts/app.context'
-import { setAccessTokenToLS } from '../../utils/auth'
+import { setAccessTokenToLS, setEmailAccountToLS } from '../../utils/auth'
 import { loginSchema, type LoginSchema } from '../../utils/rule'
 import Skeleton from '../../components/Skeleton'
 
@@ -22,7 +22,7 @@ export default function Login() {
     resolver: yupResolver(loginSchema)
   })
 
-  const { setIsAuthenticated, setEmailAccount } = useContext(AppContext)
+  const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
 
   // loginMutation sử dụng react-query dùng để fetch api đăng ký tài khoảng
@@ -40,7 +40,8 @@ export default function Login() {
         //phải ctrl r mới có sẽ bị bất đồng bộ
         console.log(response.data?.accessToken)
         setAccessTokenToLS(response.data?.accessToken as string)
-        setEmailAccount(data.email)
+        console.log(data?.email)
+        setEmailAccountToLS(data?.email)
         setIsAuthenticated(true)
         toast.success('Login successful', {
           autoClose: 1000

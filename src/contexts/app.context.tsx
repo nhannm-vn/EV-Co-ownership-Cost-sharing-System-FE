@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react'
-import { getAccessTokenFromLS } from '../utils/auth'
+import { getAccessTokenFromLS, getEmailAccountFromLS } from '../utils/auth'
 
 // Định nghĩa context lưu dữ liệu kiểu gì hoặc nói cách khác là định nghĩa cho initialState
 interface AppContextInterface {
@@ -16,7 +16,7 @@ const initialAppContext: AppContextInterface = {
   isAuthenticated: Boolean(getAccessTokenFromLS()),
   setIsAuthenticated: () => null,
   reset: () => null,
-  emailAccount: '',
+  emailAccount: getEmailAccountFromLS(),
   setEmailAccount: () => null
 }
 

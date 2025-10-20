@@ -25,6 +25,22 @@ const userApi = {
     })
   },
 
+  uploadLicense(frontFile: File, backFile: File) {
+    const accessToken = getAccessTokenFromLS()
+    const formData = new FormData()
+
+    formData.append('documentType', 'DRIVER_LICENSE')
+    formData.append('frontFile', frontFile)
+    formData.append('backFile', backFile)
+
+    return http.post<UploadImage>('api/user/documents/upload-batch', formData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  },
+
   //api giup upload CCCD
   uploadCitizenId(frontFile: File, backFile: File) {
     const accessToken = getAccessTokenFromLS()
