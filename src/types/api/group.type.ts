@@ -10,7 +10,3 @@ export interface GroupItem {
   description: string
   status: string
 }
-
-export interface GroupCoOwnership {
-  content: GroupItem[]
-}

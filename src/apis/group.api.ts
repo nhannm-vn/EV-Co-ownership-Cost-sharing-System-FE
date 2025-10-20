@@ -1,4 +1,4 @@
-import type { CreateGroupMember, GroupCoOwnership } from '../types/api/group.type'
+import type { CreateGroupMember, GroupItem } from '../types/api/group.type'
 import http from '../utils/http'
 
 const groupApi = {
@@ -12,7 +12,7 @@ const groupApi = {
 
   // view group chỉ cần gửi lên accessToken là được
   viewGroup() {
-    return http.get<GroupCoOwnership>(`api/groups`)
+    return http.get<GroupItem[]>('api/groups/my-groups')
   }
 }
 

@@ -14,7 +14,10 @@ export default function Viewgroups() {
     queryFn: groupApi.viewGroup
   })
 
-  const allGroupList = groupListQuery?.data?.data?.content
+  console.log(groupListQuery.data?.data)
+
+  const allGroupList = groupListQuery?.data?.data
+  console.log(allGroupList)
 
   return (
     <motion.div
