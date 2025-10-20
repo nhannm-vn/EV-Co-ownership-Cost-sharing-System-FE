@@ -1,4 +1,4 @@
-import type { UserOfStaff } from '../types/api/staff.type'
+import type { GroupStaffList, UserOfStaff } from '../types/api/staff.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -18,6 +18,10 @@ const staffApi = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+
+  getAllGroupStaff() {
+    return http.get<GroupStaffList>('api/groups/staff/all')
   }
 }
 
