@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { Link, NavLink, useLocation } from 'react-router'
 import path from '../../constants/path'
+import { LOGO_URL } from '../../constants/images'
 
 function RegisterHeader() {
   // Lấy route hiện tại trên đường dẫn để active trang home
@@ -10,11 +11,7 @@ function RegisterHeader() {
     <header className='bg-white top-0 z-50 overflow-x-auto'>
       <div className='flex justify-between items-center px-6'>
         <Link to={path.home} className='flex w-28 h-28 items-center mr-24 hover:scale-90 transition-transform'>
-          <img
-            src='src/assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
-            alt='logo'
-            className='block w-full h-full object-contain'
-          />
+          <img src={LOGO_URL.white} alt='logo' className='block w-full h-full object-contain' />
           <div className='ml-2 text-lg font-semibold text-black text-[14px]'>EVShare</div>
         </Link>
 

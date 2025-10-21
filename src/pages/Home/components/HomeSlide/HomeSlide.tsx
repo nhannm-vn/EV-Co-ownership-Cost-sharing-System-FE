@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { SLIDES_IMG_URL } from '../../../../constants/images'
 
 function HomeSlide() {
   return (
@@ -8,15 +9,7 @@ function HomeSlide() {
         animate={{ x: ['0%', '-50%'] }}
         transition={{ repeat: Infinity, duration: 16, ease: 'linear' }}
       >
-        {[
-          'src/assets/slide/precious-madubuike-N2Td7KpIvYc-unsplash.jpg',
-          'src/assets/slide/co-owner-owns-a-property-from-rental-income.jpg',
-          'src/assets/slide/ralph-hutter-sBtDQMmWQPI-unsplash.jpg',
-          'src/assets/slide/john-cameron-ftIPiEdrx2s-unsplash.jpg',
-          'src/assets/slide/images.jpg',
-          'src/assets/slide/230818152324-electric-vehicle-charging-061222.jpg',
-          'src/assets/slide/Giving-Away-Money-Will-Make-You-Richer.jpg'
-        ].map((img, i) => (
+        {SLIDES_IMG_URL.map((img, i) => (
           <img key={i} src={img} alt='' className='shadow-lg rounded-lg border w-48 h-28 mr-7 object-cover' />
         ))}
       </motion.div>

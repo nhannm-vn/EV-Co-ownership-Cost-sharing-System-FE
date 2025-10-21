@@ -12,6 +12,7 @@ import { AppContext } from '../../contexts/app.context'
 import { setAccessTokenToLS, setEmailAccountToLS, setRoleToLS } from '../../utils/auth'
 import { loginSchema, type LoginSchema } from '../../utils/rule'
 import Skeleton from '../../components/Skeleton'
+import { LOGIN_IMG_URL } from '../../constants/images'
 
 export default function Login() {
   const {
@@ -71,7 +72,8 @@ export default function Login() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className='bg-[url("src/assets/abec5c14-53b6-4b29-bf4d-04dabd4233ec.png")] bg-cover bg-center hidden lg:block'
+            style={{ backgroundImage: `url(${LOGIN_IMG_URL})` }}
+            className='bg-cover bg-center hidden lg:block'
           ></motion.div>
 
           {/* Right form */}
