@@ -23,6 +23,10 @@ const groupApi = {
   //  API handle id ở header khi  bấm groupDetail
   getGroupById(groupId: string) {
     return http.get<GroupItem>(`api/groups/${groupId}`)
+  },
+  // mời thành viên
+  inviteMember: (groupId: string, inviteeEmail: string) => {
+    return http.post(`api/groups/${groupId}/invitations`, { inviteeEmail })
   }
 }
 

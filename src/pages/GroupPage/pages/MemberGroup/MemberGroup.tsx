@@ -1,18 +1,15 @@
+import { CloseCircleOutlined, CloseOutlined, MailOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { UserAddOutlined, CloseOutlined, MailOutlined, CloseCircleOutlined, TeamOutlined } from '@ant-design/icons'
-
-interface InviteFormData {
-  email: string
-}
-
-const inviteSchema = yup.object({
-  email: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email')
-})
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import groupApi from '../../../../apis/group.api'
+import { inviteSchema, type InviteSchema } from '../../../../utils/rule'
 
 export default function MemberGroup() {
+  const { groupId } = useParams<{ groupId: string }>()
   const [showModal, setShowModal] = useState(false)
 
   const {
@@ -20,14 +17,31 @@ export default function MemberGroup() {
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<InviteFormData>({
+  } = useForm<InviteSchema>({
     resolver: yupResolver(inviteSchema)
   })
 
-  const onSubmit = (data: InviteFormData) => {
-    console.log('Invite email:', data.email)
-    setShowModal(false)
-    reset()
+  const inviteMutation = useMutation({
+    mutationFn: ({ groupId, inviteeEmail }: { groupId: string; inviteeEmail: string }) =>
+      groupApi.inviteMember(groupId, inviteeEmail)
+  })
+
+  const onSubmit = (data: InviteSchema) => {
+    inviteMutation.mutate(
+      { groupId: groupId as string, inviteeEmail: data.inviteeEmail },
+      {
+        onSuccess: () => {
+          console.log('Invite email:', data.inviteeEmail)
+          setShowModal(false)
+          reset()
+          toast.success('Đã gửi lời mời thành công!')
+        },
+        onError: (error) => {
+          console.error('Error inviting member:', error)
+          toast.error('Đã có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại.')
+        }
+      }
+    )
   }
 
   return (
@@ -112,15 +126,15 @@ export default function MemberGroup() {
                   Email người mời
                 </label>
                 <input
-                  {...register('email')}
+                  {...register('inviteeEmail')}
                   type='email'
-                  placeholder='[email protected]'
+                  placeholder='Nhập email người mời'
                   className='w-full px-4 py-3.5 bg-white/10 border border-white/30 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all'
                 />
-                {errors.email && (
+                {errors.inviteeEmail && (
                   <p className='mt-2.5 text-sm text-red-300 flex items-center gap-1.5'>
                     <CloseCircleOutlined />
-                    {errors.email.message}
+                    {errors.inviteeEmail.message}
                   </p>
                 )}
               </div>
