@@ -1,19 +1,26 @@
 import { UsergroupAddOutlined } from '@ant-design/icons'
 import { Avatar, Tooltip } from 'antd'
 import { useNavigate } from 'react-router'
-import path from '../../../../../../constants/path'
 
-import { getStatusStyle } from './utils/getStatusStyle'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { GroupContext } from '../../../../../../hooks/useGroupList'
+import { getStatusStyle } from './utils/getStatusStyle'
+import { AppContext } from '../../../../../../contexts/app.context'
 
 export default function TableBody() {
   const navigate = useNavigate()
+  const { setGroupId } = useContext(AppContext)
 
-  const handleRowClick = () => {
-    navigate(path.dashBoard)
+  useEffect(() => {
+    setGroupId(null)
+  }, [])
+  const handleRowClick = (groupId: number) => {
+    navigate(`/dashboard/viewGroups/${groupId}`)
+    setGroupId(groupId.toString())
   }
   const groupListData = useContext(GroupContext)
+  console.log(groupListData)
+
   return (
     <tbody>
       {groupListData.map((group) => {
@@ -33,7 +40,7 @@ export default function TableBody() {
              * border-slate-700/20 - Viền xám đen với độ trong suốt 20%
              */
             className='hover:bg-slate-700/100 transition-colors cursor-pointer border-b border-slate-700/20'
-            onClick={handleRowClick}
+            onClick={() => handleRowClick(group.groupId)}
           >
             {/* Group ID */}
             <td

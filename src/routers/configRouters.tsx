@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import path from '../constants/path'
-import GroupPageLayout from '../layouts/GroupPageLayout'
 import LearnmoreLayout from '../layouts/LearnmoreLayout'
 import MainLayout from '../layouts/MainLayout'
 import RegisterLayout from '../layouts/RegisterLayout'
@@ -30,14 +29,14 @@ import RejectedRoute from './PrivateRouters/RejectedRoute'
 
 import ManagerLayout from '../layouts/ManagerLayout'
 import AdminDashboard from '../pages/AdminDashboard'
+import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
 import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 import RoleCheck from './CheckRole/CheckRole'
-import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
 
 function Routers() {
   const routers = createBrowserRouter([
-    // ... (Phần RejectedRoute và LearnmoreLayout giữ nguyên, không thay đổi)
+    // --- PUBLIC ROUTE ---
     {
       path: '/',
       element: <RejectedRoute />,
@@ -55,60 +54,58 @@ function Routers() {
         }
       ]
     },
+
     {
       path: path.learnMore,
       element: <LearnmoreLayout />,
       children: [{ index: true, element: <Learnmore /> }]
     },
 
-    // ProtectedRoute - CỔNG CHÍNH (Phải login)
+    // --- PROTECTED ROUTE ---
     {
       path: '/',
-      element: <ProtectedRoute />, // <-- BẢO VỆ CẤP 1 (Check Login)
+      element: <ProtectedRoute />,
       children: [
-        // --- NHÓM 1: DÀNH CHO 'CO_OWNER' (User thường) ---
+        // --- CO_OWNER ---
         {
-          // BẢO VỆ CẤP 2 (Check Role)
           element: <RoleCheck allowedRoles={['CO_OWNER']} />,
           children: [
             {
-              path: path.dashBoard, // /dashboard
+              path: path.dashBoard,
               element: <MainLayout />,
               children: [
                 { index: true, element: <Dashboard /> },
-                { path: path.viewGroups, element: <Viewgroups /> },
+                {
+                  path: path.viewGroups, // /view-groups
+                  element: <Viewgroups />
+                },
+                {
+                  path: path.groupDetails,
+                  element: <GroupPage />,
+                  children: [
+                    { path: path.groupDashboard, element: <DashboardGP /> },
+                    { path: path.createContract, element: <CreateContract /> },
+                    { path: path.viewMembers, element: <MemberGroup /> },
+                    { path: path.ownershipPercentage, element: <CoOwnershipPercentage /> },
+                    { path: path.ownershipRatio, element: <OwnershipRatio /> }
+                  ]
+                },
                 { path: path.createGroups, element: <CreateGroups /> },
                 { path: path.issueReport, element: <IssueReport /> },
                 { path: path.profile, element: <MyAccount /> },
                 { path: path.uploadLicense, element: <UploadLicense /> },
                 { path: path.changePassword, element: <ChangePassword /> }
               ]
-            },
-            {
-              path: path.group, // /group
-              element: <GroupPageLayout />,
-              children: [
-                {
-                  element: <GroupPage />,
-                  children: [
-                    { index: true, element: <DashboardGP /> },
-                    { path: path.createContract, element: <CreateContract /> },
-                    { path: path.viewMembers, element: <MemberGroup /> },
-                    { path: path.ownershipPercentage, element: <CoOwnershipPercentage /> },
-                    { path: path.ownershipRatio, element: <OwnershipRatio /> }
-                  ]
-                }
-              ]
             }
           ]
         },
 
+        // --- STAFF ---
         {
-          // BẢO VỆ CẤP 2 (Check Role)
           element: <RoleCheck allowedRoles={['STAFF']} />,
           children: [
             {
-              path: path.adminDashboard, // /admin
+              path: path.adminDashboard,
               element: <ManagerLayout />,
               children: [
                 {
@@ -126,18 +123,13 @@ function Routers() {
       ]
     },
 
-    // ... (Phần /demoOTP và 404 Not Found giữ nguyên, không thay đổi)
-    {
-      path: '/demoOTP',
-      element: <OTPInput />
-    },
+    { path: '/demoOTP', element: <OTPInput /> },
+
     {
       path: '*',
       element: <RegisterLayout />,
       children: [{ path: '*', element: <NotFound /> }]
     }
-
-    // !!! QUAN TRỌNG: KHỐI ADMIN CŨ Ở ĐÂY ĐÃ ĐƯỢC XÓA ĐI
   ])
 
   return <RouterProvider router={routers} />

@@ -9,6 +9,7 @@ import DataTable from './components/DataTable'
 import HeroSection from './components/HeroSection'
 import EmptyGroup from './components/EmptyGroup'
 import type { GroupItem } from '../../types/api/group.type'
+import { Outlet } from 'react-router'
 
 export default function Viewgroups() {
   const groupListQuery = useQuery({
@@ -50,8 +51,10 @@ export default function Viewgroups() {
                      bg-white/10 backdrop-blur-lg rounded-2xl border-2 border-teal-400 shadow-[0_0_50px_rgba(20,184,166,0.6)] '
           >
             <HeroSection />
-            <div className='mt-6'>{allGroupList.length > 0 ? <DataTable /> : <EmptyGroup />}</div>
+            <div className='mt-6'>{allGroupList.length > 0 ? <DataTable /> : <EmptyGroup />}</div>O
           </motion.div>
+          {/* hiển thị thằng con */}
+          <Outlet />
         </GroupContext.Provider>
       )}
     </motion.div>

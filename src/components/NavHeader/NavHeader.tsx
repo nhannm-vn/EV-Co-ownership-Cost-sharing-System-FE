@@ -192,7 +192,9 @@ function NavHeader() {
               className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 hover:scale-110 bg-gray-700/60'
               icon={<UserOutlined />}
             />
-            <span className='text-gray-300 font-medium'>{getEmailAccountFromLS()}</span>
+            <span className='inline-block text-sm font-semibold text-gray-300 truncate max-w-[130px]'>
+              {getEmailAccountFromLS()}
+            </span>
           </Space>
         </div>
 
