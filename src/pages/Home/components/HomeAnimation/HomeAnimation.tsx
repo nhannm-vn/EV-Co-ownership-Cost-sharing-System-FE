@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router'
 import path from '../../../../constants/path'
+import { LOGO_URL } from '../../../../constants/images'
 
 export default function HomeAnimation() {
   return (
@@ -61,11 +62,7 @@ export default function HomeAnimation() {
           animate={{ y: [0, -15, 0] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
         >
-          <img
-            src='src/assets/z7052214352472_9110bb340043f5ad4f507f5a29909fc3.png'
-            alt='EV Car'
-            className='w-[75%] max-w-md rounded-xl shadow-2xl'
-          />
+          <img src={LOGO_URL.white} alt='EV Car' className='w-[75%] max-w-md rounded-xl shadow-2xl' />
         </motion.div>
       </div>
     </section>
