@@ -33,6 +33,7 @@ import Demo1 from '../pages/AdminDashboard/pages/Demo1'
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 import RoleCheck from './CheckRole/CheckRole'
+import ManagerLayout from '../layouts/ManagerLayout'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -108,11 +109,16 @@ function Routers() {
           children: [
             {
               path: path.adminDashboard, // /admin
-              element: <AdminDashboard />,
+              element: <ManagerLayout />,
               children: [
-                { index: true, element: <Demo1 /> },
-                { path: 'checkLicense', element: <CheckLicense /> },
-                { path: 'demo3', element: <Demo3 /> }
+                {
+                  element: <AdminDashboard />,
+                  children: [
+                    { index: true, element: <Demo1 /> },
+                    { path: 'checkLicense', element: <CheckLicense /> },
+                    { path: 'demo3', element: <Demo3 /> }
+                  ]
+                }
               ]
             }
           ]
