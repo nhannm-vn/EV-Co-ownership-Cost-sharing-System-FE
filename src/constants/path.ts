@@ -16,10 +16,11 @@ const path = {
   changePassword: 'changePassword', // Relative path
 
   // Group routes
-  group: '/group',
-  groupDashboard: '', // index route
+
+  groupDashboard: 'DashboardGroup', // Relative path
   createContract: 'createContract', // Relative path
   viewMembers: 'viewMembers', // Relative path
+  groupDetails: 'viewGroups/:groupId', // Relative path
   ownershipPercentage: 'ownershipPercentage', // Relative path
   ownershipRatio: 'ownershipRatio', // Relative path
 

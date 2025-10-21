@@ -1,15 +1,21 @@
+import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import { AppContext } from '../../contexts/app.context'
 
 export default function CoOwnerSideBar() {
   const base =
     'flex items-center rounded-md px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30'
+
+  const { groupId } = useContext(AppContext)
+  console.log(groupId)
+
   return (
     <aside aria-label='Navbar' className='col-span-1'>
       <div className='bg-transparent'>
         <ul className='flex flex-row items-center gap-2 overflow-x-auto whitespace-nowrap'>
           <li>
             <NavLink
-              to='.'
+              to={`viewGroups/${groupId}/dashboardGroup`}
               className={({ isActive }) =>
                 [
                   base,
@@ -18,13 +24,13 @@ export default function CoOwnerSideBar() {
                 ].join(' ')
               }
             >
-              <span>Dashboard</span>
+              <span>Group Setup</span>
             </NavLink>
           </li>
 
           <li>
             <NavLink
-              to='/group/createContract'
+              to={`viewGroups/${groupId}/createContract`}
               end
               className={({ isActive }) =>
                 [
@@ -34,13 +40,13 @@ export default function CoOwnerSideBar() {
                 ].join(' ')
               }
             >
-              <span>Create Constract</span>
+              <span>Create Contract</span>
             </NavLink>
           </li>
 
           <li>
             <NavLink
-              to='/group/viewMembers'
+              to={`viewGroups/${groupId}/viewMembers`}
               className={({ isActive }) =>
                 [
                   base,
@@ -55,7 +61,7 @@ export default function CoOwnerSideBar() {
 
           <li>
             <NavLink
-              to='/group/ownershipPercentage'
+              to={`viewGroups/${groupId}/ownershipPercentage`}
               className={({ isActive }) =>
                 [
                   base,
@@ -69,7 +75,7 @@ export default function CoOwnerSideBar() {
           </li>
           <li>
             <NavLink
-              to='/group/ownershipRatio'
+              to={`viewGroups/${groupId}/ownershipRatio`}
               className={({ isActive }) =>
                 [
                   base,

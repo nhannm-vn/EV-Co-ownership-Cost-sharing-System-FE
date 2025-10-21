@@ -1,8 +1,11 @@
-import { Link } from 'react-router'
+import { Link, useMatch } from 'react-router-dom'
 import path from '../../constants/path'
+import CoOwnerSideBar from '../CoOwnerSideBar'
 import NavHeader from '../NavHeader'
 
 export default function Header() {
+  const isMatch = useMatch('/dashboard/viewGroups/:groupId/*')
+
   return (
     <header className='flex flex-row justify-between items-center px-6 py-1 bg-gradient-to-r from-[#0a1f2e] via-[#0d1b2a] to-[#111827] shadow-2xl border-b border-gray-800/50'>
       {/* Logo */}
@@ -16,6 +19,9 @@ export default function Header() {
           EVShare
         </div>
       </Link>
+
+      {/* Chỉ hiển thị khi đang ở trang group detail */}
+      {isMatch && <CoOwnerSideBar />}
 
       {/* NavHeader */}
       <NavHeader />
