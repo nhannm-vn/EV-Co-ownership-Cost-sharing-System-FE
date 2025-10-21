@@ -6,6 +6,7 @@ import { useContext, useEffect } from 'react'
 import { GroupContext } from '../../../../../../hooks/useGroupList'
 import { getStatusStyle } from './utils/getStatusStyle'
 import { AppContext } from '../../../../../../contexts/app.context'
+import type { GroupItem } from '../../../../../../types/api/group.type'
 
 export default function TableBody() {
   const navigate = useNavigate()
@@ -14,9 +15,11 @@ export default function TableBody() {
   useEffect(() => {
     setGroupId(null)
   }, [])
-  const handleRowClick = (groupId: number) => {
-    navigate(`/dashboard/viewGroups/${groupId}`)
-    setGroupId(groupId.toString())
+  const handleRowClick = (group: GroupItem) => {
+    if (group.status == 'ACTIVE') {
+      navigate(`/dashboard/viewGroups/${group.groupId}/dashboardGroup`)
+      setGroupId(group.groupId.toString())
+    }
   }
   const groupListData = useContext(GroupContext)
   console.log(groupListData)
@@ -40,7 +43,7 @@ export default function TableBody() {
              * border-slate-700/20 - Viền xám đen với độ trong suốt 20%
              */
             className='hover:bg-slate-700/100 transition-colors cursor-pointer border-b border-slate-700/20'
-            onClick={() => handleRowClick(group.groupId)}
+            onClick={() => handleRowClick(group)}
           >
             {/* Group ID */}
             <td

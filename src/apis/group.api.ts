@@ -13,6 +13,16 @@ const groupApi = {
   // view group chỉ cần gửi lên accessToken là được
   viewGroup() {
     return http.get<GroupItem[]>('api/groups/my-groups')
+  },
+
+  // lấy thông tin mỗi group detail
+  groupDetail(groupId: string) {
+    return http.get<GroupItem>(`api/ownership-percentage/page-data/${groupId}`)
+  },
+
+  //  API handle id ở header khi  bấm groupDetail
+  getGroupById(groupId: string) {
+    return http.get<GroupItem>(`api/groups/${groupId}`)
   }
 }
 
