@@ -1,14 +1,14 @@
 import { CheckOutlined, CloseOutlined, PictureOutlined } from '@ant-design/icons'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 import staffApi from '../../../../../../apis/staff.api'
-import type { GroupImage, groupStaffItem } from '../../../../../../types/api/staff.type'
+import type { GroupImage, groupStaffItem, ReviewResponse } from '../../../../../../types/api/staff.type'
+import ConfirmModal from './components/ConfirmModal'
 import Header from './components/Header'
 import ImageGroup from './components/ImageGroup/ImageGroup'
-import { groupImages } from './utils/classifyImagesType'
-import ConfirmModal from './components/ConfirmModal'
 import RejectModal from './components/RejectModal/RejectModal'
-import { toast } from 'react-toastify'
+import { groupImages } from './utils/classifyImagesType'
 
 interface IPropupImageProps {
   group: groupStaffItem | null
@@ -18,6 +18,7 @@ interface IPropupImageProps {
 export type ImageStatus = 'APPROVED' | 'REJECTED'
 
 export default function PropupImage({ group, onClose }: IPropupImageProps) {
+  const queryClient = useQueryClient()
   const [showApproveModal, setShowApproveModal] = useState(false)
   const [showRejectModal, setShowRejectModal] = useState(false)
 
@@ -36,10 +37,36 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
   // hàm gọi khi xác nhận
 
   // nếu reject phải có lý do
+
   const submitImage = useMutation({
     mutationFn: ({ groupId, body }: { groupId: number; body: { status: ImageStatus; reason?: string } }) => {
       const payload = body.reason ? body : { status: body.status }
       return staffApi.submitImageReview(groupId, payload)
+    },
+
+    onSuccess: (response) => {
+      // Nếu status là APPROVED thì toast xanh, REJECTED thì đỏ
+      const data: ReviewResponse = response?.data
+      console.log(data.groupStatus)
+
+      if (data.groupStatus === 'ACTIVE') {
+        toast.success('Duyệt hình ảnh thành công', { autoClose: 1000 })
+      } else if (data.groupStatus === 'INACTIVE') {
+        toast.error('Từ chối hình ảnh nhóm này', { autoClose: 1000 })
+      }
+      // fetch lại danh sách nhóm để cập nhật trạng thái
+      queryClient.invalidateQueries({ queryKey: ['groupList'] })
+    },
+    onError: (error) => {
+      toast.error(error?.message || 'Có lỗi xảy ra khi gửi yêu cầu')
+    },
+    // sau khi thành công thì đóng popup
+    onSettled: () => {
+      // Luôn đóng cả hai modal xác nhận
+      setShowApproveModal(false)
+      setShowRejectModal(false)
+      // Đóng popup hình ảnh
+      onClose()
     }
   })
 
@@ -50,19 +77,15 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
   const confirmApprove = () => {
     // TODO: Gọi API duyệt toàn bộ nhóm
     console.log('Duyệt nhóm:', group?.groupId)
-    setShowApproveModal(false)
 
     submitImage.mutate({ groupId: group!.groupId, body: { status: 'APPROVED' } })
-    toast.success('Duyệt hình ảnh thành công')
   }
 
   const confirmReject = (reason: string) => {
     // TODO: Gọi API từ chối toàn bộ nhóm với lý do
     console.log('Từ chối nhóm:', group?.groupId, 'Lý do:', reason)
-    setShowRejectModal(false)
 
     submitImage.mutate({ groupId: group!.groupId, body: { status: 'REJECTED', reason } })
-    toast.error('Từ chối hình ảnh nhóm này')
   }
 
   if (!group) return null

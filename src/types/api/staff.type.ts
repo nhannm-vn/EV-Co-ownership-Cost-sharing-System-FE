@@ -56,3 +56,12 @@ export interface GroupImage {
   imageType: string
   approvalStatus: string
 }
+
+// định nghĩa resonse reject and approve
+export interface ReviewResponse {
+  approvedImages: number
+  groupId: number
+  groupStatus: string
+  rejectedImages?: number
+  totalImages: number
+}

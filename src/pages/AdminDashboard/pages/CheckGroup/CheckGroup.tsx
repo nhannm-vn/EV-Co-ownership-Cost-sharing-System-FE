@@ -31,7 +31,11 @@ export default function CheckGroup() {
               {groupData.map((group) => (
                 <div
                   key={group.groupId}
-                  onClick={() => setSelectedGroup(group)}
+                  onClick={() => {
+                    if (group.status !== 'ACTIVE' && group.status !== 'INACTIVE') {
+                      setSelectedGroup(group)
+                    }
+                  }}
                   className='p-4 rounded-lg border cursor-pointer transition-all duration-200 flex justify-between items-center hover:bg-blue-50 hover:border-blue-300 hover:shadow-md'
                 >
                   {/* Mục 1: Tên nhóm (Tự động ở bên trái) */}

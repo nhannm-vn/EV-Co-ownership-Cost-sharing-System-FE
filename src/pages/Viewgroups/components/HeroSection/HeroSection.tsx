@@ -40,7 +40,7 @@ export default function HeroSection() {
 
           {/* Rejected Groups */}
           <div className='bg-red-600/30 backdrop-blur-md px-6 py-4 rounded-xl border-2 border-red-400 w-32 text-center hover:bg-red-600/40 transition-all duration-300 shadow-lg'>
-            <div className='text-3xl font-bold text-red-200'>{getStatusGroup('reject')()}</div>
+            <div className='text-3xl font-bold text-red-200'>{getStatusGroup('inactive')()}</div>
             <div className='text-sm text-red-300 font-medium'>Rejected</div>
           </div>
         </div>
