@@ -1,14 +1,12 @@
 import { ArrowLeftOutlined, CheckCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import authApi from '../../apis/auth.api'
-import path from '../../constants/path'
-import { AppContext } from '../../contexts/app.context'
-import { useOTPLogic } from '../../hooks/useOTPInput'
-import { setAccessTokenToLS } from '../../utils/auth'
 import Skeleton from '../../components/Skeleton'
+import path from '../../constants/path'
+import { useOTPLogic } from '../../hooks/useOTPInput'
 
 // Props của component - hoàn toàn độc lập
 interface OTPInputProps {
@@ -24,7 +22,7 @@ function OTPInput({ length = 6 }: OTPInputProps) {
 
   const { message, email, type: initialType } = location.state || { message: '', email: '', type: '' }
   const [type, setType] = useState<string>(initialType || '')
-  const { setIsAuthenticated } = useContext(AppContext)
+
   const navigate = useNavigate()
   const OTPMutation = useMutation({
     mutationFn: (otp: string) =>
@@ -42,9 +40,8 @@ function OTPInput({ length = 6 }: OTPInputProps) {
           toast.success('Xác thực OTP thành công', {
             autoClose: 1000
           })
-          setAccessTokenToLS(response.data?.accessToken as string)
-          setIsAuthenticated(true)
-          navigate(path.dashBoard)
+
+          navigate(path.login)
         } else if (type === 'PASSWORD_RESET') {
           toast.success('Xác thực OTP thành công, vui lòng đặt lại mật khẩu mới', {
             autoClose: 1000
