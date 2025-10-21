@@ -71,7 +71,7 @@ export default function Login() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className='bg-[url("/src/assets/abec5c14-53b6-4b29-bf4d-04dabd4233ec.png")] bg-cover bg-center hidden lg:block'
+            className='bg-[url("src/assets/abec5c14-53b6-4b29-bf4d-04dabd4233ec.png")] bg-cover bg-center hidden lg:block'
           ></motion.div>
 
           {/* Right form */}
