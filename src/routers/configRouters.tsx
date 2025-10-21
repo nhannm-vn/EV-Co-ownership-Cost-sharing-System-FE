@@ -10,7 +10,6 @@ import Dashboard from '../pages/Dashboard'
 import ForgotPassword from '../pages/Forgot-password'
 import GroupPage from '../pages/GroupPage'
 import CoOwnershipPercentage from '../pages/GroupPage/pages/Co-ownershipPercentage/CoOwnershipPercentage'
-import CreateContract from '../pages/GroupPage/pages/CreateContract'
 import DashboardGP from '../pages/GroupPage/pages/DashboardGP'
 import MemberGroup from '../pages/GroupPage/pages/MemberGroup'
 import OwnershipRatio from '../pages/GroupPage/pages/OwnershipRatio'
@@ -28,12 +27,13 @@ import Viewgroups from '../pages/Viewgroups'
 import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
 
+import ManagerLayout from '../layouts/ManagerLayout'
 import AdminDashboard from '../pages/AdminDashboard'
+import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 import Demo1 from '../pages/AdminDashboard/pages/Demo1'
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
-import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 import RoleCheck from './CheckRole/CheckRole'
-import ManagerLayout from '../layouts/ManagerLayout'
+import CreateContract from '../pages/GroupPage/pages/CreateContract'
 
 function Routers() {
   const routers = createBrowserRouter([
