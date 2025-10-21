@@ -30,11 +30,11 @@ import RejectedRoute from './PrivateRouters/RejectedRoute'
 import ManagerLayout from '../layouts/ManagerLayout'
 import AdminDashboard from '../pages/AdminDashboard'
 
-import ManagerLayout from '../layouts/ManagerLayout'
 import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
 import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 import RoleCheck from './CheckRole/CheckRole'
+import CreateContract from '../pages/GroupPage/pages/CreateContract'
 
 function Routers() {
   const routers = createBrowserRouter([
