@@ -16,9 +16,9 @@ const CreateContract: React.FC = () => {
       term: '12 tháng'
     },
     shareholders: [
-      { id: 1, name: 'Nguyễn Văn A', contact: '0901 234 567 · a@evshare.vn', cccd: 'CCCD 012345678901', percent: 40 },
-      { id: 2, name: 'Trần Thị B', contact: '0902 234 567 · b@evshare.vn', cccd: 'CCCD 012345678902', percent: 35 },
-      { id: 3, name: 'Lê Văn C', contact: '0903 234 567 · c@evshare.vn', cccd: 'CCCD 012345678903', percent: 25 }
+      { id: 1, name: 'Nguyễn Văn A', contact: '0901 234 567 · a@evshare.vn', percent: 40 },
+      { id: 2, name: 'Trần Thị B', contact: '0902 234 567 · b@evshare.vn', percent: 35 },
+      { id: 3, name: 'Lê Văn C', contact: '0903 234 567 · c@evshare.vn', percent: 25 }
     ],
     fund: { price: '950.000.000 đ', deposit: '30.000.000 đ', reserve: '50.000.000 đ', rule: 'Theo tỷ lệ sở hữu' }
   }
@@ -124,7 +124,6 @@ const CreateContract: React.FC = () => {
                     <th className='border-b px-3 py-2 text-left font-semibold'>#</th>
                     <th className='border-b px-3 py-2 text-left font-semibold'>Họ tên</th>
                     <th className='border-b px-3 py-2 text-left font-semibold'>Liên hệ</th>
-                    <th className='border-b px-3 py-2 text-left font-semibold'>Giấy tờ</th>
                     <th className='border-b px-3 py-2 text-left font-semibold'>Tỷ lệ (%)</th>
                   </tr>
                 </thead>
@@ -134,7 +133,6 @@ const CreateContract: React.FC = () => {
                       <td className='border-b px-3 py-2'>{s.id}</td>
                       <td className='border-b px-3 py-2 font-medium'>{s.name}</td>
                       <td className='border-b px-3 py-2 text-xs'>{s.contact}</td>
-                      <td className='border-b px-3 py-2'>{s.cccd}</td>
                       <td className='border-b px-3 py-2 font-semibold'>{s.percent}%</td>
                     </tr>
                   ))}
