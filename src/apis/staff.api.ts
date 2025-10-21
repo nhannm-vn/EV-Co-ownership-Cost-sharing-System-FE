@@ -1,3 +1,4 @@
+import type { ImageStatus } from '../pages/AdminDashboard/pages/CheckGroup/components/PopupImage/PropupImage'
 import type { GroupImage, GroupStaffList, UserOfStaff } from '../types/api/staff.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
@@ -40,6 +41,14 @@ const staffApi = {
   // lấy hình ảnh group để duyệt
   getGroupImages(groupId: number) {
     return http.get<GroupImage[]>(`api/staff/vehicle-images/groups/${groupId}/images`)
+  },
+
+  // duyệt ảnh
+  submitImageReview(groupId: number, body: { status: ImageStatus; reason?: string }) {
+    return http.patch(
+      `/api/staff/vehicle-images/groups/${groupId}/approve`,
+      body.reason ? body : { status: body.status }
+    )
   }
 }
 
