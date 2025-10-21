@@ -29,10 +29,11 @@ import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
 
 import AdminDashboard from '../pages/AdminDashboard'
-import Demo1 from '../pages/AdminDashboard/pages/Demo1'
+
 import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 import RoleCheck from './CheckRole/CheckRole'
+import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -110,7 +111,7 @@ function Routers() {
               path: path.adminDashboard, // /admin
               element: <AdminDashboard />,
               children: [
-                { index: true, element: <Demo1 /> },
+                { index: true, element: <CheckGroup /> },
                 { path: 'checkLicense', element: <CheckLicense /> },
                 { path: 'demo3', element: <Demo3 /> }
               ]

@@ -7,6 +7,8 @@ import groupApi from '../../apis/group.api'
 import { GroupContext } from '../../hooks/useGroupList'
 import DataTable from './components/DataTable'
 import HeroSection from './components/HeroSection'
+import EmptyGroup from './components/EmptyGroup'
+import type { GroupItem } from '../../types/api/group.type'
 
 export default function Viewgroups() {
   const groupListQuery = useQuery({
@@ -16,7 +18,7 @@ export default function Viewgroups() {
 
   console.log(groupListQuery.data?.data)
 
-  const allGroupList = groupListQuery?.data?.data
+  const allGroupList: GroupItem[] = groupListQuery?.data?.data || []
   console.log(allGroupList)
 
   return (
@@ -48,9 +50,7 @@ export default function Viewgroups() {
                      bg-white/10 backdrop-blur-lg rounded-2xl border-2 border-teal-400 shadow-[0_0_50px_rgba(20,184,166,0.6)] '
           >
             <HeroSection />
-            <div className='mt-6'>
-              <DataTable />{' '}
-            </div>
+            <div className='mt-6'>{allGroupList.length > 0 ? <DataTable /> : <EmptyGroup />}</div>
           </motion.div>
         </GroupContext.Provider>
       )}
