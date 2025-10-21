@@ -42,7 +42,7 @@ export interface UserOfStaff {
 export interface groupStaffItem {
   groupId: number
   groupName: string
-  status: 'PENDING' | 'ACTIVE' | 'UNACTIVE'
+  status: 'PENDING' | 'ACTIVE' | 'INACTIVE'
 }
 
 export interface GroupStaffList {

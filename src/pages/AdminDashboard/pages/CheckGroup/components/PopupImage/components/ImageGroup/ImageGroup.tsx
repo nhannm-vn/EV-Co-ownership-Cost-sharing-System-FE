@@ -44,9 +44,12 @@ export default function ImageGroup({ label, images }: { label: string; images: G
         />
 
         {/* Overlay gradient */}
+        {/* làm bóng cho ảnh  absolute inset-0: chiếm toàn bộ vùng cha */}
+        {/* bg-gradient-to-t from-black/30 via-transparent to-transparent: tạo gradient từ dưới lên (màu đen mờ ở dưới, dần trong suốt lên trên */}
+        {/* pointer-events-none: lớp này không nhận sự kiện chuột, nên không chặn click vào nút phía trên. */}
         <div className='absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none'></div>
 
-        {/* Nút xoay và chỉ số */}
+        {/* nhiều hơn 1 ảnh mới có nút xoay */}
         {images.length > 1 && (
           <>
             {/* Nút xoay - chỉ hiển thị khi hover */}

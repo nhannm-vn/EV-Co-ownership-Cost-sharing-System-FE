@@ -1,23 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import staffApi from '../../../../apis/staff.api'
 import type { groupStaffItem } from '../../../../types/api/staff.type'
-import { useState } from 'react'
 import PropupImage from './components/PopupImage'
+import StatusBadge from './components/StatusBadge'
 
-const statusStyles = {
-  PENDING: 'bg-yellow-100 text-yellow-800',
-  ACTIVE: 'bg-green-100 text-green-800',
-  UNACTIVE: 'bg-red-100 text-red-800'
-}
-
-const statusText = {
-  PENDING: 'PENDING',
-  ACTIVE: 'ACTIVE',
-  UNACTIVE: 'UNACTIVE'
-}
-
-type GroupStatus = keyof typeof statusStyles
-export default function Demo1() {
+export default function CheckGroup() {
   const [selectedGroup, setSelectedGroup] = useState<groupStaffItem | null>(null)
   const groupListQuery = useQuery({
     queryKey: ['groupList'],
@@ -27,12 +15,6 @@ export default function Demo1() {
   const groupData: groupStaffItem[] = groupListQuery.data?.data?.content || []
 
   console.log(groupData)
-
-  function StatusBadge({ status }: { status: GroupStatus }) {
-    return (
-      <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusStyles[status]}`}>{statusText[status]}</span>
-    )
-  }
 
   return (
     <div className='bg-gray-100 min-h-screen font-sans'>
