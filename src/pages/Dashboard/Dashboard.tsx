@@ -88,7 +88,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className='relative overflow-hidden min-h-[900px] pt-20'>
+    <div className='relative overflow-hidden min-h-[1000px] pt-20'>
       {/* Premium Gradient Background */}
       <div className='absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-950'>
         {/* Animated gradient orbs */}

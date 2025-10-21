@@ -7,6 +7,7 @@ import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
 import { registerSchema, type RegisterSchema } from '../../utils/rule'
 import classNames from 'classnames'
+import { REGISTER_IMG_URL } from '../../constants/images'
 
 export default function Register() {
   const {
@@ -157,7 +158,8 @@ export default function Register() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className='bg-[url("src/assets/ev-scaled.jpg")] bg-cover bg-center hidden lg:block'
+            style={{ backgroundImage: `url(${REGISTER_IMG_URL})` }}
+            className='bg-cover bg-center hidden lg:block'
           ></motion.div>
         </div>
       </motion.div>
