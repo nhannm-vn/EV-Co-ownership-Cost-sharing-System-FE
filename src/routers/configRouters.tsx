@@ -30,10 +30,11 @@ import RejectedRoute from './PrivateRouters/RejectedRoute'
 
 import AdminDashboard from '../pages/AdminDashboard'
 
-import Demo3 from '../pages/AdminDashboard/pages/Demo3'
-import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
-import RoleCheck from './CheckRole/CheckRole'
 import ManagerLayout from '../layouts/ManagerLayout'
+import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
+import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
+import Demo3 from '../pages/AdminDashboard/pages/Demo3'
+import RoleCheck from './CheckRole/CheckRole'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -114,7 +115,7 @@ function Routers() {
                 {
                   element: <AdminDashboard />,
                   children: [
-                    { index: true, element: <Demo1 /> },
+                    { index: true, element: <CheckGroup /> },
                     { path: 'checkLicense', element: <CheckLicense /> },
                     { path: 'demo3', element: <Demo3 /> }
                   ]
