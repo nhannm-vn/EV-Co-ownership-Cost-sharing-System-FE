@@ -1,4 +1,4 @@
-import type { GroupImage } from '../../../../../../../../types/api/staff.type'
+import type { GroupImage } from '../../../../../../../types/api/staff.type'
 
 // định nghĩa  Registration , với vehicle là ảnh nào
 type ImageGroups = Record<string, GroupImage[]>

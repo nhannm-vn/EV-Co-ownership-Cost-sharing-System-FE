@@ -1,5 +1,5 @@
 export const getStatusStyle = (status: string) => {
-  type StatusType = 'active' | 'pending' | 'reject'
+  type StatusType = 'active' | 'pending' | 'inactive'
   // chuẩn hóa tránh lỗi do viết hoa
   const normalizedStatus = status.toLowerCase() as StatusType
   const styles = {
@@ -15,7 +15,7 @@ export const getStatusStyle = (status: string) => {
       text: 'text-yellow-300',
       label: 'PENDING'
     },
-    reject: {
+    inactive: {
       bg: 'bg-red-500/20',
       border: 'border-red-400/50',
       text: 'text-red-300',

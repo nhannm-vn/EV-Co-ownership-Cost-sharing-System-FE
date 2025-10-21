@@ -46,7 +46,7 @@ const staffApi = {
   // duyệt ảnh
   submitImageReview(groupId: number, body: { status: ImageStatus; reason?: string }) {
     return http.patch(
-      `/api/staff/vehicle-images/groups/${groupId}/approve`,
+      `/api/staff/vehicle-images/groups/${groupId}/review`,
       body.reason ? body : { status: body.status }
     )
   }
