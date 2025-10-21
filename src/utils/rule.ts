@@ -154,6 +154,10 @@ export const forgotPasswordSchema = yup.object({
   email: yup.string().email('Invalid email').required('Email is required')
 })
 
+export const inviteSchema = yup.object({
+  inviteeEmail: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email')
+})
+
 export type ForgotPasswordType = yup.InferType<typeof forgotPasswordSchema>
 
 export type LoginSchema = yup.InferType<typeof loginSchema>
@@ -167,3 +171,5 @@ export type ResetPasswordType = yup.InferType<typeof resetPasswordSchema>
 export type ChangePasswordSchema = yup.InferType<typeof changePasswordSchema>
 
 export type CreateGroupSchema = yup.InferType<typeof createGroupSchema>
+
+export type InviteSchema = yup.InferType<typeof inviteSchema>
