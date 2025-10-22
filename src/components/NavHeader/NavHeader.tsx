@@ -90,9 +90,9 @@ function NavHeader() {
       {/* Notification */}
       <div onMouseEnter={() => setIsNotificationOpen(true)} onMouseLeave={() => setIsNotificationOpen(false)}>
         <div ref={notificationRefs.setReference} className='relative'>
-          <BellOutlined className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 cursor-pointer hover:scale-110' />
+          <BellOutlined className='text-2xl text-black hover:text-teal-400 transition-all duration-300 cursor-pointer hover:scale-110' />
           {notificationCount > 0 && (
-            <span className='absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold animate-pulse'>
+            <span className='absolute -top-1 -right-1 bg-red-500 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold animate-pulse'>
               {notificationCount}
             </span>
           )}
@@ -102,7 +102,7 @@ function NavHeader() {
           <div
             ref={notificationRefs.setFloating}
             style={notificationFloatingStyles}
-            className='bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[280px] z-50 
+            className='bg-black rounded-lg shadow-xl border border-gray-200 py-2 min-w-[280px] z-50 
                    before:content-[""] before:absolute before:-top-6 before:left-0 before:right-0 before:h-6'
           >
             {notifications.length > 0 && (
@@ -189,10 +189,10 @@ function NavHeader() {
         <div ref={accountRefs.setReference}>
           <Space className='cursor-pointer'>
             <Avatar
-              className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 hover:scale-110 bg-gray-700/60'
+              className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 hover:scale-110 bg-black/60'
               icon={<UserOutlined />}
             />
-            <span className='inline-block text-sm font-semibold text-gray-300 truncate max-w-[130px]'>
+            <span className='inline-block text-sm font-semibold text-black/60 truncate max-w-[130px]'>
               {getEmailAccountFromLS()}
             </span>
           </Space>
@@ -269,8 +269,8 @@ function NavHeader() {
         className='cursor-pointer'
         onClick={() => setLang((prev) => (prev === 'Tiếng Việt' ? 'English' : 'Tiếng Việt'))}
       >
-        <GlobalOutlined className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 hover:scale-110' />
-        <span className='text-gray-300 font-medium w-24 inline-block'>{lang}</span>
+        <GlobalOutlined className='text-2xl text-black/90 hover:text-teal-400 transition-all duration-300 hover:scale-110' />
+        <span className='text-black/90 font-medium w-24 inline-block'>{lang}</span>
       </Space>
     </div>
   )
