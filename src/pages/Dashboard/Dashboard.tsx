@@ -1,14 +1,36 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import DashboardCardList from './components/DashboardCardList'
 import DashboardTitle from './components/DashboardTitle'
+import userApi from '../../apis/user.api'
+import type { UserGetProfile } from '../../types/api/user.type'
 
 export default function Dashboard() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const [userProfile, setUserProfile] = useState<UserGetProfile>()
+
+  //function checkBan
+  const allowAccess = useMemo(() => {
+    if (
+      userProfile?.documents?.citizenIdImages?.front?.status === 'APPROVED' &&
+      userProfile?.documents?.citizenIdImages?.front?.status === 'APPROVED' &&
+      userProfile?.documents?.driverLicenseImages?.front?.status === 'APPROVED' &&
+      userProfile?.documents?.driverLicenseImages?.front?.status === 'APPROVED'
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }, [userProfile])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
+
+    userApi.getProfile().then((response) => {
+      console.log(response.data)
+      setUserProfile(response.data)
+    })
 
     const updateCanvas = () => {
       const container = canvas.parentElement
@@ -154,7 +176,7 @@ export default function Dashboard() {
                   {/* Main content - Tăng spacing */}
                   <div className='relative space-y-12'>
                     <DashboardTitle />
-                    <DashboardCardList />
+                    <DashboardCardList allowAccess={allowAccess} />
                   </div>
                 </div>
 
