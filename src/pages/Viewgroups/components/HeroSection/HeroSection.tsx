@@ -8,7 +8,7 @@ export default function HeroSection() {
   const getTotalGroups = () => groupListData.length
 
   const getStatusGroup = (status: string) => () =>
-    groupListData.filter((group) => group.status.toLowerCase() === status.toLowerCase()).length
+    groupListData.filter((group) => group.status?.toLowerCase() === status.toLowerCase()).length
 
   const stats = [
     {

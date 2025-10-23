@@ -13,10 +13,10 @@ export default function TableBody() {
 
   useEffect(() => {
     setGroupId(null)
-  }, [])
+  }, [setGroupId])
 
   const handleRowClick = (group: GroupItem) => {
-    if (group.status == 'ACTIVE') {
+    if (group?.status == 'ACTIVE' && group.groupId) {
       navigate(`/dashboard/viewGroups/${group.groupId}/dashboardGroup`)
       setGroupId(group.groupId.toString())
     }
@@ -27,14 +27,14 @@ export default function TableBody() {
 
   return (
     <tbody>
-      {groupListData.map((group) => {
-        const statusStyle = getStatusStyle(group.status)
-        const truncatedDescription =
-          group.description.length > 50 ? `${group.description.substring(0, 50)}...` : group.description
+      {groupListData.map((group, index) => {
+        const statusStyle = getStatusStyle(group.status ?? '')
+        const description = group.description || ''
+        const truncatedDescription = description.length > 50 ? `${description.substring(0, 50)}...` : group.description
 
         return (
           <tr
-            key={group.groupId}
+            key={group.groupId || index}
             className='hover:bg-white/15 transition-all duration-300 cursor-pointer border-b border-white/10'
             onClick={() => handleRowClick(group)}
           >
@@ -73,8 +73,8 @@ export default function TableBody() {
 
             {/* Description */}
             <td className='px-4 py-3'>
-              {group.description.length > 50 ? (
-                <Tooltip title={group.description} placement='topLeft'>
+              {description.length > 50 ? (
+                <Tooltip title={description} placement='topLeft'>
                   <span className='text-white/75 cursor-help hover:text-white transition-colors duration-300'>
                     {truncatedDescription}
                   </span>

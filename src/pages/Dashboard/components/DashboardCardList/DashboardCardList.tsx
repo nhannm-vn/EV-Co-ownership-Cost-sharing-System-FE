@@ -19,8 +19,8 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
       onSuccess: (response) => {
         console.log('OTP verified successfully:', response?.data)
         const groupId = response?.data?.groupId
-        setGroupId(groupId.toString())
         if (groupId) {
+          setGroupId(groupId.toString())
           navigate(`/dashboard/viewGroups/${groupId}/dashboardGroup`)
         }
       },
