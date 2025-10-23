@@ -1,4 +1,4 @@
-import { formatPrice } from '../../../../../../utils/formatPrice'
+import { formatToVND } from '../../../../../../utils/formatPrice'
 
 function Summary({ members, value }: { members: number; value: number }) {
   return (
@@ -15,7 +15,7 @@ function Summary({ members, value }: { members: number; value: number }) {
         <div>
           <div className='text-white/70 text-xs font-semibold uppercase mb-1'>Giá trị</div>
           <div className='text-cyan-100 font-black text-2xl drop-shadow-[0_0_12px_rgba(6,182,212,0.7)]'>
-            {formatPrice(value)}M ₫
+            {formatToVND(value)}
           </div>
         </div>
       </div>

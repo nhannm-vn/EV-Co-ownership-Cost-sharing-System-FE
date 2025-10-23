@@ -1,4 +1,4 @@
-import { formatPrice } from '../../../../../../utils/formatPrice'
+import { formatToVND } from '../../../../../../utils/formatPrice'
 
 interface IVehicleInfo {
   name: string
@@ -21,7 +21,7 @@ export default function VehicleInfo({ name, plate, value }: IVehicleInfo) {
         <div>
           <div className='text-white/65 text-sm font-semibold uppercase mb-1'>Giá trị</div>
           <div className='text-cyan-100 font-bold text-lg drop-shadow-[0_0_10px_rgba(6,182,212,0.6)]'>
-            {formatPrice(value)}M ₫
+            {formatToVND(value)}
           </div>
         </div>
       </div>
