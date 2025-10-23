@@ -1,4 +1,4 @@
-import type { CreateGroupMember, GroupItem } from '../types/api/group.type'
+import type { CreateGroupMember, GroupItem, InvitationResponse } from '../types/api/group.type'
 import http from '../utils/http'
 
 const groupApi = {
@@ -27,6 +27,11 @@ const groupApi = {
   // mời thành viên
   inviteMember: (groupId: string, inviteeEmail: string) => {
     return http.post(`api/groups/${groupId}/invitations`, { inviteeEmail })
+  },
+  // verifymember
+
+  verifyMember: (otp: string) => {
+    return http.post<InvitationResponse>(`api/invitations/accept`, { otp })
   }
 }
 

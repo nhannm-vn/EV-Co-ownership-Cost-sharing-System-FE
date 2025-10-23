@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
-
 interface Props {
   children?: ReactNode
   moveLink: string
@@ -16,9 +15,9 @@ interface Props {
     classHColor: string
     classButtonColor: string
   }
+  handleVerify?: () => void
 }
-
-export default function DashboardCardElement({ color, content, children, moveLink }: Props) {
+export default function DashboardCardElement({ color, content, children, moveLink, handleVerify }: Props) {
   return (
     <motion.div
       variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
@@ -45,6 +44,7 @@ export default function DashboardCardElement({ color, content, children, moveLin
         {/* Button */}
         <Link to={moveLink} className='mt-auto'>
           <motion.button
+            onClick={() => handleVerify && handleVerify()}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={`w-full px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${color.classButtonColor}`}
