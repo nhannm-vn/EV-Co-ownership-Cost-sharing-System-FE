@@ -245,6 +245,16 @@ export default function Dashboard() {
                   <div className='relative space-y-12'>
                     <DashboardTitle />
                     <DashboardCardList allowAccess={allowAccess} />
+                    {/* Premium Caption */}
+                    {!allowAccess && (
+                      <div className='flex justify-start '>
+                        <div className='backdrop-blur-lg bg-slate-800/60 bg-white/12 px-5 py-2 rounded-full border-[2px] border-white/30 shadow-[0_0_20px_rgba(6,182,212,0.25),inset_0_1px_8px_rgba(255,255,255,0.1)]'>
+                          <p className='text-white text-xs font-bold italic drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]'>
+                            *Phải upload CCCD và GPLX được phê duyệt để truy cập tất cả các tính năng
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 

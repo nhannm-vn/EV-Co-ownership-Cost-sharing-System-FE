@@ -29,7 +29,7 @@ export default function DashboardCardElement({ color, content, children, moveLin
         boxShadow: `0 15px 40px ${color.boxShadow}`
       }}
       transition={{ duration: 0.3 }}
-      className={`group relative flex flex-col bg-slate-800/50 backdrop-blur-md rounded-xl shadow-lg p-6 border transition-all duration-300 ${color.classDivBorder} hover:bg-slate-800/70`}
+      className={`group relative flex flex-col bg-slate-800/60 backdrop-blur-md rounded-xl shadow-lg p-6 border transition-all duration-300 ${color.classDivBorder} hover:bg-slate-800/70`}
     >
       {/* Content */}
       <div className='relative z-10 flex flex-col h-full'>
@@ -39,7 +39,7 @@ export default function DashboardCardElement({ color, content, children, moveLin
         </h2>
 
         {/* Description */}
-        <p className='text-gray-400 text-sm leading-relaxed mb-5 flex-grow'>{content.body}</p>
+        <p className='text-slate-100 text-sm leading-relaxed mb-5 flex-grow'>{content.body}</p>
 
         {/* Children (input field nếu có) */}
         {children}

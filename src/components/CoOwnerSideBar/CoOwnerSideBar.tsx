@@ -26,7 +26,7 @@ export default function CoOwnerSideBar() {
   ]
 
   return (
-    <aside aria-label='Navbar' className='col-span-1 mb-6'>
+    <aside aria-label='Navbar' className='col-span-1 mb-6 mt-6'>
       <ul className='flex flex-row items-center gap-3 overflow-x-auto whitespace-nowrap'>
         {navItems.map((item, index) => (
           <li key={index}>
