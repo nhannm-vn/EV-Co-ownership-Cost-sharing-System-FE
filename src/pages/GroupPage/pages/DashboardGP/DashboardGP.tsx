@@ -25,7 +25,7 @@ export default function DashboardGP() {
       {/* Group Header */}
       <div className='text-center'>
         <h1 className='text-4xl font-bold text-white drop-shadow-[0_0_20px_rgba(6,182,212,0.7)] mb-2'>
-          {group?.groupName.toUpperCase()}
+          {group?.groupName?.toUpperCase()}
         </h1>
       </div>
 

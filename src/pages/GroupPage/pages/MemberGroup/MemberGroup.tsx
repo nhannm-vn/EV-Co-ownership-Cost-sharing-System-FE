@@ -1,6 +1,6 @@
 import { CloseCircleOutlined, CloseOutlined, MailOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
@@ -20,7 +20,16 @@ export default function MemberGroup() {
   } = useForm<InviteSchema>({
     resolver: yupResolver(inviteSchema)
   })
+  // hiển thị thông tin các member trong group
 
+  const membersQuery = useQuery({
+    queryKey: ['members', groupId],
+    queryFn: () => groupApi.getMembersOfGroup(groupId as string),
+    enabled: !!groupId
+  })
+  const members = membersQuery.data?.data.groupSummary?.members || []
+
+  // mời người dùng vào group
   const inviteMutation = useMutation({
     mutationFn: ({ groupId, inviteeEmail }: { groupId: string; inviteeEmail: string }) =>
       groupApi.inviteMember(groupId, inviteeEmail)
@@ -31,13 +40,11 @@ export default function MemberGroup() {
       { groupId: groupId as string, inviteeEmail: data.inviteeEmail },
       {
         onSuccess: () => {
-          console.log('Invite email:', data.inviteeEmail)
           setShowModal(false)
           reset()
           toast.success('Đã gửi lời mời thành công!')
         },
-        onError: (error) => {
-          console.error('Error inviting member:', error)
+        onError: () => {
           toast.error('Đã có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại.')
         }
       }
@@ -56,7 +63,7 @@ export default function MemberGroup() {
           <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>MemberGroup</h1>
           <button
             onClick={() => setShowModal(true)}
-            className='px-6 py-3 bg-gradient-to-r from-cyan-400 to-sky-500 hover:from-cyan-500 hover:to-sky-600 text-white rounded-xl font-bold transition-all duration-400 shadow-[0_8px_25px_rgba(6,182,212,0.5)] hover:shadow-[0_10px_35px_rgba(6,182,212,0.7)] border-[2px] border-white/40 flex items-center gap-2'
+            className='m-6 px-6 py-3 bg-gradient-to-r from-cyan-400 to-sky-500 hover:from-cyan-500 hover:to-sky-600 text-white rounded-xl font-bold transition-all duration-400 shadow-[0_8px_25px_rgba(6,182,212,0.5)] hover:shadow-[0_10px_35px_rgba(6,182,212,0.7)] border-[2px] border-white/40 flex items-center gap-2'
           >
             <UserAddOutlined className='text-lg drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]' />
             Invite Member
@@ -70,30 +77,41 @@ export default function MemberGroup() {
               <TeamOutlined className='text-cyan-200 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]' />
               Danh sách thành viên
               <span className='ml-2 px-2.5 py-0.5 bg-cyan-400/20 text-cyan-100 text-sm rounded-full border border-cyan-200/30 font-bold'>
-                0
+                {members.length}
               </span>
             </h2>
-          </div>
 
-          {/* Empty State */}
-          <div className='py-24 px-6 flex flex-col items-center justify-center'>
-            <div className='w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400/20 to-sky-500/20 border-[3px] border-cyan-200/40 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(6,182,212,0.3)]'>
-              <TeamOutlined className='text-6xl text-cyan-200/70 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]' />
-            </div>
-            <h3 className='text-2xl font-bold text-white mb-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]'>
-              Chưa có thành viên nào
-            </h3>
-            <p className='text-white/75 text-center max-w-md mb-6 font-medium'>
-              Hãy bắt đầu bằng cách mời thành viên đầu tiên vào nhóm của bạn. Họ sẽ nhận được email mời và có thể tham
-              gia ngay.
-            </p>
-            <button
-              onClick={() => setShowModal(true)}
-              className='px-6 py-3 bg-gradient-to-r from-cyan-400 to-sky-500 hover:from-cyan-500 hover:to-sky-600 text-white rounded-xl font-bold transition-all duration-400 shadow-[0_8px_25px_rgba(6,182,212,0.5)] hover:shadow-[0_10px_35px_rgba(6,182,212,0.7)] border-[2px] border-white/40 flex items-center gap-2'
-            >
-              <UserAddOutlined className='text-lg drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]' />
-              Mời thành viên đầu tiên
-            </button>
+            {/* Danh sách thành viên */}
+            {members.length > 0 ? (
+              <ul>
+                {members.map((member) => (
+                  <li
+                    key={member.userId}
+                    className='px-6 py-5 flex items-center justify-between transition-all duration-300 hover:bg-white/10'
+                  >
+                    <div className='flex items-center gap-4'>
+                      <div>
+                        <h4 className='text-lg font-bold text-white'>{member.userName}</h4>
+                        <p className='text-sm text-white/70'>{member.userEmail}</p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className='py-24 px-6 flex flex-col items-center justify-center'>
+                <div className='w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400/20 to-sky-500/20 border-[3px] border-cyan-200/40 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(6,182,212,0.3)]'>
+                  <TeamOutlined className='text-6xl text-cyan-200/70 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]' />
+                </div>
+                <h3 className='text-2xl font-bold text-white mb-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]'>
+                  Chưa có thành viên nào
+                </h3>
+                <p className='text-white/75 text-center max-w-md mb-6 font-medium'>
+                  Hãy bắt đầu bằng cách mời thành viên đầu tiên vào nhóm của bạn. Họ sẽ nhận được email mời và có thể
+                  tham gia ngay.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
