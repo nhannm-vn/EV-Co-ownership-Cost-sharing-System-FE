@@ -1,35 +1,36 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import userApi from '../../apis/user.api'
 import DashboardCardList from './components/DashboardCardList'
 import DashboardTitle from './components/DashboardTitle'
-import userApi from '../../apis/user.api'
-import type { UserGetProfile } from '../../types/api/user.type'
+import Skeleton from '../../components/Skeleton'
 
 export default function Dashboard() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const [userProfile, setUserProfile] = useState<UserGetProfile>()
+
+  // Fetch user profile with React Query
+  const { data: userProfile, isLoading } = useQuery({
+    queryKey: ['user-profile'],
+    queryFn: () => userApi.getProfile()
+  })
 
   const allowAccess = useMemo(() => {
+    const profile = userProfile?.data
     if (
-      userProfile?.documents?.citizenIdImages?.front?.status === 'APPROVED' &&
-      userProfile?.documents?.citizenIdImages?.back?.status === 'APPROVED' &&
-      userProfile?.documents?.driverLicenseImages?.front?.status === 'APPROVED' &&
-      userProfile?.documents?.driverLicenseImages?.back?.status === 'APPROVED'
+      profile?.documents?.citizenIdImages?.front?.status === 'APPROVED' &&
+      profile?.documents?.citizenIdImages?.back?.status === 'APPROVED' &&
+      profile?.documents?.driverLicenseImages?.front?.status === 'APPROVED' &&
+      profile?.documents?.driverLicenseImages?.back?.status === 'APPROVED'
     ) {
       return true
-    } else {
-      return false
     }
+    return false
   }, [userProfile])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
-
-    userApi.getProfile().then((response) => {
-      console.log(response.data)
-      setUserProfile(response.data)
-    })
 
     const updateCanvas = () => {
       const container = canvas.parentElement
@@ -41,6 +42,8 @@ export default function Dashboard() {
     updateCanvas()
     window.addEventListener('resize', updateCanvas)
 
+    const edgeMargin = 150 // Particles only in edges
+
     const particles: Array<{
       x: number
       y: number
@@ -50,19 +53,40 @@ export default function Dashboard() {
       pulse: number
       pulseSpeed: number
       colorType: 'cyan' | 'sky' | 'blue' | 'teal'
+      zone: 'top' | 'bottom' | 'left' | 'right'
     }> = []
 
-    for (let i = 0; i < 75; i++) {
+    // Create particles around edges
+    for (let i = 0; i < 80; i++) {
       const rand = Math.random()
+      const zone = rand < 0.25 ? 'top' : rand < 0.5 ? 'bottom' : rand < 0.75 ? 'left' : 'right'
+
+      let x, y
+      if (zone === 'top') {
+        x = Math.random() * canvas.width
+        y = Math.random() * edgeMargin
+      } else if (zone === 'bottom') {
+        x = Math.random() * canvas.width
+        y = canvas.height - Math.random() * edgeMargin
+      } else if (zone === 'left') {
+        x = Math.random() * edgeMargin
+        y = Math.random() * canvas.height
+      } else {
+        x = canvas.width - Math.random() * edgeMargin
+        y = Math.random() * canvas.height
+      }
+
+      const colorRand = Math.random()
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x,
+        y,
         r: Math.random() * 3.5 + 1.2,
-        dx: (Math.random() - 0.5) * 0.6,
-        dy: (Math.random() - 0.5) * 0.6,
+        dx: (Math.random() - 0.5) * 0.8,
+        dy: (Math.random() - 0.5) * 0.8,
         pulse: Math.random() * Math.PI * 2,
         pulseSpeed: 0.025 + Math.random() * 0.025,
-        colorType: rand < 0.35 ? 'cyan' : rand < 0.6 ? 'sky' : rand < 0.85 ? 'blue' : 'teal'
+        colorType: colorRand < 0.35 ? 'cyan' : colorRand < 0.6 ? 'sky' : colorRand < 0.85 ? 'blue' : 'teal',
+        zone
       })
     }
 
@@ -116,11 +140,26 @@ export default function Dashboard() {
         ctx.fill()
         ctx.shadowBlur = 0
 
+        // Movement - keep in edge zones
         p.x += p.dx
         p.y += p.dy
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1
 
+        // Boundary check - keep particles in their zones
+        if (p.zone === 'top') {
+          if (p.x < 0 || p.x > canvas.width) p.dx *= -1
+          if (p.y < 0 || p.y > edgeMargin) p.dy *= -1
+        } else if (p.zone === 'bottom') {
+          if (p.x < 0 || p.x > canvas.width) p.dx *= -1
+          if (p.y < canvas.height - edgeMargin || p.y > canvas.height) p.dy *= -1
+        } else if (p.zone === 'left') {
+          if (p.x < 0 || p.x > edgeMargin) p.dx *= -1
+          if (p.y < 0 || p.y > canvas.height) p.dy *= -1
+        } else {
+          if (p.x < canvas.width - edgeMargin || p.x > canvas.width) p.dx *= -1
+          if (p.y < 0 || p.y > canvas.height) p.dy *= -1
+        }
+
+        // Connect particles
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j]
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y)
@@ -147,9 +186,11 @@ export default function Dashboard() {
 
     animate()
     return () => window.removeEventListener('resize', updateCanvas)
-  }, [])
+  })
 
-  return (
+  return isLoading ? (
+    <Skeleton />
+  ) : (
     <div className='relative overflow-hidden min-h-[1000px] pt-20'>
       {/* Aurora Borealis Gradient Background */}
       <div className='absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-700'>
@@ -190,7 +231,7 @@ export default function Dashboard() {
         <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_42%,rgba(6,20,50,0.7)_100%)]' />
       </div>
 
-      {/* Particles Canvas */}
+      {/* Particles Canvas - EDGE NEURONS */}
       <canvas ref={canvasRef} className='absolute inset-0 pointer-events-none' />
 
       {/* Main Content */}
@@ -247,8 +288,8 @@ export default function Dashboard() {
                     <DashboardCardList allowAccess={allowAccess} />
                     {/* Premium Caption */}
                     {!allowAccess && (
-                      <div className='flex justify-start '>
-                        <div className='backdrop-blur-lg bg-slate-800/60 bg-white/12 px-5 py-2 rounded-full border-[2px] border-white/30 shadow-[0_0_20px_rgba(6,182,212,0.25),inset_0_1px_8px_rgba(255,255,255,0.1)]'>
+                      <div className='flex justify-start'>
+                        <div className='backdrop-blur-lg bg-white/12 px-5 py-2 rounded-full border-[2px] border-white/30 shadow-[0_0_20px_rgba(6,182,212,0.25),inset_0_1px_8px_rgba(255,255,255,0.1)]'>
                           <p className='text-white text-xs font-bold italic drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]'>
                             *Phải upload CCCD và GPLX được phê duyệt để truy cập tất cả các tính năng
                           </p>

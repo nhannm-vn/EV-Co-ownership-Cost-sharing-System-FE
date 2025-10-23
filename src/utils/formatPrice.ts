@@ -7,3 +7,10 @@ export function formatPrice(price: number) {
 export function formatPriceVN(price: number) {
   return price.toLocaleString('vi-VN')
 }
+
+export const formatToVND = (amount: number): string => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(amount)
+}
