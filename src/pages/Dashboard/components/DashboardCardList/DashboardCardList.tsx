@@ -6,7 +6,7 @@ import groupApi from '../../../../apis/group.api'
 import { useRef } from 'react'
 import { useNavigate } from 'react-router'
 
-export default function DashboardCardList() {
+export default function DashboardCardList({ allowAccess }: { allowAccess: boolean }) {
   const otp = useRef<HTMLInputElement>(null)
   const inviteMutation = useMutation({
     mutationFn: (otp: string) => groupApi.verifyMember(otp)
@@ -27,8 +27,6 @@ export default function DashboardCardList() {
       }
     })
   }
-
-export default function DashboardCardList({ allowAccess }: { allowAccess: boolean }) {
   return (
     <motion.div
       initial='hidden'

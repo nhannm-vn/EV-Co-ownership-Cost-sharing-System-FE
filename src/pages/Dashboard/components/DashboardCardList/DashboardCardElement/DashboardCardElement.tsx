@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 interface Props {
   children?: ReactNode
   moveLink: string
@@ -16,9 +16,10 @@ interface Props {
     classButtonColor: string
   }
   allowAccess: boolean
+  handleVerify?: () => void
 }
 
-export default function DashboardCardElement({ color, content, children, moveLink, allowAccess }: Props) {
+export default function DashboardCardElement({ color, content, children, moveLink, allowAccess, handleVerify }: Props) {
   console.log(allowAccess)
   return (
     <motion.div
@@ -44,22 +45,11 @@ export default function DashboardCardElement({ color, content, children, moveLin
         {children}
 
         {/* Button */}
-        <Link to={moveLink} className='mt-auto'>
-          <motion.button
-            onClick={() => handleVerify && handleVerify()}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`w-full px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${color.classButtonColor}`}
-          >
-            <span>{content.button}</span>
-            <svg
-              className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
+
         {allowAccess ? (
           <Link to={moveLink} className='mt-auto'>
             <motion.button
+              onClick={() => handleVerify}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`w-full px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${color.classButtonColor}`}
