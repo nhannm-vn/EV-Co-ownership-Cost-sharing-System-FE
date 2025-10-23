@@ -2,13 +2,15 @@ import React from 'react'
 
 export default function BenefitCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div className='group/item flex items-start gap-5 rounded-3xl bg-gradient-to-br from-teal-900/40 to-cyan-900/30 hover:from-teal-900/60 hover:to-cyan-900/50 border border-teal-400/20 shadow-xl shadow-teal-950/60 p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-teal-500/20'>
-      <div className='flex-shrink-0 size-14 rounded-2xl bg-gradient-to-br from-teal-500/40 to-cyan-500/40 border border-teal-400/40 flex items-center justify-center shadow-md group-hover/item:scale-110 group-hover/item:shadow-xl transition-all'>
-        <span className='text-white text-3xl'>{icon}</span>
+    <div className='group/item flex items-start gap-5 rounded-2xl bg-white/10 hover:bg-white/15 backdrop-blur-lg border-[2px] border-white/30 hover:border-cyan-200/50 shadow-[0_0_20px_rgba(6,182,212,0.2),inset_0_1px_10px_rgba(255,255,255,0.08)] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] p-6 transition-all duration-400'>
+      <div className='flex-shrink-0 size-14 rounded-xl bg-gradient-to-br from-cyan-400 to-sky-500 border-[2px] border-white/50 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.4)] group-hover/item:scale-110 group-hover/item:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all duration-400'>
+        <span className='text-white text-2xl drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]'>{icon}</span>
       </div>
       <div className='flex-1 pt-1'>
-        <h3 className='text-white font-bold text-lg leading-snug mb-1.5'>{title}</h3>
-        <p className='text-slate-300 text-sm leading-relaxed'>{desc}</p>
+        <h3 className='text-white font-bold text-lg leading-snug mb-1.5 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]'>
+          {title}
+        </h3>
+        <p className='text-white/75 text-sm leading-relaxed font-medium'>{desc}</p>
       </div>
     </div>
   )
