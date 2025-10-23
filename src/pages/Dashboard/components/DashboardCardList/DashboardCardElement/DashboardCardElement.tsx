@@ -49,7 +49,7 @@ export default function DashboardCardElement({ color, content, children, moveLin
         {allowAccess ? (
           <Link to={moveLink} className='mt-auto'>
             <motion.button
-              onClick={() => handleVerify}
+              onClick={handleVerify}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`w-full px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${color.classButtonColor}`}

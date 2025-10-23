@@ -1,14 +1,13 @@
 'use client'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import Skeleton from '../../components/Skeleton'
 import groupApi from '../../apis/group.api'
+import Skeleton from '../../components/Skeleton'
 import { GroupContext } from '../../hooks/useGroupList'
-import DataTable from './components/DataTable'
-import HeroSection from './components/HeroSection'
-import EmptyGroup from './components/EmptyGroup'
 import type { GroupItem } from '../../types/api/group.type'
-import { Outlet } from 'react-router'
+import DataTable from './components/DataTable'
+import EmptyGroup from './components/EmptyGroup'
+import HeroSection from './components/HeroSection'
 
 export default function Viewgroups() {
   const groupListQuery = useQuery({
@@ -66,7 +65,6 @@ export default function Viewgroups() {
             {/* Bottom Gradient Bar */}
             <div className='absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-200 via-sky-100 to-cyan-200 shadow-[0_0_20px_rgba(14,165,233,0.6)]' />
           </motion.div>
-          <Outlet />
         </GroupContext.Provider>
       )}
     </motion.div>
