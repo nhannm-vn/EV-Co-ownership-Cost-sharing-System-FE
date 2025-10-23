@@ -22,44 +22,54 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
   return (
     <div className='relative w-full'>
       <motion.div
-        whileHover={{ scale: 1.02, y: -2 }}
-        className='relative w-full rounded-2xl overflow-hidden border-2 border-teal-400/30 bg-gradient-to-br from-slate-800/60 to-slate-900/60 shadow-lg transition-all hover:border-teal-400/60'
+        whileHover={{ scale: 1.03, y: -4 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+        className='relative w-full rounded-2xl overflow-hidden 
+                   border-[3px] border-white/40
+                   bg-white/10 backdrop-blur-xl
+                   shadow-[0_0_30px_rgba(6,182,212,0.3),inset_0_1px_15px_rgba(255,255,255,0.1)]
+                   hover:border-white/60 hover:shadow-[0_0_40px_rgba(14,165,233,0.5),inset_0_1px_20px_rgba(255,255,255,0.15)]
+                   transition-all duration-500'
       >
-        {/* Title với Status Badge và Flip Button */}
-        <div className='p-4 border-b border-teal-400/30 bg-slate-900/50'>
+        {/* Header with Title, Status & Flip Button */}
+        <div className='p-4 border-b-[2px] border-white/20 bg-white/5 backdrop-blur-sm'>
           <div className='flex items-start justify-between gap-3'>
             <div className='flex-1 min-w-0'>
-              <h4 className='text-teal-300 text-lg font-bold truncate'>{title}</h4>
-              <p className='text-teal-400/70 text-xs mt-1'>{currentSide}</p>
+              <h4 className='text-white font-bold text-lg truncate drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]'>
+                {title}
+              </h4>
+              <p className='text-white/75 text-xs mt-1 font-medium'>{currentSide}</p>
             </div>
 
             <div className='flex items-center gap-2 flex-shrink-0'>
               {/* Status Badge */}
               <div
-                className={classNames('flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-sm', {
-                  'bg-green-500/20 border border-green-400/40': isApproved,
-                  'bg-yellow-500/20 border border-yellow-400/40': !isApproved && !isRejected,
-                  'bg-red-500/20 border border-red-400/40': isRejected
+                className={classNames('flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md', {
+                  'bg-green-400/20 border-[2px] border-green-300/50': isApproved,
+                  'bg-yellow-400/20 border-[2px] border-yellow-300/50': !isApproved && !isRejected,
+                  'bg-red-400/20 border-[2px] border-red-300/50': isRejected
                 })}
               >
                 <div
-                  className={classNames('w-2 h-2 rounded-full', {
-                    'bg-green-500': isApproved,
-                    'bg-yellow-500': !isApproved && !isRejected,
-                    'bg-red-500': isRejected
+                  className={classNames('w-2.5 h-2.5 rounded-full', {
+                    'bg-green-400': isApproved,
+                    'bg-yellow-400': !isApproved && !isRejected,
+                    'bg-red-400': isRejected
                   })}
                   style={{
                     boxShadow: isApproved
-                      ? '0 0 10px rgba(34, 197, 94, 0.8)'
+                      ? '0 0 12px rgba(74, 222, 128, 0.9), 0 0 20px rgba(74, 222, 128, 0.5)'
                       : isRejected
-                        ? '0 0 10px rgba(239, 68, 68, 0.8)'
-                        : '0 0 10px rgba(241, 209, 27, 0.8)'
+                        ? '0 0 12px rgba(248, 113, 113, 0.9), 0 0 20px rgba(248, 113, 113, 0.5)'
+                        : '0 0 12px rgba(250, 204, 21, 0.9), 0 0 20px rgba(250, 204, 21, 0.5)'
                   }}
                 />
                 <span
-                  className={`text-xs font-semibold ${
-                    isApproved ? 'text-green-400' : isRejected ? 'text-red-400' : 'text-yellow-500'
-                  }`}
+                  className={classNames('text-xs font-bold', {
+                    'text-green-200': isApproved,
+                    'text-yellow-200': !isApproved && !isRejected,
+                    'text-red-200': isRejected
+                  })}
                 >
                   {isApproved ? 'Active' : isRejected ? 'Rejected' : 'Pending'}
                 </span>
@@ -68,7 +78,10 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
               {/* Flip Button */}
               <button
                 onClick={() => setIsFlipped(!isFlipped)}
-                className='p-2 rounded-lg bg-teal-500/20 border border-teal-400/30 hover:bg-teal-500/30 transition-all group'
+                className='p-2 rounded-lg bg-white/15 border-[2px] border-white/30 
+                         hover:bg-white/25 hover:border-white/50
+                         hover:shadow-[0_0_15px_rgba(6,182,212,0.5)]
+                         transition-all duration-400 group'
                 title={`Xem ${isFlipped ? 'mặt trước' : 'mặt sau'}`}
               >
                 <svg
@@ -76,7 +89,8 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
                   height='20'
                   viewBox='0 0 24 24'
                   fill='none'
-                  className='text-teal-300 group-hover:rotate-180 transition-transform duration-500'
+                  className='text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]
+                           group-hover:rotate-180 transition-transform duration-500'
                 >
                   <path
                     d='M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8'
@@ -112,28 +126,53 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
           </div>
         </div>
 
-        {/* Image hoặc Placeholder - Mờ mặc định, Rõ khi hover */}
+        {/* Image or Placeholder */}
         {currentImage ? (
           <div className='relative w-full h-56 group'>
-            {/* ✅ Thêm blur mặc định, bỏ blur khi hover */}
+            {/* Image with blur effect */}
             <img
               src={currentImage}
               alt={`${title} - ${currentSide}`}
-              className='w-full h-full object-cover blur-md group-hover:blur-none transition-all duration-300'
+              className='w-full h-full object-cover blur-md group-hover:blur-none transition-all duration-400'
             />
 
-            {/* Overlay gradient - Mờ hơn khi hover */}
-            <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/30 transition-all duration-300' />
+            {/* Gradient Overlay */}
+            <div
+              className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent 
+                          group-hover:from-black/40 transition-all duration-400'
+            />
 
-            {/* Side indicator */}
-            <div className='absolute bottom-3 left-3 px-3 py-1 bg-black/70 backdrop-blur-sm rounded-full border border-teal-400/30'>
-              <span className='text-teal-300 text-xs font-semibold'>{currentSide}</span>
+            {/* Holographic Glass Overlay */}
+            <div
+              className='absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 
+                          opacity-0 group-hover:opacity-100 transition-opacity duration-400'
+            />
+
+            {/* Side Indicator Badge */}
+            <div
+              className='absolute bottom-3 left-3 px-3 py-1.5 
+                          bg-white/20 backdrop-blur-md rounded-full 
+                          border-[2px] border-white/40
+                          shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+            >
+              <span className='text-white text-xs font-bold drop-shadow-[0_0_6px_rgba(255,255,255,0.5)]'>
+                {currentSide}
+              </span>
             </div>
           </div>
         ) : (
-          <div className='w-full h-56 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-slate-900/80 to-teal-950/80'>
-            {/* Upload Icon SVG */}
-            <svg width='48' height='48' viewBox='0 0 24 24' fill='none' className='text-teal-400/50'>
+          <div
+            className='w-full h-56 flex flex-col items-center justify-center gap-4 
+                        bg-white/5 backdrop-blur-sm'
+          >
+            {/* Upload Icon */}
+            <svg
+              width='48'
+              height='48'
+              viewBox='0 0 24 24'
+              fill='none'
+              className='text-white/40 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]'
+            >
               <path
                 d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'
                 stroke='currentColor'
@@ -151,8 +190,8 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
               <line x1='12' y1='3' x2='12' y2='15' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
             </svg>
             <div className='text-center'>
-              <p className='text-gray-400 text-sm font-medium'>Chưa có {currentSide.toLowerCase()}</p>
-              <p className='text-gray-500 text-xs mt-1'>
+              <p className='text-white/70 text-sm font-semibold'>Chưa có {currentSide.toLowerCase()}</p>
+              <p className='text-white/50 text-xs mt-1'>
                 Vui lòng tải lên {title} {currentSide.toLowerCase()}
               </p>
             </div>

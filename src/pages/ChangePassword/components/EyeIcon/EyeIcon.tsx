@@ -1,6 +1,12 @@
 function EyeIcon({ open }: { open: boolean }) {
   return open ? (
-    <svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      className='w-5 h-5 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]'
+      fill='none'
+      viewBox='0 0 24 24'
+      stroke='currentColor'
+    >
       <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 12a3 3 0 11-6 0 3 3 0 016 0z' />
       <path
         strokeLinecap='round'
@@ -10,7 +16,13 @@ function EyeIcon({ open }: { open: boolean }) {
       />
     </svg>
   ) : (
-    <svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      className='w-5 h-5 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]'
+      fill='none'
+      viewBox='0 0 24 24'
+      stroke='currentColor'
+    >
       <path
         strokeLinecap='round'
         strokeLinejoin='round'

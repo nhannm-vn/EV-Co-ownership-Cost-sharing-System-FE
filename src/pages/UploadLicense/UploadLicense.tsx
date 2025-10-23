@@ -27,16 +27,13 @@ export default function UploadLicense() {
     cccd: { front: null, back: null }
   })
 
-  // Mutation cho upload GPLX
   const uploadLicenseMutation = useMutation({
     mutationFn: ({ frontFile, backFile }: { frontFile: File; backFile: File }) =>
       userApi.uploadLicense(frontFile, backFile),
     onSuccess: (data) => {
       console.log('Upload GPLX thành công:', data)
       setUploadSuccess((prev) => ({ ...prev, gplx: true }))
-      toast.success('Upload GPLX successfully!', {
-        autoClose: 1500
-      })
+      toast.success('Upload GPLX successfully!', { autoClose: 1500 })
     },
     onError: (error) => {
       console.error('Lỗi upload GPLX:', error)
@@ -44,16 +41,13 @@ export default function UploadLicense() {
     }
   })
 
-  // Mutation cho upload CCCD
   const uploadCitizenIdMutation = useMutation({
     mutationFn: ({ frontFile, backFile }: { frontFile: File; backFile: File }) =>
       userApi.uploadCitizenId(frontFile, backFile),
     onSuccess: (data) => {
       console.log('Upload CCCD thành công:', data)
       setUploadSuccess((prev) => ({ ...prev, cccd: true }))
-      toast.success('Upload CCCD successfully!', {
-        autoClose: 1500
-      })
+      toast.success('Upload CCCD successfully!', { autoClose: 1500 })
     },
     onError: (error) => {
       console.error('Lỗi upload CCCD:', error)
@@ -71,7 +65,6 @@ export default function UploadLicense() {
 
   const isCurrentTabReady = useMemo(() => currentUploadedCount === 2, [currentUploadedCount])
 
-  // Kiểm tra trạng thái loading
   const isUploading = uploadLicenseMutation.isPending || uploadCitizenIdMutation.isPending
 
   const handleFileChange = (type: DocType, side: DocSide, file: File | null) => {
@@ -88,23 +81,19 @@ export default function UploadLicense() {
     e.preventDefault()
 
     if (activeTab === 'gplx') {
-      // Upload GPLX
       if (!docs.gplx.front || !docs.gplx.back) {
         toast.warning('Vui lòng upload đủ 2 mặt GPLX!')
         return
       }
-
       uploadLicenseMutation.mutate({
         frontFile: docs.gplx.front,
         backFile: docs.gplx.back
       })
     } else {
-      // Upload CCCD
       if (!docs.cccd.front || !docs.cccd.back) {
         toast.warning('Vui lòng upload đủ 2 mặt CCCD!')
         return
       }
-
       uploadCitizenIdMutation.mutate({
         frontFile: docs.cccd.front,
         backFile: docs.cccd.back
@@ -113,93 +102,85 @@ export default function UploadLicense() {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] p-6'>
+    <div className='min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600 relative overflow-hidden'>
+      {/* Holographic Background */}
+      <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className='absolute top-20 right-20 w-[500px] h-[500px] bg-cyan-300/40 rounded-full blur-[120px]'
+        />
+        <motion.div
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity }}
+          className='absolute bottom-20 left-20 w-[500px] h-[500px] bg-indigo-400/40 rounded-full blur-[120px]'
+        />
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.45, 0.25] }}
+          transition={{ duration: 9, repeat: Infinity, delay: 1 }}
+          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-sky-300/35 rounded-full blur-[100px]'
+        />
+      </div>
+
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className='bg-slate-800/60 backdrop-blur-xl border-2 border-teal-400/40 rounded-2xl shadow-[0_0_40px_rgba(20,184,166,0.4)] p-8 w-full max-w-4xl space-y-6'
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className='relative z-10 w-full max-w-4xl backdrop-blur-[60px] bg-gradient-to-br from-white/22 via-white/16 to-white/20 rounded-[2.5rem] shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border-[4px] border-white/60 p-8 space-y-6 overflow-hidden'
       >
+        {/* Top Bar */}
+        <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
+
         {/* Header */}
         <div className='text-center space-y-3'>
-          <h1 className='text-3xl font-bold text-teal-300'>Upload Giấy tờ</h1>
-          <p className='text-teal-400/70 text-sm'>Tải lên GPLX và CCCD theo thứ tự bất kỳ</p>
+          <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>Upload Giấy tờ</h1>
+          <p className='text-white/75 text-sm font-medium'>Tải lên GPLX và CCCD theo thứ tự bất kỳ</p>
         </div>
 
-        {/* Tabs Navigation */}
-        <div className='flex gap-2 p-1.5 bg-slate-900/60 rounded-xl border border-teal-400/30'>
-          <button
-            type='button'
-            onClick={() => setActiveTab('gplx')}
-            className={`flex-1 relative px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-              activeTab === 'gplx'
-                ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg'
-                : 'text-teal-400/70 hover:text-teal-300 hover:bg-slate-800/50'
-            }`}
-          >
-            <div className='flex items-center justify-center gap-2'>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={2}
-                stroke='currentColor'
-                className='w-5 h-5'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z'
-                />
-              </svg>
-              <span>GPLX</span>
-              {uploadSuccess.gplx && (
-                <span className='ml-1 flex items-center justify-center w-5 h-5 rounded-full bg-green-500 text-white text-xs'>
-                  ✓
-                </span>
-              )}
-            </div>
-          </button>
-
-          <button
-            type='button'
-            onClick={() => setActiveTab('cccd')}
-            className={`flex-1 relative px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-              activeTab === 'cccd'
-                ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg'
-                : 'text-teal-400/70 hover:text-teal-300 hover:bg-slate-800/50'
-            }`}
-          >
-            <div className='flex items-center justify-center gap-2'>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={2}
-                stroke='currentColor'
-                className='w-5 h-5'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z'
-                />
-              </svg>
-              <span>CCCD</span>
-              {uploadSuccess.cccd && (
-                <span className='ml-1 flex items-center justify-center w-5 h-5 rounded-full bg-green-500 text-white text-xs'>
-                  ✓
-                </span>
-              )}
-            </div>
-          </button>
+        {/* Tabs */}
+        <div className='flex gap-2 p-2 bg-white/10 backdrop-blur-lg rounded-xl border-[2px] border-white/30'>
+          {(['gplx', 'cccd'] as const).map((tab) => (
+            <button
+              key={tab}
+              type='button'
+              onClick={() => setActiveTab(tab)}
+              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-400 ${
+                activeTab === tab
+                  ? 'bg-gradient-to-r from-cyan-400 to-sky-500 text-white shadow-[0_0_25px_rgba(6,182,212,0.6)] border-[2px] border-white/40'
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <div className='flex items-center justify-center gap-2'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={2}
+                  stroke='currentColor'
+                  className='w-5 h-5'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z'
+                  />
+                </svg>
+                <span>{tab.toUpperCase()}</span>
+                {uploadSuccess[tab] && (
+                  <span className='ml-1 flex items-center justify-center w-5 h-5 rounded-full bg-green-400 text-white text-xs font-bold shadow-[0_0_15px_rgba(74,222,128,0.8)]'>
+                    ✓
+                  </span>
+                )}
+              </div>
+            </button>
+          ))}
         </div>
 
         {/* Progress Bar */}
         <ProgressBar uploadedCount={currentUploadedCount} maxCount={2} />
 
-        {/* Tab Content */}
+        {/* Content */}
         <motion.div
           key={activeTab}
           initial={{ opacity: 0, x: 20 }}
@@ -208,8 +189,8 @@ export default function UploadLicense() {
           transition={{ duration: 0.3 }}
           className='space-y-6'
         >
-          <div className='space-y-3'>
-            <h3 className='text-lg font-bold text-teal-300 flex items-center gap-2'>
+          <div className='space-y-4'>
+            <h3 className='text-lg font-bold text-white flex items-center gap-2 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
@@ -246,24 +227,22 @@ export default function UploadLicense() {
             </div>
           </div>
 
-          {/* Hiển thị trạng thái upload */}
           {isUploading && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className='flex items-center justify-center gap-3 bg-teal-500/20 border border-teal-400/40 rounded-lg p-4'
+              className='flex items-center justify-center gap-3 bg-cyan-400/20 backdrop-blur-lg border-[2px] border-cyan-300/40 rounded-xl p-4 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
             >
-              <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-teal-400' />
-              <span className='text-teal-300 font-medium'>Đang upload...</span>
+              <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-200' />
+              <span className='text-white font-semibold'>Đang upload...</span>
             </motion.div>
           )}
 
-          {/* Hiển thị lỗi */}
           {(uploadLicenseMutation.isError || uploadCitizenIdMutation.isError) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className='flex items-center gap-3 bg-red-500/20 border border-red-400/40 rounded-lg p-4'
+              className='flex items-center gap-3 bg-red-400/20 backdrop-blur-lg border-[2px] border-red-300/40 rounded-xl p-4 shadow-[0_0_20px_rgba(248,113,113,0.3)]'
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -271,7 +250,7 @@ export default function UploadLicense() {
                 viewBox='0 0 24 24'
                 strokeWidth={2}
                 stroke='currentColor'
-                className='w-5 h-5 text-red-400'
+                className='w-5 h-5 text-red-200'
               >
                 <path
                   strokeLinecap='round'
@@ -279,16 +258,15 @@ export default function UploadLicense() {
                   d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
                 />
               </svg>
-              <span className='text-red-300 font-medium'>Upload thất bại, vui lòng thử lại!</span>
+              <span className='text-red-200 font-semibold'>Upload thất bại, vui lòng thử lại!</span>
             </motion.div>
           )}
 
-          {/* Success message cho tab hiện tại */}
           {uploadSuccess[activeTab] && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className='flex items-center gap-3 bg-green-500/20 border border-green-400/40 rounded-lg p-4'
+              className='flex items-center gap-3 bg-green-400/20 backdrop-blur-lg border-[2px] border-green-300/40 rounded-xl p-4 shadow-[0_0_20px_rgba(74,222,128,0.3)]'
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -296,18 +274,17 @@ export default function UploadLicense() {
                 viewBox='0 0 24 24'
                 strokeWidth={2}
                 stroke='currentColor'
-                className='w-5 h-5 text-green-400'
+                className='w-5 h-5 text-green-200'
               >
                 <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 12.75l6 6 9-13.5' />
               </svg>
-              <span className='text-green-300 font-medium'>
+              <span className='text-green-200 font-semibold'>
                 Upload {activeTab === 'gplx' ? 'GPLX' : 'CCCD'} thành công!
               </span>
             </motion.div>
           )}
         </motion.div>
 
-        {/* Submit Button */}
         <Button
           isReady={isCurrentTabReady && !isUploading && !uploadSuccess[activeTab]}
           uploadedCount={currentUploadedCount}
@@ -315,29 +292,25 @@ export default function UploadLicense() {
           isUploading={isUploading}
         />
 
-        {/* Upload Status Summary */}
-        <div className='flex items-center justify-center gap-4 pt-4 border-t border-teal-400/30'>
-          <div
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-              uploadSuccess.gplx ? 'bg-green-500/20 border border-green-400/40' : 'bg-slate-700/50'
-            }`}
-          >
-            <span className='text-sm text-teal-300'>GPLX:</span>
-            <span className={`text-sm font-semibold ${uploadSuccess.gplx ? 'text-green-400' : 'text-gray-400'}`}>
-              {uploadSuccess.gplx ? '✓ Hoàn thành' : 'Chưa upload'}
-            </span>
-          </div>
-          <div
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-              uploadSuccess.cccd ? 'bg-green-500/20 border border-green-400/40' : 'bg-slate-700/50'
-            }`}
-          >
-            <span className='text-sm text-teal-300'>CCCD:</span>
-            <span className={`text-sm font-semibold ${uploadSuccess.cccd ? 'text-green-400' : 'text-gray-400'}`}>
-              {uploadSuccess.cccd ? '✓ Hoàn thành' : 'Chưa upload'}
-            </span>
-          </div>
+        <div className='flex items-center justify-center gap-4 pt-4 border-t-[2px] border-white/20'>
+          {(['gplx', 'cccd'] as const).map((type) => (
+            <div
+              key={type}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl backdrop-blur-lg transition-all duration-400 ${
+                uploadSuccess[type]
+                  ? 'bg-green-400/20 border-[2px] border-green-300/40 shadow-[0_0_20px_rgba(74,222,128,0.3)]'
+                  : 'bg-white/10 border-[2px] border-white/20'
+              }`}
+            >
+              <span className='text-sm text-white font-medium'>{type.toUpperCase()}:</span>
+              <span className={`text-sm font-bold ${uploadSuccess[type] ? 'text-green-200' : 'text-white/60'}`}>
+                {uploadSuccess[type] ? '✓ Hoàn thành' : 'Chưa upload'}
+              </span>
+            </div>
+          ))}
         </div>
+
+        <div className='absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-200 via-sky-100 to-cyan-200 shadow-[0_0_20px_rgba(14,165,233,0.6)]' />
       </motion.form>
     </div>
   )

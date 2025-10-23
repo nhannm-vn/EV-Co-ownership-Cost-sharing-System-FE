@@ -22,11 +22,11 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
       <DashboardCardElement
         allowAccess={allowAccess}
         color={{
-          boxShadow: 'rgba(20,184,166,0.5)',
-          classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
-          classHColor: 'drop-shadow-[0_0_15px_rgba(20,184,166,0.5)] text-teal-200',
+          boxShadow: 'rgba(0,255,255,0.7)',
+          classDivBorder: 'border-3 border-cyan-200/80 hover:border-cyan-100 transition-all duration-400',
+          classHColor: 'drop-shadow-[0_0_22px_rgba(0,255,255,0.7)] text-cyan-50',
           classButtonColor:
-            'bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-[0_4px_20px_rgba(20,184,166,0.4)] hover:shadow-[0_6px_30px_rgba(20,184,166,0.6)] transition-all duration-300'
+            'bg-gradient-to-r from-cyan-400 to-teal-500 hover:from-cyan-300 hover:to-teal-400 shadow-[0_5px_28px_rgba(0,255,255,0.6)] hover:shadow-[0_8px_40px_rgba(0,255,255,0.8)] transition-all duration-400'
         }}
         moveLink={path.createGroups}
         content={{
@@ -40,11 +40,11 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
       <DashboardCardElement
         allowAccess={allowAccess}
         color={{
-          boxShadow: 'rgba(20,184,166,0.5)',
-          classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
-          classHColor: 'drop-shadow-[0_0_15px_rgba(20,184,166,0.5)] text-teal-200',
+          boxShadow: 'rgba(0,191,255,0.7)',
+          classDivBorder: 'border-3 border-sky-200/80 hover:border-sky-100 transition-all duration-400',
+          classHColor: 'drop-shadow-[0_0_22px_rgba(0,191,255,0.7)] text-sky-50',
           classButtonColor:
-            'bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-[0_4px_20px_rgba(20,184,166,0.4)] hover:shadow-[0_6px_30px_rgba(20,184,166,0.6)] transition-all duration-300'
+            'bg-gradient-to-r from-sky-400 to-blue-500 hover:from-sky-300 hover:to-blue-400 shadow-[0_5px_28px_rgba(0,191,255,0.6)] hover:shadow-[0_8px_40px_rgba(0,191,255,0.8)] transition-all duration-400'
         }}
         moveLink={path.viewGroups}
         content={{
@@ -58,11 +58,11 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
       <DashboardCardElement
         allowAccess={allowAccess}
         color={{
-          boxShadow: 'rgba(20,184,166,0.5)',
-          classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
-          classHColor: 'drop-shadow-[0_0_15px_rgba(20,184,166,0.5)] text-teal-200',
+          boxShadow: 'rgba(99,102,241,0.7)',
+          classDivBorder: 'border-3 border-indigo-200/80 hover:border-indigo-100 transition-all duration-400',
+          classHColor: 'drop-shadow-[0_0_22px_rgba(99,102,241,0.7)] text-indigo-50',
           classButtonColor:
-            'bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-[0_4px_20px_rgba(20,184,166,0.4)] hover:shadow-[0_6px_30px_rgba(20,184,166,0.6)] transition-all duration-300'
+            'bg-gradient-to-r from-blue-400 to-indigo-500 hover:from-blue-300 hover:to-indigo-400 shadow-[0_5px_28px_rgba(99,102,241,0.6)] hover:shadow-[0_8px_40px_rgba(99,102,241,0.8)] transition-all duration-400'
         }}
         moveLink=''
         content={{
@@ -75,7 +75,7 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
           <input
             type='text'
             placeholder='Enter group code'
-            className='w-full px-5 py-3 rounded-lg border-2 border-teal-400/50 bg-slate-900/60 text-teal-100 placeholder-teal-300/50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-300 backdrop-blur-sm shadow-inner'
+            className='w-full px-5 py-3.5 rounded-2xl border-3 border-indigo-200/70 bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-white/80 focus:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all duration-400 backdrop-blur-xl shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)]'
           />
         </div>
       </DashboardCardElement>
