@@ -1,4 +1,4 @@
-import type { CreateGroupMember, GroupItem, InvitationResponse } from '../types/api/group.type'
+import type { CreateGroupMember, GroupItem, InvitationResponse, OwnershipResponse } from '../types/api/group.type'
 import http from '../utils/http'
 
 const groupApi = {
@@ -32,6 +32,11 @@ const groupApi = {
 
   verifyMember: (otp: string) => {
     return http.post<InvitationResponse>(`api/invitations/accept`, { otp })
+  },
+
+  // get all percentage in group
+  getAllPercentageInGroup: (groupId: string) => {
+    return http.get<OwnershipResponse>(`api/shares/page-data/${groupId}`)
   }
 }
 

@@ -21,7 +21,7 @@ export default function CoOwnerSideBar() {
     { to: `viewGroups/${group?.groupId}/dashboardGroup`, label: 'Group Setup' },
     { to: `viewGroups/${group?.groupId}/createContract`, label: 'Create Contract', end: true },
     { to: `viewGroups/${group?.groupId}/viewMembers`, label: 'View Members' },
-    { to: `viewGroups/${group?.groupId}/ownershipPercentage`, label: 'Enter Co-ownership Percentage' },
+    { to: `viewGroups/${group?.groupId}/ownershipPercentage`, label: 'Enter Percentage' },
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' }
   ]
 
@@ -37,7 +37,7 @@ export default function CoOwnerSideBar() {
                 const activeClasses =
                   'bg-gradient-to-r from-cyan-400 to-sky-500 text-white shadow-[0_8px_25px_rgba(6,182,212,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]'
                 const inactiveClasses =
-                  'bg-white/90 text-gray-800 hover:bg-white hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+                  'bg-white/90 text-gray-800 hover:bg-[rgba(76,228,255,0.6)] hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
 
                 return `${base} ${isActive ? activeClasses : inactiveClasses}`
               }}

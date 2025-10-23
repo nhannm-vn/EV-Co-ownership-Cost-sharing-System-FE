@@ -1,25 +1,51 @@
+import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import userApi from '../../apis/user.api'
+import Skeleton from '../../components/Skeleton'
+import ActivitiBadge from './Components/ActivityBadge'
+import Avatar from './Components/Avatar/Avatar'
 import DocCard from './Components/DocCard'
 import Field from './Components/Field'
-import Avatar from './Components/Avatar/Avatar'
-import Username from './Components/Username'
 import GroupStatus from './Components/GroupStatus'
-import ActivitiBadge from './Components/ActivityBadge'
 import Icon from './Components/Icon'
-import { useEffect, useState } from 'react'
-import userApi from '../../apis/user.api'
-import type { UserGetProfile } from '../../types/api/user.type'
+import Username from './Components/Username'
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<UserGetProfile | null>(null)
-  useEffect(() => {
-    userApi.getProfile().then((response) => {
-      console.log(response.data)
-      setUser(response.data)
-    })
-  }, [])
+  // Fetch user profile with React Query
+  const {
+    data: userProfile,
+    isLoading,
+    isError
+  } = useQuery({
+    queryKey: ['user-profile'],
+    queryFn: () => userApi.getProfile()
+  })
 
-  console.log(user)
+  const user = userProfile?.data
+
+  // Loading state
+  if (isLoading) {
+    return <Skeleton />
+  }
+
+  // Error state
+  if (isError || !user) {
+    return (
+      <div className='min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600'>
+        <div className='backdrop-blur-[60px] bg-white/20 rounded-3xl p-12 border-[3px] border-white/40 text-center'>
+          <div className='w-16 h-16 bg-red-400/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-red-400/50'>
+            <svg className='w-8 h-8 text-red-300' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+            </svg>
+          </div>
+          <p className='text-white font-bold text-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-2'>
+            Không thể tải thông tin
+          </p>
+          <p className='text-white/70'>Vui lòng thử lại sau</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div
