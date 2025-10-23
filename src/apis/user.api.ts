@@ -47,6 +47,14 @@ const userApi = {
         'Content-Type': 'multipart/form-data'
       }
     })
+  },
+
+  //api enter percentage
+  updatePercentage(percentage: number, groupId: string) {
+    return http.put(`api/shares/my-percentage/${groupId}`, {
+      ownershipPercentage: percentage,
+      reason: 'Update Percentage'
+    })
   }
 }
 
