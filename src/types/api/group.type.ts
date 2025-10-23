@@ -10,3 +10,7 @@ export interface GroupItem {
   description: string
   status: string
 }
+
+export interface InvitationResponse {
+  groupId: string // id nhóm
+}

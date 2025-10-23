@@ -1,6 +1,32 @@
 import { motion } from 'framer-motion'
 import path from '../../../../constants/path'
 import DashboardCardElement from './DashboardCardElement'
+import { useMutation } from '@tanstack/react-query'
+import groupApi from '../../../../apis/group.api'
+import { useRef } from 'react'
+import { useNavigate } from 'react-router'
+
+export default function DashboardCardList() {
+  const otp = useRef<HTMLInputElement>(null)
+  const inviteMutation = useMutation({
+    mutationFn: (otp: string) => groupApi.verifyMember(otp)
+  })
+  const navigate = useNavigate()
+
+  const handleVerify = (otp: string) => {
+    inviteMutation.mutate(otp, {
+      onSuccess: (response) => {
+        console.log('OTP verified successfully:', response?.data)
+        const groupId = response?.data?.groupId
+        if (groupId) {
+          navigate(`/dashboard/viewGroups/${groupId}`)
+        }
+      },
+      onError: (error) => {
+        console.log(error)
+      }
+    })
+  }
 
 export default function DashboardCardList({ allowAccess }: { allowAccess: boolean }) {
   return (
@@ -56,6 +82,7 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
 
       {/* Enter Code */}
       <DashboardCardElement
+        handleVerify={() => handleVerify(otp.current?.value || '')}
         allowAccess={allowAccess}
         color={{
           boxShadow: 'rgba(20,184,166,0.5)',
@@ -73,6 +100,7 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
       >
         <div className='relative mb-4'>
           <input
+            ref={otp}
             type='text'
             placeholder='Enter group code'
             className='w-full px-5 py-3 rounded-lg border-2 border-teal-400/50 bg-slate-900/60 text-teal-100 placeholder-teal-300/50 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-300 backdrop-blur-sm shadow-inner'
