@@ -23,35 +23,43 @@ export default function ProfilePage() {
 
   return (
     <div
-      // Nền gradient teal (xanh ngọc bích) đồng bộ với CreateGroups - năng lượng xe điện
       className='min-h-screen flex items-center justify-center p-6 font-sans 
-                 bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] relative overflow-hidden'
+                 bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600 relative overflow-hidden'
     >
-      {/* Thằng này chứa hiệu ứng cho background */}
+      {/* Holographic Background Effects */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+        {/* Animated Orbs */}
         <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity }}
-          className='absolute top-20 right-20 w-96 h-96 bg-teal-500/30 rounded-full blur-3xl'
+          className='absolute top-20 right-20 w-[500px] h-[500px] bg-cyan-300/40 rounded-full blur-[120px]'
         />
         <motion.div
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.2, 0.1] }}
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 10, repeat: Infinity }}
-          className='absolute bottom-20 left-20 w-96 h-96 bg-teal-600/30 rounded-full blur-3xl'
+          className='absolute bottom-20 left-20 w-[500px] h-[500px] bg-indigo-400/40 rounded-full blur-[120px]'
+        />
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.45, 0.25] }}
+          transition={{ duration: 9, repeat: Infinity, delay: 1 }}
+          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-sky-300/35 rounded-full blur-[100px]'
         />
       </div>
 
-      {/* Card Profile Layout Ngang */}
+      {/* Premium Liquid Glass Card */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className='w-full max-w-6xl bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-2xl 
-                   rounded-3xl shadow-[0_0_60px_rgba(20,184,166,0.5)] 
-                   border-2 border-teal-400/50 overflow-hidden relative z-10'
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className='w-full max-w-6xl backdrop-blur-[60px]
+                   bg-gradient-to-br from-white/22 via-white/16 to-white/20
+                   rounded-[2.5rem] 
+                   shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)]
+                   border-[4px] border-white/60
+                   overflow-hidden relative z-10'
       >
-        {/* Decorative top gradient */}
-        <div className='absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-400 via-cyan-400 to-teal-400' />
+        {/* Premium Top Gradient Bar */}
+        <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
 
         <div className='grid lg:grid-cols-3 gap-8 p-8'>
           {/* Left Section - Avatar & Name */}
@@ -60,8 +68,9 @@ export default function ProfilePage() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
             className='lg:col-span-1 flex flex-col items-center justify-center space-y-6 
-                       bg-gradient-to-br from-teal-600/20 to-teal-800/20 rounded-2xl p-8 
-                       border border-teal-400/30'
+                       bg-white/15 backdrop-blur-xl rounded-2xl p-8 
+                       border-[3px] border-white/40
+                       shadow-[0_0_30px_rgba(6,182,212,0.3),inset_0_1px_15px_rgba(255,255,255,0.1)]'
           >
             {/* Avatar */}
             <Avatar
@@ -95,7 +104,13 @@ export default function ProfilePage() {
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               <Icon title={'Personal Information'}>
-                <svg width='20' height='20' viewBox='0 0 24 24' fill='none' className='text-white'>
+                <svg
+                  width='20'
+                  height='20'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  className='text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]'
+                >
                   <circle cx='12' cy='8' r='4' fill='currentColor' />
                   <path
                     d='M4 20c0-4 3.5-7 8-7s8 3 8 7'
@@ -145,7 +160,13 @@ export default function ProfilePage() {
               transition={{ delay: 0.5, duration: 0.6 }}
             >
               <Icon title={'License'}>
-                <svg width='20' height='20' viewBox='0 0 24 24' fill='none' className='text-white'>
+                <svg
+                  width='20'
+                  height='20'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  className='text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]'
+                >
                   <path
                     d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'
                     stroke='currentColor'
@@ -182,6 +203,9 @@ export default function ProfilePage() {
             </motion.div>
           </div>
         </div>
+
+        {/* Premium Bottom Gradient Bar */}
+        <div className='absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-200 via-sky-100 to-cyan-200 shadow-[0_0_20px_rgba(14,165,233,0.6)]' />
       </motion.div>
     </div>
   )

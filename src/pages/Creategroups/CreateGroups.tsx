@@ -16,14 +16,7 @@ import NumberInput from './components/NumberInput'
 import TextAreaInput from './components/TextAreaInput'
 import TextInput from './components/TextInput'
 
-// ==================== MAIN COMPONENT ====================
 export default function CreateGroups() {
-  // //  trạng thái cho các file hình ảnh của xe  để lưu trữ
-  // const [vehicleImage, setVehicleImage] = useState<File | null>(null)
-  // // trạng thái cho các file hình ảnh cà vẹt xe
-  // const [registrationImage, setRegistrationImage] = useState<File | null>(null)
-
-  // Form hook
   const {
     register,
     handleSubmit,
@@ -34,24 +27,21 @@ export default function CreateGroups() {
     resolver: yupResolver(createGroupSchema),
     mode: 'onSubmit',
     defaultValues: {
-      // phải set mặc định là null  để hiển thị đúng trong file upload
-      // nếu khong set null thì nó sẽ fileList mà mảng trả ra true sai logic
       vehicleImage: null,
       registrationImage: null
     }
   })
-  // không dùng useState mà dùng watch tránh hiện tượng render lại nhiều lần
+
   const vehicleImage = watch('vehicleImage')
   const registrationImage = watch('registrationImage')
   const navigate = useNavigate()
-  // xử lí call API
+
   const groupMutation = useMutation({
     mutationFn: (body: FormData) => groupApi.CreateGroup(body),
     onSuccess: (response) => {
       console.log('Create group successful:', response?.data)
       toast.success('đăng kí tạo group thành công!')
       const fullPath = `${path.dashBoard}/${path.viewGroups}`
-
       navigate(fullPath)
     },
     onError: (error) => {
@@ -60,9 +50,7 @@ export default function CreateGroups() {
     }
   })
 
-  // Submit form data
   const onSubmit: SubmitHandler<CreateGroupSchema> = (data) => {
-    // tạo form data
     const formData = new FormData()
     formData.append('groupName', data.groupName)
     formData.append('description', data.description || '')
@@ -87,136 +75,158 @@ export default function CreateGroups() {
     groupMutation.mutate(formData)
   }
 
-  // ==================== RENDER ====================
   return (
     <Fragment>
       {groupMutation.isPending && <Skeleton />}
 
-      <div className='min-h-screen bg-gradient-to-br from-[#002b36] via-[#014d4d] to-[#009688] flex items-center justify-center p-6'>
+      <div className='min-h-screen bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600 flex items-center justify-center p-6 relative overflow-hidden'>
+        {/* Holographic Background Effects */}
+        <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+            className='absolute top-20 right-20 w-[500px] h-[500px] bg-cyan-300/40 rounded-full blur-[120px]'
+          />
+          <motion.div
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 10, repeat: Infinity }}
+            className='absolute bottom-20 left-20 w-[500px] h-[500px] bg-indigo-400/40 rounded-full blur-[120px]'
+          />
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.45, 0.25] }}
+            transition={{ duration: 9, repeat: Infinity, delay: 1 }}
+            className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-sky-300/35 rounded-full blur-[100px]'
+          />
+        </div>
+
         <motion.div
-          className='max-w-2xl w-full'
+          className='max-w-2xl w-full relative z-10'
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          {/* Card viền ánh sáng xanh ngọc bích điện tử */}
+          {/* Premium Liquid Glass Card */}
           <motion.div
-            whileHover={{ scale: 1.01 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-            className='bg-gradient-to-br from-[#0d9488] via-[#14b8a6] to-[#5eead4] p-[2px] rounded-2xl shadow-[0_0_35px_rgba(20,184,166,0.6)]'
+            whileHover={{ scale: 1.005 }}
+            transition={{ type: 'spring', stiffness: 250, damping: 20 }}
+            className='backdrop-blur-[60px] bg-gradient-to-br from-white/22 via-white/16 to-white/20 rounded-[2rem] shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border-[4px] border-white/60 p-8 overflow-hidden'
           >
-            <div className='bg-gradient-to-br from-[#011f26] via-[#013a3a] to-[#025959] rounded-2xl p-7'>
-              {/* Header */}
-              <Header />
+            {/* Top Gradient Bar */}
+            <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
 
-              {/* Form */}
-              <motion.form
-                onSubmit={handleSubmit(onSubmit)}
-                className='space-y-4'
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-              >
-                {/* Group name */}
-                <div className='grid grid-cols-2 gap-3'>
-                  <TextInput
-                    label='Tên Group'
-                    placeholder='Nhập tên group'
-                    register={register('groupName')}
-                    error={errors.groupName?.message}
-                  />
-                  <TextInput
-                    label='Nhập giá trị tài sản'
-                    placeholder='Nhập giá tiền (VNĐ)'
-                    register={register('assetValue')}
-                    error={errors.assetValue?.message}
-                  />
-                </div>
+            {/* Header */}
+            <Header />
 
-                {/* License plate and chassis number */}
-                <div className='grid grid-cols-2 gap-3'>
-                  <TextInput
-                    label='Biển số xe'
-                    placeholder='29A-123.45'
-                    register={register('licensePlate')}
-                    error={errors.licensePlate?.message}
-                  />
-                  <TextInput
-                    label='Số khung xe'
-                    placeholder='RLHRE7EXXXXXXXX'
-                    register={register('chassisNumber')}
-                    error={errors.chassisNumber?.message}
-                  />
-                </div>
-
-                {/* Image uploads */}
-                {/* phải  dùng kiểu File[] mới có thể dùng map với filter , fileList không dùng được */}
-
-                <div className='grid grid-cols-2 gap-3'>
-                  <FileUpload
-                    label='Hình ảnh xe'
-                    file={vehicleImage || null}
-                    register={register('vehicleImage')}
-                    onRemove={(file) => {
-                      if (vehicleImage) {
-                        const dt = new DataTransfer()
-                        Array.from(vehicleImage)
-                          .filter((f) => f !== file)
-                          .forEach((f) => dt.items.add(f))
-                        setValue('vehicleImage', dt.files.length ? dt.files : null)
-                      }
-                    }}
-                    color='teal'
-                    error={errors.vehicleImage?.message}
-                  />
-                  <FileUpload
-                    label='Hình cà vẹt xe'
-                    file={registrationImage || null}
-                    register={register('registrationImage')}
-                    onRemove={(file) => {
-                      if (registrationImage) {
-                        const dt = new DataTransfer()
-                        Array.from(registrationImage)
-                          .filter((f) => f !== file)
-                          .forEach((f) => dt.items.add(f))
-                        setValue('registrationImage', dt.files.length ? dt.files : null)
-                      }
-                    }}
-                    color='teal'
-                    error={errors.registrationImage?.message}
-                  />
-                </div>
-                <NumberInput
-                  label='Số thành viên'
-                  placeholder='Nhập số thành viên'
-                  register={register('maxMembers')}
-                  error={errors.maxMembers?.message}
+            {/* Form */}
+            <motion.form
+              onSubmit={handleSubmit(onSubmit)}
+              className='space-y-5 mt-6'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              {/* Group Info */}
+              <div className='grid grid-cols-2 gap-4'>
+                <TextInput
+                  label='Tên Group'
+                  placeholder='Nhập tên group'
+                  register={register('groupName')}
+                  error={errors.groupName?.message}
                 />
-
-                {/* Description */}
-                <TextAreaInput
-                  label='Mô tả'
-                  placeholder='Nhập mô tả về group (tùy chọn)'
-                  register={register('description')}
-                  error={errors.description?.message}
+                <TextInput
+                  label='Nhập giá trị tài sản'
+                  placeholder='Nhập giá tiền (VNĐ)'
+                  register={register('assetValue')}
+                  error={errors.assetValue?.message}
                 />
+              </div>
 
-                {/* Submit button */}
-                <motion.button
-                  type='submit'
-                  disabled={groupMutation.isPending}
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: '0 0 35px rgba(45, 212, 191, 0.7)'
+              {/* License Info */}
+              <div className='grid grid-cols-2 gap-4'>
+                <TextInput
+                  label='Biển số xe'
+                  placeholder='29A-123.45'
+                  register={register('licensePlate')}
+                  error={errors.licensePlate?.message}
+                />
+                <TextInput
+                  label='Số khung xe'
+                  placeholder='RLHRE7EXXXXXXXX'
+                  register={register('chassisNumber')}
+                  error={errors.chassisNumber?.message}
+                />
+              </div>
+
+              {/* Image Uploads */}
+              <div className='grid grid-cols-2 gap-4'>
+                <FileUpload
+                  label='Hình ảnh xe'
+                  file={vehicleImage || null}
+                  register={register('vehicleImage')}
+                  onRemove={(file) => {
+                    if (vehicleImage) {
+                      const dt = new DataTransfer()
+                      Array.from(vehicleImage)
+                        .filter((f) => f !== file)
+                        .forEach((f) => dt.items.add(f))
+                      setValue('vehicleImage', dt.files.length ? dt.files : null)
+                    }
                   }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                  className='w-full bg-gradient-to-r from-[#0d9488] via-[#14b8a6] to-[#5eead4] text-white py-3 rounded-xl font-bold text-lg tracking-wide hover:opacity-95 transition-all duration-300'
-                >
-                  {groupMutation.isPending ? 'Đang xử lý...' : 'Tạo Group'}
-                </motion.button>
-              </motion.form>
-            </div>
+                  color='teal'
+                  error={errors.vehicleImage?.message}
+                />
+                <FileUpload
+                  label='Hình cà vẹt xe'
+                  file={registrationImage || null}
+                  register={register('registrationImage')}
+                  onRemove={(file) => {
+                    if (registrationImage) {
+                      const dt = new DataTransfer()
+                      Array.from(registrationImage)
+                        .filter((f) => f !== file)
+                        .forEach((f) => dt.items.add(f))
+                      setValue('registrationImage', dt.files.length ? dt.files : null)
+                    }
+                  }}
+                  color='teal'
+                  error={errors.registrationImage?.message}
+                />
+              </div>
+
+              {/* Member Count */}
+              <NumberInput
+                label='Số thành viên'
+                placeholder='Nhập số thành viên'
+                register={register('maxMembers')}
+                error={errors.maxMembers?.message}
+              />
+
+              {/* Description */}
+              <TextAreaInput
+                label='Mô tả'
+                placeholder='Nhập mô tả về group (tùy chọn)'
+                register={register('description')}
+                error={errors.description?.message}
+              />
+
+              {/* Submit Button */}
+              <motion.button
+                type='submit'
+                disabled={groupMutation.isPending}
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: '0 0 40px rgba(6,182,212,0.8), 0 0 60px rgba(14,165,233,0.5)'
+                }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className='w-full bg-gradient-to-r from-cyan-400 to-sky-500 text-white py-3.5 rounded-xl font-bold text-lg tracking-wide shadow-[0_8px_32px_rgba(6,182,212,0.6),0_0_20px_rgba(6,182,212,0.4)] border-[2px] border-white/40 hover:border-white/60 transition-all duration-400 disabled:opacity-50 disabled:cursor-not-allowed'
+              >
+                {groupMutation.isPending ? 'Đang xử lý...' : 'Tạo Group'}
+              </motion.button>
+            </motion.form>
+
+            {/* Bottom Gradient Bar */}
+            <div className='absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-200 via-sky-100 to-cyan-200 shadow-[0_0_20px_rgba(14,165,233,0.6)]' />
           </motion.div>
         </motion.div>
       </div>

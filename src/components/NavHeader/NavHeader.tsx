@@ -102,7 +102,7 @@ function NavHeader() {
           <div
             ref={notificationRefs.setFloating}
             style={notificationFloatingStyles}
-            className='bg-black rounded-lg shadow-xl border border-gray-200 py-2 min-w-[280px] z-50 
+            className='bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[280px] z-50 
                    before:content-[""] before:absolute before:-top-6 before:left-0 before:right-0 before:h-6'
           >
             {notifications.length > 0 && (

@@ -8,13 +8,12 @@ export default function Dashboard() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [userProfile, setUserProfile] = useState<UserGetProfile>()
 
-  //function checkBan
   const allowAccess = useMemo(() => {
     if (
       userProfile?.documents?.citizenIdImages?.front?.status === 'APPROVED' &&
-      userProfile?.documents?.citizenIdImages?.front?.status === 'APPROVED' &&
+      userProfile?.documents?.citizenIdImages?.back?.status === 'APPROVED' &&
       userProfile?.documents?.driverLicenseImages?.front?.status === 'APPROVED' &&
-      userProfile?.documents?.driverLicenseImages?.front?.status === 'APPROVED'
+      userProfile?.documents?.driverLicenseImages?.back?.status === 'APPROVED'
     ) {
       return true
     } else {
@@ -50,17 +49,20 @@ export default function Dashboard() {
       dy: number
       pulse: number
       pulseSpeed: number
+      colorType: 'cyan' | 'sky' | 'blue' | 'teal'
     }> = []
 
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 75; i++) {
+      const rand = Math.random()
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 2.5 + 0.5,
-        dx: (Math.random() - 0.5) * 0.4,
-        dy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 3.5 + 1.2,
+        dx: (Math.random() - 0.5) * 0.6,
+        dy: (Math.random() - 0.5) * 0.6,
         pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.02 + Math.random() * 0.02
+        pulseSpeed: 0.025 + Math.random() * 0.025,
+        colorType: rand < 0.35 ? 'cyan' : rand < 0.6 ? 'sky' : rand < 0.85 ? 'blue' : 'teal'
       })
     }
 
@@ -69,18 +71,50 @@ export default function Dashboard() {
 
       particles.forEach((p, i) => {
         p.pulse += p.pulseSpeed
-        const pulseScale = 1 + Math.sin(p.pulse) * 0.3
+        const pulseScale = 1 + Math.sin(p.pulse) * 0.5
 
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 14 * pulseScale)
-        gradient.addColorStop(0, `rgba(167,243,208,${0.8 * pulseScale})`)
-        gradient.addColorStop(0.3, `rgba(45,212,191,${0.5 * pulseScale})`)
-        gradient.addColorStop(0.6, `rgba(20,184,166,${0.25 * pulseScale})`)
-        gradient.addColorStop(1, 'rgba(13,148,136,0)')
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 24 * pulseScale)
+
+        if (p.colorType === 'cyan') {
+          gradient.addColorStop(0, `rgba(0,229,255,${0.9 * pulseScale})`)
+          gradient.addColorStop(0.12, `rgba(6,182,212,${0.75 * pulseScale})`)
+          gradient.addColorStop(0.35, `rgba(34,211,238,${0.5 * pulseScale})`)
+          gradient.addColorStop(0.65, `rgba(103,232,249,${0.25 * pulseScale})`)
+          gradient.addColorStop(1, 'rgba(165,243,252,0)')
+        } else if (p.colorType === 'sky') {
+          gradient.addColorStop(0, `rgba(0,149,255,${0.85 * pulseScale})`)
+          gradient.addColorStop(0.12, `rgba(14,165,233,${0.7 * pulseScale})`)
+          gradient.addColorStop(0.35, `rgba(56,189,248,${0.48 * pulseScale})`)
+          gradient.addColorStop(0.65, `rgba(125,211,252,${0.22 * pulseScale})`)
+          gradient.addColorStop(1, 'rgba(186,230,253,0)')
+        } else if (p.colorType === 'blue') {
+          gradient.addColorStop(0, `rgba(29,78,216,${0.8 * pulseScale})`)
+          gradient.addColorStop(0.12, `rgba(37,99,235,${0.65 * pulseScale})`)
+          gradient.addColorStop(0.35, `rgba(59,130,246,${0.45 * pulseScale})`)
+          gradient.addColorStop(0.65, `rgba(96,165,250,${0.2 * pulseScale})`)
+          gradient.addColorStop(1, 'rgba(147,197,253,0)')
+        } else {
+          gradient.addColorStop(0, `rgba(13,148,136,${0.75 * pulseScale})`)
+          gradient.addColorStop(0.12, `rgba(20,184,166,${0.6 * pulseScale})`)
+          gradient.addColorStop(0.35, `rgba(45,212,191,${0.4 * pulseScale})`)
+          gradient.addColorStop(0.65, `rgba(94,234,212,${0.18 * pulseScale})`)
+          gradient.addColorStop(1, 'rgba(153,246,228,0)')
+        }
+
         ctx.fillStyle = gradient
-
+        ctx.shadowBlur = 26 * pulseScale
+        ctx.shadowColor =
+          p.colorType === 'cyan'
+            ? 'rgba(0,229,255,0.7)'
+            : p.colorType === 'sky'
+              ? 'rgba(0,149,255,0.65)'
+              : p.colorType === 'blue'
+                ? 'rgba(29,78,216,0.6)'
+                : 'rgba(13,148,136,0.55)'
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r * pulseScale, 0, Math.PI * 2)
         ctx.fill()
+        ctx.shadowBlur = 0
 
         p.x += p.dx
         p.y += p.dy
@@ -91,9 +125,15 @@ export default function Dashboard() {
           const p2 = particles[j]
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y)
 
-          if (dist < 150) {
-            ctx.strokeStyle = `rgba(167,243,208,${(1 - dist / 150) * 0.35})`
-            ctx.lineWidth = 0.6
+          if (dist < 200) {
+            const alpha = (1 - dist / 200) * 0.5
+            const lineGradient = ctx.createLinearGradient(p.x, p.y, p2.x, p2.y)
+            lineGradient.addColorStop(0, `rgba(0,229,255,${alpha})`)
+            lineGradient.addColorStop(0.33, `rgba(14,165,233,${alpha * 0.95})`)
+            lineGradient.addColorStop(0.66, `rgba(20,184,166,${alpha * 0.9})`)
+            lineGradient.addColorStop(1, `rgba(0,229,255,${alpha})`)
+            ctx.strokeStyle = lineGradient
+            ctx.lineWidth = 1.2
             ctx.beginPath()
             ctx.moveTo(p.x, p.y)
             ctx.lineTo(p2.x, p2.y)
@@ -111,77 +151,105 @@ export default function Dashboard() {
 
   return (
     <div className='relative overflow-hidden min-h-[1000px] pt-20'>
-      {/* Premium Gradient Background */}
-      <div className='absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-950'>
-        {/* Animated gradient orbs */}
+      {/* Aurora Borealis Gradient Background */}
+      <div className='absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-700'>
+        {/* Premium Aurora Orbs */}
         <div
-          className='absolute -top-40 -left-40 w-[900px] h-[900px] bg-gradient-to-br from-emerald-400/35 via-teal-500/25 to-cyan-500/20 rounded-full blur-[140px] animate-pulse'
-          style={{ animationDuration: '7s' }}
+          className='absolute -top-80 -left-80 w-[1200px] h-[1200px] bg-gradient-to-br from-cyan-200/65 via-teal-300/55 to-sky-400/45 rounded-full blur-[180px] animate-pulse'
+          style={{ animationDuration: '10s' }}
+        />
+        <div
+          className='absolute top-[10%] -right-80 w-[1150px] h-[1150px] bg-gradient-to-bl from-sky-200/60 via-blue-300/50 to-indigo-400/40 rounded-full blur-[170px] animate-pulse'
+          style={{ animationDuration: '12s', animationDelay: '2s' }}
+        />
+        <div
+          className='absolute -bottom-80 left-[20%] w-[1100px] h-[1100px] bg-gradient-to-tr from-teal-300/58 via-cyan-400/48 to-blue-500/38 rounded-full blur-[165px] animate-pulse'
+          style={{ animationDuration: '14s', animationDelay: '3.5s' }}
+        />
+        <div
+          className='absolute top-[40%] left-[55%] -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-r from-cyan-200/55 via-sky-300/45 to-blue-400/35 rounded-full blur-[140px] animate-pulse'
+          style={{ animationDuration: '16s', animationDelay: '1.5s' }}
+        />
+        <div
+          className='absolute bottom-[20%] right-[15%] w-[900px] h-[900px] bg-gradient-to-tl from-indigo-300/50 via-blue-200/42 to-cyan-300/32 rounded-full blur-[130px] animate-pulse'
+          style={{ animationDuration: '18s', animationDelay: '2.5s' }}
         />
 
-        <div
-          className='absolute top-1/4 -right-40 w-[800px] h-[800px] bg-gradient-to-bl from-violet-500/30 via-purple-500/25 to-fuchsia-500/20 rounded-full blur-[120px] animate-pulse'
-          style={{ animationDuration: '9s', animationDelay: '1s' }}
-        />
+        {/* Aurora Grid Pattern */}
+        <div className='absolute inset-0 bg-[linear-gradient(rgba(0,229,255,0.15)_2px,transparent_2px),linear-gradient(90deg,rgba(20,184,166,0.12)_2px,transparent_2px)] bg-[size:75px_75px] [mask-image:radial-gradient(ellipse_at_center,black_38%,transparent_90%)]' />
 
-        <div
-          className='absolute -bottom-40 left-1/3 w-[700px] h-[700px] bg-gradient-to-tr from-cyan-500/25 via-teal-400/20 to-emerald-400/15 rounded-full blur-[100px] animate-pulse'
-          style={{ animationDuration: '11s', animationDelay: '2s' }}
-        />
+        {/* Premium Multi-layered Aurora Glow */}
+        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(0,229,255,0.4),transparent_68%)]' />
+        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,149,255,0.38),transparent_68%)]' />
+        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_center,rgba(29,78,216,0.35),transparent_72%)]' />
+        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_center_right,rgba(13,148,136,0.32),transparent_65%)]' />
+        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_center_left,rgba(6,182,212,0.3),transparent_65%)]' />
+        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(20,184,166,0.28),transparent_68%)]' />
 
-        <div
-          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-violet-500/15 rounded-full blur-[90px] animate-pulse'
-          style={{ animationDuration: '13s', animationDelay: '1.5s' }}
-        />
-
-        {/* Grid pattern */}
-        <div className='absolute inset-0 bg-[linear-gradient(rgba(167,243,208,0.04)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(167,243,208,0.04)_1.5px,transparent_1.5px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_80%)]' />
-
-        {/* Radial overlays */}
-        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(167,243,208,0.15),transparent_50%)]' />
-        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(192,132,252,0.12),transparent_50%)]' />
-        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_center,rgba(45,212,191,0.1),transparent_60%)]' />
-        <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(15,23,42,0.5)_100%)]' />
+        {/* Premium Vignette */}
+        <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_42%,rgba(6,20,50,0.7)_100%)]' />
       </div>
 
       {/* Particles Canvas */}
       <canvas ref={canvasRef} className='absolute inset-0 pointer-events-none' />
 
-      {/* Main Content - Tăng padding */}
+      {/* Main Content */}
       <div className='relative z-10 py-16 sm:py-20 lg:py-24'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='max-w-7xl mx-auto'>
-            {/* Premium Glass Card */}
+            {/* Luxury Glassmorphism Card */}
             <div className='group relative'>
-              {/* Outer glow */}
-              <div className='absolute -inset-4 bg-gradient-to-r from-emerald-500/20 via-teal-500/15 via-violet-500/15 to-purple-500/20 blur-3xl opacity-40 group-hover:opacity-70 group-hover:blur-[60px] transition-all duration-700' />
+              {/* Premium Multi-layer Aurora Glow */}
+              <div className='absolute -inset-10 bg-gradient-to-r from-cyan-300/60 via-sky-400/55 to-blue-400/50 blur-[85px] opacity-75 group-hover:opacity-95 group-hover:blur-[110px] transition-all duration-1000' />
+              <div className='absolute -inset-7 bg-gradient-to-r from-teal-200/50 via-cyan-300/45 to-sky-300/40 blur-[60px] opacity-65 group-hover:opacity-85 transition-all duration-1000' />
+              <div className='absolute -inset-3 bg-gradient-to-r from-cyan-100/35 via-sky-100/30 to-blue-200/28 blur-2xl opacity-45 group-hover:opacity-65 transition-all duration-1000' />
 
-              {/* Glass Card */}
-              <div className='relative backdrop-blur-2xl bg-gradient-to-br from-white/[0.05] to-white/[0.02] hover:from-white/[0.08] hover:to-white/[0.04] border border-emerald-500/20 hover:border-emerald-400/40 rounded-[2rem] shadow-[0_8px_32px_rgba(167,243,208,0.12),0_20px_60px_rgba(139,92,246,0.08)] hover:shadow-[0_12px_48px_rgba(167,243,208,0.25),0_30px_90px_rgba(139,92,246,0.18),0_0_120px_rgba(20,184,166,0.15)] hover:scale-[1.01] transition-all duration-500 ease-out'>
-                {/* Gradient overlay */}
-                <div className='absolute inset-0 rounded-[2rem] bg-gradient-to-br from-emerald-400/0 via-transparent to-violet-500/0 group-hover:from-emerald-400/15 group-hover:to-violet-500/15 transition-all duration-500' />
+              {/* Luxury Glass Card with Chrome Effect */}
+              <div className='relative backdrop-blur-[60px] bg-gradient-to-br from-cyan-400/88 via-sky-500/85 to-blue-600/88 hover:from-cyan-300/92 hover:via-sky-400/90 hover:to-blue-500/94 rounded-[3.5rem] shadow-[0_15px_70px_rgba(0,229,255,0.6),0_38px_120px_rgba(14,165,233,0.45),0_0_180px_rgba(29,78,216,0.35),inset_0_1px_0_rgba(255,255,255,0.15)] hover:shadow-[0_22px_90px_rgba(0,229,255,0.75),0_48px_150px_rgba(14,165,233,0.55),0_0_220px_rgba(29,78,216,0.45),inset_0_1px_0_rgba(255,255,255,0.25)] hover:scale-[1.01] transition-all duration-700 ease-out overflow-hidden border-[4px] border-cyan-100/60 hover:border-white/80'>
+                {/* Luxury Gradient Overlay */}
+                <div className='absolute inset-0 rounded-[3.5rem] bg-gradient-to-br from-cyan-200/0 via-transparent to-sky-200/0 group-hover:from-cyan-100/28 group-hover:via-blue-100/18 group-hover:to-sky-100/25 transition-all duration-700' />
 
-                {/* Top edge glow */}
-                <div className='absolute -top-px left-[20%] right-[20%] h-px bg-gradient-to-r from-transparent via-emerald-400/0 to-transparent group-hover:via-emerald-400/60 transition-all duration-500' />
+                {/* Premium Chrome Edge Glow */}
+                <div className='absolute -top-px left-[8%] right-[8%] h-[4px] bg-gradient-to-r from-transparent via-cyan-50/0 to-transparent group-hover:via-cyan-50/100 transition-all duration-700 shadow-[0_0_20px_rgba(0,229,255,0.8)]' />
 
-                {/* Content - Tăng padding */}
+                {/* Luxury Glass Texture with Depth */}
+                <div className='absolute inset-0 rounded-[3.5rem] bg-gradient-to-br from-white/[0.12] via-white/[0.06] to-white/[0.12] group-hover:from-white/[0.18] group-hover:to-white/[0.18] transition-all duration-700' />
+
+                {/* Premium Aurora Shimmer */}
+                <div className='absolute inset-0 rounded-[3.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 overflow-hidden'>
+                  <div
+                    className='absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]'
+                    style={{ transition: 'transform 3.5s ease-in-out' }}
+                  />
+                </div>
+
+                {/* Content Container */}
                 <div className='relative p-10 sm:p-14 lg:p-20'>
-                  {/* Corner glows */}
-                  <div className='absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-emerald-400/15 to-teal-500/10 group-hover:from-emerald-400/30 group-hover:to-teal-500/20 blur-3xl rounded-full transition-all duration-500' />
+                  {/* Premium Aurora Corner Lights */}
+                  <div className='absolute top-0 left-0 w-72 h-72 bg-gradient-to-br from-cyan-200/65 to-teal-200/55 group-hover:from-cyan-100/90 group-hover:to-teal-100/80 blur-[90px] rounded-full transition-all duration-700' />
+                  <div className='absolute top-0 left-0 w-52 h-52 bg-gradient-to-br from-cyan-100/55 to-sky-100/45 group-hover:from-cyan-100/75 group-hover:to-sky-100/65 blur-[60px] rounded-full transition-all duration-700' />
 
-                  <div className='absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-violet-400/15 to-purple-500/10 group-hover:from-violet-400/30 group-hover:to-purple-500/20 blur-3xl rounded-full transition-all duration-500' />
+                  <div className='absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-sky-200/62 to-blue-200/52 group-hover:from-sky-100/85 group-hover:to-blue-100/75 blur-[90px] rounded-full transition-all duration-700' />
+                  <div className='absolute top-0 right-0 w-52 h-52 bg-gradient-to-bl from-sky-100/52 to-cyan-100/42 group-hover:from-sky-100/72 group-hover:to-cyan-100/62 blur-[60px] rounded-full transition-all duration-700' />
 
-                  <div className='absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-t from-cyan-400/12 to-teal-500/8 group-hover:from-cyan-400/25 group-hover:to-teal-500/18 blur-3xl rounded-full transition-all duration-500' />
+                  <div className='absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-gradient-to-t from-cyan-300/60 to-sky-200/50 group-hover:from-cyan-200/85 group-hover:to-sky-100/75 blur-[90px] rounded-full transition-all duration-700' />
+                  <div className='absolute bottom-0 left-1/2 -translate-x-1/2 w-60 h-60 bg-gradient-to-t from-sky-200/50 to-blue-100/40 group-hover:from-sky-100/70 group-hover:to-blue-100/58 blur-[60px] rounded-full transition-all duration-700' />
 
-                  {/* Main content - Tăng spacing */}
+                  <div className='absolute bottom-0 right-0 w-68 h-68 bg-gradient-to-tl from-blue-200/58 to-sky-200/48 group-hover:from-blue-100/80 group-hover:to-sky-100/70 blur-[90px] rounded-full transition-all duration-700' />
+                  <div className='absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-tl from-sky-100/48 to-teal-100/38 group-hover:from-sky-100/68 group-hover:to-teal-100/55 blur-[60px] rounded-full transition-all duration-700' />
+
+                  {/* Premium Center Aurora Ambient */}
+                  <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[850px] bg-gradient-to-r from-cyan-200/25 via-sky-200/22 to-blue-200/18 group-hover:from-cyan-100/40 group-hover:via-sky-100/35 group-hover:to-blue-100/30 blur-[140px] rounded-full transition-all duration-1000' />
+
+                  {/* Main Content */}
                   <div className='relative space-y-12'>
                     <DashboardTitle />
                     <DashboardCardList allowAccess={allowAccess} />
                   </div>
                 </div>
 
-                {/* Bottom edge glow */}
-                <div className='absolute -bottom-px left-[20%] right-[20%] h-px bg-gradient-to-r from-transparent via-violet-400/0 to-transparent group-hover:via-violet-400/50 transition-all duration-500' />
+                {/* Premium Chrome Bottom Edge */}
+                <div className='absolute -bottom-px left-[8%] right-[8%] h-[4px] bg-gradient-to-r from-transparent via-sky-50/0 to-transparent group-hover:via-sky-50/100 transition-all duration-700 shadow-[0_0_20px_rgba(14,165,233,0.8)]' />
               </div>
             </div>
           </div>

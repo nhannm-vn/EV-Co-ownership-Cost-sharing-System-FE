@@ -4,11 +4,8 @@ import type { UseFormRegisterReturn } from 'react-hook-form'
 interface IFileUpload {
   label: string
   file: FileList | null
-  //hàm xử lí khi chọn file
   register: UseFormRegisterReturn
-  // hàm xử lí khi xóa file
   onRemove: (file: File) => void
-  // màu teal (xanh ngọc bích)
   color: 'teal'
   error?: string
 }
@@ -16,57 +13,49 @@ interface IFileUpload {
 export default function FileUpload({ label, file, register, onRemove, error }: IFileUpload) {
   return (
     <div>
-      <label className='block text-xs font-medium text-gray-300 mb-1.5'>
-        {label} <span className='text-teal-400'>*</span>
+      <label className='block text-xs font-semibold text-white/80 mb-2'>
+        {label} <span className='text-cyan-300'>*</span>
       </label>
-      {/* Upload button */}
-      {/* nếu chưa có file thì hiển thị */}
 
       {!file || file.length === 0 ? (
-        // group là để hover vào icon nó phóng to lên thằng cha thay đổi thì con thay đổi theo
-        // khi cha đổi màu viền thì con phóng to theo
-        // phải bọc vào label vì input type file nó ẩn nên phải bọc vào label để khi click vào label là click vào input file
         <label
-          className={`cursor-pointer rounded-lg p-3 text-center bg-slate-800/30 h-20 flex flex-col items-center justify-center group ${
+          className={`cursor-pointer rounded-xl p-4 text-center bg-white/10 backdrop-blur-lg h-24 flex flex-col items-center justify-center group transition-all duration-400 ${
             error
-              ? 'border-2 border-dashed border-red-500 hover:border-red-400'
-              : 'border-2 border-dashed border-teal-500/50 hover:border-teal-400'
+              ? 'border-[2px] border-dashed border-red-300/60 hover:border-red-300 hover:bg-red-400/10'
+              : 'border-[2px] border-dashed border-cyan-300/50 hover:border-cyan-200 hover:bg-white/15'
           }`}
         >
-          <div className='w-8 h-8 bg-gradient-to-br from-teal-600 to-teal-500 rounded-lg flex items-center justify-center mb-1 group-hover:scale-110 transition'>
-            {/* text-base là font-size mặc định 16px */}
-            <UploadOutlined className='text-white text-base' />
+          <div className='w-10 h-10 bg-gradient-to-br from-cyan-400 to-sky-500 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] border-[2px] border-white/40'>
+            <UploadOutlined className='text-white text-lg drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]' />
           </div>
-          <p className='text-xs text-gray-300'>Chọn {label.toLowerCase()}</p>
+          <p className='text-xs text-white/70 font-medium'>Chọn {label.toLowerCase()}</p>
           <input
             type='file'
             accept='image/*'
             multiple
             {...register}
             onChange={(e) => {
-              register.onChange(e) // gọi onChange của react-hook-form
+              register.onChange(e)
             }}
             className='hidden'
           />
         </label>
       ) : (
-        // File info display
-        <div className='bg-slate-800/50 border border-slate-700 rounded-lg p-3'>
+        <div className='bg-white/10 backdrop-blur-lg border-[2px] border-white/30 rounded-xl p-3 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)]'>
           {file &&
             file.length > 0 &&
             Array.from(file).map((f, index) => (
-              <div key={index} className='flex items-center gap-2 flex-1 min-w-0 mb-4 '>
-                <UploadOutlined
-                  // flex-shrink-0 để icon không bị co lại khi tên file dài
-                  className='text-base text-teal-400 flex-shrink-0'
-                />
-                {/* truncate là cắt ngắn văn bản nếu quá dài đẩy mất cái button */}
+              <div
+                key={index}
+                className='flex items-center gap-2 flex-1 min-w-0 mb-2 last:mb-0 bg-white/5 rounded-lg p-2 border border-white/20'
+              >
+                <UploadOutlined className='text-base text-cyan-200 flex-shrink-0 drop-shadow-[0_0_6px_rgba(6,182,212,0.5)]' />
                 <div className='flex items-center flex-1 min-w-0'>
-                  <p className='text-xs text-gray-300 truncate flex-1'>{f.name}</p>
+                  <p className='text-xs text-white/80 truncate flex-1 font-medium'>{f.name}</p>
                   <button
                     type='button'
                     onClick={() => onRemove(f)}
-                    className='text-red-400 hover:text-red-300 text-xs ml-2 flex-shrink-0'
+                    className='text-red-300 hover:text-red-200 text-xs ml-2 flex-shrink-0 font-semibold px-2 py-1 rounded bg-red-400/20 hover:bg-red-400/30 transition-colors duration-300'
                   >
                     Xóa
                   </button>
@@ -75,7 +64,7 @@ export default function FileUpload({ label, file, register, onRemove, error }: I
             ))}
         </div>
       )}
-      {error && <p className='text-xs text-red-400 mt-1'>{error}</p>}
+      {error && <p className='text-xs text-red-200 mt-1.5 font-medium'>{error}</p>}
     </div>
   )
 }
