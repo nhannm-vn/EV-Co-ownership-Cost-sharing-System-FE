@@ -1,4 +1,4 @@
-import type { CreateGroupMember, GroupItem, InvitationResponse } from '../types/api/group.type'
+import type { CreateGroupMember, GroupItem, groupSummary, InvitationResponse } from '../types/api/group.type'
 import http from '../utils/http'
 
 const groupApi = {
@@ -17,7 +17,7 @@ const groupApi = {
 
   // lấy thông tin mỗi group detail
   groupDetail(groupId: string) {
-    return http.get<GroupItem>(`api/ownership-percentage/page-data/${groupId}`)
+    return http.get<GroupItem>(`api/shares/page-data/${groupId}`)
   },
 
   //  API handle id ở header khi  bấm groupDetail
@@ -32,6 +32,10 @@ const groupApi = {
 
   verifyMember: (otp: string) => {
     return http.post<InvitationResponse>(`api/invitations/accept`, { otp })
+  },
+  // get members of group
+  getMembersOfGroup: (groupId: string) => {
+    return http.get<groupSummary>(`api/shares/page-data/${groupId}`)
   }
 }
 
