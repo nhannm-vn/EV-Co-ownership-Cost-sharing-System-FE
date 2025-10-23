@@ -15,9 +15,11 @@ interface Props {
     classHColor: string
     classButtonColor: string
   }
-  handleVerify?: () => void
+  allowAccess: boolean
 }
-export default function DashboardCardElement({ color, content, children, moveLink, handleVerify }: Props) {
+
+export default function DashboardCardElement({ color, content, children, moveLink, allowAccess }: Props) {
+  console.log(allowAccess)
   return (
     <motion.div
       variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
@@ -55,11 +57,36 @@ export default function DashboardCardElement({ color, content, children, moveLin
               fill='none'
               stroke='currentColor'
               viewBox='0 0 24 24'
+        {allowAccess ? (
+          <Link to={moveLink} className='mt-auto'>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${color.classButtonColor}`}
             >
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-            </svg>
-          </motion.button>
-        </Link>
+              <span>{content.button}</span>
+              <svg
+                className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+              </svg>
+            </motion.button>
+          </Link>
+        ) : (
+          <div className='mt-auto'>
+            <button
+              className={`w-full px-5 py-2.5 rounded-lg text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${color.classButtonColor} opacity-50 cursor-not-allowed`}
+            >
+              <span>{content.button}</span>
+              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </motion.div>
   )

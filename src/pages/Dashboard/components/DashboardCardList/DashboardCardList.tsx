@@ -28,6 +28,7 @@ export default function DashboardCardList() {
     })
   }
 
+export default function DashboardCardList({ allowAccess }: { allowAccess: boolean }) {
   return (
     <motion.div
       initial='hidden'
@@ -45,6 +46,7 @@ export default function DashboardCardList() {
     >
       {/* Create Group */}
       <DashboardCardElement
+        allowAccess={allowAccess}
         color={{
           boxShadow: 'rgba(20,184,166,0.5)',
           classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
@@ -62,6 +64,7 @@ export default function DashboardCardList() {
 
       {/* View Groups */}
       <DashboardCardElement
+        allowAccess={allowAccess}
         color={{
           boxShadow: 'rgba(20,184,166,0.5)',
           classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',
@@ -80,6 +83,7 @@ export default function DashboardCardList() {
       {/* Enter Code */}
       <DashboardCardElement
         handleVerify={() => handleVerify(otp.current?.value || '')}
+        allowAccess={allowAccess}
         color={{
           boxShadow: 'rgba(20,184,166,0.5)',
           classDivBorder: 'border-2 border-teal-400/70 hover:border-teal-400 transition-all duration-300',

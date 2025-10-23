@@ -37,21 +37,21 @@ function HeaderStaff() {
   }
 
   return (
-    <header className='bg-black top-0 z-50 overflow-x-auto '>
+    <header className='bg-white top-0 z-50 overflow-x-auto '>
       <div className='flex justify-between items-center px-6'>
         <Link
           to={path.adminDashboard}
           className='flex w-28 h-28 items-center mr-24 hover:scale-90 transition-transform'
         >
-          <img src={LOGO_URL.black} alt='' />
-          <div className='ml-2 text-lg font-semibold text-slate-100 text-[14px]'>EVShare</div>
+          <img src={LOGO_URL.white} alt='' />
+          <div className='ml-2 text-lg font-semibold text-black text-[14px]'>EVShare</div>
         </Link>
 
         <div className='flex  justify-between items-center'>
           <button
             onClick={handleLogout}
-            className='font-semibold text-center w-32 text-[14px] py-3 text-white rounded-lg transition duration-300
-           hover:bg-red-600 hover:text-black bg-amber-500'
+            className='font-semibold text-center w-32 text-[14px] py-3 text-white rounded-lg transition 
+           duration-300 bg-[#17a984] hover:text-black '
           >
             Logout
           </button>

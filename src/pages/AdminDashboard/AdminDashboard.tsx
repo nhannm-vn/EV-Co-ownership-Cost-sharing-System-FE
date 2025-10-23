@@ -4,7 +4,7 @@ export default function AdminDashboard() {
   return (
     <div className='grid min-h-screen grid-cols-4'>
       <aside className='col-span-1' aria-label='Sidebar'>
-        <div className='flex h-full flex-col overflow-y-auto bg-gray-100 py-4 px-3 shadow-lg'>
+        <div className='flex h-full flex-col overflow-y-auto bg-gray-100 py-2 mt-4 px-3 shadow-lg'>
           <ul className='space-y-2'>
             <li>
               <NavLink
