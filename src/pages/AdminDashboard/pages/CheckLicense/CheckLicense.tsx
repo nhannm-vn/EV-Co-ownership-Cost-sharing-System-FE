@@ -85,6 +85,7 @@ export default function CheckLicense() {
         if (res.data && Array.isArray(res.data)) {
           const mappedMembers = res.data.map(mapUserToMember)
           setMembers(mappedMembers)
+          console.log(res.data)
         }
       })
       .catch(console.error)
