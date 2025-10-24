@@ -28,26 +28,32 @@ export default function CoOwnerSideBar() {
   return (
     <aside aria-label='Navbar' className='col-span-1 mb-6 mt-6'>
       <ul className='flex flex-row items-center gap-3 overflow-x-auto whitespace-nowrap'>
-        {navItems.map((item, index) => (
-          <li key={index}>
-            <NavLink
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) => {
-                const activeClasses =
-                  'bg-gradient-to-r from-cyan-400 to-sky-500 text-white shadow-[0_8px_25px_rgba(6,182,212,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]'
-                const inactiveClasses =
-                  'bg-white/90 text-gray-800 hover:bg-[rgba(76,228,255,0.6)] hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+        {navItems.map((item, index) => {
+          if (item.label === 'Create Contract' && group?.userRole !== 'ADMIN') {
+            return null
+          }
 
-                return `${base} ${isActive ? activeClasses : inactiveClasses}`
-              }}
-            >
-              {({ isActive }) => (
-                <span className={isActive ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' : ''}>{item.label}</span>
-              )}
-            </NavLink>
-          </li>
-        ))}
+          return (
+            <li key={index}>
+              <NavLink
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) => {
+                  const activeClasses =
+                    'bg-gradient-to-r from-cyan-400 to-sky-500 text-white shadow-[0_8px_25px_rgba(6,182,212,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]'
+                  const inactiveClasses =
+                    'bg-white/90 text-gray-800 hover:bg-[rgba(76,228,255,0.6)] hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
+
+                  return `${base} ${isActive ? activeClasses : inactiveClasses}`
+                }}
+              >
+                {({ isActive }) => (
+                  <span className={isActive ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' : ''}>{item.label}</span>
+                )}
+              </NavLink>
+            </li>
+          )
+        })}
       </ul>
     </aside>
   )
