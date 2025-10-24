@@ -30,22 +30,25 @@ export default function HomeAbout() {
           About Us
         </motion.h2>
         <motion.p
-          className='text-gray-600 text-base md:text-lg font-light  max-w-3xl mx-auto text-center mb-4 font-serif leading-relaxed'
+          className='text-gray-600 text-base md:text-lg font-light  max-w-3xl mx-auto text-center mb-4 text-start leading-relaxed'
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.7 }}
           viewport={{ once: true, amount: 0.6 }}
         >
-          <span className='font-semibold text-emerald-800'>EVShare</span> is a platform for{' '}
-          <span className='font-semibold text-emerald-700'>
+          <span className='font-sans font-bold text-emerald-800'>EVShare</span> is a platform for{' '}
+          <span className='font-sans font-bold text-emerald-700'>
             co-ownership management and electric vehicle cost sharing.
           </span>
           We help owners{' '}
-          <span className='font-bold text-emerald-700'>easily track expenses, distribute costs transparently,</span> and
-          optimize the use of electric vehicles within the community. EVShare is a platform for co-ownership management
-          and electric vehicle cost sharing. We help owners easily track expenses, distribute costs transparently, and
-          optimize the use of electric vehicles within the community. With EVShare, you can manage finances, usage
-          history, and payments quickly and fairly, ensuring convenience and transparency for all members.
+          <span className='font-sans text-emerald-700 font-bold'>
+            easily track expenses, distribute costs transparently,
+          </span>{' '}
+          and optimize the use of electric vehicles within the community. EVShare is a platform for co-ownership
+          management and electric vehicle cost sharing. We help owners easily track expenses, distribute costs
+          transparently, and optimize the use of electric vehicles within the community. With EVShare, you can manage
+          finances, usage history, and payments quickly and fairly, ensuring convenience and transparency for all
+          members.
         </motion.p>
       </div>
     </section>

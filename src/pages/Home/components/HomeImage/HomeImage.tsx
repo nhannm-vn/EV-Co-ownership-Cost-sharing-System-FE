@@ -9,7 +9,7 @@ export default function HomeImage({ image, content }: Props) {
       className='h-[750px] bg-cover bg-center bg-fixed flex items-center justify-center'
       style={{ backgroundImage: `url(${image})` }}
     >
-      <h2 className='text-4xl font-bold text-white drop-shadow-lg'>{content}</h2>
+      <h2 className='text-4xl font-bold px-52 text-center text-white drop-shadow-lg'>{content}</h2>
     </section>
   )
 }

@@ -35,7 +35,7 @@ export default function TableBody() {
         return (
           <tr
             key={group.groupId || index}
-            className='hover:bg-white/15 transition-all duration-300 cursor-pointer border-b border-white/10'
+            className='hover:bg-white/30 transition-all duration-300 cursor-pointer border-b border-white/10'
             onClick={() => handleRowClick(group)}
           >
             {/* Group ID */}
