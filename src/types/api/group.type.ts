@@ -27,6 +27,7 @@ export interface Member {
 export interface groupSummary {
   groupSummary?: {
     members?: Member[]
+    memberCapacity?: number
   }
 }
 
