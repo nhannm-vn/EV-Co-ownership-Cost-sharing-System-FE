@@ -26,12 +26,11 @@ import UploadLicense from '../pages/UploadLicense'
 import Viewgroups from '../pages/Viewgroups'
 import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
-
 import ManagerLayout from '../layouts/ManagerLayout'
 import AdminDashboard from '../pages/AdminDashboard'
+import CheckContract from '../pages/AdminDashboard/pages/CheckContract'
 import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
 import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
-import Demo3 from '../pages/AdminDashboard/pages/Demo3'
 import RoleCheck from './CheckRole/CheckRole'
 
 function Routers() {
@@ -76,7 +75,7 @@ function Routers() {
               children: [
                 { index: true, element: <Dashboard /> },
                 {
-                  path: path.viewGroups, // /view-groups
+                  path: path.viewGroups,
                   element: <Viewgroups />
                 },
                 {
@@ -100,9 +99,9 @@ function Routers() {
           ]
         },
 
-        // --- STAFF ---
+        // --- STAFF & ADMIN (Shared Routes) ---
         {
-          element: <RoleCheck allowedRoles={['STAFF']} />,
+          element: <RoleCheck allowedRoles={['STAFF', 'ADMIN']} />,
           children: [
             {
               path: path.adminDashboard,
@@ -112,9 +111,25 @@ function Routers() {
                   element: <AdminDashboard />,
                   children: [
                     { index: true, element: <CheckGroup /> },
-                    { path: 'checkLicense', element: <CheckLicense /> },
-                    { path: 'demo3', element: <Demo3 /> }
+                    { path: 'checkLicense', element: <CheckLicense /> }
                   ]
+                }
+              ]
+            }
+          ]
+        },
+
+        // --- ADMIN ONLY (Extra Routes) ---
+        {
+          element: <RoleCheck allowedRoles={['ADMIN']} />,
+          children: [
+            {
+              path: path.adminDashboard,
+              element: <ManagerLayout />,
+              children: [
+                {
+                  element: <AdminDashboard />,
+                  children: [{ path: 'checkContract', element: <CheckContract /> }]
                 }
               ]
             }

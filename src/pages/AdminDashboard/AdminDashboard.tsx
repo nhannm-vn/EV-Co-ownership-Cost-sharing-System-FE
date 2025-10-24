@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { getRoleFromLS } from '../../utils/auth'
 
 export default function AdminDashboard() {
+  const role = getRoleFromLS()
   return (
     <div className='grid min-h-screen grid-cols-4'>
       <aside className='col-span-1' aria-label='Sidebar'>
@@ -15,7 +17,7 @@ export default function AdminDashboard() {
                   return `flex items-center rounded-lg ${activeClass} p-2 text-base font-normal text-gray-900 hover:bg-gray-300`
                 }}
               >
-                {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>Dashboard</span>}
+                {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>CheckGroup</span>}
               </NavLink>
             </li>
             <li>
@@ -29,17 +31,19 @@ export default function AdminDashboard() {
                 {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>CheckLicense</span>}
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to='CheckGroup'
-                className={({ isActive }) => {
-                  const activeClass = isActive ? 'bg-gray-300' : ''
-                  return `flex items-center rounded-lg ${activeClass} p-2 text-base font-normal text-gray-900 hover:bg-gray-300`
-                }}
-              >
-                {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>Demo2</span>}
-              </NavLink>
-            </li>
+            {role === 'ADMIN' && (
+              <li>
+                <NavLink
+                  to='checkContract'
+                  className={({ isActive }) => {
+                    const activeClass = isActive ? 'bg-gray-300' : ''
+                    return `flex items-center rounded-lg ${activeClass} p-2 text-base font-normal text-gray-900 hover:bg-gray-300`
+                  }}
+                >
+                  {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>CheckContract</span>}
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div>
       </aside>
