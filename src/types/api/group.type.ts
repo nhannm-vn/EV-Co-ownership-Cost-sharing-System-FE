@@ -71,7 +71,7 @@ export interface GroupSummary {
   fullyAllocated: boolean
 }
 
-// 🚗 Thông tin xe
+// Thông tin xe
 export interface VehicleInfo {
   vehicleId: number
   brand: string
@@ -85,7 +85,7 @@ export interface VehicleInfo {
   updatedAt: string
 }
 
-// 📦 Kiểu dữ liệu tổng cho API response
+// Kiểu dữ liệu tổng cho API response
 export interface OwnershipResponse {
   userOwnership: UserOwnership
   groupSummary: GroupSummary
