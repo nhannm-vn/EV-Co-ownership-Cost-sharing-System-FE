@@ -17,7 +17,7 @@ export default function CheckGroup() {
   console.log(groupData)
 
   return (
-    <div className='bg-gray-100 min-h-screen font-sans'>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 font-sans'>
       <div className='container mx-auto p-4 md:p-8'>
         <header className='text-center mb-8'>
           <h1 className='text-3xl md:text-4xl font-bold text-gray-800'>Trang Duyệt Yêu Cầu Nhóm</h1>

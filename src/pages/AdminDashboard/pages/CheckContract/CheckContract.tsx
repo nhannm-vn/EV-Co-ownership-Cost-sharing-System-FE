@@ -1,88 +1,66 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect } from 'react'
-
-interface Contract {
-  id: number
-  groupId: number
-  startDate: string
-  endDate: string
-  requiredDepositAmount: number
-  isActive: boolean
-  approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED'
-  approvedById: number | null
-  approvedAt: string | null
-  rejectionReason: string | null
-  createdAt: string
-  updatedAt: string
-}
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { ContractResponse } from '../../../../types/api/admin.type'
+import adminApi from '../../../../apis/admin.api'
+import { formatToVND } from '../../../../utils/formatPrice'
+import Skeleton from '../../../../components/Skeleton'
+import { toast } from 'react-toastify'
+import { formatVnTime } from '../../../../utils/helper'
 
 function CheckContract() {
-  const [contracts, setContracts] = useState<Contract[]>([])
-  const [loading] = useState(false)
+  const queryClient = useQueryClient()
 
-  useEffect(() => {
-    // Mock data - thay bằng API call thật
-    setContracts([
-      {
-        id: 1,
-        groupId: 3,
-        startDate: '2024-02-01',
-        endDate: '2024-11-30',
-        requiredDepositAmount: 3000.0,
-        isActive: true,
-        approvalStatus: 'PENDING',
-        approvedById: null,
-        approvedAt: null,
-        rejectionReason: null,
-        createdAt: '2025-10-24T19:40:47.46',
-        updatedAt: '2025-10-24T19:40:47.46'
-      }
-    ])
-  }, [])
+  const { data: contracts = [], isLoading } = useQuery<ContractResponse[]>({
+    queryKey: ['contracts'],
+    queryFn: () => adminApi.getAllContracts().then((res) => res.data)
+  })
 
-  const handleApprove = async (id: number) => {
-    if (!window.confirm('Approve this contract?')) return
+  const approveMutation = useMutation({
+    mutationFn: (id: number) => adminApi.approveContract(id, 'APPROVE'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contracts'] })
+      toast.success('Aprrove contract successful!', {
+        autoClose: 1500
+      })
+    },
+    onError: () => {
+      toast.error('Aprrove contract fail!', {
+        autoClose: 1500
+      })
+    }
+  })
 
-    try {
-      // await fetch(`/api/contracts/${id}/approve`, { method: 'POST' })
-      setContracts((prev) => prev.map((c) => (c.id === id ? { ...c, approvalStatus: 'APPROVED' as const } : c)))
-      alert('Contract approved!')
-    } catch (error) {
-      alert('Error approving contract')
+  const rejectMutation = useMutation({
+    mutationFn: (id: number) => adminApi.approveContract(id, 'REJECT'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contracts'] })
+      toast.success('Reject contract successful!', {
+        autoClose: 1500
+      })
+    },
+    onError: () => {
+      toast.error('Reject contract fail!', {
+        autoClose: 1500
+      })
+    }
+  })
+
+  const handleApprove = (id: number) => {
+    if (window.confirm('Xác nhận duyệt hợp đồng này?')) {
+      approveMutation.mutate(id)
     }
   }
 
-  const handleReject = async (id: number) => {
-    const reason = prompt('Enter rejection reason:')
-    if (!reason) return
-
-    try {
-      // await fetch(`/api/contracts/${id}/reject`, {
-      //   method: 'POST',
-      //   body: JSON.stringify({ rejectionReason: reason })
-      // })
-      setContracts((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, approvalStatus: 'REJECTED' as const, rejectionReason: reason } : c))
-      )
-      alert('Contract rejected!')
-    } catch (error) {
-      alert('Error rejecting contract')
+  const handleReject = (id: number) => {
+    if (window.confirm('Xác nhận từ chối hợp đồng này?')) {
+      rejectMutation.mutate(id)
     }
   }
 
-  const formatMoney = (amount: number) => {
-    return amount.toLocaleString('vi-VN') + ' VND'
-  }
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('vi-VN')
-  }
-
-  if (loading) return <div className='p-8'>Loading...</div>
-
-  return (
-    <div className='p-8'>
-      <h1 className='text-2xl font-bold mb-6'>Duyệt Hợp Đồng</h1>
+  return isLoading ? (
+    <Skeleton />
+  ) : (
+    <div className='p-8 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>
+      <h1 className='text-2xl  font-bold mb-6'>Duyệt Hợp Đồng</h1>
 
       <div className='bg-white rounded-lg shadow overflow-x-auto'>
         <table className='w-full'>
@@ -101,10 +79,10 @@ function CheckContract() {
             {contracts.map((contract) => (
               <tr key={contract.id} className='hover:bg-gray-50'>
                 <td className='px-4 py-3'>#{contract.id}</td>
-                <td className='px-4 py-3'>Group #{contract.groupId}</td>
-                <td className='px-4 py-3'>{formatDate(contract.startDate)}</td>
-                <td className='px-4 py-3'>{formatDate(contract.endDate)}</td>
-                <td className='px-4 py-3 font-semibold'>{formatMoney(contract.requiredDepositAmount)}</td>
+                <td className='px-4 py-3'>Group {contract.groupId}</td>
+                <td className='px-4 py-3'>{formatVnTime(contract.startDate)}</td>
+                <td className='px-4 py-3'>{formatVnTime(contract.endDate)}</td>
+                <td className='px-4 py-3 font-semibold'>{formatToVND(contract.requiredDepositAmount)}</td>
                 <td className='px-4 py-3'>
                   {contract.approvalStatus === 'PENDING' && (
                     <span className='px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full'>
@@ -127,15 +105,17 @@ function CheckContract() {
                     <div className='flex gap-2'>
                       <button
                         onClick={() => handleApprove(contract.id)}
-                        className='px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600'
+                        disabled={approveMutation.isPending}
+                        className='px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                       >
-                        Duyệt
+                        {approveMutation.isPending ? 'Đang duyệt...' : 'Duyệt'}
                       </button>
                       <button
                         onClick={() => handleReject(contract.id)}
-                        className='px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600'
+                        disabled={rejectMutation.isPending}
+                        className='px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                       >
-                        Từ chối
+                        {rejectMutation.isPending ? 'Đang xử lý...' : 'Từ chối'}
                       </button>
                     </div>
                   ) : (
