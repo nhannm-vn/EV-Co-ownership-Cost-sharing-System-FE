@@ -10,6 +10,7 @@ export interface GroupItem {
   groupName?: string
   description?: string
   status?: string
+  userRole?: 'ADMIN' | 'MEMBER'
 }
 
 export interface InvitationResponse {

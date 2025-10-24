@@ -29,6 +29,7 @@ export default function MemberGroup() {
   })
   const members = membersQuery.data?.data.groupSummary?.members || []
   const amount = membersQuery.data?.data.groupSummary?.memberCapacity || 0
+  console.log(membersQuery.data?.data)
 
   // mời người dùng vào group
   const inviteMutation = useMutation({
