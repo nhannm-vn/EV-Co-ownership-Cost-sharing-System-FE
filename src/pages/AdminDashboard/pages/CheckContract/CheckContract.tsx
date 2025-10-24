@@ -18,7 +18,7 @@ interface Contract {
 
 function CheckContract() {
   const [contracts, setContracts] = useState<Contract[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
 
   useEffect(() => {
     // Mock data - thay bằng API call thật
