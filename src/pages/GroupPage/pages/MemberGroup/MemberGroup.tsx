@@ -28,6 +28,7 @@ export default function MemberGroup() {
     enabled: !!groupId
   })
   const members = membersQuery.data?.data.groupSummary?.members || []
+  const amount = membersQuery.data?.data.groupSummary?.memberCapacity || 0
 
   // mời người dùng vào group
   const inviteMutation = useMutation({
@@ -61,13 +62,16 @@ export default function MemberGroup() {
         {/* Header */}
         <div className='flex justify-between items-center mb-8'>
           <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>MemberGroup</h1>
-          <button
-            onClick={() => setShowModal(true)}
-            className='m-6 px-6 py-3 bg-gradient-to-r from-cyan-400 to-sky-500 hover:from-cyan-500 hover:to-sky-600 text-white rounded-xl font-bold transition-all duration-400 shadow-[0_8px_25px_rgba(6,182,212,0.5)] hover:shadow-[0_10px_35px_rgba(6,182,212,0.7)] border-[2px] border-white/40 flex items-center gap-2'
-          >
-            <UserAddOutlined className='text-lg drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]' />
-            Invite Member
-          </button>
+          {/* đủ rồi không cho mời  */}
+          {members.length < amount && (
+            <button
+              onClick={() => setShowModal(true)}
+              className='m-6 px-6 py-3 bg-gradient-to-r from-cyan-400 to-sky-500 hover:from-cyan-500 hover:to-sky-600 text-white rounded-xl font-bold transition-all duration-400 shadow-[0_8px_25px_rgba(6,182,212,0.5)] hover:shadow-[0_10px_35px_rgba(6,182,212,0.7)] border-[2px] border-white/40 flex items-center gap-2'
+            >
+              <UserAddOutlined className='text-lg drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]' />
+              Invite Member
+            </button>
+          )}
         </div>
 
         {/* Member List Card */}
@@ -77,7 +81,7 @@ export default function MemberGroup() {
               <TeamOutlined className='text-cyan-200 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]' />
               Danh sách thành viên
               <span className='ml-2 px-2.5 py-0.5 bg-cyan-400/20 text-cyan-100 text-sm rounded-full border border-cyan-200/30 font-bold'>
-                {members.length}
+                {members.length} / {membersQuery.data?.data.groupSummary?.memberCapacity || 0}
               </span>
             </h2>
 
