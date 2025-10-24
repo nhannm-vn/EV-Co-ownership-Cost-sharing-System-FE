@@ -20,8 +20,22 @@ const CreateContract: React.FC = () => {
       setShowContract(false)
     },
     onError: (error) => {
-      console.log('Error signing contract', error)
+      console.log('Error signing contract', error.message)
       toast.error('Đã có lỗi xảy ra khi phê duyệt hợp đồng.')
+    }
+  })
+
+  const cancelContractMutation = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) => groupApi.cancelContract(id, reason),
+    onSuccess: () => {
+      console.log('Contract canceled successfully')
+      toast.success('Hợp đồng đã được hủy thành công!')
+      setShowCancelModal(false)
+      setShowContract(false)
+    },
+    onError: (error) => {
+      console.log('Error canceling contract', error)
+      toast.error('Đã có lỗi xảy ra khi hủy hợp đồng.')
     }
   })
 
@@ -38,6 +52,14 @@ const CreateContract: React.FC = () => {
       return
     }
     signContractMutation.mutate(groupId as string)
+  }
+
+  const onCancel = () => {
+    if (!groupId) {
+      toast.error('Không tìm thấy groupId, vui lòng thử lại.')
+      return
+    }
+    cancelContractMutation.mutate({ id: groupId as string, reason: cancelReason })
   }
 
   console.log(contractQuery.data?.data)
@@ -64,11 +86,7 @@ const CreateContract: React.FC = () => {
                 Quay lại
               </button>
               <button
-                onClick={() => {
-                  console.log('Cancel:', cancelReason)
-                  setShowCancelModal(false)
-                  setShowContract(false)
-                }}
+                onClick={onCancel}
                 disabled={!cancelReason.trim()}
                 className='flex-1 bg-red-500 text-white rounded-lg py-2 disabled:opacity-50'
               >
