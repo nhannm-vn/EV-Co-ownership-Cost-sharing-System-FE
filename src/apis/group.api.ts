@@ -51,6 +51,10 @@ const groupApi = {
   // generate contract
   generateContract: (groupId: string) => {
     return http.post<ContractResponse>(`api/contracts/${groupId}/generate`)
+  },
+  // sign contract
+  signContract: (groupId: string) => {
+    return http.post(`api/contracts/${groupId}/auto-sign`)
   }
 }
 
