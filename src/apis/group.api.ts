@@ -1,4 +1,5 @@
 import type {
+  ContractResponse,
   CreateGroupMember,
   GroupItem,
   groupSummary,
@@ -46,6 +47,10 @@ const groupApi = {
   // get all percentage in group
   getAllPercentageInGroup: (groupId: string) => {
     return http.get<OwnershipResponse>(`api/shares/page-data/${groupId}`)
+  },
+  // generate contract
+  generateContract: (groupId: string) => {
+    return http.post<ContractResponse>(`api/contracts/${groupId}/generate`)
   }
 }
 

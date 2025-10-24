@@ -90,3 +90,43 @@ export interface OwnershipResponse {
   suggestions: any[] // nếu backend có gợi ý cụ thể, có thể tạo type riêng sau
   vehicleInfo: VehicleInfo
 }
+
+// contract
+export interface ContractResponse {
+  contract?: {
+    effectiveDate?: string
+    endDate?: string
+    location?: string
+    signDate?: string // "24/10/2025"
+    status?: string
+    termLabel?: string // "1 năm"
+  }
+  contractNumber?: string // "EVS-16-1761307580054"
+
+  finance: {
+    depositAmount?: number
+    targetAmount?: number
+    vehiclePrice?: number
+  }
+  generatedAt?: string
+  group: {
+    name: string // "nhóm xe rồng"
+  }
+
+  owners?: Array<{
+    idType?: string
+    phone?: string
+    name?: string
+    share?: number
+    idNo?: string
+  }>
+  savedToDatabase: boolean // false
+  status: string // "GENERATED"
+  terms: string // Nội dung hợp đồng dạng text
+
+  vehicle: {
+    model: string // "Unknown Unknown"
+    plate: string // "66B-123.99"
+    vin: string // "SALWR2VF7FA123456"
+  }
+}
