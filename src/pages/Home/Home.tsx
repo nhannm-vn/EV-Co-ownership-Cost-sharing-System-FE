@@ -13,12 +13,12 @@ function Home() {
       <HomeAnimation />
       <HomeImage
         image={BACKGROUNDFIXED_IMG_URL.first} //
-        content='EV Share'
+        content='A smart platform that simplifies electric vehicle co-ownership — manage usage, share costs, and stay transparent together.'
       />
       <HomeService />
       <HomeImage
         image={BACKGROUNDFIXED_IMG_URL.second} //
-        content='Share the Ride – Connect the Benefits'
+        content='Own, share, and save — the smarter way to manage electric vehicles together.'
       />
       <HomeAbout />
       <HomeLine />
