@@ -4,9 +4,6 @@ import groupApi from '../../apis/group.api'
 import type { GroupItem } from '../../types/api/group.type'
 
 export default function CoOwnerSideBar() {
-  const base =
-    'flex items-center rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-400 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-cyan-300/50 backdrop-blur-lg'
-
   const { groupId } = useParams<{ groupId: string }>()
 
   const idGroupQuery = useQuery({
@@ -19,42 +16,42 @@ export default function CoOwnerSideBar() {
 
   const navItems = [
     { to: `viewGroups/${group?.groupId}/dashboardGroup`, label: 'Group Setup' },
-    { to: `viewGroups/${group?.groupId}/createContract`, label: 'Create Contract', end: true },
+    { to: `viewGroups/${group?.groupId}/createContract`, label: 'View Contract', end: true },
     { to: `viewGroups/${group?.groupId}/viewMembers`, label: 'View Members' },
     { to: `viewGroups/${group?.groupId}/ownershipPercentage`, label: 'Enter Percentage' },
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' }
   ]
 
   return (
-    <aside aria-label='Navbar' className='col-span-1 mb-6 mt-6'>
-      <ul className='flex flex-row items-center gap-3 overflow-x-auto whitespace-nowrap'>
+    <nav className='max-w-4xl mx-auto'>
+      <ul className='flex items-center gap-2'>
         {navItems.map((item, index) => {
-          if (item.label === 'Create Contract' && group?.userRole !== 'ADMIN') {
-            return null
-          }
-
           return (
             <li key={index}>
               <NavLink
                 to={item.to}
                 end={item.end}
-                className={({ isActive }) => {
-                  const activeClasses =
-                    'bg-gradient-to-r from-cyan-400 to-sky-500 text-white shadow-[0_8px_25px_rgba(6,182,212,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]'
-                  const inactiveClasses =
-                    'bg-white/90 text-gray-800 hover:bg-[rgba(76,228,255,0.6)] hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)] shadow-[0_2px_8px_rgba(0,0,0,0.08)]'
-
-                  return `${base} ${isActive ? activeClasses : inactiveClasses}`
-                }}
+                className={({ isActive }) =>
+                  `
+                    inline-flex items-center justify-center
+                    px-5 py-2.5 rounded-xl
+                    text-sm font-semibold whitespace-nowrap
+                    transition-all duration-300
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2
+                    ${
+                      isActive
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/30 scale-105'
+                        : 'bg-gray-50/80 text-gray-700 hover:bg-white hover:text-cyan-600 hover:shadow-md border border-gray-200/80'
+                    }
+                  `.trim()
+                }
               >
-                {({ isActive }) => (
-                  <span className={isActive ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' : ''}>{item.label}</span>
-                )}
+                {item.label}
               </NavLink>
             </li>
           )
         })}
       </ul>
-    </aside>
+    </nav>
   )
 }

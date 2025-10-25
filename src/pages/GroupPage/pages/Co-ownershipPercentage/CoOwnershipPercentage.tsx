@@ -6,6 +6,7 @@ import groupApi from '../../../../apis/group.api'
 import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import Skeleton from '../../../../components/Skeleton'
+import GroupHeader from '../../components/GroupHeader'
 
 export default function CoOwnershipPercentage() {
   const [percentage, setPercentage] = useState('')
@@ -89,7 +90,7 @@ export default function CoOwnershipPercentage() {
       <div className='w-full max-w-md backdrop-blur-[60px] bg-gradient-to-br from-white/22 via-white/16 to-white/20 rounded-[2rem] shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border-[4px] border-white/60 relative overflow-hidden p-8'>
         {/* Top Gradient Bar */}
         <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
-
+        <GroupHeader groupId={groupId} />
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className='text-center mb-8'>
           <div className='inline-block mb-4'>

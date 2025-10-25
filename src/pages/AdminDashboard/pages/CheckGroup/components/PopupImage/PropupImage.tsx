@@ -119,8 +119,8 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
 
           {/* Footer */}
           <div className='bg-gray-50 rounded-b-xl px-8 py-5 flex justify-between items-center border-t'>
-            <div className='flex gap-3'>
-              <>
+            {group.status === 'PENDING' && (
+              <div className='flex gap-3'>
                 <button
                   onClick={() => toggleHandle(setShowApproveModal)}
                   className='px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg'
@@ -135,8 +135,9 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
                   <CloseOutlined className='text-lg' />
                   Từ chối
                 </button>
-              </>
-            </div>
+              </div>
+            )}
+
             <button
               onClick={onClose}
               className='px-6 py-2.5 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg transition-colors'
