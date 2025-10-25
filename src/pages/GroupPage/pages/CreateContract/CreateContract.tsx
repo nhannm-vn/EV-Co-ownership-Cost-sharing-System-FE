@@ -34,6 +34,21 @@ const CreateContract: React.FC = () => {
     onError: (error) => {
       console.log('Error canceling contract', error)
       toast.error('Đã có lỗi xảy ra khi hủy hợp đồng.')
+      toast.error('Đã có lỗi xảy ra khi phê duyệt hợp đồng.')
+    }
+  })
+
+  const cancelContractMutation = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) => groupApi.cancelContract(id, reason),
+    onSuccess: () => {
+      console.log('Contract canceled successfully')
+      toast.success('Hợp đồng đã được hủy thành công!')
+      setShowCancelModal(false)
+      setShowContract(false)
+    },
+    onError: (error) => {
+      console.log('Error canceling contract', error)
+      toast.error('Đã có lỗi xảy ra khi hủy hợp đồng.')
     }
   })
 
@@ -67,6 +82,7 @@ const CreateContract: React.FC = () => {
     return parts.filter((p) => p.trim())
   }
 
+  console.log(contractQuery.data?.data)
   const dataContract = contractQuery.data?.data
   const termsList = dataContract?.terms ? parseTerms(dataContract.terms) : []
 
