@@ -4,7 +4,7 @@ export const LOGO_URL = {
 }
 
 export const REGISTER_IMG_URL =
-  'https://evsharestorage.blob.core.windows.net/images/0ca02571-eb35-45ca-99f4-15c17d367983_1761107847483.jpg'
+  'https://evsharestorage.blob.core.windows.net/images/f40ec420-37c6-49b5-8b2d-88b9f0d3cbaa_1761352403134.jpg'
 
 export const LOGIN_IMG_URL =
   'https://evsharestorage.blob.core.windows.net/images/z7141541067364_15cf7bc1689c0ad6fc892fc8ce86b3fa.jpg'
