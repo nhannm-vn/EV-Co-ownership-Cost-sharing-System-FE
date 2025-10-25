@@ -38,20 +38,6 @@ const CreateContract: React.FC = () => {
     }
   })
 
-  const cancelContractMutation = useMutation({
-    mutationFn: ({ id, reason }: { id: string; reason: string }) => groupApi.cancelContract(id, reason),
-    onSuccess: () => {
-      console.log('Contract canceled successfully')
-      toast.success('Hợp đồng đã được hủy thành công!')
-      setShowCancelModal(false)
-      setShowContract(false)
-    },
-    onError: (error) => {
-      console.log('Error canceling contract', error)
-      toast.error('Đã có lỗi xảy ra khi hủy hợp đồng.')
-    }
-  })
-
   const contractQuery = useQuery({
     queryKey: ['contractData', groupId],
     queryFn: () => groupApi.generateContract(groupId as string),
