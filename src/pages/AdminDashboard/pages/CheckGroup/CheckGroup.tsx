@@ -32,9 +32,7 @@ export default function CheckGroup() {
                 <div
                   key={group.groupId}
                   onClick={() => {
-                    if (group.status !== 'ACTIVE' && group.status !== 'INACTIVE') {
-                      setSelectedGroup(group)
-                    }
+                    setSelectedGroup(group)
                   }}
                   className='p-4 rounded-lg border cursor-pointer transition-all duration-200 flex justify-between items-center hover:bg-blue-50 hover:border-blue-300 hover:shadow-md'
                 >
