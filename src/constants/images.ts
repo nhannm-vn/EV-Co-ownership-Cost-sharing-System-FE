@@ -3,6 +3,7 @@ export const LOGO_URL = {
   black: 'https://evsharestorage.blob.core.windows.net/images/d0bc1c54-6d26-403a-a365-fd7130644e2b_1761103177179.jpg'
 }
 
+//
 export const REGISTER_IMG_URL =
   'https://evsharestorage.blob.core.windows.net/images/f40ec420-37c6-49b5-8b2d-88b9f0d3cbaa_1761352403134.jpg'
 
