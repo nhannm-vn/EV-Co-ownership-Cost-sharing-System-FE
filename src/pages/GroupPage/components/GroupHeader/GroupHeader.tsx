@@ -10,6 +10,7 @@ export default function GroupHeader({ groupId }: { groupId?: string }) {
   })
 
   const group: GroupItem = idGroupQuery?.data?.data as GroupItem
+  // hiển thị tên nhóm để giúp cải thiện UX khi bấm vào từng group
   return (
     <>
       <div className='text-center text-white'>
