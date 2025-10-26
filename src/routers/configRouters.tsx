@@ -2,7 +2,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import path from '../constants/path'
 import LearnmoreLayout from '../layouts/LearnmoreLayout'
 import MainLayout from '../layouts/MainLayout'
+import ManagerLayout from '../layouts/ManagerLayout'
 import RegisterLayout from '../layouts/RegisterLayout'
+import AdminDashboard from '../pages/AdminDashboard'
+import CheckContract from '../pages/AdminDashboard/pages/CheckContract'
+import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
+import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
 import ChangePassword from '../pages/ChangePassword'
 import CreateGroups from '../pages/Creategroups'
 import Dashboard from '../pages/Dashboard'
@@ -24,14 +29,10 @@ import ResetPassword from '../pages/ResetPassword'
 import OTPInput from '../pages/UI-OTP'
 import UploadLicense from '../pages/UploadLicense'
 import Viewgroups from '../pages/Viewgroups'
+import RoleCheck from './CheckRole/CheckRole'
 import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
-import ManagerLayout from '../layouts/ManagerLayout'
-import AdminDashboard from '../pages/AdminDashboard'
-import CheckContract from '../pages/AdminDashboard/pages/CheckContract'
-import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
-import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
-import RoleCheck from './CheckRole/CheckRole'
+import PaymentDeposit from '../pages/GroupPage/pages/PaymentDeposit'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -86,7 +87,8 @@ function Routers() {
                     { path: path.createContract, element: <CreateContract /> },
                     { path: path.viewMembers, element: <MemberGroup /> },
                     { path: path.ownershipPercentage, element: <CoOwnershipPercentage /> },
-                    { path: path.ownershipRatio, element: <OwnershipRatio /> }
+                    { path: path.ownershipRatio, element: <OwnershipRatio /> },
+                    { path: path.paymentDeposit, element: <PaymentDeposit /> }
                   ]
                 },
                 { path: path.createGroups, element: <CreateGroups /> },
