@@ -1,6 +1,8 @@
 import type {
   ContractResponse,
   CreateGroupMember,
+  DepositForGroup,
+  DepositForUser,
   GroupItem,
   groupSummary,
   InvitationResponse,
@@ -59,6 +61,14 @@ const groupApi = {
   // cancel contract
   cancelContract: (groupId: string, reason: string) => {
     return http.post(`api/contracts/${groupId}/cancel`, { reason })
+  },
+  // get deposit for user
+  getDepositForUser: (userId: string, groupId: string) => {
+    return http.get<DepositForUser>(`api/deposits/info/${userId}/${groupId}`)
+  },
+  // get deposit for group
+  getDepositForGroup: (groupId: string) => {
+    return http.get<DepositForGroup[]>(`api/deposits/group/${groupId}/status`)
   }
 }
 

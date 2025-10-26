@@ -136,3 +136,23 @@ export interface ContractResponse {
     vin: string // "SALWR2VF7FA123456"
   }
 }
+
+export interface DepositForUser {
+  contractSigned: boolean
+  canPay: boolean
+  requiredAmount: number
+  groupId: number
+  depositStatus: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED'
+  userId: number
+  ownershipPercentage: number
+}
+
+export interface DepositForGroup {
+  joinDate: string
+  requiredDepositAmount: number
+  depositStatus: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED'
+  userEmail: string
+  userName: string
+  userId: number
+  ownershipPercentage: number
+}
