@@ -2,20 +2,35 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import staffApi from '../../../../apis/staff.api'
 import type { groupStaffItem } from '../../../../types/api/staff.type'
+import PaginationButton from './components/PaginationButton'
 import PropupImage from './components/PopupImage'
 import StatusBadge from './components/StatusBadge'
 
 export default function CheckGroup() {
+  const [currentPage, setCurrentPage] = useState(0)
+  const pageSize = 10 // kích thước trang cố định
+
   const [selectedGroup, setSelectedGroup] = useState<groupStaffItem | null>(null)
   const groupListQuery = useQuery({
-    queryKey: ['groupList'],
-    queryFn: staffApi.getAllGroupStaff
+    queryKey: ['groupList', { page: currentPage, size: pageSize }],
+    // vẫn giữ lại dữ liệu trang 1 trong lấy trang 2
+    queryFn: () => staffApi.getAllGroupStaff(currentPage, pageSize)
   })
 
   const groupData: groupStaffItem[] = groupListQuery.data?.data?.content || []
 
-  console.log(groupData)
+  // tổng số trang
+  const totalPages: number = groupListQuery.data?.data?.totalPages || 0
+  // pagenumber hiện tại
+  const pageNumber: number = groupListQuery.data?.data?.pageable.pageNumber || 0
+  //totalElements
+  const totalElements: number = groupListQuery.data?.data?.totalElements || 0
 
+  console.log(groupListQuery.data?.data)
+  // hầm chuyển trang
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage) // Cập nhật state (0, 1, 2...)
+  }
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 font-sans'>
       <div className='container mx-auto p-4 md:p-8'>
@@ -52,6 +67,12 @@ export default function CheckGroup() {
             </div>
           </div>
         </main>
+        <div className='mt-6 pt-4 border-t flex flex-col items-center'>
+          <PaginationButton currentPage={pageNumber + 1} totalPages={totalPages} onPageChange={handlePageChange} />
+          <div className='text-sm text-gray-500 mt-2'>
+            Trang {pageNumber + 1} / {totalPages} (Tổng {totalElements} mục)
+          </div>
+        </div>
       </div>
 
       {selectedGroup && <PropupImage group={selectedGroup} onClose={() => setSelectedGroup(null)} />}

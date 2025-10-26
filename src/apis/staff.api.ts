@@ -35,8 +35,13 @@ const staffApi = {
     )
   },
 
-  getAllGroupStaff() {
-    return http.get<GroupStaffList>('api/groups/staff/all')
+  getAllGroupStaff(page: number, size: number) {
+    return http.get<GroupStaffList>('api/groups/staff/all', {
+      params: {
+        page: page,
+        size: size
+      }
+    })
   },
   // lấy hình ảnh group để duyệt
   getGroupImages(groupId: number) {

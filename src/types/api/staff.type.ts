@@ -47,6 +47,11 @@ export interface groupStaffItem {
 
 export interface GroupStaffList {
   content: groupStaffItem[]
+  pageable: {
+    pageNumber: number
+  }
+  totalElements: number
+  totalPages: number
 }
 
 // ảnh

@@ -91,14 +91,30 @@ const imageFileSchema = yup
   })
 
 export const createGroupSchema = yup.object({
-  groupName: yup.string().required('Group name is required').min(3, 'Group name must be at least 3 characters'),
+  //   \p{L} → mọi ký tự chữ (a-z, A-Z, á, à, â, ê, ô, ơ, ư, đ, …)
+
+  // 0-9 → cho phép số
+
+  // \s → cho phép khoảng trắng
+
+  // u → bật chế độ Unicode (để nhận diện được tiếng Việt)
+  groupName: yup
+    .string()
+    .required('Group name is required')
+    .min(3, 'Group name must be at least 3 characters')
+    .matches(/^[\p{L}0-9\s]+$/u, 'Group name cannot contain special characters'),
 
   assetValue: yup
-    .number()
-    .typeError('Giá tiền phải là số')
+    .string()
+    .transform((value) => value.replace(/\./g, '')) // Transform TRƯỚC tiên - xóa dấu chấm
     .required('Vui lòng nhập giá tiền')
-    .positive('Giá tiền phải lớn hơn 0')
-    .defined(), // đảm bảo giá trị được định nghĩa,
+    .matches(/^[0-9]+$/, 'Vui lòng nhập số')
+    .test('is-positive', 'Giá tiền phải lớn hơn 0', (value) => {
+      if (value) {
+        return Number(value) > 0
+      }
+      return false
+    }),
 
   licensePlate: yup
     .string()
