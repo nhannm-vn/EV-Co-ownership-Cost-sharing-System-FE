@@ -23,12 +23,17 @@ export interface Member {
   userEmail?: string
   userName?: string
   userId?: number
+  groupRole?: 'ADMIN' | 'MEMBER' | string
 }
 
 export interface groupSummary {
   groupSummary?: {
     members?: Member[]
     memberCapacity?: number
+    currentUserRole: 'ADMIN' | 'MEMBER' | string
+  }
+  userOwnership?: {
+    userId: number
   }
 }
 
@@ -116,14 +121,13 @@ export interface ContractResponse {
   }
 
   owners?: Array<{
-    idType?: string
     phone?: string
     name?: string
     share?: number
-    idNo?: string
+    userRole?: string
+    userId?: string
   }>
-  savedToDatabase: boolean // false
-  status: string // "GENERATED"
+  userId?: string
   terms: string // Nội dung hợp đồng dạng text
 
   vehicle: {

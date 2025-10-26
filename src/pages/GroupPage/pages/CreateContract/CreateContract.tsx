@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useParams } from 'react-router'
-import groupApi from '../../../../apis/group.api'
 import { toast } from 'react-toastify'
+import groupApi from '../../../../apis/group.api'
 import Skeleton from '../../../../components/Skeleton'
 
 const CreateContract: React.FC = () => {
@@ -71,6 +71,11 @@ const CreateContract: React.FC = () => {
   console.log(contractQuery.data?.data)
   const dataContract = contractQuery.data?.data
   const termsList = dataContract?.terms ? parseTerms(dataContract.terms) : []
+  // checkAdmin mới có nút ký và hủy
+  const isAdmin = dataContract?.owners?.some(
+    (owner) => owner.userRole === 'ADMIN' && owner.userId === dataContract.userId
+  )
+  console.log(isAdmin)
 
   if (contractQuery.isLoading) {
     return <Skeleton />
@@ -182,7 +187,12 @@ const CreateContract: React.FC = () => {
                   {dataContract?.owners?.map((item, index) => (
                     <tr key={index}>
                       <td className='border-b px-3 py-2'>{index + 1}</td>
-                      <td className='border-b px-3 py-2 font-bold'>{item?.name}</td>
+                      <td className='border-b px-3 py-2 font-bold'>
+                        {item?.name}{' '}
+                        <>
+                          <span className='text-xs text-gray-500'>{item?.userRole}</span>
+                        </>
+                      </td>
                       <td className='border-b px-3 py-2 text-xs'>{item?.phone}</td>
                       <td className='border-b px-3 py-2 font-bold text-cyan-600'>{item?.share}%</td>
                     </tr>
@@ -249,33 +259,36 @@ const CreateContract: React.FC = () => {
             {/* Admin Notice */}
             <div className='mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl'>
               <div className='flex items-start gap-3'>
-                <span className='text-amber-600 text-xl'>ℹ️</span>
                 <div>
                   <h4 className='font-bold text-amber-900 mb-1'>Lưu ý về ký hợp đồng</h4>
                   <p className='text-sm text-amber-800'>
-                    Chỉ có <span className='font-bold'>Trưởng nhóm (Admin)</span> mới có quyền ký và phê duyệt hợp đồng
-                    này. Các thành viên khác chỉ có thể xem nội dung hợp đồng.
+                    <span className='font-bold'>Trưởng nhóm (Admin)</span> mới có quyền ký và phê duyệt hợp đồng. Các
+                    thành viên khác chỉ được xem nội dung hợp đồng. Nếu có thắc mắc, vui lòng liên hệ trực tiếp với
+                    Trưởng nhóm. Hệ thống không can thiệp vào quá trình này.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className='flex gap-4 mt-6 pt-6 border-t'>
-              <button
-                onClick={() => setShowCancelModal(true)}
-                className='flex-1 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600'
-              >
-                Hủy hợp đồng
-              </button>
-              <button
-                onClick={onSubmit}
-                disabled={signContractMutation.isPending}
-                className='flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-xl hover:bg-cyan-600 disabled:opacity-50'
-              >
-                {signContractMutation.isPending ? 'Đang xử lý...' : '✍️ Ký hợp đồng'}
-              </button>
-            </div>
+
+            {isAdmin && (
+              <div className='flex gap-4 mt-6 pt-6 border-t'>
+                <button
+                  onClick={() => setShowCancelModal(true)}
+                  className='flex-1 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600'
+                >
+                  Hủy hợp đồng
+                </button>
+                <button
+                  onClick={onSubmit}
+                  disabled={signContractMutation.isPending}
+                  className='flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-xl hover:bg-cyan-600 disabled:opacity-50'
+                >
+                  {signContractMutation.isPending ? 'Đang xử lý...' : '✍️ Ký hợp đồng'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
