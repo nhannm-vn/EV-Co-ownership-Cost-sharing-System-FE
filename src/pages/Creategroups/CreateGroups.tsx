@@ -15,6 +15,7 @@ import Header from './components/Header'
 import NumberInput from './components/NumberInput'
 import TextAreaInput from './components/TextAreaInput'
 import TextInput from './components/TextInput'
+import PriceInput from './components/PriceInput/PriceInput'
 
 export default function CreateGroups() {
   const {
@@ -133,11 +134,12 @@ export default function CreateGroups() {
                   register={register('groupName')}
                   error={errors.groupName?.message}
                 />
-                <TextInput
+                <PriceInput
                   label='Nhập giá trị tài sản'
                   placeholder='Nhập giá tiền (VNĐ)'
                   register={register('assetValue')}
                   error={errors.assetValue?.message}
+                  formatNumber={true}
                 />
               </div>
 
