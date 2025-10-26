@@ -23,6 +23,7 @@ const path = {
   groupDetails: 'viewGroups/:groupId', // Relative path
   ownershipPercentage: 'ownershipPercentage', // Relative path
   ownershipRatio: 'ownershipRatio', // Relative path
+  paymentDeposit: 'paymentDeposit', // Relative path
 
   //OTP
   OTP: '/demoOTP',
