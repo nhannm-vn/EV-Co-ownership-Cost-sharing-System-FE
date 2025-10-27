@@ -156,3 +156,19 @@ export interface DepositForGroup {
   userId: number
   ownershipPercentage: number
 }
+
+export interface CreateDepositSuccess {
+  txnRef: string
+  paymentId: number
+  userId: number
+  groupId: number
+  amount: number
+  requiredAmount: number
+  paymentMethod: string
+  status: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED' // tùy hệ thống bạn có thể thêm các trạng thái khác
+  transactionCode: string
+  createdAt: string
+  paidAt: string
+  vnpayUrl: string
+  message: string
+}

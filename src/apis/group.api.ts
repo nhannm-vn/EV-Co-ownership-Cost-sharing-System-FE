@@ -1,5 +1,6 @@
 import type {
   ContractResponse,
+  CreateDepositSuccess,
   CreateGroupMember,
   DepositForGroup,
   DepositForUser,
@@ -8,6 +9,7 @@ import type {
   InvitationResponse,
   OwnershipResponse
 } from '../types/api/group.type'
+import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
 const groupApi = {
@@ -63,12 +65,19 @@ const groupApi = {
     return http.post(`api/contracts/${groupId}/cancel`, { reason })
   },
   // get deposit for user
-  getDepositForUser: (userId: string, groupId: string) => {
-    return http.get<DepositForUser>(`api/deposits/info/${userId}/${groupId}`)
+  getDepositForUser: ({ userId, groupId }: { userId: string; groupId: string }) => {
+    const accessToken = getAccessTokenFromLS()
+    return http.get<DepositForUser>(`api/deposits/info/${userId}/${groupId}`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
   },
   // get deposit for group
   getDepositForGroup: (groupId: string) => {
     return http.get<DepositForGroup[]>(`api/deposits/group/${groupId}/status`)
+  },
+  // create deposit for co-owner
+  createDepositForCoOwner: ({ userId, groupId }: { userId: string; groupId: string }) => {
+    return http.post<CreateDepositSuccess>(`api/deposits/create`, { userId, groupId })
   }
 }
 

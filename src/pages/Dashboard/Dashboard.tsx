@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo, useRef } from 'react'
 import userApi from '../../apis/user.api'
 import Skeleton from '../../components/Skeleton'
+import { setUserIdToLS } from '../../utils/auth'
 import DashboardCardList from './components/DashboardCardList'
 import DashboardTitle from './components/DashboardTitle'
 
@@ -15,6 +16,7 @@ export default function Dashboard() {
 
   const allowAccess = useMemo(() => {
     const profile = userProfile?.data
+    setUserIdToLS(profile?.userId.toString() as string)
     if (
       profile?.documents?.citizenIdImages?.front?.status === 'APPROVED' &&
       profile?.documents?.citizenIdImages?.back?.status === 'APPROVED' &&

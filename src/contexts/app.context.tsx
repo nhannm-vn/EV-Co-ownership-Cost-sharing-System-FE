@@ -1,6 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState } from 'react'
-import { getAccessTokenFromLS, getEmailAccountFromLS, getRoleFromLS } from '../utils/auth'
+import {
+  getAccessTokenFromLS,
+  getEmailAccountFromLS,
+  getGroupIdFromLS,
+  getRoleFromLS,
+  getUserIdFromLS
+} from '../utils/auth'
 
 // Định nghĩa context lưu dữ liệu kiểu gì hoặc nói cách khác là định nghĩa cho initialState
 interface AppContextInterface {
@@ -11,8 +17,10 @@ interface AppContextInterface {
   setEmailAccount: React.Dispatch<React.SetStateAction<string>>
   role: string
   setRole: React.Dispatch<React.SetStateAction<string>>
-  groupId: string | null
-  setGroupId: React.Dispatch<React.SetStateAction<string | null>>
+  groupId: string
+  setGroupId: React.Dispatch<React.SetStateAction<string>>
+  userId: string
+  setUserId: React.Dispatch<React.SetStateAction<string>>
 }
 
 // initialState giúp coi ban đầu sẽ lưu gì
@@ -25,8 +33,10 @@ const initialAppContext: AppContextInterface = {
   setEmailAccount: () => null,
   role: getRoleFromLS(),
   setRole: () => null,
-  groupId: null,
-  setGroupId: () => null
+  groupId: getGroupIdFromLS(),
+  setGroupId: () => null,
+  userId: getUserIdFromLS(),
+  setUserId: () => null
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -36,14 +46,15 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initialAppContext.isAuthenticated)
   const [emailAccount, setEmailAccount] = useState<string>(initialAppContext.emailAccount)
   const [role, setRole] = useState<string>(initialAppContext.role)
+  const [userId, setUserId] = useState<string>(initialAppContext.userId)
 
   // thêm state groupId
-  const [groupId, setGroupId] = useState<string | null>(null)
+  const [groupId, setGroupId] = useState<string>(initialAppContext.groupId)
 
   const reset = () => {
     setIsAuthenticated(false)
     // reset luôn group khi logout
-    setGroupId(null)
+    setGroupId('')
   }
 
   // Nếu không có value thì nó sẽ lấy inititalAppContext
@@ -58,7 +69,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         role,
         setRole,
         groupId,
-        setGroupId
+        setGroupId,
+        userId,
+        setUserId
       }}
     >
       {children}
