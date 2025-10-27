@@ -79,6 +79,7 @@ const groupApi = {
   // create deposit for co-owner
   createDepositForCoOwner: ({ userId, groupId }: { userId: string; groupId: string }) => {
     return http.post<CreateDepositSuccess>(`api/deposits/create`, { userId, groupId })
+  },
   // check status contract để hiển thị aside mới
   getStatusContract: (groupId: string) => {
     return http.get<ContractStatus>(`api/contracts/${groupId}`)
