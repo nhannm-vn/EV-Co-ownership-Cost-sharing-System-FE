@@ -12,6 +12,14 @@ export default function CoOwnerSideBar() {
     enabled: !!groupId
   })
 
+  const contractQuery = useQuery({
+    queryKey: ['contracts', groupId],
+    queryFn: () => groupApi.getStatusContract(groupId as string),
+    enabled: !!groupId
+  })
+
+  const isApprovalStatus = contractQuery.data?.data?.approvalStatus === 'APPROVED'
+
   const group: GroupItem = idGroupQuery?.data?.data as GroupItem
 
   const navItems = [
@@ -22,11 +30,19 @@ export default function CoOwnerSideBar() {
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
     { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Payment Deposit' }
   ]
+  const navApprovedItems = [
+    { to: `viewGroups/${group?.groupId}/booking`, label: 'Booking Car' },
+    { to: `viewGroups/${group?.groupId}/createContract`, label: 'Contract', end: true },
+    { to: `viewGroups/${group?.groupId}/viewMembers`, label: 'Members' },
+    { to: `viewGroups/${group?.groupId}/ownershipPercentage`, label: 'Percentage' },
+    { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
+    { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Payment Deposit' }
+  ]
 
   return (
     <nav className='max-w-4xl mx-auto'>
       <ul className='flex items-center gap-2'>
-        {navItems.map((item, index) => {
+        {(isApprovalStatus ? navApprovedItems : navItems).map((item, index) => {
           return (
             <li key={index}>
               <NavLink

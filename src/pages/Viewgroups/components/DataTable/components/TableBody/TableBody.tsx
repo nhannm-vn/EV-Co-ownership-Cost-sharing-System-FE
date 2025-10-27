@@ -1,24 +1,17 @@
 import { UsergroupAddOutlined } from '@ant-design/icons'
 import { Avatar, Tooltip } from 'antd'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router'
-import { useContext, useEffect } from 'react'
 import { GroupContext } from '../../../../../../hooks/useGroupList'
-import { getStatusStyle } from './utils/getStatusStyle'
-import { AppContext } from '../../../../../../contexts/app.context'
 import type { GroupItem } from '../../../../../../types/api/group.type'
+import { getStatusStyle } from './utils/getStatusStyle'
 
 export default function TableBody() {
   const navigate = useNavigate()
-  const { setGroupId } = useContext(AppContext)
-
-  useEffect(() => {
-    setGroupId(null)
-  }, [setGroupId])
 
   const handleRowClick = (group: GroupItem) => {
     if (group?.status == 'ACTIVE' && group.groupId) {
       navigate(`/dashboard/viewGroups/${group.groupId}/dashboardGroup`)
-      setGroupId(group.groupId.toString())
     }
   }
 
