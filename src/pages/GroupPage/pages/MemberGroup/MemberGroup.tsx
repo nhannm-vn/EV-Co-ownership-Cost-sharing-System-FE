@@ -58,6 +58,7 @@ export default function MemberGroup() {
       }
     )
   }
+
   // check admin
   const isAdmin = members.some(
     (member) => member.userId === membersQuery.data?.data.userOwnership?.userId && member.groupRole === 'ADMIN'
@@ -93,6 +94,7 @@ export default function MemberGroup() {
           onSubmit={onSubmit}
           errors={errors}
           reset={reset}
+          isPending={inviteMutation.isPending}
         />
       )}
     </>

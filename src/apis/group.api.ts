@@ -1,5 +1,6 @@
 import type {
   ContractResponse,
+  ContractStatus,
   CreateGroupMember,
   DepositForGroup,
   DepositForUser,
@@ -69,6 +70,10 @@ const groupApi = {
   // get deposit for group
   getDepositForGroup: (groupId: string) => {
     return http.get<DepositForGroup[]>(`api/deposits/group/${groupId}/status`)
+  },
+  // check status contract để hiển thị aside mới
+  getStatusContract: (groupId: string) => {
+    return http.get<ContractStatus>(`api/contracts/${groupId}`)
   }
 }
 

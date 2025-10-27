@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { ContractResponse } from '../../../../types/api/admin.type'
-import adminApi from '../../../../apis/admin.api'
-import { formatToVND } from '../../../../utils/formatPrice'
-import Skeleton from '../../../../components/Skeleton'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+import adminApi from '../../../../apis/admin.api'
+import Skeleton from '../../../../components/Skeleton'
+import type { ContractResponse } from '../../../../types/api/admin.type'
+import { formatToVND } from '../../../../utils/formatPrice'
 import { formatVnTime } from '../../../../utils/helper'
 
 function CheckContract() {
@@ -13,6 +13,7 @@ function CheckContract() {
     queryKey: ['contracts'],
     queryFn: () => adminApi.getAllContracts().then((res) => res.data)
   })
+  console.log(contracts)
 
   const approveMutation = useMutation({
     mutationFn: (id: number) => adminApi.approveContract(id, 'APPROVE'),
@@ -84,7 +85,7 @@ function CheckContract() {
                 <td className='px-4 py-3'>{formatVnTime(contract.endDate)}</td>
                 <td className='px-4 py-3 font-semibold'>{formatToVND(contract.requiredDepositAmount)}</td>
                 <td className='px-4 py-3'>
-                  {contract.approvalStatus === 'PENDING' && (
+                  {contract.approvalStatus === 'SIGNED' && (
                     <span className='px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full'>
                       Chờ duyệt
                     </span>
@@ -101,7 +102,7 @@ function CheckContract() {
                   )}
                 </td>
                 <td className='px-4 py-3'>
-                  {contract.approvalStatus === 'PENDING' ? (
+                  {contract.approvalStatus === 'SIGNED' ? (
                     <div className='flex gap-2'>
                       <button
                         onClick={() => handleApprove(contract.id)}

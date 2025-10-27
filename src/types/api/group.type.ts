@@ -156,3 +156,8 @@ export interface DepositForGroup {
   userId: number
   ownershipPercentage: number
 }
+
+// kiểm tra trạng thái hợp đồng
+export interface ContractStatus {
+  approvalStatus: 'PENDING' | 'APPROVED' | 'SIGNED'
+}

@@ -11,8 +11,6 @@ interface AppContextInterface {
   setEmailAccount: React.Dispatch<React.SetStateAction<string>>
   role: string
   setRole: React.Dispatch<React.SetStateAction<string>>
-  groupId: string | null
-  setGroupId: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 // initialState giúp coi ban đầu sẽ lưu gì
@@ -24,9 +22,7 @@ const initialAppContext: AppContextInterface = {
   emailAccount: getEmailAccountFromLS(),
   setEmailAccount: () => null,
   role: getRoleFromLS(),
-  setRole: () => null,
-  groupId: null,
-  setGroupId: () => null
+  setRole: () => null
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -37,13 +33,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [emailAccount, setEmailAccount] = useState<string>(initialAppContext.emailAccount)
   const [role, setRole] = useState<string>(initialAppContext.role)
 
-  // thêm state groupId
-  const [groupId, setGroupId] = useState<string | null>(null)
-
   const reset = () => {
     setIsAuthenticated(false)
-    // reset luôn group khi logout
-    setGroupId(null)
   }
 
   // Nếu không có value thì nó sẽ lấy inititalAppContext
@@ -56,9 +47,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         emailAccount,
         setEmailAccount,
         role,
-        setRole,
-        groupId,
-        setGroupId
+        setRole
       }}
     >
       {children}

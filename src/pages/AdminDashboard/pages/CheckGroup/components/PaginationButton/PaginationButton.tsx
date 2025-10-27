@@ -12,9 +12,13 @@ export default function PaginationButton({ currentPage, totalPages, onPageChange
   }
 
   // vì page lên api bắt đầu là 0
+  // chỉnh page cho  giống ap
   const currentPageIndex = currentPage - 1 // 1 -> 0, 2 -> 1, 3 -> 2
+  console.log(currentPageIndex)
 
   const isFirstPage = currentPage === 1
+  console.log(isFirstPage)
+
   const isLastPage = currentPage === totalPages
 
   return (

@@ -125,8 +125,10 @@ const CreateContract: React.FC = () => {
                 <p className='text-sm text-gray-600'>Hệ thống đồng sở hữu xe điện</p>
               </div>
               <div>
-                <span className='bg-cyan-100 text-cyan-700 text-xs px-3 py-1 rounded-lg'>DRAFT</span>
-                <p className='text-xs text-gray-500 mt-1'>Số: {dataContract?.contractNumber}</p>
+                <span className='bg-cyan-100 text-cyan-700 text-xs px-3 py-1 rounded-lg'>
+                  Trạng thái hợp đồng: {dataContract?.contract?.status}
+                </span>
+                <p className='text-xs text-gray-500 mt-3 ml-2'>Số: {dataContract?.contractNumber}</p>
               </div>
             </div>
 
@@ -271,8 +273,8 @@ const CreateContract: React.FC = () => {
             </div>
 
             {/* Action Buttons */}
-
-            {isAdmin && (
+            {/*  nếu là admin và trạng thái là pending  */}
+            {isAdmin && dataContract?.contract?.status === 'PENDING' && (
               <div className='flex gap-4 mt-6 pt-6 border-t'>
                 <button
                   onClick={() => setShowCancelModal(true)}

@@ -5,7 +5,7 @@ export interface ContractResponse {
   endDate: string // ISO format: "YYYY-MM-DD"
   requiredDepositAmount: number
   isActive: boolean
-  approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED'
+  approvalStatus: 'SIGNED' | 'APPROVED' | 'REJECTED'
   approvedById: number | null
   approvedAt: string | null // ISO datetime string
   rejectionReason: string | null
