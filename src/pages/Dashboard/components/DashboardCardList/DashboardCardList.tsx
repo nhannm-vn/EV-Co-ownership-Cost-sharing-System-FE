@@ -1,11 +1,10 @@
+import { useMutation } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { useNavigate } from 'react-router'
+import groupApi from '../../../../apis/group.api'
 import path from '../../../../constants/path'
 import DashboardCardElement from './DashboardCardElement'
-import { useMutation } from '@tanstack/react-query'
-import groupApi from '../../../../apis/group.api'
-import { useContext, useRef } from 'react'
-import { useNavigate } from 'react-router'
-import { AppContext } from '../../../../contexts/app.context'
 
 export default function DashboardCardList({ allowAccess }: { allowAccess: boolean }) {
   const otp = useRef<HTMLInputElement>(null)
@@ -13,14 +12,13 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
     mutationFn: (otp: string) => groupApi.verifyMember(otp)
   })
   const navigate = useNavigate()
-  const { setGroupId } = useContext(AppContext)
+
   const handleVerify = (otp: string) => {
     inviteMutation.mutate(otp, {
       onSuccess: (response) => {
         console.log('OTP verified successfully:', response?.data)
         const groupId = response?.data?.groupId
         if (groupId) {
-          setGroupId(groupId.toString())
           navigate(`/dashboard/viewGroups/${groupId}/dashboardGroup`)
         }
       },
