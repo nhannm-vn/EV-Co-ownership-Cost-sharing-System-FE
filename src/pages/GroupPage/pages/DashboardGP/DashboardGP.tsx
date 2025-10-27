@@ -4,9 +4,11 @@ import Banner from './components/Banner'
 import BenefitCard from './components/BenefitCard'
 import StepCard from './components/StepCard/StepCard'
 import { useParams } from 'react-router'
+import { setGroupIdToLS } from '../../../../utils/auth'
 
 export default function DashboardGP() {
   const { groupId } = useParams<{ groupId: string }>()
+  setGroupIdToLS(groupId as string)
   return (
     <div className='w-full max-w-5xl rounded-[2rem] backdrop-blur-[60px] bg-gradient-to-br from-white/22 via-white/16 to-white/20 shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border-[4px] border-white/60 p-10 space-y-8 m-12 relative overflow-hidden'>
       {/* Top Gradient Bar */}
