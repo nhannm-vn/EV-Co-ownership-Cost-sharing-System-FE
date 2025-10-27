@@ -20,6 +20,7 @@ interface IModalinviteProps {
     inviteeEmail: string
   }>
   reset: () => void
+  isPending: boolean
 }
 
 export default function Modalinvite({
@@ -28,7 +29,8 @@ export default function Modalinvite({
   onSubmit,
   register,
   errors,
-  reset
+  reset,
+  isPending
 }: IModalinviteProps) {
   return (
     <div className='fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4'>
@@ -48,6 +50,7 @@ export default function Modalinvite({
           </h2>
           {/* nếu bấm vào nút close thì sẽ tắt modal và reset form */}
           <button
+            disabled={isPending}
             onClick={() => {
               setShowModal(false)
               reset()

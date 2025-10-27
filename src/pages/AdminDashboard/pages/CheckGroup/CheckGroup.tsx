@@ -23,6 +23,8 @@ export default function CheckGroup() {
   const totalPages: number = groupListQuery.data?.data?.totalPages || 0
   // pagenumber hiện tại
   const pageNumber: number = groupListQuery.data?.data?.pageable.pageNumber || 0
+  console.log(pageNumber)
+
   //totalElements
   const totalElements: number = groupListQuery.data?.data?.totalElements || 0
 
@@ -67,6 +69,7 @@ export default function CheckGroup() {
             </div>
           </div>
         </main>
+
         <div className='mt-6 pt-4 border-t flex flex-col items-center'>
           <PaginationButton currentPage={pageNumber + 1} totalPages={totalPages} onPageChange={handlePageChange} />
           <div className='text-sm text-gray-500 mt-2'>
