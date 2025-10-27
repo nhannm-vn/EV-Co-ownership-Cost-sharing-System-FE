@@ -49,6 +49,7 @@ export default function Viewgroups() {
       {groupListQuery.isLoading ? (
         <Skeleton />
       ) : (
+        // truyền dữ liệu vô dataTable bằng context
         <GroupContext.Provider value={allGroupList || []}>
           <motion.div
             initial={{ opacity: 0, y: 40 }}

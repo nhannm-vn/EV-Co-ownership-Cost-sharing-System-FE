@@ -25,6 +25,7 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
   const imagesQuery = useQuery({
     queryKey: ['groupImages', group?.groupId],
     queryFn: () => staffApi.getGroupImages(group!.groupId),
+    // kiểm tra groupId tồn tại mới gọi API
     enabled: !!group?.groupId
   })
 
@@ -45,7 +46,6 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
     },
 
     onSuccess: (response) => {
-      // Nếu status là APPROVED thì toast xanh, REJECTED thì đỏ
       const data: ReviewResponse = response?.data
       console.log(data.groupStatus)
 
@@ -84,7 +84,7 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
   const confirmReject = (reason: string) => {
     // TODO: Gọi API từ chối toàn bộ nhóm với lý do
     console.log('Từ chối nhóm:', group?.groupId, 'Lý do:', reason)
-
+    // dấu ! đảm bảo group không null
     submitImage.mutate({ groupId: group!.groupId, body: { status: 'REJECTED', reason } })
   }
 
@@ -109,7 +109,7 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
               <PictureOutlined className='text-blue-500 text-2xl' />
               Thông Tin Hình Ảnh
             </h3>
-
+            {/* Nhóm hình ảnh theo loại và hiển thị */}
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
               {Object.entries(groupImages(images)).map(([type, imgs]) => (
                 <ImageGroup key={type} label={type} images={imgs} />
@@ -120,6 +120,7 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
           {/* Footer */}
           <div className='bg-gray-50 rounded-b-xl px-8 py-5 flex justify-between items-center border-t'>
             {group.status === 'PENDING' && (
+              //   bấm vào nút duyệt hoặc từ chối để hiện modal xác nhận
               <div className='flex gap-3'>
                 <button
                   onClick={() => toggleHandle(setShowApproveModal)}
