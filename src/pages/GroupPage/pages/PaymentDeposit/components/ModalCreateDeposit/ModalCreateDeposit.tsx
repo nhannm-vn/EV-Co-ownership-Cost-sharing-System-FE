@@ -23,6 +23,7 @@ function ModalCreateDeposit({ handleSetShowCreateDeposit }: IModalCreateDeposit)
       try {
         const response = await groupApi.createDepositForCoOwner({ userId: userId, groupId: groupId as string })
         setMember(response.data)
+        console.log(response.data.vnpayUrl)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         console.error(error)
@@ -35,7 +36,7 @@ function ModalCreateDeposit({ handleSetShowCreateDeposit }: IModalCreateDeposit)
 
   const handleContinue = () => {
     handleSetShowCreateDeposit()
-    window.open(`${memeber?.vnpayUrl}`, '_blank', 'noopener,noreferrer')
+    window.open(`${memeber?.vnpayUrl}`, '_blank')
   }
 
   return (
