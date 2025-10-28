@@ -63,7 +63,7 @@ export interface GroupMember {
   currentUser: boolean
 }
 
-// 🧮 Tổng quan group
+// Tổng quan group
 export interface GroupSummary {
   groupId: number
   groupName: string
@@ -138,17 +138,19 @@ export interface ContractResponse {
 }
 
 export interface DepositForUser {
-  contractSigned: boolean
-  canPay: boolean
-  requiredAmount: number
-  groupId: number
-  depositStatus: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED'
-  userId: number
-  ownershipPercentage: number
+  contractSigned: boolean // Hợp đồng đã ký hay chưa
+  canPay: boolean // Có thể thanh toán hay không
+  contractStatus: 'SIGNED' | 'PENDING' | 'REJECTED' // Trạng thái hợp đồng
+  requiredAmount: number // Số tiền yêu cầu nộp
+  groupId: number // ID nhóm đồng sở hữu
+  depositStatus: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED' // Trạng thái tiền ký quỹ
+  userId: number // ID người dùng
+  ownershipPercentage: number // Tỷ lệ sở hữu (%)
 }
 
 export interface DepositForGroup {
   joinDate: string
+  contractStatus: 'SIGNED' | 'PENDING' | 'REJECTED'
   requiredDepositAmount: number
   depositStatus: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED'
   userEmail: string

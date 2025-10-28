@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import groupApi from '../../../../apis/group.api'
@@ -9,11 +9,12 @@ import type { DepositForGroup } from '../../../../types/api/group.type'
 import { formatToVND } from '../../../../utils/formatPrice'
 import ModalCreateDeposit from './components/ModalCreateDeposit'
 import ProgressBar from './components/ProgressBar'
+import { AppContext } from '../../../../contexts/app.context'
 
 function PaymentDeposit() {
   const { groupId } = useParams<{ groupId: string }>()
 
-  // const { userId } = useContext(AppContext)
+  const { userId } = useContext(AppContext)
 
   // Lấy thông tin của toàn bộ nhóm để hiển thị
   const [members, setMembers] = useState<DepositForGroup[]>([])
@@ -47,6 +48,11 @@ function PaymentDeposit() {
 
     fetchDeposits()
   }, [groupId])
+
+  const ban = useMemo(() => {
+    const check = members.find((member) => member.userId === Number(userId))
+    return check?.contractStatus === 'SIGNED'
+  }, [members, userId])
 
   const getStatusText = (status: DepositForGroup['depositStatus']) => {
     const statusMap = {
@@ -99,11 +105,11 @@ function PaymentDeposit() {
             <div className='flex items-center gap-3'>
               <button
                 onClick={() => setShowCreateDeposit(true)}
-                // disabled={memeber?.contractSigned}
+                disabled={!ban}
                 className={classNames(
                   'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-105',
                   {
-                    // 'cursor-not-allowed': memeber?.contractSigned
+                    'cursor-not-allowed': !ban
                   }
                 )}
               >
