@@ -25,6 +25,7 @@ const path = {
   ownershipRatio: 'ownershipRatio', // Relative path
   paymentDeposit: 'paymentDeposit', // Relative path
   booking: 'booking', // Relative path
+  depositHistory: 'payment-result', // Relative path
 
   //OTP
   OTP: '/demoOTP',

@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import groupApi from '../../../../apis/group.api'
 import Skeleton from '../../../../components/Skeleton'
+import { AppContext } from '../../../../contexts/app.context'
 import type { DepositForGroup } from '../../../../types/api/group.type'
 import { formatToVND } from '../../../../utils/formatPrice'
 import ModalCreateDeposit from './components/ModalCreateDeposit'
 import ProgressBar from './components/ProgressBar'
-import { AppContext } from '../../../../contexts/app.context'
 
 function PaymentDeposit() {
   const { groupId } = useParams<{ groupId: string }>()
@@ -48,6 +48,8 @@ function PaymentDeposit() {
 
     fetchDeposits()
   }, [groupId])
+
+  console.log(members)
 
   //check hai trạng thái nếu ký rồi thì mới cho tạo deposit
   const isSigned = useMemo(() => {

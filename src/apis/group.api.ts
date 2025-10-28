@@ -1,7 +1,7 @@
 import type {
   ContractResponse,
-  CreateDepositSuccess,
   ContractStatus,
+  CreateDepositSuccess,
   CreateGroupMember,
   DepositForGroup,
   DepositForUser,
@@ -10,6 +10,7 @@ import type {
   InvitationResponse,
   OwnershipResponse
 } from '../types/api/group.type'
+import type { PaymentHistory } from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -83,6 +84,12 @@ const groupApi = {
   // check status contract để hiển thị aside mới
   getStatusContract: (groupId: string) => {
     return http.get<ContractStatus>(`api/contracts/${groupId}`)
+  },
+  // get deposit history for group
+  getDepositHistoryForGroup: (txnRef: string) => {
+    return http.get<PaymentHistory>(`api/deposits/info-by-txn`, {
+      params: { txnRef }
+    })
   }
 }
 
