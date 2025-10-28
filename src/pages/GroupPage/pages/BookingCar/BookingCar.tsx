@@ -1,5 +1,3 @@
-import React from 'react'
-
 // Cấu trúc Type (giữ nguyên)
 type Member = {
   id: string
