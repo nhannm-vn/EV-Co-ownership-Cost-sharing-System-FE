@@ -158,3 +158,13 @@ export interface GetAllNotifications {
   actionUrl: string
   priority: null
 }
+
+export interface PaymentHistory {
+  amount?: number
+  groupId?: number
+  paidAt?: string
+  paymentId?: number
+  paymentMethod?: 'VNPAY'
+  status: 'COMPLETED'
+  transactionCode: '67941305'
+}

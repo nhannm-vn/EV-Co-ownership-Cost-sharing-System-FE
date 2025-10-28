@@ -13,11 +13,13 @@ import CreateGroups from '../pages/Creategroups'
 import Dashboard from '../pages/Dashboard'
 import ForgotPassword from '../pages/Forgot-password'
 import GroupPage from '../pages/GroupPage'
+import BookingCar from '../pages/GroupPage/pages/BookingCar'
 import CoOwnershipPercentage from '../pages/GroupPage/pages/Co-ownershipPercentage/CoOwnershipPercentage'
 import CreateContract from '../pages/GroupPage/pages/CreateContract'
 import DashboardGP from '../pages/GroupPage/pages/DashboardGP'
 import MemberGroup from '../pages/GroupPage/pages/MemberGroup'
 import OwnershipRatio from '../pages/GroupPage/pages/OwnershipRatio'
+import PaymentDeposit from '../pages/GroupPage/pages/PaymentDeposit'
 import Home from '../pages/Home'
 import IssueReport from '../pages/IssueReport'
 import Learnmore from '../pages/Learnmore'
@@ -30,10 +32,9 @@ import OTPInput from '../pages/UI-OTP'
 import UploadLicense from '../pages/UploadLicense'
 import Viewgroups from '../pages/Viewgroups'
 import RoleCheck from './CheckRole/CheckRole'
-import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
-import PaymentDeposit from '../pages/GroupPage/pages/PaymentDeposit'
-import BookingCar from '../pages/GroupPage/pages/BookingCar'
+import ProtectedRoute from './PrivateRouters/ProtectedRoute'
+import PaymentStatus from '../pages/GroupPage/pages/PaymentStatus'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -76,6 +77,7 @@ function Routers() {
               element: <MainLayout />,
               children: [
                 { index: true, element: <Dashboard /> },
+
                 {
                   path: path.viewGroups,
                   element: <Viewgroups />
@@ -90,6 +92,7 @@ function Routers() {
                     { path: path.ownershipPercentage, element: <CoOwnershipPercentage /> },
                     { path: path.ownershipRatio, element: <OwnershipRatio /> },
                     { path: path.paymentDeposit, element: <PaymentDeposit /> },
+                    { path: path.depositHistory, element: <PaymentStatus /> },
                     { path: path.booking, element: <BookingCar /> }
                   ]
                 },
