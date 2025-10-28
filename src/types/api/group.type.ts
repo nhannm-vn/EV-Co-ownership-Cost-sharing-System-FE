@@ -171,6 +171,7 @@ export interface CreateDepositSuccess {
   paidAt: string
   vnpayUrl: string
   message: string
+}
 // kiểm tra trạng thái hợp đồng
 export interface ContractStatus {
   approvalStatus: 'PENDING' | 'APPROVED' | 'SIGNED'
