@@ -49,9 +49,16 @@ function PaymentDeposit() {
     fetchDeposits()
   }, [groupId])
 
-  const ban = useMemo(() => {
+  //check hai trạng thái nếu ký rồi thì mới cho tạo deposit
+  const isSigned = useMemo(() => {
     const check = members.find((member) => member.userId === Number(userId))
-    return check?.contractStatus === 'SIGNED'
+    return check?.contractStatus !== 'SIGNED'
+  }, [members, userId])
+
+  // nếu đã đóng tiền rồi thì khóa nút tạo deposit
+  const isSubmitDeposit = useMemo(() => {
+    const check = members.find((member) => member.userId === Number(userId))
+    return check?.depositStatus === 'COMPLETED'
   }, [members, userId])
 
   const getStatusText = (status: DepositForGroup['depositStatus']) => {
@@ -105,11 +112,11 @@ function PaymentDeposit() {
             <div className='flex items-center gap-3'>
               <button
                 onClick={() => setShowCreateDeposit(true)}
-                disabled={!ban}
+                disabled={isSigned || isSubmitDeposit}
                 className={classNames(
                   'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40 transition-all duration-300 transform hover:scale-105',
                   {
-                    'cursor-not-allowed': !ban
+                    'cursor-not-allowed': isSigned || isSubmitDeposit
                   }
                 )}
               >

@@ -1,6 +1,6 @@
 // file chứa những method call api cho user/co-owner
 
-import type { UploadImage, UserGetProfile } from '../types/api/user.type'
+import type { GetAllNotifications, UploadImage, UserGetProfile } from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -55,6 +55,15 @@ const userApi = {
       ownershipPercentage: percentage,
       reason: 'Update Percentage'
     })
+  },
+
+  //get all notification for user
+  getAllNotification() {
+    return http.get<GetAllNotifications[]>('api/notifications')
+  },
+  //change isRead in notification
+  readNotification(notificationId: string) {
+    return http.put(`api/notifications/${notificationId}/read`)
   }
 }
 
