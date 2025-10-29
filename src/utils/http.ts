@@ -1,6 +1,7 @@
-import axios, { type AxiosInstance } from 'axios'
+import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import config from '../constants/config'
-import { getAccessTokenFromLS } from './auth'
+import { clearLS, getAccessTokenFromLS } from './auth'
+import { toast } from 'react-toastify'
 
 class Http {
   instance: AxiosInstance
@@ -28,6 +29,27 @@ class Http {
         return config
       },
       (error) => {
+        return Promise.reject(error)
+      }
+    )
+    // Response Interceptor - xử lý lỗi 401 het accesstoken
+    this.instance.interceptors.response.use(
+      (response) => {
+        return response
+      },
+      (error: AxiosError) => {
+        if (error.response?.status === HttpStatusCode.Unauthorized) {
+          clearLS()
+        }
+        if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data: any | undefined = error.response?.data
+          // Nếu mà trong data không có message thì hãy hãy message ở ngoài error luôn đi
+          const message = data?.message || error.message
+          toast.error(message, {
+            autoClose: 1500
+          })
+        }
         return Promise.reject(error)
       }
     )
