@@ -33,8 +33,6 @@ const CreateContract: React.FC = () => {
     },
     onError: (error) => {
       console.log('Error canceling contract', error)
-      toast.error('Đã có lỗi xảy ra khi hủy hợp đồng.')
-      toast.error('Đã có lỗi xảy ra khi phê duyệt hợp đồng.')
     }
   })
 
@@ -47,7 +45,6 @@ const CreateContract: React.FC = () => {
 
   const onSubmit = () => {
     if (!groupId) {
-      toast.error('Không tìm thấy groupId, vui lòng thử lại.')
       return
     }
     signContractMutation.mutate(groupId as string)
@@ -55,7 +52,6 @@ const CreateContract: React.FC = () => {
 
   const onCancel = () => {
     if (!groupId) {
-      toast.error('Không tìm thấy groupId, vui lòng thử lại.')
       return
     }
     cancelContractMutation.mutate({ id: groupId as string, reason: cancelReason })
@@ -274,7 +270,7 @@ const CreateContract: React.FC = () => {
 
             {/* Action Buttons */}
             {/*  nếu là admin và trạng thái là pending  */}
-            {isAdmin && dataContract?.contract?.status === 'PENDING' && (
+            {isAdmin && dataContract?.contract?.status === 'PENDING' ? (
               <div className='flex gap-4 mt-6 pt-6 border-t'>
                 <button
                   onClick={() => setShowCancelModal(true)}
@@ -287,8 +283,17 @@ const CreateContract: React.FC = () => {
                   disabled={signContractMutation.isPending}
                   className='flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-xl hover:bg-cyan-600 disabled:opacity-50'
                 >
-                  {signContractMutation.isPending ? 'Đang xử lý...' : '✍️ Ký hợp đồng'}
+                  {signContractMutation.isPending ? 'Đang xử lý...' : 'Ký hợp đồng'}
                 </button>
+              </div>
+            ) : (
+              <div className='mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl'>
+                <h4 className='font-bold text-blue-900 mb-1'>Hợp đồng đã ký</h4>
+                <p className='text-sm text-blue-800'>
+                  Hợp đồng đã được ký và hiện đang chờ
+                  <span className='font-bold'> Admin của hệ thống </span>phê duyệt. Sau khi được duyệt, nhóm sẽ có thể
+                  sử dụng các chức năng như đặt lịch và quản lý xe.
+                </p>
               </div>
             )}
           </div>

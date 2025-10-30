@@ -152,7 +152,7 @@ export interface DepositForGroup {
   joinDate: string
   contractStatus: 'SIGNED' | 'PENDING' | 'REJECTED'
   requiredDepositAmount: number
-  depositStatus: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED'
+  depositStatus: 'PENDING' | 'PAID' | 'REFUNDED'
   userEmail: string
   userName: string
   userId: number

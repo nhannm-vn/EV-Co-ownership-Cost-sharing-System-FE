@@ -2,7 +2,6 @@
 import classNames from 'classnames'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import groupApi from '../../../../apis/group.api'
 import Skeleton from '../../../../components/Skeleton'
 import { AppContext } from '../../../../contexts/app.context'
@@ -31,7 +30,6 @@ function PaymentDeposit() {
   useEffect(() => {
     const fetchDeposits = async () => {
       if (!groupId) {
-        toast.error('Group ID not found')
         return
       }
       setLoading(true)
@@ -40,7 +38,6 @@ function PaymentDeposit() {
         setMembers(response.data)
       } catch (error: any) {
         console.error(error)
-        toast.error('Error loading data')
       } finally {
         setLoading(false)
       }
@@ -48,8 +45,6 @@ function PaymentDeposit() {
 
     fetchDeposits()
   }, [groupId])
-
-  console.log(members)
 
   //check hai trạng thái nếu ký rồi thì mới cho tạo deposit
   const isSigned = useMemo(() => {
@@ -60,14 +55,14 @@ function PaymentDeposit() {
   // nếu đã đóng tiền rồi thì khóa nút tạo deposit
   const isSubmitDeposit = useMemo(() => {
     const check = members.find((member) => member.userId === Number(userId))
-    return check?.depositStatus === 'COMPLETED'
+    return check?.depositStatus === 'PAID'
   }, [members, userId])
 
   const getStatusText = (status: DepositForGroup['depositStatus']) => {
     const statusMap = {
-      COMPLETED: 'Paid',
+      PAID: 'Paid',
       PENDING: 'Pending',
-      FAILED: 'Failed',
+
       REFUNDED: 'Refunded'
     }
     return statusMap[status]
@@ -75,9 +70,8 @@ function PaymentDeposit() {
 
   const getStatusColor = (status: DepositForGroup['depositStatus']) => {
     const colorMap = {
-      COMPLETED: 'bg-teal-50 text-teal-700 border-teal-200',
+      PAID: 'bg-teal-50 text-teal-700 border-teal-200',
       PENDING: 'bg-sky-50 text-sky-700 border-sky-200',
-      FAILED: 'bg-slate-50 text-slate-700 border-slate-200',
       REFUNDED: 'bg-indigo-50 text-indigo-700 border-indigo-200'
     }
     return colorMap[status]
@@ -92,7 +86,7 @@ function PaymentDeposit() {
   }
 
   const totalMembers = members.length
-  const paidMembers = members.filter((m) => m.depositStatus === 'COMPLETED').length
+  const paidMembers = members.filter((m) => m.depositStatus === 'PAID').length
   const unpaidMembers = totalMembers - paidMembers
   const completionRate = totalMembers > 0 ? Math.round((paidMembers / totalMembers) * 100) : 0
 
