@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import userApi from '../../apis/user.api'
 import Skeleton from '../../components/Skeleton'
 import { setUserIdToLS } from '../../utils/auth'
 import DashboardCardList from './components/DashboardCardList'
 import DashboardTitle from './components/DashboardTitle'
+import { ExclamationCircleOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 
 export default function Dashboard() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -28,108 +29,163 @@ export default function Dashboard() {
     return false
   }, [userProfile])
 
+  // Simplified Particle Animation
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    const particles: Array<{
+      x: number
+      y: number
+      size: number
+      speedX: number
+      speedY: number
+      opacity: number
+    }> = []
+
+    for (let i = 0; i < 40; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3,
+        opacity: Math.random() * 0.4 + 0.1
+      })
+    }
+
+    function animate() {
+      if (!ctx || !canvas) return
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      particles.forEach((particle) => {
+        particle.x += particle.speedX
+        particle.y += particle.speedY
+
+        if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1
+        if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1
+
+        ctx.beginPath()
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(6, 182, 212, ${particle.opacity})`
+        ctx.fill()
+      })
+
+      requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return isLoading ? (
     <Skeleton />
   ) : (
-    <div className='relative overflow-hidden min-h-[1000px] pt-20'>
-      {/* Cyan-to-Blue Background with Car Image */}
+    <div className='relative overflow-hidden min-h-screen pt-20'>
+      {/* Simplified Background */}
       <div className='absolute inset-0'>
-        {/* Car Background Image */}
         <img
           src='https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=1920&q=80'
           alt='Electric Car'
           className='w-full h-full object-cover'
         />
-
-        {/* Cyan to Blue Gradient Overlay - Matching Image Colors */}
-        <div className='absolute inset-0 bg-gradient-to-br from-cyan-400/50 via-sky-500/60 to-blue-600/55' />
-
-        {/* Additional Brightness Layer */}
-        <div className='absolute inset-0 bg-gradient-to-t from-blue-700/30 via-transparent to-cyan-300/20' />
+        <div className='absolute inset-0 bg-gradient-to-br from-cyan-500/65 via-sky-600/70 to-blue-700/75' />
       </div>
 
-      {/* Cyan-Blue Aurora Orbs */}
+      {/* Simplified Aurora - 2 Orbs Only */}
       <div className='absolute inset-0'>
         <div
-          className='absolute -top-80 -left-80 w-[1200px] h-[1200px] bg-gradient-to-br from-cyan-300/35 via-sky-400/30 to-blue-400/30 rounded-full blur-[180px] animate-pulse'
-          style={{ animationDuration: '10s' }}
+          className='absolute top-0 left-0 w-[1000px] h-[1000px] bg-gradient-to-br from-cyan-400/35 to-sky-500/30 rounded-full blur-[150px] animate-pulse'
+          style={{ animationDuration: '12s' }}
         />
         <div
-          className='absolute top-[10%] -right-80 w-[1150px] h-[1150px] bg-gradient-to-bl from-sky-300/35 via-cyan-400/30 to-blue-500/30 rounded-full blur-[170px] animate-pulse'
-          style={{ animationDuration: '12s', animationDelay: '2s' }}
-        />
-        <div
-          className='absolute -bottom-80 left-[20%] w-[1100px] h-[1100px] bg-gradient-to-tr from-blue-400/35 via-sky-500/30 to-cyan-500/30 rounded-full blur-[165px] animate-pulse'
-          style={{ animationDuration: '14s', animationDelay: '3.5s' }}
+          className='absolute bottom-0 right-0 w-[1000px] h-[1000px] bg-gradient-to-tl from-blue-500/35 to-cyan-500/30 rounded-full blur-[150px] animate-pulse'
+          style={{ animationDuration: '14s', animationDelay: '3s' }}
         />
       </div>
 
-      {/* Cyan Grid Pattern */}
-      <div className='absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.08)_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_90%)]' />
+      {/* Grid Pattern */}
+      <div className='absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.1)_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_80%)]' />
 
-      {/* Soft Vignette */}
-      <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.35)_100%)]' />
+      {/* Vignette */}
+      <div className='absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.4)_100%)]' />
 
-      {/* Particles Canvas */}
+      {/* Particles */}
       <canvas ref={canvasRef} className='absolute inset-0 pointer-events-none' />
 
-      {/* Main Content */}
-      <div className='relative z-10 py-16 sm:py-20 lg:py-24'>
+      {/* Main Content - Simplified */}
+      <div className='relative z-10 py-12 sm:py-16 lg:py-20'>
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='max-w-7xl mx-auto'>
+          <div className='max-w-6xl mx-auto'>
             <div className='group relative'>
-              {/* Cyan-Blue Multi-layer Glow */}
-              <div className='absolute -inset-10 bg-gradient-to-r from-cyan-400/50 via-sky-500/45 to-blue-500/50 blur-[85px] opacity-75 group-hover:opacity-95 group-hover:blur-[110px] transition-all duration-1000' />
-              <div className='absolute -inset-7 bg-gradient-to-r from-cyan-300/45 via-sky-400/40 to-blue-400/45 blur-[60px] opacity-65 group-hover:opacity-85 transition-all duration-1000' />
-              <div className='absolute -inset-3 bg-gradient-to-r from-cyan-200/35 via-sky-300/30 to-blue-300/35 blur-2xl opacity-50 group-hover:opacity-70 transition-all duration-1000' />
+              {/* Simplified Glow - 2 Layers */}
+              <div className='absolute -inset-8 bg-gradient-to-r from-cyan-400/50 via-sky-500/45 to-blue-500/50 blur-[80px] opacity-70 group-hover:opacity-90 transition-all duration-700' />
+              <div className='absolute -inset-3 bg-gradient-to-r from-cyan-300/40 to-blue-400/40 blur-2xl opacity-50 group-hover:opacity-70 transition-all duration-700' />
 
-              {/* Glass Card */}
-              <div className='relative backdrop-blur-[50px] bg-gradient-to-br from-white/22 via-cyan-50/15 to-white/22 hover:from-white/30 hover:via-cyan-50/22 hover:to-white/30 rounded-[3.5rem] shadow-[0_20px_75px_rgba(0,0,0,0.3),0_0_75px_rgba(6,182,212,0.35),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_25px_95px_rgba(0,0,0,0.4),0_0_95px_rgba(6,182,212,0.45),inset_0_1px_0_rgba(255,255,255,0.4)] hover:scale-[1.01] transition-all duration-700 ease-out overflow-hidden border-[3px] border-white/45 hover:border-cyan-100/60'>
-                {/* Cyan Gradient Overlay */}
-                <div className='absolute inset-0 rounded-[3.5rem] bg-gradient-to-br from-cyan-100/0 via-transparent to-sky-100/0 group-hover:from-cyan-50/20 group-hover:via-sky-50/12 group-hover:to-blue-50/20 transition-all duration-700' />
+              {/* Glass Card - Cleaner */}
+              <div className='relative backdrop-blur-[50px] bg-gradient-to-br from-white/30 via-cyan-50/20 to-white/30 hover:from-white/40 hover:to-white/40 rounded-[3rem] shadow-[0_20px_70px_rgba(0,0,0,0.3),0_0_70px_rgba(6,182,212,0.35)] hover:shadow-[0_25px_90px_rgba(0,0,0,0.4),0_0_90px_rgba(6,182,212,0.45)] hover:scale-[1.01] transition-all duration-500 overflow-hidden border-[2px] border-white/60 hover:border-white/80'>
+                {/* Top Edge Glow */}
+                <div className='absolute top-0 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-transparent via-cyan-300/80 to-transparent' />
 
-                {/* Cyan Top Edge Glow */}
-                <div className='absolute -top-px left-[8%] right-[8%] h-[3px] bg-gradient-to-r from-transparent via-cyan-300/0 to-transparent group-hover:via-cyan-300/95 transition-all duration-700 shadow-[0_0_20px_rgba(6,182,212,0.7)]' />
-
-                {/* Glass Texture */}
-                <div className='absolute inset-0 rounded-[3.5rem] bg-gradient-to-br from-white/[0.12] via-white/[0.08] to-white/[0.12] group-hover:from-white/[0.18] group-hover:to-white/[0.18] transition-all duration-700' />
-
-                {/* Cyan Shimmer */}
-                <div className='absolute inset-0 rounded-[3.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 overflow-hidden'>
-                  <div
-                    className='absolute inset-0 bg-gradient-to-r from-transparent via-cyan-200/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]'
-                    style={{ transition: 'transform 3.5s ease-in-out' }}
-                  />
-                </div>
-
-                {/* Content Container */}
-                <div className='relative p-10 sm:p-14 lg:p-20'>
-                  {/* Cyan-Blue Corner Lights */}
-                  <div className='absolute top-0 left-0 w-72 h-72 bg-gradient-to-br from-cyan-400/45 to-sky-500/40 group-hover:from-cyan-300/65 group-hover:to-sky-400/60 blur-[90px] rounded-full transition-all duration-700' />
-                  <div className='absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-sky-400/45 to-blue-500/40 group-hover:from-sky-300/65 group-hover:to-blue-400/60 blur-[90px] rounded-full transition-all duration-700' />
-                  <div className='absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-gradient-to-t from-blue-500/45 to-cyan-400/40 group-hover:from-blue-400/65 group-hover:to-cyan-300/60 blur-[90px] rounded-full transition-all duration-700' />
-
-                  {/* Center Ambient */}
-                  <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[850px] bg-gradient-to-r from-cyan-300/18 via-sky-300/15 to-blue-300/15 group-hover:from-cyan-200/30 group-hover:via-sky-200/25 group-hover:to-blue-200/25 blur-[140px] rounded-full transition-all duration-1000' />
+                {/* Content */}
+                <div className='relative p-8 sm:p-12 lg:p-16'>
+                  {/* Ambient Light */}
+                  <div className='absolute inset-0 bg-gradient-to-br from-cyan-200/20 via-transparent to-blue-200/20 rounded-[3rem]' />
 
                   {/* Main Content */}
-                  <div className='relative space-y-12'>
+                  <div className='relative space-y-10'>
                     <DashboardTitle />
                     <DashboardCardList allowAccess={allowAccess} />
+
+                    {/* Compact Warning Banner */}
                     {!allowAccess && (
-                      <div className='flex justify-start'>
-                        <div className='backdrop-blur-lg bg-white/18 px-5 py-2 rounded-full border-[2px] border-cyan-200/40 shadow-[0_0_20px_rgba(6,182,212,0.3),inset_0_1px_5px_rgba(255,255,255,0.25)]'>
-                          <p className='text-white text-xs font-bold italic drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]'>
-                            *Phải upload CCCD và GPLX được phê duyệt để truy cập tất cả các tính năng
-                          </p>
+                      <div className='flex justify-center'>
+                        <div className='relative group/warning max-w-2xl w-full'>
+                          {/* Subtle Glow */}
+                          <div className='absolute -inset-1 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 blur-xl opacity-50 group-hover/warning:opacity-70 transition-all duration-300 rounded-xl' />
+
+                          {/* Compact Card */}
+                          <div className='relative backdrop-blur-lg bg-gradient-to-r from-cyan-600/90 to-blue-600/90 hover:from-cyan-500/90 hover:to-blue-500/90 px-6 py-4 rounded-xl shadow-xl border border-white/40 hover:border-white/60 transition-all duration-300'>
+                            <div className='flex items-center gap-4'>
+                              {/* Icon */}
+                              <div className='flex-shrink-0 bg-white/25 p-2.5 rounded-lg'>
+                                <ExclamationCircleOutlined style={{ fontSize: '24px', color: 'white' }} />
+                              </div>
+
+                              {/* Content */}
+                              <div className='flex-1'>
+                                <div className='flex items-center gap-2 mb-1'>
+                                  <SafetyCertificateOutlined style={{ fontSize: '18px', color: 'white' }} />
+                                  <h4 className='text-white text-sm font-sans uppercase'>Yêu cầu xác minh</h4>
+                                </div>
+                                <p className='text-white/95 text-sm font-sans'>
+                                  Vui lòng upload <span className='font-black'>CCCD</span> và{' '}
+                                  <span className='font-black'>GPLX</span> để truy cập đầy đủ tính năng
+                                </p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Blue Bottom Edge Glow */}
-                <div className='absolute -bottom-px left-[8%] right-[8%] h-[3px] bg-gradient-to-r from-transparent via-sky-400/0 to-transparent group-hover:via-sky-400/95 transition-all duration-700 shadow-[0_0_20px_rgba(14,165,233,0.7)]' />
+                {/* Bottom Edge Glow */}
+                <div className='absolute bottom-0 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-transparent via-sky-400/80 to-transparent' />
               </div>
             </div>
           </div>
