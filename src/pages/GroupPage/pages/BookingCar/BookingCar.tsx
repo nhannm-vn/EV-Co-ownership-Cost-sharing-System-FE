@@ -17,7 +17,7 @@ import {
   TrophyOutlined,
   LockOutlined
 } from '@ant-design/icons'
-import { Card, Badge, Tooltip, Progress, Modal, message, Statistic, Tag } from 'antd'
+import { Card, Tooltip, Progress, Modal, message, Statistic, Tag } from 'antd'
 
 // ============= INTERFACES (giữ nguyên) =============
 interface QuotaInfo {
@@ -185,7 +185,7 @@ const BookingSlotCell: React.FC<{
 const BookingCar: React.FC = () => {
   const [bookings, setBookings] = useState<Record<string, TimeSlot>>(getInitialBookings())
   const [quota, setQuota] = useState<QuotaInfo>({ used: 2, total: 5, remaining: 3 })
-  const [vehicleStatus, setVehicleStatus] = useState<VehicleStatus>(getInitialVehicleStatus())
+  const vehicleStatus: VehicleStatus = getInitialVehicleStatus()
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState<{ id: string; timeRange: string; day: string } | null>(null)
 
