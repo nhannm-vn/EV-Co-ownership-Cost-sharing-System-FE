@@ -178,3 +178,42 @@ export interface CreateDepositSuccess {
 export interface ContractStatus {
   approvalStatus: 'PENDING' | 'APPROVED' | 'SIGNED'
 }
+
+// response danh sách  lịch booking của group
+export interface BookingResponse {
+  weekStart?: string
+  weekEnd?: string
+  userQuota?: {
+    totalSlots?: number
+    usedSlots?: number
+    remainingSlots?: number
+  }
+  dailySlots: {
+    date?: string // "2025-10-27"
+    dayOfWeek?: string // "MONDAY", "TUESDAY", ...
+    slots?: {
+      time?: string // "00:00-03:00"
+      status?: 'AVAILABLE' | 'LOCKED' | 'CONFIRMED' | 'CANCELLED'
+      bookedBy?: string | null
+      bookable?: boolean
+      type?: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER'
+    }[]
+  }[]
+  dashboardSummary: {
+    groupId?: number
+    vehicleId?: number
+    brand?: string
+    model?: string
+    licensePlate?: string
+    vehicleValue?: number
+    vehicleStatus?: 'Good' | 'Under Maintenance' | 'Has Issues' | ''
+    batteryPercent?: number | null
+    odometer?: number | null
+    lastMaintenanceDate?: string | null
+    nextMaintenanceDate?: string | null
+    maintenanceStatus?: 'NO_ISSUE' | 'NEEDS_MAINTENANCE' | ''
+    totalBookings?: number
+    userBookings?: number
+    bookingRatio?: number
+  }
+}
