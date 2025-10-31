@@ -1,4 +1,5 @@
 import type {
+  BookingResponse,
   ContractResponse,
   ContractStatus,
   CreateDepositSuccess,
@@ -90,6 +91,11 @@ const groupApi = {
     return http.get<PaymentHistory>(`api/deposits/info-by-txn`, {
       params: { txnRef }
     })
+  },
+
+  // get booking calendar for group vehicles
+  getBookingCalendar: (groupId: string) => {
+    return http.get<BookingResponse>(`api/calendar/groups/${groupId}/weekly`)
   }
 }
 
