@@ -35,6 +35,7 @@ import RoleCheck from './CheckRole/CheckRole'
 import RejectedRoute from './PrivateRouters/RejectedRoute'
 import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import PaymentStatus from '../pages/GroupPage/pages/PaymentStatus'
+import MyBooking from '../pages/GroupPage/pages/MyBooking'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -93,7 +94,8 @@ function Routers() {
                     { path: path.ownershipRatio, element: <OwnershipRatio /> },
                     { path: path.paymentDeposit, element: <PaymentDeposit /> },
                     { path: path.depositHistory, element: <PaymentStatus /> },
-                    { path: path.booking, element: <BookingCar /> }
+                    { path: path.booking, element: <BookingCar /> },
+                    { path: path.mybooking, element: <MyBooking /> }
                   ]
                 },
                 { path: path.createGroups, element: <CreateGroups /> },
