@@ -217,3 +217,12 @@ export interface BookingResponse {
     bookingRatio?: number
   }
 }
+
+// booking slot
+
+export interface BookingSlotResponse {
+  bookingId: number
+  status: 'CONFIRMED'
+  message: string
+  totalHours: number
+}

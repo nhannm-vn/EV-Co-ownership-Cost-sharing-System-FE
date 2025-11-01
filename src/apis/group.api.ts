@@ -1,5 +1,6 @@
 import type {
   BookingResponse,
+  BookingSlotResponse,
   ContractResponse,
   ContractStatus,
   CreateDepositSuccess,
@@ -96,6 +97,10 @@ const groupApi = {
   // get booking calendar for group vehicles
   getBookingCalendar: (groupId: string) => {
     return http.get<BookingResponse>(`api/calendar/groups/${groupId}/weekly`)
+  },
+  // booking slot
+  bookingSlot: (body: { vehicleId: number; startDateTime: string; endDateTime: string }) => {
+    return http.post<BookingSlotResponse>(`api/calendar/flexible-booking`, body)
   }
 }
 

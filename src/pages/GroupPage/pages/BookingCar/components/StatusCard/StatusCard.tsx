@@ -1,6 +1,8 @@
 import { Card, Progress } from 'antd'
-import getConditionConfig from '../../utils/getConditionconfig'
+
 import { DashboardOutlined, ThunderboltOutlined } from '@ant-design/icons'
+import getConditionConfig from '../BookingSlotCell/utils/getConditionconfig'
+
 interface statusCardProps {
   vehicleStatus: 'Good' | 'Under Maintenance' | 'Has Issues' | ''
   batteryPercent: number | null
@@ -30,7 +32,7 @@ export default function StatusCard({ vehicleStatus, batteryPercent, odometer }: 
                   }
                 </div>
                 <div>
-                  <div className='text-white/95 text-xs font-bold uppercase tracking-wide'>Trạng thái</div>
+                  <div className='text-white/95 text-2xl font-bold uppercase tracking-wide'>Trạng thái của xe </div>
                   <div className='text-white text-2xl font-black'>
                     {
                       getConditionConfig({

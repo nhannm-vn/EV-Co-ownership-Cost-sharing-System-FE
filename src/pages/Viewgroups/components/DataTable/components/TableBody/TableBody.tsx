@@ -5,16 +5,32 @@ import { useNavigate } from 'react-router'
 import { GroupContext } from '../../../../../../hooks/useGroupList'
 import type { GroupItem } from '../../../../../../types/api/group.type'
 import { getStatusStyle } from './utils/getStatusStyle'
+import { AppContext } from '../../../../../../contexts/app.context'
+import { useQuery } from '@tanstack/react-query'
+import groupApi from '../../../../../../apis/group.api'
 
 export default function TableBody() {
   const navigate = useNavigate()
 
+  const { groupId } = useContext(AppContext)
+
+  console.log(groupId)
+
+  const statusContract = useQuery({
+    queryKey: ['status-contract', groupId],
+    queryFn: () => groupApi.getStatusContract(groupId as string),
+    enabled: !!groupId
+  })
+
+  const isApprovalStatus = statusContract.data?.data?.approvalStatus === 'APPROVED'
+
   const handleRowClick = (group: GroupItem) => {
-    if (group?.status == 'ACTIVE' && group.groupId) {
+    if (isApprovalStatus && group.groupId && group?.status == 'ACTIVE') {
+      navigate(`/dashboard/viewGroups/${group.groupId}/booking`)
+    } else if (group?.status == 'ACTIVE' && group.groupId) {
       navigate(`/dashboard/viewGroups/${group.groupId}/dashboardGroup`)
     }
   }
-
   const groupListData = useContext(GroupContext)
   console.log(groupListData)
 
