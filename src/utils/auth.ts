@@ -26,6 +26,7 @@ export const clearLS = () => {
   localStorage.removeItem('emailAccount')
   localStorage.removeItem('role')
   localStorage.removeItem('userId')
+  localStorage.removeItem('groupId')
   const clearLSEvent = new Event('clearLS')
   LocalStorageEventTarget.dispatchEvent(clearLSEvent)
 }

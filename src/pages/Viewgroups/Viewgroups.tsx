@@ -15,6 +15,8 @@ export default function Viewgroups() {
     queryFn: groupApi.viewGroup
   })
 
+  localStorage.setItem('groupId', '')
+
   console.log(groupListQuery.data?.data)
 
   const allGroupList: GroupItem[] = groupListQuery?.data?.data || []
