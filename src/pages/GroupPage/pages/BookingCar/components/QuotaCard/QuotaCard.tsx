@@ -13,9 +13,7 @@ export default function QuotaCard({ quotaUser }: { quotaUser: QuotaInfo }) {
           <div className='absolute inset-0 bg-white/5'></div>
           <div className='absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-3xl'></div>
           <div className='relative z-10 flex flex-col justify-between h-full min-h-[300px]'>
-            <div className='text-white text-sm font-black uppercase tracking-widest text-center mb-4'>
-              Quota (Anh Tuấn)
-            </div>
+            <div className='text-white text-3xl font-black uppercase tracking-widest text-center mb-4'>Quota</div>
             <div className='flex-1 flex items-center justify-center'>
               <div className='relative'>
                 <Progress
