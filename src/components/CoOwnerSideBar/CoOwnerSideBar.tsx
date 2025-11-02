@@ -34,7 +34,8 @@ export default function CoOwnerSideBar() {
     { to: `viewGroups/${group?.groupId}/booking`, label: 'Booking Car' },
     { to: `viewGroups/${group?.groupId}/mybooking`, label: 'My Booking' },
     { to: `viewGroups/${group?.groupId}/viewMembers`, label: 'Members' },
-    { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' }
+    { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
+    { to: `viewGroups/${group?.groupId}/check-in`, label: 'Check In' }
   ]
 
   return (

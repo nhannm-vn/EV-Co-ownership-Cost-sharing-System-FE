@@ -27,6 +27,7 @@ const path = {
   booking: 'booking', // Relative path
   mybooking: 'mybooking', // Relative path
   depositHistory: 'payment-result', // Relative path
+  checkIn: 'check-in', // Relative path
 
   //OTP
   OTP: '/demoOTP',
