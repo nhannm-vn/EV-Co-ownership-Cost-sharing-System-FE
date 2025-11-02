@@ -10,6 +10,7 @@ import type {
   GroupItem,
   groupSummary,
   InvitationResponse,
+  MyBooking,
   OwnershipResponse
 } from '../types/api/group.type'
 import type { PaymentHistory } from '../types/api/user.type'
@@ -105,6 +106,9 @@ const groupApi = {
   // cancel booking slot
   cancelBookingSlot: (bookingId: number) => {
     return http.put(`api/bookings/${bookingId}/cancel`)
+  // my booking
+  getMyBooking: () => {
+    return http.get<MyBooking[]>('api/bookings/user-bookings')
   }
 }
 

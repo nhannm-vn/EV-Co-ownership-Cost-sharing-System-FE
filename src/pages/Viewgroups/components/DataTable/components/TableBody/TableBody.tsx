@@ -2,37 +2,33 @@ import { UsergroupAddOutlined } from '@ant-design/icons'
 import { Avatar, Tooltip } from 'antd'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router'
+import groupApi from '../../../../../../apis/group.api'
 import { GroupContext } from '../../../../../../hooks/useGroupList'
 import type { GroupItem } from '../../../../../../types/api/group.type'
 import { getStatusStyle } from './utils/getStatusStyle'
-import { AppContext } from '../../../../../../contexts/app.context'
-import { useQuery } from '@tanstack/react-query'
-import groupApi from '../../../../../../apis/group.api'
 
 export default function TableBody() {
   const navigate = useNavigate()
+  const groupListData = useContext(GroupContext)
 
-  const { groupId } = useContext(AppContext)
+  const handleRowClick = async (group: GroupItem) => {
+    if (group?.status !== 'ACTIVE' || !group.groupId) return
 
-  console.log(groupId)
+    try {
+      // Gọi API trực tiếp để check contract của group đang click
+      const statusContract = await groupApi.getStatusContract(group.groupId.toString())
+      const isApprovalStatus = statusContract.data?.approvalStatus === 'APPROVED'
 
-  const statusContract = useQuery({
-    queryKey: ['status-contract', groupId],
-    queryFn: () => groupApi.getStatusContract(groupId as string),
-    enabled: !!groupId
-  })
-
-  const isApprovalStatus = statusContract.data?.data?.approvalStatus === 'APPROVED'
-
-  const handleRowClick = (group: GroupItem) => {
-    if (isApprovalStatus && group.groupId && group?.status == 'ACTIVE') {
-      navigate(`/dashboard/viewGroups/${group.groupId}/booking`)
-    } else if (group?.status == 'ACTIVE' && group.groupId) {
+      if (isApprovalStatus) {
+        navigate(`/dashboard/viewGroups/${group.groupId}/booking`)
+      } else {
+        navigate(`/dashboard/viewGroups/${group.groupId}/dashboardGroup`)
+      }
+    } catch (error) {
+      console.error('Error checking contract status:', error)
       navigate(`/dashboard/viewGroups/${group.groupId}/dashboardGroup`)
     }
   }
-  const groupListData = useContext(GroupContext)
-  console.log(groupListData)
 
   return (
     <tbody>

@@ -24,19 +24,17 @@ export default function CoOwnerSideBar() {
 
   const navItems = [
     { to: `viewGroups/${group?.groupId}/dashboardGroup`, label: 'Group Setup' },
-    { to: `viewGroups/${group?.groupId}/createContract`, label: 'Contract', end: true },
     { to: `viewGroups/${group?.groupId}/viewMembers`, label: 'Members' },
     { to: `viewGroups/${group?.groupId}/ownershipPercentage`, label: 'Percentage' },
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
-    { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Payment Deposit' }
+    { to: `viewGroups/${group?.groupId}/createContract`, label: 'Contract' },
+    { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Deposit' }
   ]
   const navApprovedItems = [
-    { to: `viewGroups/${group?.groupId}/booking`, label: 'Booking Car', end: true },
-    { to: `viewGroups/${group?.groupId}/createContract`, label: 'Contract' },
+    { to: `viewGroups/${group?.groupId}/booking`, label: 'Booking Car' },
+    { to: `viewGroups/${group?.groupId}/mybooking`, label: 'My Booking' },
     { to: `viewGroups/${group?.groupId}/viewMembers`, label: 'Members' },
-    { to: `viewGroups/${group?.groupId}/ownershipPercentage`, label: 'Percentage' },
-    { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
-    { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Payment Deposit' }
+    { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' }
   ]
 
   return (
@@ -47,14 +45,13 @@ export default function CoOwnerSideBar() {
             <li key={index}>
               <NavLink
                 to={item.to}
-                end={item.end}
                 className={({ isActive }) =>
                   `
                     inline-flex items-center justify-center
-                    px-5 py-2.5 rounded-xl
+                    px-4 py-2.5 rounded-xl
                     text-xs font-semibold whitespace-nowrap
                     transition-all duration-300
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 mr-4
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 mr-3
                     w-32 
                     ${
                       isActive

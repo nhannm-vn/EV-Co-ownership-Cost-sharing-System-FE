@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // VehicleBookingCalendar.tsx - IMPROVED BADGE & LEGEND DESIGN
 import { ClockCircleOutlined, LockOutlined, ToolOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'

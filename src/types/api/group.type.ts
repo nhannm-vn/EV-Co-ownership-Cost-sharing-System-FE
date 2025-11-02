@@ -227,3 +227,13 @@ export interface BookingSlotResponse {
   message: string
   totalHours: number
 }
+
+export interface MyBooking {
+  bookingId: number
+  licensePlate: string
+  brand: string
+  model: string
+  startDateTime: string // ISO datetime string
+  endDateTime: string // ISO datetime string
+  status: 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | string
+}
