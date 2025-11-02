@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { getRoleFromLS } from '../../utils/auth'
+import path from '../../constants/path'
 
 export default function AdminDashboard() {
   const role = getRoleFromLS()
@@ -22,13 +23,24 @@ export default function AdminDashboard() {
             </li>
             <li>
               <NavLink
-                to='checkLicense'
+                to={path.checkLicense}
                 className={({ isActive }) => {
                   const activeClass = isActive ? 'bg-gray-300' : ''
                   return `flex items-center rounded-lg ${activeClass} p-2 text-base font-normal text-gray-900 hover:bg-gray-300`
                 }}
               >
                 {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>CheckLicense</span>}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to={path.checkBooking}
+                className={({ isActive }) => {
+                  const activeClass = isActive ? 'bg-gray-300' : ''
+                  return `flex items-center rounded-lg ${activeClass} p-2 text-base font-normal text-gray-900 hover:bg-gray-300`
+                }}
+              >
+                {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>CheckBooking</span>}
               </NavLink>
             </li>
             {role === 'ADMIN' && (

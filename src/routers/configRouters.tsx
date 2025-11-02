@@ -37,6 +37,7 @@ import ProtectedRoute from './PrivateRouters/ProtectedRoute'
 import PaymentStatus from '../pages/GroupPage/pages/PaymentStatus'
 import MyBooking from '../pages/GroupPage/pages/MyBooking'
 import CheckIn from '../pages/GroupPage/pages/CheckIn'
+import CheckBooking from '../pages/AdminDashboard/pages/CheckBooking'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -122,7 +123,8 @@ function Routers() {
                   element: <AdminDashboard />,
                   children: [
                     { index: true, element: <CheckGroup /> },
-                    { path: 'checkLicense', element: <CheckLicense /> }
+                    { path: path.checkLicense, element: <CheckLicense /> },
+                    { path: path.checkBooking, element: <CheckBooking /> }
                   ]
                 }
               ]

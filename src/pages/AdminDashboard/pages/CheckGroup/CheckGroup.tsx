@@ -5,6 +5,7 @@ import type { groupStaffItem } from '../../../../types/api/staff.type'
 import PaginationButton from './components/PaginationButton'
 import PropupImage from './components/PopupImage'
 import StatusBadge from './components/StatusBadge'
+import Skeleton from '../../../../components/Skeleton'
 
 export default function CheckGroup() {
   const [currentPage, setCurrentPage] = useState(0)
@@ -17,6 +18,8 @@ export default function CheckGroup() {
     queryFn: () => staffApi.getAllGroupStaff(currentPage, pageSize)
   })
 
+  const { isPending } = groupListQuery
+
   const groupData: groupStaffItem[] = groupListQuery.data?.data?.content || []
 
   // tổng số trang
@@ -28,12 +31,14 @@ export default function CheckGroup() {
   //totalElements
   const totalElements: number = groupListQuery.data?.data?.totalElements || 0
 
-  console.log(groupListQuery.data?.data)
   // hầm chuyển trang
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage) // Cập nhật state (0, 1, 2...)
   }
-  return (
+
+  return isPending ? (
+    <Skeleton />
+  ) : (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 font-sans'>
       <div className='container mx-auto p-4 md:p-8'>
         <header className='text-center mb-8'>
