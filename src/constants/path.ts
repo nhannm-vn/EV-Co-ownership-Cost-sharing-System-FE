@@ -33,7 +33,9 @@ const path = {
   OTP: '/demoOTP',
 
   // admin and staff dashboard
-  adminDashboard: '/manager'
+  adminDashboard: '/manager',
+  checkLicense: 'checkLicense',
+  checkBooking: 'checkBooking'
 } as const
 
 export default path

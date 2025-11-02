@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import staffApi from '../../../../apis/staff.api'
 import ImageCard from './components/ImageCard'
+import Skeleton from '../../../../components/Skeleton'
 
 export type Status = 'PENDING' | 'APPROVED' | 'REJECTED'
 type DocType = 'cccd' | 'gplx'
@@ -77,15 +78,17 @@ function mapUserToMember(user: any): Member {
 export default function CheckLicense() {
   const [members, setMembers] = useState<Member[]>([])
   const [selected, setSelected] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     staffApi
       .getUsersPendingLicense()
       .then((res) => {
         if (res.data && Array.isArray(res.data)) {
           const mappedMembers = res.data.map(mapUserToMember)
           setMembers(mappedMembers)
-          console.log(res.data)
+          setLoading(false)
         }
       })
       .catch(console.error)
@@ -130,7 +133,9 @@ export default function CheckLicense() {
     )
   }
 
-  return (
+  return loading ? (
+    <Skeleton />
+  ) : (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6'>
       {members.map((member, i) => (
         <motion.div
