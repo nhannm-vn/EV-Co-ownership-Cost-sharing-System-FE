@@ -228,7 +228,7 @@ export interface BookingSlotResponse {
   totalHours: number
 }
 
-export interface MyBooking {
+export interface MyBookingResponse {
   bookingId: number
   licensePlate: string
   brand: string

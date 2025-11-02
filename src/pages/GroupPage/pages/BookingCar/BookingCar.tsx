@@ -2,7 +2,6 @@
 import { ClockCircleOutlined, LockOutlined, ToolOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Card, Tag } from 'antd'
-import React from 'react'
 import { useParams } from 'react-router'
 import groupApi from '../../../../apis/group.api'
 

@@ -5,12 +5,12 @@ import groupApi from '../../../../apis/group.api'
 import Skeleton from '../../../../components/Skeleton'
 import { getGroupIdFromLS } from '../../../../utils/auth'
 import Legend from './components/Legend'
-import type { MyBooking } from '../../../../types/api/group.type'
 import { formatDate } from '../../../../utils/formatTimeMyBooking'
 import EmptyBooking from './components/EmptyBooking'
+import type { MyBookingResponse } from '../../../../types/api/group.type'
 
 const MyBooking = () => {
-  const [bookings, setBookings] = useState<MyBooking[]>([])
+  const [bookings, setBookings] = useState<MyBookingResponse[]>([])
   const [loading, setLoading] = useState(true)
   const groupId = getGroupIdFromLS()
 
@@ -110,7 +110,7 @@ const MyBooking = () => {
     return maintenanceSlotIndices.includes(slotIndex)
   }
 
-  const isBookingInSlot = (booking: MyBooking, date: Date, slotIndex: number): boolean => {
+  const isBookingInSlot = (booking: MyBookingResponse, date: Date, slotIndex: number): boolean => {
     try {
       if (!booking?.startDateTime) return false
 
@@ -135,7 +135,7 @@ const MyBooking = () => {
     }
   }
 
-  const getBookingForSlot = (date: Date, slotIndex: number): MyBooking | undefined => {
+  const getBookingForSlot = (date: Date, slotIndex: number): MyBookingResponse | undefined => {
     try {
       return bookings.find((booking) => isBookingInSlot(booking, date, slotIndex))
     } catch {

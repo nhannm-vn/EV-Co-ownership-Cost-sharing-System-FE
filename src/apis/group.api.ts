@@ -10,7 +10,7 @@ import type {
   GroupItem,
   groupSummary,
   InvitationResponse,
-  MyBooking,
+  MyBookingResponse,
   OwnershipResponse
 } from '../types/api/group.type'
 import type { PaymentHistory } from '../types/api/user.type'
@@ -109,7 +109,7 @@ const groupApi = {
   },
   // my booking
   getMyBooking: (groupId: string) => {
-    return http.get<MyBooking[]>('api/bookings/user-bookings', {
+    return http.get<MyBookingResponse[]>('api/bookings/user-bookings', {
       params: { groupId } //  vào params
     })
   }
