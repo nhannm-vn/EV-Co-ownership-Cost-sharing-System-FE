@@ -10,6 +10,7 @@ import type {
   GroupItem,
   groupSummary,
   InvitationResponse,
+  MyBooking,
   OwnershipResponse
 } from '../types/api/group.type'
 import type { PaymentHistory } from '../types/api/user.type'
@@ -101,6 +102,10 @@ const groupApi = {
   // booking slot
   bookingSlot: (body: { vehicleId: number; startDateTime: string; endDateTime: string }) => {
     return http.post<BookingSlotResponse>(`api/calendar/flexible-booking`, body)
+  },
+  // my booking
+  getMyBooking: () => {
+    return http.get<MyBooking[]>('api/bookings/user-bookings')
   }
 }
 
