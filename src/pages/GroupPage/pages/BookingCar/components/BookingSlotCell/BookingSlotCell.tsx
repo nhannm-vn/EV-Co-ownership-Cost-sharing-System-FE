@@ -22,6 +22,7 @@ export interface Slot {
     totalSlots: number
     remainingSlots: number
   }
+  bookingId?: number | null
 }
 
 export default function BookingSlotCell({
@@ -31,7 +32,7 @@ export default function BookingSlotCell({
   type,
   vehicleId,
   vehicleStatus,
-
+  bookingId,
   quotaUser
 }: Slot) {
   const mutateQuery = useQueryClient()
@@ -43,13 +44,29 @@ export default function BookingSlotCell({
       console.log(response)
       mutateQuery.invalidateQueries({ queryKey: ['vehicle-bookings'] })
       toast.success(response?.data?.message)
+      setIsModalVisible(false)
     },
     onError: (response) => {
       console.log(response)
     }
   })
 
+  const cancelMutation = useMutation({
+    mutationFn: (bookingId: number) => groupApi.cancelBookingSlot(bookingId),
+    onSuccess: (response) => {
+      console.log(response)
+      mutateQuery.invalidateQueries({ queryKey: ['vehicle-bookings'] })
+      toast.success(response?.data?.message)
+      setIsModalVisible(false)
+    },
+    onError: (response) => {
+      console.log(response)
+    }
+  })
   const confirmBooking = () => {
+    if (type !== 'AVAILABLE' && type !== 'BOOKED_SELF') {
+      return
+    }
     if (quotaUser.remainingSlots <= 0) {
       toast.error('Bạn đã hết quota tuần này!')
       return
@@ -84,7 +101,10 @@ export default function BookingSlotCell({
       startDateTime,
       endDateTime
     })
-    setIsModalVisible(false)
+  }
+
+  const handleCancel = (bookingId: number) => {
+    cancelMutation.mutate(bookingId)
   }
 
   return (
@@ -120,10 +140,12 @@ export default function BookingSlotCell({
       </div>
       <ModalConfirm
         visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
+        onClose={() => setIsModalVisible(false)}
+        onCancel={handleCancel}
         selectedSlot={{ day: date, timeRange: time }}
         onConfirm={handleConfirm}
         quotaUser={quotaUser}
+        bookingId={bookingId ?? null}
       />
     </>
   )

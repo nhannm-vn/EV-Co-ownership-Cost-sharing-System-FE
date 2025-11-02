@@ -1,26 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // VehicleBookingCalendar.tsx - IMPROVED BADGE & LEGEND DESIGN
-import {
-  CalendarOutlined,
-  CarOutlined,
-  ClockCircleOutlined,
-  LockOutlined,
-  ToolOutlined,
-  UserOutlined
-} from '@ant-design/icons'
+import { ClockCircleOutlined, LockOutlined, ToolOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
-import { Card, message, Modal, Tag } from 'antd'
-import React, { useState } from 'react'
+import { Card, Tag } from 'antd'
+import React from 'react'
 import { useParams } from 'react-router'
 import groupApi from '../../../../apis/group.api'
 
+import BookingSlotCell from './components/BookingSlotCell'
 import DetailStatusBooking from './components/DetailStatusBooking'
 import MaintenanceCard from './components/MaintenanceCard'
 import QuotaCard from './components/QuotaCard'
 import Statsbar from './components/StatsBar'
 import StatusCard from './components/StatusCard'
 import VehicleInforCard from './components/VehicleInforCard'
-import BookingSlotCell from './components/BookingSlotCell'
 
 // ============= INTERFACES (giữ nguyên) =============
 type SlotStatus = 'AVAILABLE' | 'LOCKED' | 'CONFIRMED' | 'CANCELLED' | ''
@@ -32,6 +25,7 @@ interface TimeSlot {
   bookedBy: string | null
   bookable: boolean
   type: SlotType
+  bookingId: number | null
 }
 interface DailySlot {
   date: string | ''
@@ -75,6 +69,7 @@ const BookingCar: React.FC = () => {
           status: slot.status ?? '',
           bookedBy: slot.bookedBy ?? null,
           bookable: slot.bookable ?? false,
+          bookingId: slot.bookingId ?? null,
           type: slot.type ?? ''
         })) ?? []
     })) ?? []
@@ -194,6 +189,7 @@ const BookingCar: React.FC = () => {
                               vehicleId={groupSummary?.vehicleId as number}
                               vehicleStatus={vehicleStatus}
                               quotaUser={quotaUser}
+                              bookingId={daySlot?.bookingId ?? undefined}
                             />
                           )}
                         </td>

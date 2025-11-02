@@ -4,7 +4,8 @@ import { Modal } from 'antd'
 interface ModalConfirmProps {
   visible: boolean
   onConfirm: () => void
-  onCancel: () => void
+  onCancel: (bookingId: number) => void
+  onClose: () => void
   selectedSlot: {
     day: string
     timeRange: string
@@ -14,9 +15,61 @@ interface ModalConfirmProps {
     totalSlots: number
     remainingSlots: number
   }
+  bookingId?: number | null
 }
 
-export default function ModalConfirm({ visible, onConfirm, onCancel, selectedSlot, quotaUser }: ModalConfirmProps) {
+export default function ModalConfirm({
+  visible,
+  onConfirm,
+  onCancel,
+  selectedSlot,
+  quotaUser,
+  bookingId,
+  onClose
+}: ModalConfirmProps) {
+  console.log(bookingId)
+
+  const actionButtons = bookingId
+    ? [
+        // TRƯỜNG HỢP 1: ĐÃ ĐẶT (BOOKED_SELF)
+        // 1. Nút Hủy Đóng Modal
+        <button
+          key='close'
+          onClick={onClose}
+          className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
+        >
+          Đóng
+        </button>,
+        // 2. Nút Hủy Đặt Xe (Call API)
+        <button
+          key='cancelBooking'
+          // Đảm bảo bookingId tồn tại trước khi gọi onCancel
+          onClick={() => onCancel(bookingId as number)}
+          className='bg-red-500 text-white font-bold text-base h-12 px-6 rounded-xl hover:bg-red-600 transition'
+        >
+          Xác nhận HỦY đặt xe
+        </button>
+      ]
+    : [
+        // TRƯỜNG HỢP 2: CHƯA ĐẶT (AVAILABLE)
+        // 1. Nút Hủy Đóng Modal
+        <button
+          key='cancel'
+          onClick={onClose}
+          className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
+        >
+          Hủy
+        </button>,
+        // 2. Nút Xác Nhận Đặt Xe (Call API)
+        <button
+          key='confirm'
+          onClick={onConfirm}
+          className='bg-gradient-to-br from-[#06B6D4] to-[#0EA5E9] text-white font-bold text-base h-12 px-6 rounded-xl hover:opacity-90 transition'
+        >
+          Xác nhận ĐẶT xe
+        </button>
+      ]
+
   return (
     <Modal
       title={
@@ -28,23 +81,8 @@ export default function ModalConfirm({ visible, onConfirm, onCancel, selectedSlo
         </div>
       }
       open={visible}
-      onCancel={onCancel} // Xử lý khi bấm Hủy
-      footer={[
-        <button
-          key='cancel'
-          onClick={onCancel}
-          className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
-        >
-          Hủy
-        </button>,
-        <button
-          key='confirm'
-          onClick={onConfirm}
-          className='bg-gradient-to-br from-[#06B6D4] to-[#0EA5E9] text-white font-bold text-base h-12 px-6 rounded-xl hover:opacity-90 transition'
-        >
-          Xác nhận
-        </button>
-      ]}
+      onCancel={onClose} // Xử lý khi bấm Hủy
+      footer={<>{actionButtons}</>}
       width={750}
     >
       {selectedSlot && (

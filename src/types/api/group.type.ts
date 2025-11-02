@@ -197,6 +197,7 @@ export interface BookingResponse {
       bookedBy?: string | null
       bookable?: boolean
       type?: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER'
+      bookingId?: number | null
     }[]
   }[]
   dashboardSummary: {
