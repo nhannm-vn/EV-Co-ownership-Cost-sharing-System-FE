@@ -108,8 +108,10 @@ const groupApi = {
     return http.put(`api/bookings/${bookingId}/cancel`)
   },
   // my booking
-  getMyBooking: () => {
-    return http.get<MyBooking[]>('api/bookings/user-bookings')
+  getMyBooking: (groupId: string) => {
+    return http.get<MyBooking[]>('api/bookings/user-bookings', {
+      params: { groupId } //  vào params
+    })
   }
 }
 
