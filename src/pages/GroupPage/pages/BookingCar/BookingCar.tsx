@@ -13,6 +13,7 @@ import QuotaCard from './components/QuotaCard'
 import Statsbar from './components/StatsBar'
 import StatusCard from './components/StatusCard'
 import VehicleInforCard from './components/VehicleInforCard'
+import { setGroupIdToLS } from '../../../../utils/auth'
 
 // ============= INTERFACES (giữ nguyên) =============
 type SlotStatus = 'AVAILABLE' | 'LOCKED' | 'CONFIRMED' | 'CANCELLED' | ''
@@ -41,8 +42,9 @@ interface QuotaInfo {
 // ============= INITIAL MOCK DATA (giữ nguyên) =============
 
 // ============= MAIN COMPONENT =============
-const BookingCar: React.FC = () => {
+const BookingCar = () => {
   const { groupId } = useParams<{ groupId: string }>()
+  setGroupIdToLS(groupId as string)
   const bookingQuery = useQuery({
     queryKey: ['vehicle-bookings'],
     queryFn: () => groupApi.getBookingCalendar(groupId as string),
