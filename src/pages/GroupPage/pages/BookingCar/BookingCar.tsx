@@ -24,6 +24,7 @@ interface TimeSlot {
   bookedBy: string | null
   bookable: boolean
   type: SlotType
+  bookingId: number | null
 }
 interface DailySlot {
   date: string | ''
@@ -67,6 +68,7 @@ const BookingCar: React.FC = () => {
           status: slot.status ?? '',
           bookedBy: slot.bookedBy ?? null,
           bookable: slot.bookable ?? false,
+          bookingId: slot.bookingId ?? null,
           type: slot.type ?? ''
         })) ?? []
     })) ?? []
@@ -186,6 +188,7 @@ const BookingCar: React.FC = () => {
                               vehicleId={groupSummary?.vehicleId as number}
                               vehicleStatus={vehicleStatus}
                               quotaUser={quotaUser}
+                              bookingId={daySlot?.bookingId ?? undefined}
                             />
                           )}
                         </td>

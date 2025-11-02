@@ -103,6 +103,9 @@ const groupApi = {
   bookingSlot: (body: { vehicleId: number; startDateTime: string; endDateTime: string }) => {
     return http.post<BookingSlotResponse>(`api/calendar/flexible-booking`, body)
   },
+  // cancel booking slot
+  cancelBookingSlot: (bookingId: number) => {
+    return http.put(`api/bookings/${bookingId}/cancel`)
   // my booking
   getMyBooking: () => {
     return http.get<MyBooking[]>('api/bookings/user-bookings')
