@@ -32,7 +32,7 @@ export default function StatusCard({ vehicleStatus, batteryPercent, odometer }: 
                   }
                 </div>
                 <div>
-                  <div className='text-white/95 text-2xl font-bold uppercase tracking-wide'>Trạng thái của xe </div>
+                  <div className='text-white/95 text-xl font-bold uppercase tracking-wide'>Trạng thái của xe </div>
                   <div className='text-white text-2xl font-black'>
                     {
                       getConditionConfig({

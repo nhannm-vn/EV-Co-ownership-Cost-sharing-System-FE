@@ -196,7 +196,7 @@ export interface BookingResponse {
       status?: 'AVAILABLE' | 'LOCKED' | 'CONFIRMED' | 'CANCELLED'
       bookedBy?: string | null
       bookable?: boolean
-      type?: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER'
+      type?: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED'
       bookingId?: number | null
     }[]
   }[]

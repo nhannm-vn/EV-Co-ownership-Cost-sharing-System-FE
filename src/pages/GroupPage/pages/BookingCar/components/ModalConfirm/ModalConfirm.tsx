@@ -16,6 +16,8 @@ interface ModalConfirmProps {
     remainingSlots: number
   }
   bookingId?: number | null
+  isLoadingConfirm?: boolean
+  isLoadingCancel?: boolean
 }
 
 export default function ModalConfirm({
@@ -25,10 +27,10 @@ export default function ModalConfirm({
   selectedSlot,
   quotaUser,
   bookingId,
+  isLoadingConfirm,
+  isLoadingCancel,
   onClose
 }: ModalConfirmProps) {
-  console.log(bookingId)
-
   const actionButtons = bookingId
     ? [
         // TRƯỜNG HỢP 1: ĐÃ ĐẶT (BOOKED_SELF)
@@ -43,6 +45,7 @@ export default function ModalConfirm({
         // 2. Nút Hủy Đặt Xe (Call API)
         <button
           key='cancelBooking'
+          disabled={isLoadingCancel}
           // Đảm bảo bookingId tồn tại trước khi gọi onCancel
           onClick={() => onCancel(bookingId as number)}
           className='bg-red-500 text-white font-bold text-base h-12 px-6 rounded-xl hover:bg-red-600 transition'
@@ -64,6 +67,7 @@ export default function ModalConfirm({
         <button
           key='confirm'
           onClick={onConfirm}
+          disabled={isLoadingConfirm}
           className='bg-gradient-to-br from-[#06B6D4] to-[#0EA5E9] text-white font-bold text-base h-12 px-6 rounded-xl hover:opacity-90 transition'
         >
           Xác nhận ĐẶT xe
