@@ -1,5 +1,5 @@
 import type { ImageStatus } from '../pages/AdminDashboard/pages/CheckGroup/components/PopupImage/PropupImage'
-import type { GroupImage, GroupStaffList, UserOfStaff } from '../types/api/staff.type'
+import type { GetGroupById, GroupImage, GroupStaffList, UserOfStaff } from '../types/api/staff.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -54,6 +54,11 @@ const staffApi = {
       `/api/staff/vehicle-images/groups/${groupId}/review`,
       body.reason ? body : { status: body.status }
     )
+  },
+
+  //lấy all group by user id
+  getAllGroupsByUserId(userId: number) {
+    return http.get<GetGroupById>(`api/staff/users/${userId}/groups`)
   }
 }
 

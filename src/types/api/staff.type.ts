@@ -70,3 +70,16 @@ export interface ReviewResponse {
   rejectedImages?: number
   totalImages: number
 }
+
+export interface Booking {
+  bookingId: number
+  qrCode: string // JSON string, chứa thông tin booking
+  startDateTime: string // ISO DateTime string
+  endDateTime: string // ISO DateTime string
+}
+
+export interface GetGroupById {
+  groupId: number
+  groupName: string
+  bookings: Booking[]
+}
