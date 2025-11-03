@@ -10,8 +10,8 @@ export default function DetailStatusBooking() {
           <div className='grid grid-cols-5 gap-6'>
             {[
               {
-                icon: <PlusOutlined style={{ fontSize: '18px' }} />,
-                bg: 'bg-gradient-to-br from-white to-cyan-50/30',
+                icon: <PlusOutlined style={{ fontSize: '18px', color: 'white' }} />,
+                bg: 'bg-gradient-to-br from-cyan-500 to-blue-500 p-2 rounded-xl shadow-lg',
                 border: 'border-[#22D3EE]',
                 label: 'Có thể đặt',
                 description: 'Click để đặt xe'
@@ -42,7 +42,7 @@ export default function DetailStatusBooking() {
                 bg: 'bg-gradient-to-br from-gray-100 to-gray-200',
                 border: '',
                 label: 'Khóa',
-                description: 'Đã bị khóa'
+                description: 'thời gian trong quá khứ '
               }
             ].map((item, idx) => (
               <div

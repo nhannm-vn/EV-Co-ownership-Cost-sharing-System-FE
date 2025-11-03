@@ -1,5 +1,5 @@
 // VehicleBookingCalendar.tsx - IMPROVED BADGE & LEGEND DESIGN
-import { ClockCircleOutlined, LockOutlined, ToolOutlined } from '@ant-design/icons'
+import { ClockCircleOutlined, ToolOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import { Card, Tag } from 'antd'
 import React from 'react'
@@ -16,7 +16,7 @@ import VehicleInforCard from './components/VehicleInforCard'
 
 // ============= INTERFACES (giữ nguyên) =============
 type SlotStatus = 'AVAILABLE' | 'LOCKED' | 'CONFIRMED' | 'CANCELLED' | ''
-type SlotType = 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | ''
+type SlotType = 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | ''
 
 interface TimeSlot {
   time: string
@@ -153,12 +153,12 @@ const BookingCar: React.FC = () => {
                   >
                     <td className='border-t border-gray-200 p-6 sticky left-0 z-10 bg-white'>
                       <div className='flex items-center gap-3'>
-                        <div className='text-[#06B6D4] font-black text-base'>{slot.time}</div>
+                        <div className='text-[#06B6D4] font-black text-base '>{slot.time}</div>
                         {slot.type === 'MAINTENANCE' && (
                           <Tag
                             icon={<ToolOutlined />}
                             color='cyan'
-                            className='rounded-full px-4 py-1 font-bold text-xs border-0 shadow-md'
+                            className='rounded-full px-4 py-1 font-bold text-xs border-2 border-cyan-500 text-cyan-600 shadow-md bg-white flex items-center gap-1'
                             style={{
                               background: 'linear-gradient(135deg, #06B6D4, #0EA5E9)',
                               color: 'white'
@@ -175,9 +175,9 @@ const BookingCar: React.FC = () => {
                       return (
                         <td key={`${day.date}-${timeIndex}`} className='border-t border-gray-200 p-5'>
                           {daySlot?.type === 'MAINTENANCE' ? (
-                            <div className='text-gray-400 text-sm py-6 text-center font-semibold flex flex-col items-center gap-2'>
-                              <LockOutlined style={{ fontSize: '20px' }} />
-                              <span>Không khả dụng</span>
+                            <div className='w-28 h-28 flex flex-col justify-center items-center border border-[#22D3EE] rounded-lg text-gray-400 text-sm font-semibold gap-2'>
+                              <ToolOutlined className='text-slate-800 text-2xl bg-gradient-to-br from-gray-50 to-slate-50 p-2 rounded-xl' />
+                              <span>Bảo dưỡng</span>
                             </div>
                           ) : (
                             <BookingSlotCell

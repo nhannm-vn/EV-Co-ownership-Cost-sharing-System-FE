@@ -1,4 +1,4 @@
-import { PlusOutlined, UserOutlined } from '@ant-design/icons'
+import { LockOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Tooltip } from 'antd'
 import { useState } from 'react'
@@ -13,7 +13,7 @@ export interface Slot {
   date: string
   time: string
   bookedBy: string | null
-  type: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | ''
+  type: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | ''
   vehicleId: number
 
   vehicleStatus: 'Good' | 'Under Maintenance' | 'Has Issues' | ''
@@ -56,7 +56,7 @@ export default function BookingSlotCell({
     onSuccess: (response) => {
       console.log(response)
       mutateQuery.invalidateQueries({ queryKey: ['vehicle-bookings'] })
-      toast.success(response?.data?.message)
+      toast.success('Hủy đặt xe thành công!')
       setIsModalVisible(false)
     },
     onError: (response) => {
@@ -135,10 +135,20 @@ export default function BookingSlotCell({
                 <div className='text-xs opacity-90'>Người khác đặt</div>
               </div>
             )}
+            {type === 'LOCKED' && (
+              <div className='text-center'>
+                <div className='bg-white/20 backdrop-blur-sm p-2 rounded-xl mb-2 inline-block'>
+                  <LockOutlined style={{ fontSize: '20px' }} />
+                </div>
+                <div className='text-xs font-bold'>Đã khóa</div>
+              </div>
+            )}
           </div>
         </Tooltip>
       </div>
       <ModalConfirm
+        isLoadingConfirm={confirmMutation.isPending}
+        isLoadingCancel={cancelMutation.isPending}
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         onCancel={handleCancel}
