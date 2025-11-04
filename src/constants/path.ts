@@ -30,6 +30,8 @@ const path = {
   checkIn: 'check-in', // Relative path
   checkInResult: 'check-in-result/:status/:startTime/:endTime/:brand/:licensePlate',
   checkInResultFail: 'check-in-result/:status',
+  checkOutResultFail: 'check-out-result/:status',
+  checkOutResult: 'check-out-result/:status/:bookingId',
 
   //OTP
   OTP: '/demoOTP',

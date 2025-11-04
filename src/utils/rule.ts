@@ -114,6 +114,12 @@ export const createGroupSchema = yup.object({
         return Number(value) > 0
       }
       return false
+    })
+    .test('is-under-1-billion', 'Giá tiền phải nhỏ hơn hoặc bằng 1 tỷ', (value) => {
+      if (value) {
+        return Number(value) <= 1000000000
+      }
+      return true
     }),
 
   licensePlate: yup
@@ -173,6 +179,35 @@ export const forgotPasswordSchema = yup.object({
 export const inviteSchema = yup.object({
   inviteeEmail: yup.string().email('Email không hợp lệ').required('Vui lòng nhập email')
 })
+
+export const checkoutSchema = yup.object({
+  odometer: yup
+    .string()
+    .required('Bắt buộc nhập số km')
+    .matches(/^[0-9]+$/, 'Chỉ được nhập số')
+    .test('is-positive', 'Số km phải lớn hơn 0', (value) => {
+      return value ? Number(value) > 0 : false
+    })
+    .test('max-value', 'Số km không hợp lệ', (value) => {
+      return value ? Number(value) <= 999999 : false
+    }),
+
+  batteryLevel: yup
+    .string()
+    .required('Bắt buộc nhập mức pin')
+    .matches(/^[0-9]+$/, 'Chỉ được nhập số')
+    .test('min-value', 'Pin tối thiểu 0%', (value) => {
+      return value ? Number(value) >= 0 : false
+    })
+    .test('max-value', 'Pin tối đa 100%', (value) => {
+      return value ? Number(value) <= 100 : false
+    }),
+
+  notes: yup.string().required('Nhập ghi chú (nếu không có nhập không có)'),
+  issues: yup.string().required('Nhập vấn đề (nếu không có nhập không có)')
+})
+
+export type CheckoutType = yup.InferType<typeof checkoutSchema>
 
 export type ForgotPasswordType = yup.InferType<typeof forgotPasswordSchema>
 

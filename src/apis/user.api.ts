@@ -1,5 +1,6 @@
 // file chứa những method call api cho user/co-owner
 
+import type { CheckoutForm } from '../pages/GroupPage/pages/CheckOut/CheckOut'
 import type { GetAllNotifications, UploadImage, UserGetProfile } from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
@@ -64,6 +65,11 @@ const userApi = {
   //change isRead in notification
   readNotification(notificationId: string) {
     return http.put(`api/notifications/${notificationId}/read`)
+  },
+
+  // send report checkout
+  sendCheckoutReport(body: CheckoutForm) {
+    return http.post('api/vehicle-checks/checkout/submit', body)
   }
 }
 
