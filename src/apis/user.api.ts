@@ -70,6 +70,10 @@ const userApi = {
   // send report checkout
   sendCheckoutReport(body: CheckoutForm) {
     return http.post('api/vehicle-checks/checkout/submit', body)
+  },
+  // show page notification checkout
+  showpageNotificationCheckout(bookingId: string) {
+    return http.get(`api/vehicle-checks/booking/${bookingId}/post-use`)
   }
 }
 

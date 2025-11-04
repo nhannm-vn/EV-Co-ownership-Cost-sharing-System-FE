@@ -22,11 +22,10 @@ export interface CheckoutForm {
   odometer: string
   batteryLevel: string
   notes: string
-  issues: string
 }
 
 export default function CoOwnerCheckoutForm() {
-  const { status, bookingId } = useParams()
+  const { status, bookingId, groupId } = useParams()
   console.log(typeof bookingId)
 
   const navigate = useNavigate()
@@ -53,6 +52,7 @@ export default function CoOwnerCheckoutForm() {
     onSuccess: (response) => {
       console.log('Checkout report sent successfully:', response)
       toast.success('Checkout report sent successfully!')
+      navigate(`/dashboard/viewGroups/${groupId}/pending-checkout/${bookingId}`)
     }
   })
 
@@ -195,26 +195,6 @@ export default function CoOwnerCheckoutForm() {
                 <p className='text-red-500 text-sm mt-1 flex items-center gap-1'>
                   <WarningOutlined className='text-xs' />
                   {errors.notes.message}
-                </p>
-              )}
-            </div>
-
-            {/* Vấn đề - Textarea lớn */}
-            <div>
-              <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
-                <WarningOutlined className='text-orange-600' />
-                Vấn đề (nếu có)
-              </label>
-              <textarea
-                {...register('issues')}
-                placeholder='Mô tả chi tiết các vấn đề gặp phải (hỏng hóc, trầy xước, thiếu phụ kiện...)'
-                rows={5}
-                className='w-full border-2 border-gray-200 rounded-xl p-4 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none resize-none'
-              />
-              {errors.issues && (
-                <p className='text-red-500 text-sm mt-1 flex items-center gap-1'>
-                  <WarningOutlined className='text-xs' />
-                  {errors.issues.message}
                 </p>
               )}
             </div>
