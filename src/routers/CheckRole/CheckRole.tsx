@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 import path from '../../constants/path'
 import { getRoleFromLS } from '../../utils/auth'
 
-type UserRole = 'STAFF' | 'CO_OWNER' | 'ADMIN'
+type UserRole = 'STAFF' | 'CO_OWNER' | 'ADMIN' | 'TECHNICIAN'
 
 interface RoleCheckProps {
   allowedRoles: UserRole[]
@@ -11,6 +11,7 @@ interface RoleCheckProps {
 
 export default function RoleCheck({ allowedRoles }: RoleCheckProps) {
   const role = getRoleFromLS()
+  console.log(role)
 
   if (!role) {
     return <Navigate to={path.login} replace />
@@ -20,7 +21,14 @@ export default function RoleCheck({ allowedRoles }: RoleCheckProps) {
     return <Outlet />
   }
 
-  const defaultPath = role === 'ADMIN' || role === 'STAFF' ? path.adminDashboard : path.dashBoard
+  let defaultPath = ''
+  if (role === 'ADMIN' || role === 'STAFF') {
+    defaultPath = path.adminDashboard
+  } else if (role === 'TECHNICIAN') {
+    defaultPath = '/manager/checkVehicleReport'
+  } else {
+    defaultPath = path.dashBoard
+  }
 
   return <Navigate to={defaultPath} replace />
 }
