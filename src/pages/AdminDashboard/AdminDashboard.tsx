@@ -73,7 +73,9 @@ export default function AdminDashboard() {
                     return `flex items-center rounded-lg ${activeClass} p-2 text-base font-normal text-gray-900 hover:bg-gray-300`
                   }}
                 >
-                  {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>CheckVehicleReport</span>}
+                  {({ isActive }) => (
+                    <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>Check Vehicle Report</span>
+                  )}
                 </NavLink>
               </li>
             )}
