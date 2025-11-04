@@ -116,7 +116,7 @@ const groupApi = {
   },
   // verify QR code
   verifyCheckIn: (qrCode: string) => {
-    return http.post<CheckInResponse>('api/vehicle-checks/qr-checkin', { qrCode })
+    return http.post<CheckInResponse>('api/vehicle-checks/qr-scan', { qrCode })
   }
 }
 
