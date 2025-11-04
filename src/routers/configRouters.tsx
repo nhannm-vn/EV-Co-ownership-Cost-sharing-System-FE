@@ -40,6 +40,7 @@ import CheckIn from '../pages/GroupPage/pages/CheckIn'
 import CheckBooking from '../pages/AdminDashboard/pages/CheckBooking'
 import BookingQr from '../pages/AdminDashboard/pages/BookingQr'
 import CheckInResult from '../pages/GroupPage/pages/CheckInResult'
+import CheckVehicleReport from '../pages/AdminDashboard/pages/CheckVehicleReport'
 import CheckOut from '../pages/GroupPage/pages/CheckOut'
 
 function Routers() {
@@ -118,7 +119,23 @@ function Routers() {
           ]
         },
 
-        // --- STAFF & ADMIN (Shared Routes) ---
+        {
+          element: <RoleCheck allowedRoles={['TECHNICIAN']} />,
+          children: [
+            {
+              path: path.adminDashboard,
+              element: <ManagerLayout />,
+              children: [
+                {
+                  element: <AdminDashboard />,
+                  children: [{ path: 'checkVehicleReport', element: <CheckVehicleReport /> }]
+                }
+              ]
+            }
+          ]
+        },
+
+        // --- STAFF & ADMIN & TECHNICIAN (Shared Routes) ---
         {
           element: <RoleCheck allowedRoles={['STAFF', 'ADMIN']} />,
           children: [
