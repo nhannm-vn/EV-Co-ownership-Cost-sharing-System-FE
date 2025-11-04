@@ -248,4 +248,6 @@ export interface CheckInResponse {
     licensePlate?: string
     brand?: string
   }
+  bookingId: number
+  responseType: 'CHECKOUT' | 'CHECKIN'
 }

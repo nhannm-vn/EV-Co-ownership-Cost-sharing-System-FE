@@ -41,6 +41,7 @@ import CheckBooking from '../pages/AdminDashboard/pages/CheckBooking'
 import BookingQr from '../pages/AdminDashboard/pages/BookingQr'
 import CheckInResult from '../pages/GroupPage/pages/CheckInResult'
 import CheckVehicleReport from '../pages/AdminDashboard/pages/CheckVehicleReport'
+import CheckOut from '../pages/GroupPage/pages/CheckOut'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -103,7 +104,9 @@ function Routers() {
                     { path: path.mybooking, element: <MyBooking /> },
                     { path: path.checkIn, element: <CheckIn /> },
                     { path: path.checkInResult, element: <CheckInResult /> },
-                    { path: path.checkInResultFail, element: <CheckInResult /> }
+                    { path: path.checkInResultFail, element: <CheckInResult /> },
+                    { path: path.checkOutResultFail, element: <CheckOut /> },
+                    { path: path.checkOutResult, element: <CheckOut /> }
                   ]
                 },
                 { path: path.createGroups, element: <CreateGroups /> },

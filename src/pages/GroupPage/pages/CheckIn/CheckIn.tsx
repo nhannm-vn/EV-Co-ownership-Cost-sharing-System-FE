@@ -28,17 +28,30 @@ export default function CheckIn() {
       return groupApi.verifyCheckIn(qrCode)
     },
     onSuccess: (response) => {
-      const startTime = response?.data?.bookingInfo?.startTime
-      const endTime = response?.data?.bookingInfo?.endTime
-      const brand = response?.data?.vehicleInfo?.brand || ''
-      const licensePlate = response?.data?.vehicleInfo?.licensePlate || ''
-      toast.success('Quét mã QR thành công')
-      if (response?.data?.status === 'success') {
-        navigate(
-          `/dashboard/viewGroups/${groupId}/check-in-result/${response?.data?.status}/${startTime}/${endTime}/${brand}/${licensePlate}`
-        )
+      if (response?.data?.responseType === 'CHECKIN') {
+        const startTime = response?.data?.bookingInfo?.startTime
+        const endTime = response?.data?.bookingInfo?.endTime
+        const brand = response?.data?.vehicleInfo?.brand || ''
+        const licensePlate = response?.data?.vehicleInfo?.licensePlate || ''
+        toast.success('Quét mã QR thành công')
+        console.log(response?.data?.bookingId)
+
+        if (response?.data?.status === 'success') {
+          navigate(
+            `/dashboard/viewGroups/${groupId}/check-in-result/${response?.data?.status}/${startTime}/${endTime}/${brand}/${licensePlate}`
+          )
+        } else {
+          navigate(`/dashboard/viewGroups/${groupId}/check-in-result/${response?.data?.status}`)
+        }
+        //  nếu là checkout xuống chuyển đến trang check out
       } else {
-        navigate(`/dashboard/viewGroups/${groupId}/check-in-result/${response?.data?.status}`)
+        if (response?.data?.status === 'success') {
+          navigate(
+            `/dashboard/viewGroups/${groupId}/check-out-result/${response?.data?.status}/${response?.data?.bookingId}`
+          )
+        } else {
+          navigate(`/dashboard/viewGroups/${groupId}/check-out-result/${response?.data?.status}`)
+        }
       }
     }
   })
