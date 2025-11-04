@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import staffApi from '../../../../apis/staff.api'
-import ImageCard from './components/ImageCard'
 import Skeleton from '../../../../components/Skeleton'
+import ImageCard from './components/ImageCard'
+import EmptyState from '../EmptyState'
 
 export type Status = 'PENDING' | 'APPROVED' | 'REJECTED'
 type DocType = 'cccd' | 'gplx'
@@ -131,6 +132,10 @@ export default function CheckLicense() {
         />
       </div>
     )
+  }
+
+  if (members.length === 0) {
+    return <EmptyState />
   }
 
   return loading ? (
