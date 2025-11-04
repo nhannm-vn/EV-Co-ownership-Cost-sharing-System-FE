@@ -28,6 +28,8 @@ const path = {
   mybooking: 'mybooking', // Relative path
   depositHistory: 'payment-result', // Relative path
   checkIn: 'check-in', // Relative path
+  checkInResult: 'check-in-result/:status/:startTime/:endTime/:brand/:licensePlate',
+  checkInResultFail: 'check-in-result/:status',
 
   //OTP
   OTP: '/demoOTP',

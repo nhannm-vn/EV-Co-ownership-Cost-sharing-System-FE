@@ -1,6 +1,7 @@
 import type {
   BookingResponse,
   BookingSlotResponse,
+  CheckInResponse,
   ContractResponse,
   ContractStatus,
   CreateDepositSuccess,
@@ -112,6 +113,10 @@ const groupApi = {
     return http.get<MyBookingResponse[]>('api/bookings/user-bookings', {
       params: { groupId } //  vào params
     })
+  },
+  // verify QR code
+  verifyCheckIn: (qrCode: string) => {
+    return http.post<CheckInResponse>('api/vehicle-checks/qr-checkin', { qrCode })
   }
 }
 

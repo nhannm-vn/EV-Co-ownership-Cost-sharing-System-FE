@@ -41,7 +41,7 @@ export default function BookingSlotCell({
   const confirmMutation = useMutation({
     mutationFn: (body: { vehicleId: number; startDateTime: string; endDateTime: string }) => groupApi.bookingSlot(body),
     onSuccess: (response) => {
-      console.log(response)
+      console.log(response?.data)
       mutateQuery.invalidateQueries({ queryKey: ['vehicle-bookings'] })
       toast.success(response?.data?.message)
       setIsModalVisible(false)
