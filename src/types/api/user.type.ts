@@ -168,3 +168,6 @@ export interface PaymentHistory {
   status: 'COMPLETED'
   transactionCode: '67941305'
 }
+export interface CheckoutFormResponse {
+  status: string
+}

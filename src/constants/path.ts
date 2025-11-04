@@ -32,6 +32,7 @@ const path = {
   checkInResultFail: 'check-in-result/:status',
   checkOutResultFail: 'check-out-result/:status',
   checkOutResult: 'check-out-result/:status/:bookingId',
+  pendingCheckout: 'pending-checkout/:bookingId',
 
   //OTP
   OTP: '/demoOTP',

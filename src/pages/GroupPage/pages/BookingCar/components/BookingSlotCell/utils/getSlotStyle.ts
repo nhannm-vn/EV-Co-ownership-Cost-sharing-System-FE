@@ -8,6 +8,8 @@ const getSlotStyle = (type: string) => {
       return 'bg-gradient-to-br from-slate-400 to-slate-500 text-white opacity-75 shadow-md'
     case 'MAINTENANCE':
       return 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+    case 'AWAITING_REVIEW':
+      return 'bg-gradient-to-br from-green-400 to-emerald-500 text-white border-2 border-green-300 shadow-lg ring-2 ring-green-200/50'
     default:
       return 'bg-white'
   }

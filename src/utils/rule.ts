@@ -203,8 +203,7 @@ export const checkoutSchema = yup.object({
       return value ? Number(value) <= 100 : false
     }),
 
-  notes: yup.string().required('Nhập ghi chú (nếu không có nhập không có)'),
-  issues: yup.string().required('Nhập vấn đề (nếu không có nhập không có)')
+  notes: yup.string().required('Nhập ghi chú (nếu không có nhập không có)')
 })
 
 export type CheckoutType = yup.InferType<typeof checkoutSchema>
