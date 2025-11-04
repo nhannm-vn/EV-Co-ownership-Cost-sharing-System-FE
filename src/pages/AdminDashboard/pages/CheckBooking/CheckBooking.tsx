@@ -6,6 +6,7 @@ import staffApi from '../../../../apis/staff.api'
 import Skeleton from '../../../../components/Skeleton'
 import type { GetGroupById, UserOfStaff } from '../../../../types/api/staff.type'
 import { useNavigate } from 'react-router'
+import EmptyState from '../EmptyState'
 
 const ITEMS_PER_PAGE = 10
 
@@ -73,7 +74,7 @@ export default function CheckBooking() {
 
   // Render
   if (isLoading) return <Skeleton />
-  if (!data.length) return <div className='p-8 text-gray-500'>No data</div>
+  if (!data.length) return <EmptyState />
 
   return (
     <div className='p-5 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen'>

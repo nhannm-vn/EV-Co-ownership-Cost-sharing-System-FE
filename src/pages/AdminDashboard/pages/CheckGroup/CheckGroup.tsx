@@ -6,6 +6,7 @@ import PaginationButton from './components/PaginationButton'
 import PropupImage from './components/PopupImage'
 import StatusBadge from './components/StatusBadge'
 import Skeleton from '../../../../components/Skeleton'
+import EmptyState from '../EmptyState'
 
 export default function CheckGroup() {
   const [currentPage, setCurrentPage] = useState(0)
@@ -34,6 +35,10 @@ export default function CheckGroup() {
   // hầm chuyển trang
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage) // Cập nhật state (0, 1, 2...)
+  }
+
+  if (groupData.length === 0) {
+    return <EmptyState />
   }
 
   return isPending ? (

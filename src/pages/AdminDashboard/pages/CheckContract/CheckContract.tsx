@@ -5,6 +5,7 @@ import Skeleton from '../../../../components/Skeleton'
 import type { ContractResponse } from '../../../../types/api/admin.type'
 import { formatToVND } from '../../../../utils/formatPrice'
 import { formatVnTime } from '../../../../utils/helper'
+import EmptyState from '../EmptyState'
 
 function CheckContract() {
   const queryClient = useQueryClient()
@@ -55,6 +56,10 @@ function CheckContract() {
     if (window.confirm('Xác nhận từ chối hợp đồng này?')) {
       rejectMutation.mutate(id)
     }
+  }
+
+  if (contracts.length === 0) {
+    return <EmptyState />
   }
 
   return isLoading ? (
