@@ -83,3 +83,54 @@ export interface GetGroupById {
   groupName: string
   bookings: Booking[]
 }
+
+export interface BookingResponse {
+  content: BookingItem[]
+  pageable: Pageable
+  last: boolean
+  totalElements: number
+  totalPages: number
+  first: boolean
+  size: number
+  number: number
+  sort: SortInfo
+  numberOfElements: number
+  empty: boolean
+}
+
+export interface BookingItem {
+  bookingId: number
+  licensePlate: string
+  brand: string
+  model: string
+  startDateTime: string
+  endDateTime: string
+  status: 'CONFIRMED' | 'CANCELLED' | string
+  qrCodeCheckin: QrCodeData | null
+  qrCodeCheckout: QrCodeData | null
+  createdAt: string
+}
+
+export interface QrCodeData {
+  bookingId: number
+  userId: number
+  vehicleId: number
+  phase: 'CHECKIN' | 'CHECKOUT' | string
+  startTime: string
+  endTime: string
+}
+
+export interface Pageable {
+  pageNumber: number
+  pageSize: number
+  sort: SortInfo
+  offset: number
+  paged: boolean
+  unpaged: boolean
+}
+
+export interface SortInfo {
+  sorted: boolean
+  empty: boolean
+  unsorted: boolean
+}

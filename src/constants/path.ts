@@ -35,7 +35,8 @@ const path = {
   // admin and staff dashboard
   adminDashboard: '/manager',
   checkLicense: 'checkLicense',
-  checkBooking: 'checkBooking'
+  checkBooking: 'checkBooking',
+  bookingQr: 'bookingQr/:userId/:groupId'
 } as const
 
 export default path
