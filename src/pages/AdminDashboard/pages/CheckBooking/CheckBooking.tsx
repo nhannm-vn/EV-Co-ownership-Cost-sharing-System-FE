@@ -5,6 +5,7 @@ import { useState } from 'react'
 import staffApi from '../../../../apis/staff.api'
 import Skeleton from '../../../../components/Skeleton'
 import type { GetGroupById, UserOfStaff } from '../../../../types/api/staff.type'
+import { useNavigate } from 'react-router'
 
 const ITEMS_PER_PAGE = 10
 
@@ -13,12 +14,10 @@ export default function CheckBooking() {
   const [expanded, setExpanded] = useState<number | null>(null)
   const [groups, setGroups] = useState<Record<number, GetGroupById[]>>({})
 
+  const navigate = useNavigate()
+
   // Fetch users
-  const {
-    data = [],
-    isLoading,
-    error
-  } = useQuery({
+  const { data = [], isLoading } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       const res = await staffApi.getUsers()
@@ -32,6 +31,7 @@ export default function CheckBooking() {
   const total = Math.ceil(data.length / ITEMS_PER_PAGE)
 
   // Fetch groups
+  // function call api
   const handleExpand = async (userId: number | undefined) => {
     if (!userId) return
 
@@ -67,14 +67,17 @@ export default function CheckBooking() {
       .slice(0, 2)
   }
 
+  const moveToBookingQrPage = ({ userId, groupId }: { userId: number; groupId: number }) => {
+    navigate(`/manager/bookingQr/${userId}/${groupId}`)
+  }
+
   // Render
   if (isLoading) return <Skeleton />
-  if (error) return <div className='p-8 text-red-500'>Error</div>
   if (!data.length) return <div className='p-8 text-gray-500'>No data</div>
 
   return (
-    <div className='p-5 bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen'>
-      <div className='max-w-4xl mx-auto'>
+    <div className='p-5 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen'>
+      <div className='max-w-5xl mx-auto'>
         {/* Header */}
         <h1 className='text-3xl font-bold mb-1'>Co-Owners</h1>
         <p className='text-gray-600 text-sm mb-6'>
@@ -136,6 +139,12 @@ export default function CheckBooking() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.05 }}
                           className='bg-white border border-blue-200 rounded p-3 hover:bg-blue-50'
+                          onClick={() =>
+                            moveToBookingQrPage({
+                              userId: user.userId as number,
+                              groupId: group.groupId
+                            })
+                          }
                         >
                           <p className='text-sm font-medium text-blue-900'>{group.groupName}</p>
                         </motion.div>

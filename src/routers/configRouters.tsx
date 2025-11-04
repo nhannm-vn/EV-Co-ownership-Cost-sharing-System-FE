@@ -38,6 +38,7 @@ import PaymentStatus from '../pages/GroupPage/pages/PaymentStatus'
 import MyBooking from '../pages/GroupPage/pages/MyBooking'
 import CheckIn from '../pages/GroupPage/pages/CheckIn'
 import CheckBooking from '../pages/AdminDashboard/pages/CheckBooking'
+import BookingQr from '../pages/AdminDashboard/pages/BookingQr'
 import CheckInResult from '../pages/GroupPage/pages/CheckInResult'
 
 function Routers() {
@@ -127,7 +128,8 @@ function Routers() {
                   children: [
                     { index: true, element: <CheckGroup /> },
                     { path: path.checkLicense, element: <CheckLicense /> },
-                    { path: path.checkBooking, element: <CheckBooking /> }
+                    { path: path.checkBooking, element: <CheckBooking /> },
+                    { path: path.bookingQr, element: <BookingQr /> }
                   ]
                 }
               ]
