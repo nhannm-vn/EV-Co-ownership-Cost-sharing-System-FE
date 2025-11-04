@@ -1,5 +1,5 @@
 // components/technician/CheckVehicleReport.tsx
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import Skeleton from '../../../../components/Skeleton'
 import technicianApi from '../../../../apis/technician.api'
@@ -25,6 +25,8 @@ const METRIC_STYLES = {
 
 export function CheckVehicleReport() {
   const [currentPage, setCurrentPage] = useState(0)
+  const queryClient = useQueryClient()
+
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['vehicleChecks', currentPage],
     queryFn: () => technicianApi.getAllVehicleCheck(),
@@ -44,7 +46,14 @@ export function CheckVehicleReport() {
 
         <div className='space-y-3'>
           {reportData?.content?.length ? (
-            reportData.content.map((report, idx) => <ReportCard key={report.id} report={report} index={idx} />)
+            reportData.content.map((report, idx) => (
+              <ReportCard
+                key={report.id}
+                report={report}
+                index={idx}
+                onStatusChange={() => queryClient.invalidateQueries({ queryKey: ['vehicleChecks'] })}
+              />
+            ))
           ) : (
             <EmptyState />
           )}
@@ -135,7 +144,15 @@ const Pagination = ({
   </div>
 )
 
-function ReportCard({ report, index }: { report: BookingReviewItem; index: number }) {
+function ReportCard({
+  report,
+  index,
+  onStatusChange
+}: {
+  report: BookingReviewItem
+  index: number
+  onStatusChange: () => void
+}) {
   const isPending = report.status === 'PENDING'
 
   const formatDate = (date: string) =>
@@ -145,6 +162,16 @@ function ReportCard({ report, index }: { report: BookingReviewItem; index: numbe
       hour: '2-digit',
       minute: '2-digit'
     })
+
+  const { mutate: checkReport, isPending: isSubmitting } = useMutation({
+    mutationFn: (status: 'APPROVED' | 'REJECTED') => technicianApi.checkReport(String(report.id), status),
+    onSuccess: () => {
+      onStatusChange()
+    },
+    onError: (error) => {
+      console.error('Lỗi khi cập nhật trạng thái:', error)
+    }
+  })
 
   return (
     <div
@@ -210,8 +237,20 @@ function ReportCard({ report, index }: { report: BookingReviewItem; index: numbe
       {/* Action Buttons */}
       {isPending && (
         <div className='flex gap-2 pt-4 border-t border-gray-100'>
-          <ActionButton variant='reject' label='Từ chối' />
-          <ActionButton variant='approve' label='Phê duyệt' />
+          <button
+            onClick={() => checkReport('REJECTED')}
+            disabled={isSubmitting}
+            className='flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all bg-gradient-to-r from-red-50 to-red-100 text-red-700 border-2 border-red-300 hover:from-red-100 hover:to-red-200 hover:shadow-lg hover:shadow-red-500/10 disabled:opacity-50'
+          >
+            {isSubmitting ? 'Đang xử lý...' : 'Từ chối'}
+          </button>
+          <button
+            onClick={() => checkReport('APPROVED')}
+            disabled={isSubmitting}
+            className='flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:from-teal-700 hover:to-teal-800 hover:shadow-lg hover:shadow-teal-600/20 disabled:opacity-50'
+          >
+            {isSubmitting ? 'Đang xử lý...' : 'Phê duyệt'}
+          </button>
         </div>
       )}
     </div>
@@ -224,19 +263,5 @@ const MetricCard = ({ label, value, style }: { label: string; value: string | nu
     <p className='text-2xl font-black'>{value}</p>
   </div>
 )
-
-const ActionButton = ({ variant, label }: { variant: 'approve' | 'reject'; label: string }) => {
-  const styles = {
-    approve:
-      'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:from-teal-700 hover:to-teal-800 hover:shadow-lg hover:shadow-teal-600/20',
-    reject:
-      'bg-gradient-to-r from-red-50 to-red-100 text-red-700 border-2 border-red-300 hover:from-red-100 hover:to-red-200 hover:shadow-lg hover:shadow-red-500/10'
-  }
-  return (
-    <button className={`flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${styles[variant]}`}>
-      {label}
-    </button>
-  )
-}
 
 export default CheckVehicleReport
