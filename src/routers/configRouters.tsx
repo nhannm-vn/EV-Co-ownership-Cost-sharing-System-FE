@@ -38,6 +38,7 @@ import PaymentStatus from '../pages/GroupPage/pages/PaymentStatus'
 import MyBooking from '../pages/GroupPage/pages/MyBooking'
 import CheckIn from '../pages/GroupPage/pages/CheckIn'
 import CheckBooking from '../pages/AdminDashboard/pages/CheckBooking'
+import CheckInResult from '../pages/GroupPage/pages/CheckInResult'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -98,7 +99,9 @@ function Routers() {
                     { path: path.depositHistory, element: <PaymentStatus /> },
                     { path: path.booking, element: <BookingCar /> },
                     { path: path.mybooking, element: <MyBooking /> },
-                    { path: path.checkIn, element: <CheckIn /> }
+                    { path: path.checkIn, element: <CheckIn /> },
+                    { path: path.checkInResult, element: <CheckInResult /> },
+                    { path: path.checkInResultFail, element: <CheckInResult /> }
                   ]
                 },
                 { path: path.createGroups, element: <CreateGroups /> },

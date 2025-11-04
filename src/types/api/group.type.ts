@@ -237,3 +237,15 @@ export interface MyBookingResponse {
   endDateTime: string // ISO datetime string
   status: 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | string
 }
+
+export interface CheckInResponse {
+  status: 'fail' | 'success'
+  bookingInfo?: {
+    startTime?: string
+    endTime?: string
+  }
+  vehicleInfo?: {
+    licensePlate?: string
+    brand?: string
+  }
+}
