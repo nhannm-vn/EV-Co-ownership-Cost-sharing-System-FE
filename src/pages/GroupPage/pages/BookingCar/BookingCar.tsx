@@ -16,7 +16,7 @@ import { setGroupIdToLS } from '../../../../utils/auth'
 
 // ============= INTERFACES (giữ nguyên) =============
 type SlotStatus = 'AVAILABLE' | 'LOCKED' | 'CONFIRMED' | 'CANCELLED' | ''
-type SlotType = 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | ''
+type SlotType = 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | 'AWAITING_REVIEW' | ''
 
 interface TimeSlot {
   time: string
@@ -176,9 +176,13 @@ const BookingCar = () => {
                       return (
                         <td key={`${day.date}-${timeIndex}`} className='border-t border-gray-200 p-5'>
                           {daySlot?.type === 'MAINTENANCE' ? (
-                            <div className='w-28 h-28 flex flex-col justify-center items-center border border-[#22D3EE] rounded-lg text-gray-400 text-sm font-semibold gap-2'>
-                              <ToolOutlined className='text-slate-800 text-2xl bg-gradient-to-br from-gray-50 to-slate-50 p-2 rounded-xl' />
-                              <span>Bảo dưỡng</span>
+                            <div className='flex items-center justify-center min-h-[80px] py-6 px-4 rounded-2xl bg-gradient-to-br from-gray-100 to-slate-100 border border-gray-300'>
+                              <div className='flex flex-col items-center gap-2'>
+                                <div className='bg-white/60 backdrop-blur-sm p-2 rounded-xl'>
+                                  <ToolOutlined style={{ fontSize: '20px' }} className='text-slate-700' />
+                                </div>
+                                <span className='text-xs font-bold text-slate-700'>Bảo dưỡng</span>
+                              </div>
                             </div>
                           ) : (
                             <BookingSlotCell

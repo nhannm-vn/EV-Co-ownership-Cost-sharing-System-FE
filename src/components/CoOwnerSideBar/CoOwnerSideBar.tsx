@@ -37,6 +37,8 @@ export default function CoOwnerSideBar() {
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
     { to: `viewGroups/${group?.groupId}/voting`, label: 'Voting' },
     { to: `viewGroups/${group?.groupId}/check-in`, label: 'Check In / Check Out' }
+    { to: `viewGroups/${group?.groupId}/check-in`, label: 'Check In / Check Out' },
+    { to: `viewGroups/${group?.groupId}/fund-ownership`, label: 'Fund Ownership' }
   ]
 
   return (
