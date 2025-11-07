@@ -110,7 +110,7 @@ function Routers() {
                     { path: path.checkInResultFail, element: <CheckInResult /> },
                     { path: path.checkOutResultFail, element: <CheckOut /> },
                     { path: path.checkOutResult, element: <CheckOut /> },
-                    { path: path.voting, element: <Voting /> }
+                    { path: path.voting, element: <Voting /> },
                     { path: path.pendingCheckout, element: <PendingCheckout /> },
                     { path: path.fundOwnership, element: <FundOwnership /> }
                   ]
