@@ -43,6 +43,7 @@ import CheckInResult from '../pages/GroupPage/pages/CheckInResult'
 import CheckVehicleReport from '../pages/AdminDashboard/pages/CheckVehicleReport'
 import CheckOut from '../pages/GroupPage/pages/CheckOut'
 import PendingCheckout from '../pages/GroupPage/pages/PendingCheckout'
+import FundOwnership from '../pages/AdminDashboard/pages/FundOwnership'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -108,7 +109,8 @@ function Routers() {
                     { path: path.checkInResultFail, element: <CheckInResult /> },
                     { path: path.checkOutResultFail, element: <CheckOut /> },
                     { path: path.checkOutResult, element: <CheckOut /> },
-                    { path: path.pendingCheckout, element: <PendingCheckout /> }
+                    { path: path.pendingCheckout, element: <PendingCheckout /> },
+                    { path: path.fundOwnership, element: <FundOwnership /> }
                   ]
                 },
                 { path: path.createGroups, element: <CreateGroups /> },

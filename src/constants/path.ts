@@ -33,6 +33,7 @@ const path = {
   checkOutResultFail: 'check-out-result/:status',
   checkOutResult: 'check-out-result/:status/:bookingId',
   pendingCheckout: 'pending-checkout/:bookingId',
+  fundOwnership: 'fund-ownership', // Relative path
 
   //OTP
   OTP: '/demoOTP',
