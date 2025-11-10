@@ -42,7 +42,8 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
             </div>
 
             <div className='flex items-center gap-2 flex-shrink-0'>
-              {/* Status Badge */}
+              {/* Status Badge: cho hiển thị lại cục active hoặc màu khác chứ đừng
+              để active nó sẽ trùng với lại mấy thằng cũ */}
               <div
                 className={classNames('flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md', {
                   'bg-green-400/20 border-[2px] border-green-300/50': isApproved,
@@ -64,15 +65,6 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
                         : '0 0 12px rgba(250, 204, 21, 0.9), 0 0 20px rgba(250, 204, 21, 0.5)'
                   }}
                 />
-                <span
-                  className={classNames('text-xs font-bold', {
-                    'text-green-200': isApproved,
-                    'text-yellow-200': !isApproved && !isRejected,
-                    'text-red-200': isRejected
-                  })}
-                >
-                  {isApproved ? 'Active' : isRejected ? 'Rejected' : 'Pending'}
-                </span>
               </div>
 
               {/* Flip Button */}
