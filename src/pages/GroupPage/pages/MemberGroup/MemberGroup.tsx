@@ -30,6 +30,7 @@ export default function MemberGroup() {
     queryFn: () => groupApi.getMembersOfGroup(groupId as string),
     enabled: !!groupId
   })
+
   // lấy danh sách thành viên
   const members = membersQuery.data?.data.groupSummary?.members || []
   // lấy số lượng thành viên tối đa
@@ -64,6 +65,8 @@ export default function MemberGroup() {
     (member) => member.userId === membersQuery.data?.data.userOwnership?.userId && member.groupRole === 'ADMIN'
   )
 
+  // lấy role của user hiện tại
+  const currentUserRole = membersQuery?.data?.data.groupSummary?.currentUserRole
   return (
     <>
       {/* Wrapper Container */}
@@ -79,7 +82,7 @@ export default function MemberGroup() {
 
         <Header members={members} isAdmin={isAdmin} amount={amount} setShowModal={setShowModal} />
         {/* Member List Card */}
-        <Memberlist members={members} amount={amount} />
+        <Memberlist members={members} amount={amount} groupId={groupId as string} currentUserRole={currentUserRole} />
 
         {/* Bottom Gradient Bar */}
         <div className='absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-200 via-sky-100 to-cyan-200 shadow-[0_0_20px_rgba(14,165,233,0.6)]' />

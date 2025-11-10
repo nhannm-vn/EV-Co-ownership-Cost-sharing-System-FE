@@ -15,7 +15,7 @@ export default function Header({ members, isAdmin, amount, setShowModal }: IHead
   // setShowModal là hàm để hiển thị modal mời thành viên
   return (
     <div className='flex justify-between items-center mb-8'>
-      <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>MemberGroup</h1>
+      <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>Member Group</h1>
       {/* đủ rồi không cho mờivà admin group mới hiện*/}
       {members.length < amount && isAdmin && (
         <button

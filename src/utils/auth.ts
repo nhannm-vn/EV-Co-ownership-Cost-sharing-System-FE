@@ -31,6 +31,10 @@ export const clearLS = () => {
   LocalStorageEventTarget.dispatchEvent(clearLSEvent)
 }
 
+export const clearGroupInfoLS = () => {
+  localStorage.removeItem('groupId')
+}
+
 export const getAccessTokenFromLS = () => localStorage.getItem('accessToken') || ''
 export const getEmailAccountFromLS = () => localStorage.getItem('emailAccount') || ''
 export const getRoleFromLS = () => localStorage.getItem('role') || ''
