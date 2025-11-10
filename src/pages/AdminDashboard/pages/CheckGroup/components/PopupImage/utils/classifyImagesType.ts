@@ -1,13 +1,13 @@
-import type { GroupImage } from '../../../../../../../types/api/staff.type'
+import type { imageElement } from '../../../../../../../types/api/staff.type'
 
 // định nghĩa  Registration , với vehicle là ảnh nào
-type ImageGroups = Record<string, GroupImage[]>
+type ImageGroups = Record<string, imageElement[]>
 
-export function groupImages(images: GroupImage[]): ImageGroups {
+export function groupImages(images: imageElement[]): ImageGroups {
   return images.reduce(
     (
       imagesByType: ImageGroups, //
-      currentImage: GroupImage
+      currentImage: imageElement
     ) => {
       const { imageType } = currentImage
 

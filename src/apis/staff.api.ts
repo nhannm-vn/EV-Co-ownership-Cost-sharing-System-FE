@@ -45,7 +45,7 @@ const staffApi = {
   },
   // lấy hình ảnh group để duyệt
   getGroupImages(groupId: number) {
-    return http.get<GroupImage[]>(`api/staff/vehicle-images/groups/${groupId}/images`)
+    return http.get<GroupImage>(`api/staff/vehicle-images/groups/${groupId}/vehicle-with-images`)
   },
 
   // duyệt ảnh

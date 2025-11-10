@@ -43,6 +43,8 @@ export interface groupStaffItem {
   groupId: number
   groupName: string
   status: 'PENDING' | 'ACTIVE' | 'INACTIVE'
+  description: string
+  memberCapacity: number
 }
 
 export interface GroupStaffList {
@@ -54,12 +56,24 @@ export interface GroupStaffList {
   totalPages: number
 }
 
-// ảnh
-export interface GroupImage {
+export interface imageElement {
   imageId: number
   imageUrl: string
   imageType: string
   approvalStatus: string
+}
+
+// ảnh
+export interface GroupImage {
+  brand: string
+  model: string
+  licensePlate: string
+  chassisNumber: string
+  vehicleValue: number
+  vehicleCreatedAt: string
+  vehicleUpdatedAt: string
+  groupName: string
+  images: imageElement[]
 }
 
 // định nghĩa resonse reject and approve

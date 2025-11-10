@@ -1,8 +1,8 @@
 import { ReloadOutlined } from '@ant-design/icons'
 import { useState } from 'react'
-import type { GroupImage } from '../../../../../../../../types/api/staff.type'
+import type { imageElement } from '../../../../../../../../types/api/staff.type'
 
-export default function ImageGroup({ label, images }: { label: string; images: GroupImage[] }) {
+export default function ImageGroup({ label, images }: { label: string; images: imageElement[] }) {
   // hiện chỉ số ảnh hiện tại
   const [currentIndex, setCurrentIndex] = useState(0)
   // tạo hiệu ứng mờ dần khi chuyển ảnh
