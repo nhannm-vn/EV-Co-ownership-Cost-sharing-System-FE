@@ -12,6 +12,7 @@ import Username from './Components/Username'
 
 export default function ProfilePage() {
   // Fetch user profile with React Query
+  //dùng usequery để query dữ liệu
   const {
     data: userProfile,
     isLoading,
@@ -23,12 +24,12 @@ export default function ProfilePage() {
 
   const user = userProfile?.data
 
-  // Loading state
+  // Loading state: nếu như đang fetch api thì để là skeleton
   if (isLoading) {
     return <Skeleton />
   }
 
-  // Error state
+  // Error state: Nếu mà chưa có dữ liệu hoặc là bị lỗi thì sẽ render ra cái component này
   if (isError || !user) {
     return (
       <div className='min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600'>
@@ -52,7 +53,7 @@ export default function ProfilePage() {
       className='min-h-screen flex items-center justify-center p-6 font-sans 
                  bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600 relative overflow-hidden'
     >
-      {/* Holographic Background Effects */}
+      {/* Holographic Background Effects: các motion hiệu ứng để cho UI hiện đại và mượt hơn */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         {/* Animated Orbs */}
         <motion.div
@@ -114,16 +115,16 @@ export default function ProfilePage() {
               status={user?.statistics.accountStatus as string}
             />
 
-            {/* Activity Badge */}
+            {/* Activity Badge: hiện trạng thái account register và bắt đầu sử dụng khi nào */}
             <ActivitiBadge
               status={user?.statistics.accountStatus as string}
               time={user?.statistics.memberSince as string}
             />
           </motion.div>
 
-          {/* Right Section - Info & Documents */}
+          {/* Right Section - Info & Documents: bên đây là phần hiển thị các giấy tờ  */}
           <div className='lg:col-span-2 space-y-6'>
-            {/* Personal Info */}
+            {/* Personal Info: đầu tiên là phần info của account */}
             <motion.div
               initial={{ x: 30, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -209,7 +210,7 @@ export default function ProfilePage() {
                   />
                 </svg>
               </Icon>
-              {/* Documents Grid */}
+              {/* Documents Grid: hai phần cccd và gplx */}
               <div className='grid md:grid-cols-2 gap-4'>
                 <DocCard
                   title='CCCD'
