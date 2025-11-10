@@ -1,7 +1,7 @@
 // file chứa những method call api cho user/co-owner
 
 import type { CheckoutForm } from '../pages/GroupPage/pages/CheckOut/CheckOut'
-import type { GetAllNotifications, UploadImage, UserGetProfile } from '../types/api/user.type'
+import type { GetAllNotifications, UploadImage, UserGetProfile, Voting } from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -74,6 +74,12 @@ const userApi = {
   // show page notification checkout
   showpageNotificationCheckout(bookingId: string) {
     return http.get(`api/vehicle-checks/booking/${bookingId}/post-use`)
+  },
+  //get all voting
+  getAllVoting(groupId: number) {
+    return http.get<Voting[]>('api/votings', {
+      params: { groupId }
+    })
   }
 }
 
