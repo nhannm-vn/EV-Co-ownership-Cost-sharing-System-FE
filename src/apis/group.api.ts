@@ -45,6 +45,10 @@ const groupApi = {
   inviteMember: (groupId: string, inviteeEmail: string) => {
     return http.post(`api/groups/${groupId}/invitations`, { inviteeEmail })
   },
+  // kích thành viên ra khỏi nhóm
+  deleteMember: (groupId: string, userId: string) => {
+    return http.delete(`api/shares/${groupId}/members/${userId}`)
+  },
   // verifymember
 
   verifyMember: (otp: string) => {

@@ -1,13 +1,17 @@
 import { useState } from 'react'
 
-interface Contribution {
+// ============ INTERFACES ============
+interface Transaction {
   id: string
   memberName: string
   amount: number
   date: string
   isAdmin: boolean
-  isPaid: boolean // Thêm trạng thái đã đóng hay chưa
+  isPaid: boolean
+  type: 'income' | 'expense' // ← THÊM: phân loại thu/chi
+  description?: string // ← THÊM: mô tả chi phí
 }
+
 // ============ HEADER COMPONENT ============
 const FundHeader: React.FC = () => {
   return (
@@ -30,10 +34,12 @@ const FundHeader: React.FC = () => {
 // ============ FUND SUMMARY CARD COMPONENT ============
 interface FundSummaryCardProps {
   totalFund: number
+  totalIncome: number
+  totalExpense: number
   onContribute: () => void
 }
 
-const FundSummaryCard: React.FC<FundSummaryCardProps> = ({ totalFund, onContribute }) => {
+const FundSummaryCard: React.FC<FundSummaryCardProps> = ({ totalFund, totalIncome, totalExpense, onContribute }) => {
   const isLowBalance = totalFund < 5000000
 
   return (
@@ -54,7 +60,7 @@ const FundSummaryCard: React.FC<FundSummaryCardProps> = ({ totalFund, onContribu
         </div>
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
         {/* Card Tổng Quỹ */}
         <div className='bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-lg p-5 border border-green-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1'>
           <div className='flex items-center justify-between mb-3'>
@@ -72,9 +78,37 @@ const FundSummaryCard: React.FC<FundSummaryCardProps> = ({ totalFund, onContribu
           </button>
         </div>
 
+        {/* Card Tổng Thu */}
+        <div className='bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl shadow-lg p-5 border border-blue-100 hover:shadow-xl transition-all duration-300'>
+          <div className='flex items-center justify-between mb-3'>
+            <h2 className='text-sm text-gray-700 font-semibold flex items-center gap-1'>
+              <span className='text-lg'>↑</span> Tổng Thu
+            </h2>
+            <span className='text-2xl'>📈</span>
+          </div>
+          <p className='text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent'>
+            +{totalIncome.toLocaleString('vi-VN')}đ
+          </p>
+          <p className='text-xs text-gray-600 mt-2'>Từ thành viên đóng góp</p>
+        </div>
+
+        {/* Card Tổng Chi */}
+        <div className='bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-lg p-5 border border-red-100 hover:shadow-xl transition-all duration-300'>
+          <div className='flex items-center justify-between mb-3'>
+            <h2 className='text-sm text-gray-700 font-semibold flex items-center gap-1'>
+              <span className='text-lg'>↓</span> Tổng Chi
+            </h2>
+            <span className='text-2xl'>📉</span>
+          </div>
+          <p className='text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent'>
+            -{totalExpense.toLocaleString('vi-VN')}đ
+          </p>
+          <p className='text-xs text-gray-600 mt-2'>Bảo trì & chi phí khác</p>
+        </div>
+
         {/* Card Cảnh Báo */}
         {isLowBalance && (
-          <div className='bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-lg p-4 border-l-4 border-orange-500 hover:shadow-xl transition-all duration-300'>
+          <div className='bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-lg p-4 border-l-4 border-orange-500 hover:shadow-xl transition-all duration-300 md:col-span-3'>
             <div className='flex items-start space-x-3'>
               <div className='bg-orange-100 p-2 rounded-full'>
                 <span className='text-2xl'>⚠️</span>
@@ -93,20 +127,89 @@ const FundSummaryCard: React.FC<FundSummaryCardProps> = ({ totalFund, onContribu
   )
 }
 
-const ContributionHistory: React.FC = () => {
-  const contributions: Contribution[] = [
-    { id: '1', memberName: 'Nguyễn Văn A', amount: 2000000, date: '2025-11-05', isAdmin: true, isPaid: true },
-    { id: '2', memberName: 'Trần Thị B', amount: 1500000, date: '2025-11-04', isAdmin: false, isPaid: true },
-    { id: '3', memberName: 'Lê Văn C', amount: 2000000, date: '2025-11-03', isAdmin: false, isPaid: false },
-    { id: '4', memberName: 'Phạm Thị D', amount: 1800000, date: '2025-11-02', isAdmin: false, isPaid: true },
-    { id: '5', memberName: 'Hoàng Văn E', amount: 2200000, date: '2025-11-01', isAdmin: false, isPaid: false }
+// ============ TRANSACTION HISTORY COMPONENT ============
+const TransactionHistory: React.FC = () => {
+  const transactions: Transaction[] = [
+    // Thu vào
+    {
+      id: '1',
+      memberName: 'Nguyễn Văn A',
+      amount: 2000000,
+      date: '2025-11-05',
+      isAdmin: true,
+      isPaid: true,
+      type: 'income'
+    },
+    {
+      id: '2',
+      memberName: 'Trần Thị B',
+      amount: 1500000,
+      date: '2025-11-04',
+      isAdmin: false,
+      isPaid: true,
+      type: 'income'
+    },
+
+    // Chi ra (bảo trì)
+    {
+      id: '3',
+      memberName: 'Hệ thống',
+      amount: 3000000,
+      date: '2025-11-03',
+      isAdmin: true,
+      isPaid: true,
+      type: 'expense',
+      description: 'Bảo trì định kỳ'
+    },
+    {
+      id: '4',
+      memberName: 'Hệ thống',
+      amount: 1200000,
+      date: '2025-11-02',
+      isAdmin: true,
+      isPaid: true,
+      type: 'expense',
+      description: 'Thay lốp xe'
+    },
+
+    // Thu vào
+    {
+      id: '5',
+      memberName: 'Lê Văn C',
+      amount: 2000000,
+      date: '2025-11-01',
+      isAdmin: false,
+      isPaid: false,
+      type: 'income'
+    },
+    {
+      id: '6',
+      memberName: 'Phạm Thị D',
+      amount: 1800000,
+      date: '2025-10-31',
+      isAdmin: false,
+      isPaid: true,
+      type: 'income'
+    },
+
+    // Chi ra
+    {
+      id: '7',
+      memberName: 'Hệ thống',
+      amount: 800000,
+      date: '2025-10-30',
+      isAdmin: true,
+      isPaid: true,
+      type: 'expense',
+      description: 'Bảo hiểm xe tháng 10'
+    }
   ]
 
   return (
     <div className='bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100'>
       <div className='px-4 py-3 bg-gradient-to-r from-blue-500 to-cyan-500'>
         <h2 className='text-xl font-bold text-white flex items-center gap-2'>
-          <span>📋</span> Lịch Sử Đóng Quỹ
+          <span>📋</span> Lịch Sử Giao Dịch
         </h2>
       </div>
 
@@ -114,65 +217,101 @@ const ContributionHistory: React.FC = () => {
         <table className='w-full'>
           <thead className='bg-gray-50'>
             <tr>
-              <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Thành Viên</th>
+              <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Loại</th>
+              <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Nội Dung</th>
               <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Số Tiền</th>
-              <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Ngày Đóng</th>
+              <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Ngày</th>
               <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Trạng Thái</th>
-              <th className='px-4 py-3 text-left text-xs font-bold text-gray-700'>Vai Trò</th>
             </tr>
           </thead>
           <tbody className='divide-y divide-gray-100 bg-white'>
-            {contributions.map((contrib, index) => (
+            {transactions.map((trans, index) => (
               <tr
-                key={contrib.id}
+                key={trans.id}
                 className='hover:bg-blue-50 transition-all duration-200'
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <td className='px-4 py-3'>
-                  <div className='flex items-center space-x-2'>
-                    <div
-                      className='w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md'
-                      style={{
-                        background: contrib.isAdmin
-                          ? 'linear-gradient(135deg, #CE93D8 0%, #AB47BC 100%)'
-                          : 'linear-gradient(135deg, #039BE5 0%, #0277BD 100%)'
-                      }}
-                    >
-                      {contrib.memberName.charAt(0)}
-                    </div>
-                    <span className='font-semibold text-gray-800 text-sm'>{contrib.memberName}</span>
-                  </div>
-                </td>
-                <td className='px-4 py-3 font-bold text-green-600 text-base'>
-                  +{contrib.amount.toLocaleString('vi-VN')}đ
-                </td>
-                <td className='px-4 py-3 text-gray-600 text-sm'>
-                  {new Date(contrib.date).toLocaleDateString('vi-VN')}
-                </td>
+                {/* Cột Loại */}
                 <td className='px-4 py-3'>
                   <span
                     className='px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1 shadow-sm'
                     style={{
-                      background: contrib.isPaid
-                        ? 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)'
-                        : 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%)',
-                      color: contrib.isPaid ? '#2E7D32' : '#C62828'
+                      background:
+                        trans.type === 'income'
+                          ? 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)'
+                          : 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%)',
+                      color: trans.type === 'income' ? '#2E7D32' : '#D32F2F'
                     }}
                   >
-                    <span className='text-sm'>{contrib.isPaid ? '✓' : '⏱'}</span>
-                    {contrib.isPaid ? 'Đã Đóng' : 'Chưa Đóng'}
+                    <span className='text-sm'>{trans.type === 'income' ? '↑' : '↓'}</span>
+                    {trans.type === 'income' ? 'Thu' : 'Chi'}
                   </span>
                 </td>
+
+                {/* Cột Nội Dung */}
+                <td className='px-4 py-3'>
+                  {trans.type === 'income' ? (
+                    <div className='flex items-center space-x-2'>
+                      <div
+                        className='w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md'
+                        style={{
+                          background: trans.isAdmin
+                            ? 'linear-gradient(135deg, #CE93D8 0%, #AB47BC 100%)'
+                            : 'linear-gradient(135deg, #039BE5 0%, #0277BD 100%)'
+                        }}
+                      >
+                        {trans.memberName.charAt(0)}
+                      </div>
+                      <div>
+                        <span className='font-semibold text-gray-800 text-sm block'>{trans.memberName}</span>
+                        <span
+                          className='text-xs font-semibold'
+                          style={{
+                            color: trans.isAdmin ? '#AB47BC' : '#0277BD'
+                          }}
+                        >
+                          {trans.isAdmin ? '👑 Admin' : '👤 Thành viên'}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='flex items-center space-x-2'>
+                      <div className='w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-orange-400 to-red-500 text-white shadow-md text-lg'>
+                        🔧
+                      </div>
+                      <div>
+                        <span className='font-semibold text-gray-800 text-sm block'>Bảo Trì & Chi Phí</span>
+                        <span className='text-xs text-gray-500'>{trans.description}</span>
+                      </div>
+                    </div>
+                  )}
+                </td>
+
+                {/* Cột Số Tiền */}
+                <td
+                  className='px-4 py-3 font-bold text-base'
+                  style={{ color: trans.type === 'income' ? '#2E7D32' : '#D32F2F' }}
+                >
+                  {trans.type === 'income' ? '+' : '-'}
+                  {trans.amount.toLocaleString('vi-VN')}đ
+                </td>
+
+                {/* Cột Ngày */}
+                <td className='px-4 py-3 text-gray-600 text-sm'>{new Date(trans.date).toLocaleDateString('vi-VN')}</td>
+
+                {/* Cột Trạng Thái */}
                 <td className='px-4 py-3'>
                   <span
-                    className='px-3 py-1 rounded-full text-xs font-bold text-white shadow-md'
+                    className='px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1 shadow-sm'
                     style={{
-                      background: contrib.isAdmin
-                        ? 'linear-gradient(135deg, #CE93D8 0%, #AB47BC 100%)'
-                        : 'linear-gradient(135deg, #039BE5 0%, #0277BD 100%)'
+                      background: trans.isPaid
+                        ? 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)'
+                        : 'linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%)',
+                      color: trans.isPaid ? '#2E7D32' : '#C62828'
                     }}
                   >
-                    {contrib.isAdmin ? '👑 Admin' : '👤 Thành viên'}
+                    <span className='text-sm'>{trans.isPaid ? '✓' : '⏱'}</span>
+                    {trans.isPaid ? 'Hoàn thành' : 'Chưa hoàn thành'}
                   </span>
                 </td>
               </tr>
@@ -263,9 +402,14 @@ const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose, onSu
   )
 }
 
+// ============ MAIN COMPONENT ============
 export default function FundOwnership() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [totalFund, setTotalFund] = useState(10000000)
+
+  // Tính tổng thu và chi từ transactions (trong thực tế sẽ lấy từ API)
+  const totalIncome = 8500000
+  const totalExpense = 5000000
 
   return (
     <div className='min-h-screen overflow-auto'>
@@ -273,9 +417,14 @@ export default function FundOwnership() {
         <div className='bg-white/95 backdrop-blur-lg rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.3)] p-5 space-y-4'>
           <FundHeader />
 
-          <FundSummaryCard totalFund={totalFund} onContribute={() => setIsModalOpen(true)} />
+          <FundSummaryCard
+            totalFund={totalFund}
+            totalIncome={totalIncome}
+            totalExpense={totalExpense}
+            onContribute={() => setIsModalOpen(true)}
+          />
 
-          <ContributionHistory />
+          <TransactionHistory />
         </div>
       </div>
 
