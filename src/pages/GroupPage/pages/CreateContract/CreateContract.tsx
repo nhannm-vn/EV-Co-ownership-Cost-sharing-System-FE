@@ -7,8 +7,14 @@ import Skeleton from '../../../../components/Skeleton'
 
 const CreateContract: React.FC = () => {
   const { groupId } = useParams()
+  // trạng thái thi khi addmin ký
   const [showCancelModal, setShowCancelModal] = useState(false)
+  // trạng thái xác nhận các tành viên trong group
+  const [showRejectModal, setShowRejectModal] = useState(false)
+  // lý do từ chối khi admin ký hợp đồng
   const [cancelReason, setCancelReason] = useState('')
+  // lý do từ chối khi member từ chối hợp đồng
+  const [rejectReason, setRejectReason] = useState('')
   const [openTerm, setOpenTerm] = useState<number | null>(null)
 
   // sign contract
@@ -36,12 +42,43 @@ const CreateContract: React.FC = () => {
     }
   })
 
+  const approveMemberMutation = useMutation({
+    mutationFn: ({
+      contractId,
+      status,
+      reason
+    }: {
+      contractId: string
+      status: 'APPROVED' | 'REJECTED'
+      reason?: string
+    }) => groupApi.approveMemberContract(contractId, { status, reason }),
+    onSuccess: () => {
+      console.log('member approve sucessfull')
+    }
+  })
+
   const contractQuery = useQuery({
     queryKey: ['contractData', groupId],
     queryFn: () => groupApi.generateContract(groupId as string),
-    enabled: !!groupId,
-    staleTime: 60000
+    enabled: !!groupId
   })
+  // Hàm tách chuỗi terms thành mảng
+  const parseTerms = (termsText: string) => {
+    // Tách theo số thứ tự 1. 2. 3. ...
+    const parts = termsText.split(/(?=\d+\.\s+[A-Z])/)
+    return parts.filter((p) => p.trim())
+  }
+
+  console.log(contractQuery.data?.data)
+  const dataContract = contractQuery.data?.data
+  const idContract = dataContract?.contractId as string
+  // const idContract
+  const termsList = dataContract?.terms ? parseTerms(dataContract.terms) : []
+  // checkAdmin mới có nút ký và hủy
+  const isAdmin = dataContract?.owners?.some(
+    (owner) => owner.userRole === 'ADMIN' && owner.userId === dataContract.userId
+  )
+  const isPendingMemberApproval = dataContract?.contract?.status === 'PENDING_MEMBER_APPROVAL'
 
   const onSubmit = () => {
     if (!groupId) {
@@ -57,21 +94,19 @@ const CreateContract: React.FC = () => {
     cancelContractMutation.mutate({ id: groupId as string, reason: cancelReason })
   }
 
-  // Hàm tách chuỗi terms thành mảng
-  const parseTerms = (termsText: string) => {
-    // Tách theo số thứ tự 1. 2. 3. ...
-    const parts = termsText.split(/(?=\d+\.\s+[A-Z])/)
-    return parts.filter((p) => p.trim())
+  const onApproveMember = () => {
+    if (!idContract) {
+      return
+    }
+    approveMemberMutation.mutate({ contractId: idContract, status: 'APPROVED' })
   }
 
-  console.log(contractQuery.data?.data)
-  const dataContract = contractQuery.data?.data
-  const termsList = dataContract?.terms ? parseTerms(dataContract.terms) : []
-  // checkAdmin mới có nút ký và hủy
-  const isAdmin = dataContract?.owners?.some(
-    (owner) => owner.userRole === 'ADMIN' && owner.userId === dataContract.userId
-  )
-  console.log(isAdmin)
+  const onRejectMember = () => {
+    if (!idContract) {
+      return
+    }
+    approveMemberMutation.mutate({ contractId: idContract, status: 'REJECTED', reason: rejectReason })
+  }
 
   if (contractQuery.isLoading) {
     return <Skeleton />
@@ -104,6 +139,47 @@ const CreateContract: React.FC = () => {
                 className='flex-1 bg-red-500 text-white rounded-lg py-2 disabled:opacity-50'
               >
                 Xác nhận hủy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/*  THÊM: Reject Modal (Member) */}
+      {showRejectModal && (
+        <div
+          className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'
+          onClick={() => setShowRejectModal(false)}
+        >
+          <div className='bg-white rounded-2xl p-6 w-[500px] shadow-2xl' onClick={(e) => e.stopPropagation()}>
+            <h3 className='text-xl font-bold mb-4 text-orange-600'>📝 Lý do từ chối hợp đồng</h3>
+            <p className='text-sm text-gray-600 mb-3'>
+              Vui lòng nêu rõ lý do từ chối để hệ thống có thể xem xét và điều chỉnh hợp đồng.
+            </p>
+            <textarea
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              placeholder='Ví dụ: Tỷ lệ sở hữu chưa đúng, điều khoản chưa rõ ràng...'
+              rows={4}
+              className='w-full border-2 border-gray-200 rounded-xl p-3 mb-4 focus:border-orange-500 focus:outline-none'
+            />
+            {rejectReason.trim().length > 0 && rejectReason.trim().length < 10 && (
+              <p className='text-red-500 text-sm mb-2'>Lý do từ chối phải có ít nhất 10 ký tự.</p>
+            )}
+            <div className='flex gap-3'>
+              <button
+                onClick={() => setShowRejectModal(false)}
+                className='flex-1 border-2 border-gray-300 rounded-xl py-2.5 font-semibold hover:bg-gray-50'
+              >
+                Quay lại
+              </button>
+              <button
+                onClick={onRejectMember}
+                // nếu form lý do từ chối chưa đủ 10 ký tự thì disable
+                disabled={rejectReason.trim().length < 10 || approveMemberMutation.isPending}
+                className='flex-1 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl py-2.5 font-semibold disabled:brightness-90 disabled:cursor-not-allowed hover:bg-orange-600'
+              >
+                {approveMemberMutation.isPending ? 'Đang gửi...' : 'Gửi từ chối'}
               </button>
             </div>
           </div>
@@ -208,16 +284,13 @@ const CreateContract: React.FC = () => {
               <div className='space-y-2 text-sm'>
                 <div className='flex justify-between'>
                   <span>Giá trị xe</span>
-                  <span className='font-bold'>{dataContract?.finance?.vehiclePrice}</span>
+                  <span className='font-bold'>{dataContract?.finance?.vehiclePrice?.toLocaleString('vi-VN')} đ</span>
                 </div>
                 <div className='flex justify-between'>
                   <span>Tiền cọc</span>
-                  <span className='font-bold'>{dataContract?.finance?.depositAmount}</span>
+                  <span className='font-bold'>{dataContract?.finance?.depositAmount?.toLocaleString('vi-VN')} đ</span>
                 </div>
-                <div className='flex justify-between'>
-                  <span>Mục tiêu quỹ</span>
-                  <span className='font-bold'>{dataContract?.finance?.targetAmount}</span>
-                </div>
+
                 <div className='flex justify-between'>
                   <span>Nguyên tắc góp</span>
                   <span className='font-bold'>Theo Tỷ lệ Sở Hữu</span>
@@ -260,9 +333,11 @@ const CreateContract: React.FC = () => {
                 <div>
                   <h4 className='font-bold text-amber-900 mb-1'>Lưu ý về ký hợp đồng</h4>
                   <p className='text-sm text-amber-800'>
-                    <span className='font-bold'>Trưởng nhóm (Admin)</span> mới có quyền ký và phê duyệt hợp đồng. Các
-                    thành viên khác chỉ được xem nội dung hợp đồng. Nếu có thắc mắc, vui lòng liên hệ trực tiếp với
-                    Trưởng nhóm. Hệ thống không can thiệp vào quá trình này.
+                    <span className='font-bold'>Trưởng nhóm (Admin Group)</span> mới có quyền ký và phê duyệt hợp đồng.
+                    Các thành viên khác được xem nội dung hợp đồng và xác nhận sau khi Admin Group ký . Nếu có thắc mắc
+                    không đảm bảo quyền lợi, ghi chú rõ ràng trong phần bình luận. để hệ thống xem xét nếu hợp lý sẽ sửa
+                    lại hợp đồng sau khi các thành viên xác nhận tiến hành đóng cọc và hệ thống sẽ phê duyệt hợp đồng
+                    nếu thành công tiến hành sử dụng các chức năng của hệ thống.
                   </p>
                 </div>
               </div>
@@ -270,7 +345,7 @@ const CreateContract: React.FC = () => {
 
             {/* Action Buttons */}
             {/*  nếu là admin và trạng thái là pending  */}
-            {isAdmin && dataContract?.contract?.status === 'PENDING' ? (
+            {isAdmin && dataContract?.contract?.status === 'PENDING' && (
               <div className='flex gap-4 mt-6 pt-6 border-t'>
                 <button
                   onClick={() => setShowCancelModal(true)}
@@ -286,14 +361,25 @@ const CreateContract: React.FC = () => {
                   {signContractMutation.isPending ? 'Đang xử lý...' : 'Ký hợp đồng'}
                 </button>
               </div>
-            ) : (
-              <div className='mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl'>
-                <h4 className='font-bold text-blue-900 mb-1'>Hợp đồng đã ký</h4>
-                <p className='text-sm text-blue-800'>
-                  Hợp đồng đã được ký và hiện đang chờ
-                  <span className='font-bold'> Admin của hệ thống </span>phê duyệt. Sau khi được duyệt, nhóm sẽ có thể
-                  sử dụng các chức năng như đặt lịch và quản lý xe.
-                </p>
+            )}
+
+            {/* sau khi admin kí thì trang thái Pending Member Approval  để cho co-owner xác nhận và đóng góp sửa hợp đồng */}
+            {isPendingMemberApproval && (
+              <div className='flex gap-4 mt-6 pt-6 border-t'>
+                <button
+                  onClick={() => setShowRejectModal(true)}
+                  disabled={approveMemberMutation.isPending}
+                  className='flex-1 px-6 py-3 bg-orange text-white font-bold rounded-xl border-2 border-orange-500 hover:bg-orange-50 disabled:opacity-50 transition-colors'
+                >
+                  {approveMemberMutation.isPending ? ' Đang gửi...' : 'Từ chối'}
+                </button>
+                <button
+                  onClick={onApproveMember}
+                  disabled={approveMemberMutation.isPending}
+                  className='flex-1 px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 disabled:opacity-50 transition-colors'
+                >
+                  {approveMemberMutation.isPending ? ' Đang xử lý...' : ' Xác nhận'}
+                </button>
               </div>
             )}
           </div>

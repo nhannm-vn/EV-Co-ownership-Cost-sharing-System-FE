@@ -108,6 +108,8 @@ export interface ContractResponse {
     status?: string
     termLabel?: string // "1 năm"
   }
+
+  contractId?: string // "16"
   contractNumber?: string // "EVS-16-1761307580054"
 
   finance: {
