@@ -347,7 +347,7 @@ const CreateContract: React.FC = () => {
 
             {/* Action Buttons */}
             {/*  nếu là admin và trạng thái là pending  */}
-            {isAdmin && dataContract?.contract?.status === 'PENDING' && (
+            {isAdmin && dataContract?.contract?.status === 'PENDING' ? (
               <div className='flex gap-4 mt-6 pt-6 border-t'>
                 <button
                   onClick={() => setShowCancelModal(true)}
@@ -362,6 +362,11 @@ const CreateContract: React.FC = () => {
                 >
                   {signContractMutation.isPending ? 'Đang xử lý...' : 'Ký hợp đồng'}
                 </button>
+              </div>
+            ) : (
+              <div className='inline-flex items-center gap-2 bg-yellow-50 text-yellow-700 px-4 py-2 rounded-xl border border-yellow-200'>
+                <ClockCircleOutlined className='text-yellow-500 text-lg' />
+                <span className='font-medium'>Đang chờ admin ký rồi sau đó đến thành viên phê duyệt</span>
               </div>
             )}
 
