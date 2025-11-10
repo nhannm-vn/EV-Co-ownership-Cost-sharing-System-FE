@@ -74,6 +74,10 @@ const groupApi = {
   cancelContract: (groupId: string, reason: string) => {
     return http.post(`api/contracts/${groupId}/cancel`, { reason })
   },
+  // approve or reject member contract
+  approveMemberContract: (contractId: string, payload: { status: string; reason?: string }) => {
+    return http.post(`api/contracts/${contractId}/member-feedback`, payload)
+  },
   // get deposit for user
   getDepositForUser: ({ userId, groupId }: { userId: string; groupId: string }) => {
     const accessToken = getAccessTokenFromLS()
