@@ -4,6 +4,7 @@ import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import groupApi from '../../../../apis/group.api'
 import Skeleton from '../../../../components/Skeleton'
+import { ClockCircleOutlined } from '@ant-design/icons'
 
 const CreateContract: React.FC = () => {
   const { groupId } = useParams()
@@ -52,8 +53,9 @@ const CreateContract: React.FC = () => {
       status: 'APPROVED' | 'REJECTED'
       reason?: string
     }) => groupApi.approveMemberContract(contractId, { status, reason }),
-    onSuccess: () => {
-      console.log('member approve sucessfull')
+    onSuccess: (_, variables) => {
+      if (variables.status === 'APPROVED') toast.success('Hợp đồng đã được phê duyệt!')
+      else toast.success('Đã gửi lý do từ chối hợp đồng!')
     }
   })
 
@@ -364,7 +366,7 @@ const CreateContract: React.FC = () => {
             )}
 
             {/* sau khi admin kí thì trang thái Pending Member Approval  để cho co-owner xác nhận và đóng góp sửa hợp đồng */}
-            {isPendingMemberApproval && (
+            {isPendingMemberApproval && !isAdmin ? (
               <div className='flex gap-4 mt-6 pt-6 border-t'>
                 <button
                   onClick={() => setShowRejectModal(true)}
@@ -380,6 +382,11 @@ const CreateContract: React.FC = () => {
                 >
                   {approveMemberMutation.isPending ? ' Đang xử lý...' : ' Xác nhận'}
                 </button>
+              </div>
+            ) : (
+              <div className='inline-flex items-center gap-2 bg-yellow-50 text-yellow-700 px-4 py-2 rounded-xl border border-yellow-200'>
+                <ClockCircleOutlined className='text-yellow-500 text-lg' />
+                <span className='font-medium'>Đang chờ thành viên phê duyệt hợp đồng</span>
               </div>
             )}
           </div>
