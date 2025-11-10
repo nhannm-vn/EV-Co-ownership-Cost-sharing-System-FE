@@ -105,7 +105,7 @@ export enum NotificationType {
   CONTRACT_EXPIRING = 'CONTRACT_EXPIRING',
 
   // ==============================
-  // 👥 Group related
+  // Group related
   // ==============================
   GROUP_CREATED = 'GROUP_CREATED',
   GROUP_INVITATION = 'GROUP_INVITATION',
@@ -170,4 +170,27 @@ export interface PaymentHistory {
 }
 export interface CheckoutFormResponse {
   status: string
+}
+
+export interface Voting {
+  votingId: number
+  groupId: number
+  title: string
+  description: string
+  votingType: string
+  status: string
+  deadline: string // ISO datetime string
+  estimatedAmount: number
+  relatedExpenseId: number
+  options: Record<string, string> // hoặc { [key: string]: string }
+  results: Record<string, string> // tương tự options
+  createdBy: number
+  createdByName: string
+  createdAt: string // ISO datetime string
+  hasVoted: boolean
+  userVote: string
+  totalVotes: number
+  totalMembers: number
+  votingProgress: string
+  timeRemaining: string
 }

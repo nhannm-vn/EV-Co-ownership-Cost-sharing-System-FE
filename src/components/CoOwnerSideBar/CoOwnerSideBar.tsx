@@ -49,7 +49,6 @@ export default function CoOwnerSideBar() {
     { to: `viewGroups/${group?.groupId}/mybooking`, label: 'My Booking' },
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
     { to: `viewGroups/${group?.groupId}/check-in`, label: 'QR Check' },
-    { to: `viewGroups/${group?.groupId}/fund-ownership`, label: 'Fund Ownership' },
     { to: `viewGroups/${group?.groupId}/createContract`, label: 'Contract' },
     { to: `viewGroups/${group?.groupId}/voting`, label: 'Voting' },
     { to: `viewGroups/${group?.groupId}/fund-ownership`, label: 'Fund Ownership' }
