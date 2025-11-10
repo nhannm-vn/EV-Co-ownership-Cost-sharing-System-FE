@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 import path from '../../constants/path'
 import { useMutation } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
-import { clearLS, getAccessTokenFromLS } from '../../utils/auth'
+import { clearLS, getAccessTokenFromLS, getRoleFromLS } from '../../utils/auth'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 import { toast } from 'react-toastify'
@@ -11,6 +11,8 @@ import { LOGO_URL } from '../../constants/images'
 function HeaderStaff() {
   // lấy state global từ contextApi
   const { setIsAuthenticated } = useContext(AppContext)
+
+  const role = getRoleFromLS()
 
   //call api logout
   // ***Mình không cần navigate vì khi set về false thì nó sẽ tự chuyển cho mình về login
@@ -48,6 +50,12 @@ function HeaderStaff() {
         </Link>
 
         <div className='flex  justify-between items-center'>
+          <div className='mr-8 flex items-center gap-2 text-gray-600 font-semibold'>
+            <span className='text-sm'>Welcome</span>
+            <span className='text-emerald-600 text-sm bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200'>
+              {role}
+            </span>
+          </div>
           <button
             onClick={handleLogout}
             className='font-semibold text-center w-32 text-[14px] py-3 text-white rounded-lg transition 
