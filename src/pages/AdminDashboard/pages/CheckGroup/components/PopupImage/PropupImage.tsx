@@ -1,14 +1,21 @@
-import { CheckOutlined, CloseOutlined, PictureOutlined } from '@ant-design/icons'
+import {
+  CalendarOutlined,
+  CarOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  DollarOutlined,
+  PictureOutlined
+} from '@ant-design/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import staffApi from '../../../../../../apis/staff.api'
-import type { GroupImage, groupStaffItem, ReviewResponse } from '../../../../../../types/api/staff.type'
+import type { groupStaffItem, ReviewResponse } from '../../../../../../types/api/staff.type'
 import ConfirmModal from './components/ConfirmModal'
 import Header from './components/Header'
-import ImageGroup from './components/ImageGroup/ImageGroup'
 import RejectModal from './components/RejectModal/RejectModal'
 import { groupImages } from './utils/classifyImagesType'
+import ImageGroup from './components/ImageGroup/ImageGroup'
 
 interface IPropupImageProps {
   group: groupStaffItem | null
@@ -29,9 +36,14 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
     enabled: !!group?.groupId
   })
 
-  const images: GroupImage[] = imagesQuery.data?.data || []
-
-  console.log(images)
+  const images = imagesQuery?.data?.data?.images
+  const brand = imagesQuery?.data?.data?.brand
+  const model = imagesQuery?.data?.data?.model
+  const licensePlate = imagesQuery?.data?.data?.licensePlate
+  const chassisNumber = imagesQuery?.data?.data?.chassisNumber
+  const vehicleValue = imagesQuery?.data?.data?.vehicleValue
+  const vehicleCreatedAt = imagesQuery?.data?.data?.vehicleCreatedAt
+  const vehicleUpdatedAt = imagesQuery?.data?.data?.vehicleUpdatedAt
 
   // Nhóm ảnh theo loại
 
@@ -88,7 +100,17 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
     submitImage.mutate({ groupId: group!.groupId, body: { status: 'REJECTED', reason } })
   }
 
+  function capitalizeWords(str: string) {
+    if (!str) return ''
+    return str
+      .toLowerCase() // Chuyển tất cả về chữ thường
+      .split(' ') // Tách thành từng từ
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Viết hoa chữ đầu
+      .join(' ')
+  }
+
   if (!group) return null
+  console.log(group)
 
   return (
     <>
@@ -102,6 +124,66 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
         >
           {/* Header với gradient */}
           <Header group={group} />
+          {/* Thông tin xe  */}
+          <div className='bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100 shadow-sm'>
+            <h3 className='text-xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
+              <CarOutlined className='text-blue-500 text-2xl' />
+              Thông Tin Xe
+            </h3>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              {/* Hãng xe & Model */}
+              <div className='bg-white rounded-lg p-4 shadow-sm'>
+                <div className='text-xs text-gray-500 mb-1'>Hãng xe & Model</div>
+                <div className='text-lg font-bold text-gray-800'>
+                  {capitalizeWords(brand as string)} {capitalizeWords(model as string)}
+                </div>
+              </div>
+
+              {/* Biển số xe */}
+              <div className='bg-white rounded-lg p-4 shadow-sm'>
+                <div className='text-xs text-gray-500 mb-1'>Biển số xe</div>
+                <div className='text-lg font-bold text-blue-600'>{licensePlate}</div>
+              </div>
+
+              {/* Số khung */}
+              <div className='bg-white rounded-lg p-4 shadow-sm'>
+                <div className='text-xs text-gray-500 mb-1'>Số khung</div>
+                <div className='text-base font-semibold text-gray-700'>{chassisNumber}</div>
+              </div>
+
+              {/* Giá trị xe */}
+              <div className='bg-white rounded-lg p-4 shadow-sm'>
+                <div className='text-xs text-gray-500 mb-1 flex items-center gap-1'>
+                  <DollarOutlined className='text-green-500' />
+                  Giá trị xe
+                </div>
+                <div className='text-lg font-bold text-green-600'>{vehicleValue?.toLocaleString('vi-VN')} đ</div>
+              </div>
+
+              {/* Ngày tạo */}
+              <div className='bg-white rounded-lg p-4 shadow-sm'>
+                <div className='text-xs text-gray-500 mb-1 flex items-center gap-1'>
+                  <CalendarOutlined className='text-purple-500' />
+                  Ngày tạo
+                </div>
+                <div className='text-sm font-medium text-gray-700'>
+                  {vehicleCreatedAt ? new Date(vehicleCreatedAt).toLocaleDateString('vi-VN') : 'N/A'}
+                </div>
+              </div>
+
+              {/* Ngày cập nhật */}
+              <div className='bg-white rounded-lg p-4 shadow-sm'>
+                <div className='text-xs text-gray-500 mb-1 flex items-center gap-1'>
+                  <CalendarOutlined className='text-orange-500' />
+                  Ngày cập nhật
+                </div>
+                <div className='text-sm font-medium text-gray-700'>
+                  {vehicleUpdatedAt ? new Date(vehicleUpdatedAt).toLocaleDateString('vi-VN') : 'N/A'}
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Content */}
           <div className='p-8'>
@@ -111,7 +193,7 @@ export default function PropupImage({ group, onClose }: IPropupImageProps) {
             </h3>
             {/* Nhóm hình ảnh theo loại và hiển thị */}
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-              {Object.entries(groupImages(images)).map(([type, imgs]) => (
+              {Object.entries(groupImages(images ?? [])).map(([type, imgs]) => (
                 <ImageGroup key={type} label={type} images={imgs} />
               ))}
             </div>
