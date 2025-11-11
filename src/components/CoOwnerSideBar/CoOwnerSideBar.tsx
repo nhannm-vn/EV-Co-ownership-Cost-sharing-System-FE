@@ -68,8 +68,8 @@ export default function CoOwnerSideBar() {
                     px-4 py-2.5 rounded-xl
                     text-xs font-semibold whitespace-nowrap
                     transition-all duration-300
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 mr-3
-                    w-32 
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2
+                    w-32
                     ${
                       isActive
                         ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/30 scale-105'
