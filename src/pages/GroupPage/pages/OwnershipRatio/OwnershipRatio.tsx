@@ -5,7 +5,7 @@ import Member from './components/Member'
 import ProgressBar from './components/ProgressBar'
 import Summary from './components/Summary'
 import Chart from './components/Chart'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
 import groupApi from '../../../../apis/group.api'
 import Skeleton from '../../../../components/Skeleton'
@@ -20,6 +20,12 @@ export interface Member {
 
 export default function OwnershipRatio() {
   const { groupId } = useParams<{ groupId: string }>()
+
+  const navigate = useNavigate()
+
+  const handleViewContract = () => {
+    navigate(`/dashboard/viewGroups/${groupId}/createContract`)
+  }
 
   // Fetch group data
   const { data: ownershipData, isPending } = useQuery({
@@ -49,14 +55,38 @@ export default function OwnershipRatio() {
       <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
 
       <div className='max-w-7xl mt-10 mx-auto'>
-        {/* Header */}
-        <HeaderTitle />
+        {/* Header với Button căn giữa */}
+        <div className='flex items-center justify-center gap-4 mb-8 ml-72'>
+          <HeaderTitle />
+
+          {/* Glassmorphism Button */}
+          <motion.button
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className='group relative px-6 py-3 backdrop-blur-xl bg-white/20 border-2 border-white/40 rounded-xl
+                     shadow-[0_8px_32px_rgba(6,182,212,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]
+                     hover:bg-white/30 hover:shadow-[0_12px_40px_rgba(6,182,212,0.5),inset_0_1px_0_rgba(255,255,255,0.6)]
+                     transition-all duration-300 overflow-hidden ml-36'
+          >
+            {/* Gradient Overlay on Hover */}
+            <div className='absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
+
+            {/* Button Content */}
+            <div className='relative flex items-center gap-2' onClick={handleViewContract}>
+              <span className='font-semibold text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]'>
+                View contract
+              </span>
+            </div>
+          </motion.button>
+        </div>
 
         {/* Vehicle Info */}
         <VehicleInfo
           name={responseData?.vehicleInfo?.model as string}
           plate={responseData?.vehicleInfo?.licensePlate as string}
+          brand={responseData?.vehicleInfo?.brand as string}
           value={responseData?.vehicleInfo?.vehicleValue as number}
+          chassis={responseData?.vehicleInfo.chassisNumber as string}
         />
 
         {/* Layout: Chart + Members List */}
