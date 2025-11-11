@@ -1,7 +1,16 @@
 // file chứa những method call api cho user/co-owner
 
 import type { CheckoutForm } from '../pages/GroupPage/pages/CheckOut/CheckOut'
-import type { GetAllNotifications, UploadImage, UserGetProfile, Voting } from '../types/api/user.type'
+import type {
+  CreateVotingPayload,
+  CreateVotingResponse,
+  GetAllNotifications,
+  UploadImage,
+  UserGetProfile,
+  Voting,
+  VotingSubmitPayload,
+  VotingSubmitResponse
+} from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -80,6 +89,14 @@ const userApi = {
     return http.get<Voting[]>('api/votings', {
       params: { groupId }
     })
+  },
+  //create voting
+  createVoting(body: CreateVotingPayload) {
+    return http.post<CreateVotingResponse>('api/votings', body)
+  },
+  //voting
+  voting(body: VotingSubmitPayload) {
+    return http.post<VotingSubmitResponse>('api/votings/vote', body)
   }
 }
 

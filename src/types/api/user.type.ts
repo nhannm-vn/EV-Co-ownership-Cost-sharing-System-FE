@@ -194,3 +194,71 @@ export interface Voting {
   votingProgress: string
   timeRemaining: string
 }
+
+export interface VotingOption {
+  key: string
+  label: string
+}
+
+export interface CreateVotingPayload {
+  groupId: number
+  title: string
+  description: string
+  votingType: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE'
+  options: VotingOption[]
+  deadline: string // ISO 8601 format, e.g. "2025-11-13T23:59:59"
+}
+
+export interface CreateVotingResponse {
+  votingId: number
+  groupId: number
+  title: string
+  description: string
+  votingType: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE'
+  status: 'ACTIVE' | 'CLOSED' | 'PENDING' | string
+  deadline: string // ISO 8601 format, ví dụ "2025-11-13T23:59:59"
+  estimatedAmount: number | null
+  relatedExpenseId: number | null
+  options: Record<string, string> // { "option1": "Kraken V3 SF", ... }
+  results: Record<string, number> // có thể là { "option1": 10, "option2": 5 }
+  createdBy: number
+  createdByName: string
+  createdAt: string // ISO datetime string
+  hasVoted: boolean
+  userVote: string | null // key của option mà user đã chọn
+  totalVotes: number
+  totalMembers: number
+  votingProgress: string // ví dụ: "0.0%" hoặc "75%"
+  timeRemaining: string // ví dụ: "2 days"
+}
+
+//Đ/n kiểu dữ liệu gửi lên submit voting
+export interface VotingSubmitPayload {
+  groupId: number
+  votingId: number
+  selectedOption: string // ví dụ: 'option1', 'option2', ...
+}
+
+//response after voting submit successful
+export interface VotingSubmitResponse {
+  votingId: number
+  groupId: number
+  title: string
+  description: string
+  votingType: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE'
+  status: 'ACTIVE' | 'CLOSED' | 'PENDING' | string
+  deadline: string
+  estimatedAmount: number | null
+  relatedExpenseId: number | null
+  options: Record<string, string>
+  results: Record<string, number>
+  createdBy: number
+  createdByName: string
+  createdAt: string
+  hasVoted: boolean
+  userVote: string | null
+  totalVotes: number
+  totalMembers: number
+  votingProgress: string
+  timeRemaining: string
+}
