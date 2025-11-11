@@ -12,3 +12,12 @@ export interface ContractResponse {
   createdAt: string // ISO datetime string
   updatedAt: string // ISO datetime string
 }
+
+export interface ContractsForEditResponse {
+  approvalStatus: string
+  endDate: string
+  groupId: number
+  groupName: string
+  id: number
+  startDate: string
+}

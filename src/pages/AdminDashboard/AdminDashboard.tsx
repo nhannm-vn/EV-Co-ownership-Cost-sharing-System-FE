@@ -61,6 +61,15 @@ export default function AdminDashboard() {
                 >
                   {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>CheckContract</span>}
                 </NavLink>
+                <NavLink
+                  to='editContract'
+                  className={({ isActive }) => {
+                    const activeClass = isActive ? 'bg-gray-300' : ''
+                    return `flex items-center rounded-lg ${activeClass} p-2 text-base font-normal text-gray-900 hover:bg-gray-300`
+                  }}
+                >
+                  {({ isActive }) => <span className={`ml-3 ${isActive ? 'font-bold' : ''}`}>Edit Contract</span>}
+                </NavLink>
               </li>
             )}
 
