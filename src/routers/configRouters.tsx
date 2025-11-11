@@ -45,6 +45,8 @@ import CheckOut from '../pages/GroupPage/pages/CheckOut'
 import Voting from '../pages/GroupPage/pages/Voting'
 import PendingCheckout from '../pages/GroupPage/pages/PendingCheckout'
 import FundOwnership from '../pages/GroupPage/pages/FundOwnership'
+import EditContract from '../pages/AdminDashboard/pages/EditContract'
+import FeedbackCoOwner from '../pages/AdminDashboard/pages/EditContract/FeedbackCo-Owner'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -173,7 +175,11 @@ function Routers() {
               children: [
                 {
                   element: <AdminDashboard />,
-                  children: [{ path: 'checkContract', element: <CheckContract /> }]
+                  children: [
+                    { path: 'checkContract', element: <CheckContract /> },
+                    { path: 'editContract', element: <EditContract /> },
+                    { path: 'feedbackCo-Owner/:contractId', element: <FeedbackCoOwner /> }
+                  ]
                 }
               ]
             }

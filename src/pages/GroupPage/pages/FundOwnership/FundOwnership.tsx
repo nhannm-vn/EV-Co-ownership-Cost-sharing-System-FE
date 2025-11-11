@@ -26,9 +26,6 @@ const FundHeader: React.FC = () => {
             <h1 className='text-2xl font-bold text-white mb-1'>Quỹ Chung Nhóm và tiền cọc </h1>
             <p className='text-green-50 text-xs'>Quản lý tài chính hiệu quả</p>
           </div>
-          <div className='flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-lg'>
-            <span className='text-white text-xs font-semibold'>🚗 VinFast VF8 Plus</span>
-          </div>
         </div>
       </div>
     </header>
@@ -89,19 +86,19 @@ const FundSummaryCard: React.FC<FundSummaryCardProps> = ({
         {/* ✅ THÊM: Card Tiền Cọc */}
         <div className='bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-500 hover:shadow-xl rounded-xl shadow-lg p-5 transition-all duration-300'>
           <div className='flex items-center justify-between mb-3'>
-            <h2 className='text-sm text-white font-semibold'>Tiền Cọc</h2>
+            <h2 className='text-sm text-white font-semibold'>Tiền Cọc Đảm Bảo</h2>
           </div>
           <p className='text-3xl font-bold bg-gradient-to-r from-blue-500 via-sky-500 to-cyan-400 bg-clip-text text-white'>
             {depositAmount.toLocaleString('vi-VN')}đ
           </p>
-          <p className='text-xl text-white mt-2'>Đã đặt cọc đã đóng ban đầu</p>
+          <p className='text-xl text-white mt-2'>Tiền cọc đã đóng ban đầu</p>
         </div>
 
         {/* Card Tổng Thu */}
         <div className='bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl shadow-lg p-5 border border-blue-100 hover:shadow-xl transition-all duration-300'>
           <div className='flex items-center justify-between mb-3'>
             <h2 className='text-sm text-gray-700 font-semibold flex items-center gap-1'>
-              <span className='text-lg'>↑</span> Tổng Thu của tiền quỹ và tiền cọc
+              <span className='text-sm'>↑</span> Tổng Thu của tiền quỹ và tiền cọc Đảm Bảo
             </h2>
           </div>
           <p className='text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent'>
@@ -114,7 +111,7 @@ const FundSummaryCard: React.FC<FundSummaryCardProps> = ({
         <div className='bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-lg p-5 border border-red-100 hover:shadow-xl transition-all duration-300'>
           <div className='flex items-center justify-between mb-3'>
             <h2 className='text-sm text-gray-700 font-semibold flex items-center gap-1'>
-              <span className='text-xl'>↓</span> Tổng Chi của tiền quỹ và tiền cọc
+              <span className='text-xl'>↓</span> Tổng Chi của tiền quỹ và tiền cọc đảm bảo
             </h2>
           </div>
           <p className='text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent'>
@@ -172,9 +169,9 @@ function TransactionHistory({ transactions }: { transactions: FundDepositHistory
             </tr>
           </thead>
           <tbody className='bg-white divide-y divide-gray-100'>
-            {transactions.map((trans) => (
+            {transactions.map((trans, index) => (
               <tr
-                key={trans.fundId}
+                key={`${trans.fundId}-${index}`}
                 className='hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition-all duration-300'
               >
                 {/* Fund ID */}
@@ -206,7 +203,7 @@ function TransactionHistory({ transactions }: { transactions: FundDepositHistory
                 <td className='px-6 py-4 whitespace-nowrap'>
                   <span className='inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 ring-1 ring-blue-200'>
                     <FundOutlined style={{ fontSize: '12px' }} />
-                    {trans.fundType == 'DEPOSIT_RESERVE' ? 'vehicle deposit' : 'fund contribution'}
+                    {trans.fundType == 'DEPOSIT_RESERVE' ? 'Security Deposit' : 'Fund Contribution'}
                   </span>
                 </td>
 
