@@ -44,7 +44,7 @@ import CheckVehicleReport from '../pages/AdminDashboard/pages/CheckVehicleReport
 import CheckOut from '../pages/GroupPage/pages/CheckOut'
 import Voting from '../pages/GroupPage/pages/Voting'
 import PendingCheckout from '../pages/GroupPage/pages/PendingCheckout'
-import FundOwnership from '../pages/AdminDashboard/pages/FundOwnership'
+import FundOwnership from '../pages/GroupPage/pages/FundOwnership'
 
 function Routers() {
   const routers = createBrowserRouter([

@@ -253,3 +253,23 @@ export interface CheckInResponse {
   bookingId: number
   responseType: 'CHECKOUT' | 'CHECKIN'
 }
+// lịch sử thanh toán tiền ký quỹ
+
+export interface FundDepositHistoryRow {
+  amount: number
+  direction: string
+  fundId: number
+  fundType: string
+  occurredAt: string
+  subtitle: string
+  title: string
+  userId: number
+}
+export interface FundDepositHistory {
+  depositBalance: number
+  operatingBalance: number
+  rows: FundDepositHistoryRow[]
+
+  totalIn: number
+  totalOut: number
+}

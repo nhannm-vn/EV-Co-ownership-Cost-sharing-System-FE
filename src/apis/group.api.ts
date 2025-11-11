@@ -8,6 +8,7 @@ import type {
   CreateGroupMember,
   DepositForGroup,
   DepositForUser,
+  FundDepositHistory,
   GroupItem,
   groupSummary,
   InvitationResponse,
@@ -125,6 +126,10 @@ const groupApi = {
   // verify QR code
   verifyCheckIn: (qrCode: string) => {
     return http.post<CheckInResponse>('api/vehicle-checks/qr-scan', { qrCode })
+  },
+  // show deposit and fund history
+  showDepositAndFundHistory: (groupId: string) => {
+    return http.get<FundDepositHistory>(`api/funds/groups/${groupId}/ledger/summary`)
   }
 }
 
