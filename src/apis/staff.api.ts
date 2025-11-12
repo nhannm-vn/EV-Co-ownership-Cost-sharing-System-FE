@@ -1,5 +1,5 @@
 import type { ImageStatus } from '../pages/AdminDashboard/pages/CheckGroup/components/PopupImage/PropupImage'
-import type { GetGroupById, GroupImage, GroupStaffList, UserOfStaff } from '../types/api/staff.type'
+import type { GetGroupById, GroupImage, GroupStaffList, UserDetails, UserOfStaff } from '../types/api/staff.type'
 import { getAccessTokenFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -59,6 +59,12 @@ const staffApi = {
   //lấy all group by user id
   getAllGroupsByUserId(userId: number) {
     return http.get<GetGroupById>(`api/staff/users/${userId}/groups`)
+  },
+
+  //lấy thông tin của chi tiết user dựa vào id, để tiến hành
+  //hiển thị thêm các thông tin xem chi tiết
+  getUserDetailInStaffById(userId: string) {
+    return http.get<UserDetails>(`api/staff/users/${userId}`)
   }
 }
 

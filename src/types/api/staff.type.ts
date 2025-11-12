@@ -148,3 +148,49 @@ export interface SortInfo {
   empty: boolean
   unsorted: boolean
 }
+
+// Đ/n cho get detail user by userId
+
+export interface UserDetails {
+  userId: number
+  fullName: string
+  email: string
+  phoneNumber: string
+  avatarUrl: string | null
+  roleName: 'OWNER' | 'CO_OWNER' | 'STAFF' | string
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING' | string
+  createdAt: string
+  documents: UserDocuments
+  statistics: UserStatistics
+}
+
+export interface UserDocuments {
+  citizenIdImages: {
+    front: DocumentInfo | null
+    back: DocumentInfo | null
+  }
+  driverLicenseImages: {
+    front: DocumentInfo | null
+    back: DocumentInfo | null
+  }
+}
+
+export interface DocumentInfo {
+  documentId: number
+  imageUrl: string
+  status: 'APPROVED' | 'REJECTED' | 'PENDING' | string
+  uploadedAt: string
+  reviewNote: string | null
+  reviewedBy: string | null
+  documentNumber: string | null
+  dateOfBirth: string | null
+  issueDate: string | null
+  expiryDate: string | null
+  address: string | null
+}
+
+export interface UserStatistics {
+  groupsJoined: number
+  accountStatus: 'ACTIVE' | 'INACTIVE' | string
+  memberSince: string
+}
