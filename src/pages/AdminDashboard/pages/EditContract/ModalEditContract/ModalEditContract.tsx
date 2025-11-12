@@ -3,6 +3,7 @@ import { Button, DatePicker } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 // Mock data đầy đủ
 const mockContractData = {
@@ -31,6 +32,7 @@ const mockContractData = {
 }
 
 export default function ModalEditContract() {
+  const navigate = useNavigate()
   const [isEditModalOpen, setIsEditModalOpen] = useState(true)
   const [openTerm, setOpenTerm] = useState<number | null>(null)
   const [startDate, setStartDate] = useState(dayjs(mockContractData.contract.effectiveDate))
@@ -291,6 +293,7 @@ export default function ModalEditContract() {
                 onClick={() => {
                   setIsEditModalOpen(false)
                   setOpenTerm(null)
+                  navigate(-1)
                 }}
                 className='px-6'
               >

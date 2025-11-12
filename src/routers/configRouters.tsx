@@ -47,6 +47,7 @@ import PendingCheckout from '../pages/GroupPage/pages/PendingCheckout'
 import FundOwnership from '../pages/GroupPage/pages/FundOwnership'
 import EditContract from '../pages/AdminDashboard/pages/EditContract'
 import FeedbackCoOwner from '../pages/AdminDashboard/pages/EditContract/FeedbackCo-Owner'
+import ModalEditContract from '../pages/AdminDashboard/pages/EditContract/ModalEditContract/ModalEditContract'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -178,7 +179,8 @@ function Routers() {
                   children: [
                     { path: 'checkContract', element: <CheckContract /> },
                     { path: 'editContract', element: <EditContract /> },
-                    { path: 'feedbackCo-Owner/:contractId/:groupId/:groupName', element: <FeedbackCoOwner /> }
+                    { path: 'feedbackCo-Owner/:contractId/:groupId/:groupName', element: <FeedbackCoOwner /> },
+                    { path: 'editContractDetail/:groupId', element: <ModalEditContract /> }
                   ]
                 }
               ]
