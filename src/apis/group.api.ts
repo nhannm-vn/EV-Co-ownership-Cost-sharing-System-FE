@@ -13,7 +13,8 @@ import type {
   groupSummary,
   InvitationResponse,
   MyBookingResponse,
-  OwnershipResponse
+  OwnershipResponse,
+  PaymentFund
 } from '../types/api/group.type'
 import type { PaymentHistory } from '../types/api/user.type'
 import { getAccessTokenFromLS } from '../utils/auth'
@@ -130,6 +131,10 @@ const groupApi = {
   // show deposit and fund history
   showDepositAndFundHistory: (groupId: string) => {
     return http.get<FundDepositHistory>(`api/funds/groups/${groupId}/ledger/summary`)
+  },
+  // payment fund contribution
+  paymentFund: (body: { userId: string; groupId: string; amount: number; note: string }) => {
+    return http.post<PaymentFund>('api/funds/payments/create', body)
   }
 }
 

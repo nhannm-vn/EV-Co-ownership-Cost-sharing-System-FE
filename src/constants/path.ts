@@ -35,7 +35,6 @@ const path = {
   voting: 'voting',
   pendingCheckout: 'pending-checkout/:bookingId',
   fundOwnership: 'fund-ownership', // Relative path
-
   //OTP
   OTP: '/demoOTP',
 

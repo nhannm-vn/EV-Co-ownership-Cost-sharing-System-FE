@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import adminApi from '../../../../apis/admin.api'
+import { useNavigate } from 'react-router'
+import Skeleton from '../../../../components/Skeleton'
 
 export default function EditContract() {
+  const navigate = useNavigate()
   const allContractQuery = useQuery({
     queryKey: ['all-contracts-for-edit'],
     queryFn: () => adminApi.getContractsForEdit()
@@ -9,6 +12,20 @@ export default function EditContract() {
 
   // Sample data - replace with your API data
   const contracts = allContractQuery?.data?.data || []
+  //
+  const handleViewFeedback = ({
+    contractId,
+    groupId,
+    groupName
+  }: {
+    contractId: string
+    groupId: string
+    groupName: string
+  }) => {
+    navigate(`/manager/feedbackCo-Owner/${contractId}/${groupId}/${groupName}`)
+  }
+
+  if (allContractQuery.isLoading) return <Skeleton />
 
   return (
     <div className='min-h-screen bg-gray-50 p-8'>
@@ -52,11 +69,17 @@ export default function EditContract() {
                   <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-700'>{contract.approvalStatus}</td>
                   <td className='px-6 py-4 whitespace-nowrap text-right text-sm'>
                     <div className='flex justify-end gap-2'>
-                      <button className='px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors'>
+                      <button
+                        className='px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors'
+                        onClick={() =>
+                          handleViewFeedback({
+                            contractId: contract.id.toString(),
+                            groupId: contract.groupId.toString(),
+                            groupName: contract.groupName.toString()
+                          })
+                        }
+                      >
                         View Feedback
-                      </button>
-                      <button className='px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors'>
-                        Edit Contract
                       </button>
                     </div>
                   </td>

@@ -154,7 +154,7 @@ const CreateContract: React.FC = () => {
           onClick={() => setShowRejectModal(false)}
         >
           <div className='bg-white rounded-2xl p-6 w-[500px] shadow-2xl' onClick={(e) => e.stopPropagation()}>
-            <h3 className='text-xl font-bold mb-4 text-orange-600'>📝 Lý do từ chối hợp đồng</h3>
+            <h3 className='text-xl font-bold mb-4 text-orange-600'> Lý do từ chối hợp đồng</h3>
             <p className='text-sm text-gray-600 mb-3'>
               Vui lòng nêu rõ lý do từ chối để hệ thống có thể xem xét và điều chỉnh hợp đồng.
             </p>

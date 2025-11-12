@@ -273,3 +273,7 @@ export interface FundDepositHistory {
   totalIn: number
   totalOut: number
 }
+
+export interface PaymentFund {
+  vnpayUrl: string
+}
