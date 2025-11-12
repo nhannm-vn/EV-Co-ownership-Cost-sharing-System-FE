@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import groupApi from '../../../../apis/group.api'
@@ -13,6 +13,8 @@ import {
   UnorderedListOutlined,
   UserOutlined
 } from '@ant-design/icons'
+import { toast } from 'react-toastify'
+import { getGroupIdFromLS, getUserIdFromLS } from '../../../../utils/auth'
 
 // ============ INTERFACES ============
 
@@ -83,7 +85,7 @@ const FundSummaryCard: React.FC<FundSummaryCardProps> = ({
           </button>
         </div>
 
-        {/* ✅ THÊM: Card Tiền Cọc */}
+        {/*  THÊM: Card Tiền Cọc */}
         <div className='bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-500 hover:shadow-xl rounded-xl shadow-lg p-5 transition-all duration-300'>
           <div className='flex items-center justify-between mb-3'>
             <h2 className='text-sm text-white font-semibold'>Tiền Cọc Đảm Bảo</h2>
@@ -276,32 +278,71 @@ function TransactionHistory({ transactions }: { transactions: FundDepositHistory
 interface ContributeModalProps {
   isOpen: boolean
   onClose: () => void
-  onSuccess: (amount: number) => void
+  onSuccess: (amount: number, note: string) => void
 }
 
-const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose, onSuccess }) => {
+const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose }) => {
   const [amount, setAmount] = useState<string>('')
   const [note, setNote] = useState<string>('')
-
-  if (!isOpen) return null
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const numAmount = parseInt(amount)
-    if (numAmount > 0) {
-      onSuccess(numAmount)
+  const paymentFundMutation = useMutation({
+    mutationFn: (data: { userId: string; groupId: string; amount: number; note: string }) => groupApi.paymentFund(data),
+    onSuccess: (response) => {
+      // toast.success('Đóng quỹ thành công!')
       setAmount('')
       setNote('')
+      onClose()
+      window.open(`${response?.data?.vnpayUrl}`, '_blank')
+    },
+    onError: () => {
+      toast.error('Đóng quỹ thất bại, vui lòng thử lại!')
     }
+  })
+
+  if (!isOpen) return null
+  const formatNumber = (value: string) => {
+    const cleaned = value.replace(/\D/g, '') // chỉ giữ số
+    if (!cleaned) return ''
+    return new Intl.NumberFormat('vi-VN').format(Number(cleaned))
+  }
+  // hàm tự nhập format cho đẹp
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setAmount(formatNumber(value))
+  }
+
+  // hàm khi submit form
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const numericValue = Number(amount.replace(/\./g, ''))
+    const groupId = getGroupIdFromLS() || ''
+    console.log(groupId)
+
+    const userId = getUserIdFromLS() || ''
+
+    console.log(userId)
+
+    // Validate giá trị
+    if (numericValue < 10000) {
+      toast.error('Số tiền tối thiểu là 10.000 VNĐ')
+      return
+    }
+    if (numericValue > 100000000) {
+      toast.error('Số tiền tối đa là 100.000.000 VNĐ')
+      return
+    }
+    paymentFundMutation.mutate({
+      userId,
+      groupId,
+      amount: numericValue,
+      note
+    })
   }
 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm'>
       <div className='bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all'>
         <div className='px-6 py-5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-t-2xl'>
-          <h3 className='text-2xl font-bold text-white flex items-center gap-2'>
-            <span>💳</span> Đóng Quỹ Chung
-          </h3>
+          <h3 className='text-2xl font-bold text-white flex items-center gap-2'>Đóng Quỹ Chung</h3>
         </div>
 
         <form onSubmit={handleSubmit} className='p-6 space-y-5'>
@@ -310,9 +351,10 @@ const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose, onSu
               Số Tiền (VNĐ) <span className='text-red-500'>*</span>
             </label>
             <input
-              type='number'
+              type='text'
+              inputMode='numeric'
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={handleAmountChange}
               className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all text-lg font-semibold'
               placeholder='Nhập số tiền'
               required
@@ -320,7 +362,9 @@ const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose, onSu
           </div>
 
           <div>
-            <label className='block text-sm font-bold text-gray-700 mb-2'>Ghi Chú (Tùy chọn)</label>
+            <label className='block text-sm font-bold text-gray-700 mb-2'>
+              Ghi Chú <span className='text-red-500'>*</span>
+            </label>
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
@@ -356,7 +400,6 @@ export default function FundOwnership() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [totalFund, setTotalFund] = useState(0)
   const { groupId } = useParams<{ groupId: string }>()
-  console.log(groupId)
 
   // call API
   const fundSummaryQuery = useQuery({
@@ -364,7 +407,7 @@ export default function FundOwnership() {
     queryFn: () => groupApi.showDepositAndFundHistory(groupId as string)
   })
 
-  console.log(fundSummaryQuery?.data?.data)
+  // console.log(fundSummaryQuery?.data?.data)
 
   // Tính tổng thu và chi từ transactions (trong thực tế sẽ lấy từ API)
   const totalFundData = fundSummaryQuery?.data?.data?.operatingBalance

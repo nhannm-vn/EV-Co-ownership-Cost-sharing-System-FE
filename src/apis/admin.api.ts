@@ -34,7 +34,7 @@ const adminApi = {
   },
   // lấy danh sách feedback của  từng hợp đồng
   getFeedbackByContractId: (contractId: string) => {
-    return http.get(`api/admin/contracts/${contractId}/feedback`)
+    return http.get(`api/contracts/${contractId}/member-feedbacks`)
   }
 }
 

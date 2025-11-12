@@ -178,7 +178,7 @@ function Routers() {
                   children: [
                     { path: 'checkContract', element: <CheckContract /> },
                     { path: 'editContract', element: <EditContract /> },
-                    { path: 'feedbackCo-Owner/:contractId', element: <FeedbackCoOwner /> }
+                    { path: 'feedbackCo-Owner/:contractId/:groupId/:groupName', element: <FeedbackCoOwner /> }
                   ]
                 }
               ]
