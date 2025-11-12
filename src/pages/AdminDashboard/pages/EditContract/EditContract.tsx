@@ -12,6 +12,8 @@ export default function EditContract() {
 
   // Sample data - replace with your API data
   const contracts = allContractQuery?.data?.data || []
+  console.log(contracts)
+
   //
   const handleViewFeedback = ({
     contractId,

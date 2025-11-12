@@ -33,16 +33,13 @@ export interface FeedbackItem {
   submittedAt: string
   userId: number
 }
-// export interface FeedbackCoOwnerResponse {
-//   contraccontractIdtId: string
-//   contractStatus: string
-//   feedbacks: FeedbackItem[]
-//   totalFeedbacks: number
-//   totalMembers: number
-//   pendingAgreeCount: 0
-//   pendingDisagreeCount: 1
-
-//   rejectedCount: 0
-//   totalFeedbacks: 1
-//   totalMembers: 1
-// }
+export interface FeedbackCoOwnerResponse {
+  contraccontractIdtId: string
+  contractStatus: string
+  feedbacks: FeedbackItem[]
+  totalFeedbacks: number
+  totalMembers: number
+  pendingAgreeCount: number
+  pendingDisagreeCount: number
+  rejectedCount: number
+}
