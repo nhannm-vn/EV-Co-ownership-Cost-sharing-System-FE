@@ -31,13 +31,13 @@ interface Member {
 const DOC_CONFIG = {
   cccd: {
     title: 'Căn cước công dân',
-    color: 'blue',
-    icon: 'M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2'
+    shortTitle: 'CCCD',
+    accent: '#3B82F6'
   },
   gplx: {
     title: 'Giấy phép lái xe',
-    color: 'green',
-    icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+    shortTitle: 'GPLX',
+    accent: '#10B981'
   }
 }
 
@@ -80,6 +80,9 @@ export default function CheckLicense() {
   const [members, setMembers] = useState<Member[]>([])
   const [selected, setSelected] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [expandedMembers, setExpandedMembers] = useState<Set<string>>(new Set())
+  const [scrollProgress, setScrollProgress] = useState(0)
+  const [showBackToTop, setShowBackToTop] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -89,11 +92,51 @@ export default function CheckLicense() {
         if (res.data && Array.isArray(res.data)) {
           const mappedMembers = res.data.map(mapUserToMember)
           setMembers(mappedMembers)
+          // Auto-expand first member
+          if (mappedMembers.length > 0) {
+            setExpandedMembers(new Set([mappedMembers[0].id]))
+          }
           setLoading(false)
         }
       })
       .catch(console.error)
   }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight
+      const progress = windowHeight > 0 ? (scrollTop / windowHeight) * 100 : 0
+      setScrollProgress(progress)
+      setShowBackToTop(scrollTop > 300)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const toggleMember = (id: string) => {
+    setExpandedMembers((prev) => {
+      const newSet = new Set(prev)
+      if (newSet.has(id)) {
+        newSet.delete(id)
+      } else {
+        newSet.add(id)
+      }
+      return newSet
+    })
+  }
+
+  const expandAll = () => {
+    setExpandedMembers(new Set(members.map((m) => m.id)))
+  }
+
+  const collapseAll = () => {
+    setExpandedMembers(new Set())
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const updateStatus = (id: string, type: DocType, side: Side, status: Status) => {
     setMembers((m) => m.map((x) => (x.id === id ? { ...x, [type]: { ...x[type], [`${side}Status`]: status } } : x)))
@@ -101,35 +144,41 @@ export default function CheckLicense() {
 
   const DocumentSection = ({ member, docType }: { member: Member; docType: DocType }) => {
     const doc = member[docType]
-    const { title, color, icon } = DOC_CONFIG[docType]
+    const { title, shortTitle, accent } = DOC_CONFIG[docType]
+
     return (
-      <div className={`p-4 bg-${color}-50 rounded-2xl border-2 border-${color}-200`}>
-        <div className='flex gap-2 mb-4 items-center'>
-          <div className={`w-10 h-10 bg-${color}-500 rounded-xl flex items-center justify-center`}>
-            <svg className='w-6 h-6 text-white' fill='none' stroke='currentColor' strokeWidth={2} viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' d={icon} />
-            </svg>
+      <div className='bg-gray-50 rounded-lg border border-gray-200 overflow-hidden'>
+        <div className='px-4 py-2.5 border-b border-gray-200 bg-white'>
+          <div className='flex items-center gap-2'>
+            <span
+              className='text-xs font-bold uppercase tracking-wide px-2 py-0.5 rounded text-white'
+              style={{ backgroundColor: accent }}
+            >
+              {shortTitle}
+            </span>
+            <span className='text-sm font-medium text-gray-700'>{title}</span>
           </div>
-          <h4 className='text-lg font-bold text-gray-900'>{title}</h4>
         </div>
-        <ImageCard
-          image={doc.frontImage}
-          alt='Mặt trước'
-          status={doc.frontStatus}
-          documentId={doc.frontId}
-          setSelected={setSelected}
-          onApprove={() => updateStatus(member.id, docType, 'front', 'APPROVED')}
-          onReject={() => updateStatus(member.id, docType, 'front', 'REJECTED')}
-        />
-        <ImageCard
-          image={doc.backImage}
-          alt='Mặt sau'
-          status={doc.backStatus}
-          documentId={doc.backId}
-          setSelected={setSelected}
-          onApprove={() => updateStatus(member.id, docType, 'back', 'APPROVED')}
-          onReject={() => updateStatus(member.id, docType, 'back', 'REJECTED')}
-        />
+        <div className='p-3 space-y-3'>
+          <ImageCard
+            image={doc.frontImage}
+            alt='Mặt trước'
+            status={doc.frontStatus}
+            documentId={doc.frontId}
+            setSelected={setSelected}
+            onApprove={() => updateStatus(member.id, docType, 'front', 'APPROVED')}
+            onReject={() => updateStatus(member.id, docType, 'front', 'REJECTED')}
+          />
+          <ImageCard
+            image={doc.backImage}
+            alt='Mặt sau'
+            status={doc.backStatus}
+            documentId={doc.backId}
+            setSelected={setSelected}
+            onApprove={() => updateStatus(member.id, docType, 'back', 'APPROVED')}
+            onReject={() => updateStatus(member.id, docType, 'back', 'REJECTED')}
+          />
+        </div>
       </div>
     )
   }
@@ -141,35 +190,146 @@ export default function CheckLicense() {
   return loading ? (
     <Skeleton />
   ) : (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6'>
-      {members.map((member, i) => (
-        <motion.div
-          key={member.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1 }}
-          className='bg-white rounded-2xl shadow-lg border border-indigo-100 overflow-hidden mb-6'
-        >
-          <div className='p-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white flex justify-between items-center'>
-            <div className='flex gap-3 items-center'>
-              <div className='w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center text-xl font-bold border border-white/30'>
-                {member.name.charAt(0)}
-              </div>
-              <div>
-                <h3 className='text-xl font-bold'>{member.name}</h3>
-                <p className='text-sm opacity-90'>
-                  {member.email} • {member.phone}
-                </p>
-              </div>
+    <div className='min-h-screen bg-gray-50'>
+      {/* Progress Bar */}
+      <div className='fixed top-0 left-0 right-0 h-1 bg-gray-200 z-50'>
+        <div className='h-full bg-blue-600 transition-all duration-150' style={{ width: `${scrollProgress}%` }} />
+      </div>
+
+      {/* Compact Sticky Header */}
+      <div className='sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm mt-1'>
+        <div className='max-w-6xl mx-auto px-4 py-3'>
+          <div className='flex items-center justify-between gap-4'>
+            <div className='flex items-center gap-3'>
+              <h1 className='text-xl font-bold text-gray-900'>Xác minh giấy tờ</h1>
+              <span className='text-sm text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full font-medium'>
+                {members.length} yêu cầu
+              </span>
             </div>
-            <div className='bg-white/20 px-3 py-1.5 rounded-lg font-semibold text-sm'>{member.submittedAt}</div>
+
+            {/* Expand/Collapse All */}
+            <div className='flex gap-2'>
+              <button
+                onClick={expandAll}
+                className='text-xs px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 font-medium transition-colors'
+              >
+                Mở tất cả
+              </button>
+              <button
+                onClick={collapseAll}
+                className='text-xs px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors'
+              >
+                Thu gọn
+              </button>
+            </div>
           </div>
-          <div className='p-5 grid gap-5 lg:grid-cols-2'>
-            <DocumentSection member={member} docType='cccd' />
-            <DocumentSection member={member} docType='gplx' />
-          </div>
-        </motion.div>
-      ))}
+        </div>
+      </div>
+
+      {/* Compact Member List */}
+      <div className='max-w-6xl mx-auto px-4 py-6'>
+        <div className='space-y-3'>
+          {members.map((member, i) => {
+            const isExpanded = expandedMembers.has(member.id)
+
+            return (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03, duration: 0.2 }}
+                className='bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200'
+              >
+                {/* Compact Header - Always Visible */}
+                <button
+                  onClick={() => toggleMember(member.id)}
+                  className='w-full px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors'
+                >
+                  <div className='flex items-center gap-3 flex-1'>
+                    {/* Avatar */}
+                    <div
+                      className='w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0'
+                      style={{ backgroundColor: '#3B82F6' }}
+                    >
+                      {member.name.charAt(0).toUpperCase()}
+                    </div>
+
+                    {/* Info */}
+                    <div className='flex-1 text-left min-w-0'>
+                      <div className='flex items-center gap-2 mb-0.5'>
+                        <h3 className='text-base font-bold text-gray-900 truncate'>{member.name}</h3>
+                        <span className='text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded flex-shrink-0'>
+                          #{i + 1}
+                        </span>
+                      </div>
+                      <div className='flex items-center gap-4 text-xs text-gray-600'>
+                        <span className='truncate'>{member.email}</span>
+                        <span className='flex-shrink-0'>{member.phone}</span>
+                        <span className='flex-shrink-0 text-gray-500'>{member.submittedAt}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Expand Icon */}
+                  <motion.div
+                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className='ml-3 flex-shrink-0'
+                  >
+                    <svg className='w-5 h-5 text-gray-500' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
+                    </svg>
+                  </motion.div>
+                </button>
+
+                {/* Collapsible Content */}
+                <AnimatePresence initial={false}>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className='overflow-hidden'
+                    >
+                      <div className='px-5 pb-5 pt-2 border-t border-gray-100 bg-gray-50'>
+                        <div className='grid gap-4 md:grid-cols-2'>
+                          <DocumentSection member={member} docType='cccd' />
+                          <DocumentSection member={member} docType='gplx' />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* End Indicator */}
+        <div className='mt-6 text-center'>
+          <p className='text-sm text-gray-500'>Đã hiển thị {members.length} yêu cầu</p>
+        </div>
+      </div>
+
+      {/* Back to Top */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={scrollToTop}
+            className='fixed bottom-6 right-6 z-40 bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-colors'
+          >
+            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2.5} d='M5 10l7-7m0 0l7 7m-7-7v18' />
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Image Preview */}
       <AnimatePresence>
         {selected && (
           <motion.div
@@ -177,7 +337,7 @@ export default function CheckLicense() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className='fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex justify-center items-center p-4'
+            className='fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-6 cursor-zoom-out'
           >
             <motion.img
               src={selected}
@@ -186,7 +346,7 @@ export default function CheckLicense() {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
-              className='max-w-4xl w-full rounded-2xl'
+              className='max-w-5xl w-full rounded-lg shadow-2xl'
             />
           </motion.div>
         )}
