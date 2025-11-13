@@ -1,4 +1,4 @@
-import type { ContractResponse, ContractsForEditResponse } from '../types/api/admin.type'
+import type { ContractDetail, ContractResponse, ContractsForEditResponse } from '../types/api/admin.type'
 import type { BookingResponse } from '../types/api/staff.type'
 import http from '../utils/http'
 
@@ -28,7 +28,6 @@ const adminApi = {
       }
     })
   },
-  // lấy danh sách contract để hiển thị trang edit
   getContractsForEdit: () => {
     return http.get<ContractsForEditResponse[]>('api/admin/contracts/pending-member-approval')
   },
@@ -57,6 +56,9 @@ const adminApi = {
     terms: string
   }) => {
     return http.put(`api/admin/contracts/${contractId}`, { startDate, endDate, terms })
+  // lấy chi tiết hợp đồng dựa trên groupId
+  getContractDetailByGroupId: (groupId: number) => {
+    return http.get<ContractDetail>(`api/contracts/${groupId}/details`)
   }
 }
 

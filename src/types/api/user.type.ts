@@ -262,3 +262,23 @@ export interface VotingSubmitResponse {
   votingProgress: string
   timeRemaining: string
 }
+
+//type for history payment
+export interface PaymentHistory {
+  userId: number
+  totalCompletedAmount: number
+  items: PaymentItem[]
+}
+
+export interface PaymentItem {
+  paymentId: number
+  fundId: number
+  groupId: number
+  groupName: string
+  amount: number
+  paymentMethod: 'VNPAY' | 'BANK_TRANSFER' | 'CASH' // có thể mở rộng nếu có thêm phương thức
+  status: 'COMPLETED' | 'PENDING' | 'FAILED' // tùy theo hệ thống
+  paymentType: 'DEPOSIT' | 'CONTRIBUTION'
+  transactionCode: string
+  paymentDate: string // dạng ISO hoặc "YYYY-MM-DD HH:mm:ss"
+}

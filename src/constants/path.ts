@@ -14,6 +14,7 @@ const path = {
   profile: 'profile', // Relative path
   uploadLicense: 'uploadLicense', // Relative path
   changePassword: 'changePassword', // Relative path
+  paymentHistory: 'paymentHistory', // Relative path
 
   // Group routes
 
