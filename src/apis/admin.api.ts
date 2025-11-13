@@ -28,19 +28,16 @@ const adminApi = {
       }
     })
   },
-  // lấy danh sách contract để hiển thị trang edit
   getContractsForEdit: () => {
     return http.get<ContractsForEditResponse[]>('api/admin/contracts/pending-member-approval')
   },
   // lấy danh sách feedback của  từng hợp đồng
   getFeedbackByContractId: (contractId: string) => {
-    return http.get(`api/admin/contracts/${contractId}/feedback`)
+    return http.get(`api/contracts/${contractId}/member-feedbacks`)
   },
-
   // lấy chi tiết hợp đồng dựa trên groupId
   getContractDetailByGroupId: (groupId: number) => {
     return http.get<ContractDetail>(`api/contracts/${groupId}/details`)
-    return http.get(`api/contracts/${contractId}/member-feedbacks`)
   }
 }
 

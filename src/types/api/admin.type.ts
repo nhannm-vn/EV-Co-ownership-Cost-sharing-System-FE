@@ -60,6 +60,7 @@ export interface ContractDetail {
   contract: Contract
   group: Group
   members: Member[]
+}
 // định nghĩa các kiểu cho feedback của co-owner
 
 export interface FeedbackItem {
