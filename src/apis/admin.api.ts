@@ -1,4 +1,4 @@
-import type { ContractResponse, ContractsForEditResponse } from '../types/api/admin.type'
+import type { ContractDetail, ContractResponse, ContractsForEditResponse } from '../types/api/admin.type'
 import type { BookingResponse } from '../types/api/staff.type'
 import http from '../utils/http'
 
@@ -35,6 +35,11 @@ const adminApi = {
   // lấy danh sách feedback của  từng hợp đồng
   getFeedbackByContractId: (contractId: string) => {
     return http.get(`api/admin/contracts/${contractId}/feedback`)
+  },
+
+  // lấy chi tiết hợp đồng dựa trên groupId
+  getContractDetailByGroupId: (groupId: number) => {
+    return http.get<ContractDetail>(`api/contracts/${groupId}/details`)
   }
 }
 
