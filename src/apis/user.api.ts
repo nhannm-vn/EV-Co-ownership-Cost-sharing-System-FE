@@ -5,6 +5,7 @@ import type {
   CreateVotingPayload,
   CreateVotingResponse,
   GetAllNotifications,
+  PaymentHistory,
   UploadImage,
   UserGetProfile,
   Voting,
@@ -97,6 +98,12 @@ const userApi = {
   //voting
   voting(body: VotingSubmitPayload) {
     return http.post<VotingSubmitResponse>('api/votings/vote', body)
+  },
+  //getHistoryPayments
+  getHistoryPayments(userId: number, fromDate?: string, toDate?: string) {
+    return http.get<PaymentHistory>('api/payments/history', {
+      params: { userId, fromDate, toDate }
+    })
   }
 }
 
