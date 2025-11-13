@@ -29,12 +29,20 @@ export interface FeedbackItem {
   email: string
   fullName: string
   reason: string
-  status: 'REJECTED' | 'APPROVED' | 'PENDING'
+  status: 'PENDING' | 'ACCEPTED'
   submittedAt: string
   userId: number
+  feedbackId: number
+  rejectCount: number
+  approveCount: number
+  isProcessed: boolean
+  lastAdminAction: 'REJECT' | 'APPROVE'
 }
 export interface FeedbackCoOwnerResponse {
-  contraccontractIdtId: string
+  approvedFeedbacksCount: number
+
+  rejectedFeedbacksCount: number
+  contractId: number
   contractStatus: string
   feedbacks: FeedbackItem[]
   totalFeedbacks: number

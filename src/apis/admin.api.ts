@@ -35,6 +35,28 @@ const adminApi = {
   // lấy danh sách feedback của  từng hợp đồng
   getFeedbackByContractId: (contractId: string) => {
     return http.get(`api/contracts/${contractId}/member-feedbacks`)
+  },
+  // đồng ý feedback
+  acceptFeedback: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) => {
+    return http.put(`api/admin/contracts/feedbacks/${feedbackId}/approve`, { adminNote })
+  },
+  // từ chối feedback
+  rejectFeedback: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) => {
+    return http.put(`api/admin/contracts/feedbacks/${feedbackId}/reject`, { adminNote })
+  },
+  // update contract
+  updateContract: ({
+    contractId,
+    startDate,
+    endDate,
+    terms
+  }: {
+    contractId: string
+    startDate: string
+    endDate: string
+    terms: string
+  }) => {
+    return http.put(`api/admin/contracts/${contractId}`, { startDate, endDate, terms })
   }
 }
 
