@@ -48,6 +48,7 @@ import FundOwnership from '../pages/GroupPage/pages/FundOwnership'
 import EditContract from '../pages/AdminDashboard/pages/EditContract'
 import FeedbackCoOwner from '../pages/AdminDashboard/pages/EditContract/FeedbackCo-Owner'
 import ModalEditContract from '../pages/AdminDashboard/pages/EditContract/ModalEditContract/ModalEditContract'
+import PaymentHistory from '../pages/PaymentHistory'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -122,6 +123,7 @@ function Routers() {
                 { path: path.issueReport, element: <IssueReport /> },
                 { path: path.profile, element: <MyAccount /> },
                 { path: path.uploadLicense, element: <UploadLicense /> },
+                { path: path.paymentHistory, element: <PaymentHistory /> },
                 { path: path.changePassword, element: <ChangePassword /> }
               ]
             }
