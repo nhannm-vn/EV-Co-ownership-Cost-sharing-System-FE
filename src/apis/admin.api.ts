@@ -40,6 +40,7 @@ const adminApi = {
   // lấy chi tiết hợp đồng dựa trên groupId
   getContractDetailByGroupId: (groupId: number) => {
     return http.get<ContractDetail>(`api/contracts/${groupId}/details`)
+    return http.get(`api/contracts/${contractId}/member-feedbacks`)
   }
 }
 

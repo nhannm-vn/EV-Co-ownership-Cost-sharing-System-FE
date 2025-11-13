@@ -13,6 +13,7 @@ export interface ContractResponse {
   updatedAt: string // ISO datetime string
 }
 
+// định nghĩa kiểu dữ cho các hợp đồng
 export interface ContractsForEditResponse {
   approvalStatus: string
   endDate: string
@@ -59,4 +60,23 @@ export interface ContractDetail {
   contract: Contract
   group: Group
   members: Member[]
+// định nghĩa các kiểu cho feedback của co-owner
+
+export interface FeedbackItem {
+  email: string
+  fullName: string
+  reason: string
+  status: 'REJECTED' | 'APPROVED' | 'PENDING'
+  submittedAt: string
+  userId: number
+}
+export interface FeedbackCoOwnerResponse {
+  contraccontractIdtId: string
+  contractStatus: string
+  feedbacks: FeedbackItem[]
+  totalFeedbacks: number
+  totalMembers: number
+  pendingAgreeCount: number
+  pendingDisagreeCount: number
+  rejectedCount: number
 }
