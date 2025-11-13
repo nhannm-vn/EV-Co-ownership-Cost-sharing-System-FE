@@ -56,6 +56,7 @@ const adminApi = {
     terms: string
   }) => {
     return http.put(`api/admin/contracts/${contractId}`, { startDate, endDate, terms })
+  },
   // lấy chi tiết hợp đồng dựa trên groupId
   getContractDetailByGroupId: (groupId: number) => {
     return http.get<ContractDetail>(`api/contracts/${groupId}/details`)
