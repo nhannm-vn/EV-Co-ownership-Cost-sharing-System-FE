@@ -4,7 +4,8 @@ import {
   UserOutlined,
   SafetyCertificateOutlined,
   LockOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  TransactionOutlined
 } from '@ant-design/icons'
 import { Avatar, Space, Modal } from 'antd'
 import { useContext, useState } from 'react'
@@ -236,7 +237,7 @@ function NavHeader() {
             ref={accountRefs.setFloating}
             style={accountFloatingStyles}
             className='bg-gradient-to-br from-white via-gray-50 to-gray-100 rounded-xl shadow-2xl border border-gray-200/50 py-3 min-w-[220px] ml-10 z-[60] 
-                   before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 backdrop-blur-sm'
+                 before:content-[""]  before:absolute before:-top-6 before:left-0 before:right-0 before:h-6 backdrop-blur-sm'
           >
             {/* Header with user info */}
             <div className='px-4 py-3 border-b border-gray-200/70 bg-gradient-to-r from-blue-50 to-indigo-50'>
@@ -250,7 +251,8 @@ function NavHeader() {
                 </div>
               </div>
             </div>
-            {/* Menu items giữ nguyên ... */}
+
+            {/* Menu items */}
             <div className='py-2'>
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.profile} className='flex items-center gap-3'>
@@ -258,12 +260,21 @@ function NavHeader() {
                   <span className='group-hover:text-blue-600 transition-colors'>Tài Khoản Của Tôi</span>
                 </Link>
               </div>
+
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.uploadLicense} className='flex items-center gap-3'>
                   <SafetyCertificateOutlined className='text-green-500 group-hover:text-green-600 transition-colors' />
                   <span className='group-hover:text-green-600 transition-colors'>Cập nhật GPLX & CCCD</span>
                 </Link>
               </div>
+
+              <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-purple-100 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
+                <Link to={path.paymentHistory} className='flex items-center gap-3'>
+                  <TransactionOutlined className='text-purple-500 group-hover:text-purple-600 transition-colors' />
+                  <span className='group-hover:text-purple-600 transition-colors'>Lịch sử thanh toán</span>
+                </Link>
+              </div>
+
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-yellow-100 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.changePassword} className='flex items-center gap-3'>
                   <LockOutlined className='text-orange-500 group-hover:text-orange-600 transition-colors' />
@@ -271,6 +282,7 @@ function NavHeader() {
                 </Link>
               </div>
             </div>
+
             <div className='border-t border-gray-200/70 mt-2'>
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <div
