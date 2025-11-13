@@ -46,16 +46,20 @@ const CreateContract: React.FC = () => {
   const approveMemberMutation = useMutation({
     mutationFn: ({
       contractId,
-      status,
+      reactionType,
       reason
     }: {
       contractId: string
-      status: 'APPROVED' | 'REJECTED'
+      reactionType: 'DISAGREE' | 'AGREE'
       reason?: string
-    }) => groupApi.approveMemberContract(contractId, { status, reason }),
+    }) => groupApi.approveMemberContract(contractId, { reactionType: reactionType, reason }),
     onSuccess: (_, variables) => {
-      if (variables.status === 'APPROVED') toast.success('Hợp đồng đã được phê duyệt!')
+      if (variables.reactionType === 'AGREE') toast.success('Hợp đồng đã được phê duyệt!')
       else toast.success('Đã gửi lý do từ chối hợp đồng!')
+
+      setShowRejectModal(false)
+
+      setRejectReason('')
     }
   })
 
@@ -100,14 +104,14 @@ const CreateContract: React.FC = () => {
     if (!idContract) {
       return
     }
-    approveMemberMutation.mutate({ contractId: idContract, status: 'APPROVED' })
+    approveMemberMutation.mutate({ contractId: idContract, reactionType: 'AGREE' })
   }
 
   const onRejectMember = () => {
     if (!idContract) {
       return
     }
-    approveMemberMutation.mutate({ contractId: idContract, status: 'REJECTED', reason: rejectReason })
+    approveMemberMutation.mutate({ contractId: idContract, reactionType: 'DISAGREE', reason: rejectReason })
   }
 
   if (contractQuery.isLoading) {

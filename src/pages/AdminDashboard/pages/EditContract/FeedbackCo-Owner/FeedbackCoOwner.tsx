@@ -1,13 +1,62 @@
 import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, LeftOutlined } from '@ant-design/icons'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router'
 import adminApi from '../../../../../apis/admin.api'
 import type { FeedbackCoOwnerResponse } from '../../../../../types/api/admin.type'
 import MainContent from './components/MainContent'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 export default function FeedbackCoOwner() {
+  const queryClient = useQueryClient()
   const { contractId, groupName, groupId } = useParams()
+  const [adminNote, setAdminNote] = useState('')
   const navigate = useNavigate()
+  // chấp nhận feedback
+  const accepctFeedback = useMutation({
+    mutationFn: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) =>
+      adminApi.acceptFeedback({ feedbackId, adminNote })
+  })
+
+  const rejectFeedback = useMutation({
+    mutationFn: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) =>
+      adminApi.rejectFeedback({ feedbackId, adminNote })
+  })
+
+  const handleAcceptFeedback = (feedbackId: string, isProcessed: boolean, adminNote: string) => {
+    if (!isProcessed) toast.error('cần xử lý  hợp đồng trước khi chấp nhận feedback')
+    if (adminNote.trim().length === 0) {
+      toast.error('vui lòng nhập thông tin hợp đồng sửa đổi trước khi chấp nhận feedback')
+      return
+    }
+    accepctFeedback.mutate(
+      { feedbackId, adminNote },
+      {
+        onSuccess: () => {
+          toast.success('đã chấp nhận feedback thành công')
+          setAdminNote('')
+          queryClient.invalidateQueries({ queryKey: ['feedback-by-contract-id', contractId] })
+        }
+      }
+    )
+  }
+
+  const handleRejectFeedback = (feedbackId: string, reason: string) => {
+    if (reason.trim().length === 0) {
+      toast.error('vui lòng nhập lý do trước khi từ chối feedback')
+      return
+    }
+    rejectFeedback.mutate(
+      { feedbackId, adminNote: reason },
+      {
+        onSuccess: () => {
+          toast.success('đã từ chối feedback thành công')
+          setAdminNote('')
+          queryClient.invalidateQueries({ queryKey: ['feedback-by-contract-id', contractId] })
+        }
+      }
+    )
+  }
   const feedContractQuery = useQuery({
     queryKey: ['feedback-by-contract-id', contractId],
     queryFn: () => adminApi.getFeedbackByContractId(contractId ?? ''),
@@ -17,8 +66,8 @@ export default function FeedbackCoOwner() {
   const feedbacks: FeedbackCoOwnerResponse = feedContractQuery?.data?.data
   const allFeedbacks = feedbacks?.feedbacks || []
 
-  const handleEditContract = (groupId: string) => {
-    navigate(`/manager/editContractDetail/${groupId}`)
+  const handleEditContract = ({ contractId, groupId }: { contractId: string; groupId: string }) => {
+    navigate(`/manager/editContractDetail/${contractId}/${groupId}`)
   }
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -45,7 +94,7 @@ export default function FeedbackCoOwner() {
       <MainContent feedBacks={feedbacks} />
       {/* Content Grid */}
       {allFeedbacks.map((feedback) => (
-        <div className='grid grid-cols-1 lg:grid-cols-5 gap-6'>
+        <div className='grid grid-cols-1 lg:grid-cols-5 gap-6' key={feedback?.userId}>
           {/* Feedback List */}
           <div className='lg:col-span-3'>
             <div
@@ -70,19 +119,19 @@ export default function FeedbackCoOwner() {
                         <p className='text-sm text-gray-500'>{feedback?.email}</p>
                       </div>
 
-                      {feedback?.status === 'PENDING' && (
+                      {feedback?.lastAdminAction === null && (
                         <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200'>
                           <ClockCircleOutlined className='text-sm' />
                           Chờ xử lý
                         </span>
                       )}
-                      {feedback?.status === 'APPROVED' && (
+                      {feedback?.lastAdminAction === 'APPROVE' && (
                         <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200'>
                           <CheckCircleOutlined className='text-sm' />
                           Đã chấp nhận
                         </span>
                       )}
-                      {feedback?.status === 'REJECTED' && (
+                      {feedback?.lastAdminAction === 'REJECT' && (
                         <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200'>
                           <CloseCircleOutlined className='text-sm' />
                           Đã từ chối
@@ -132,34 +181,51 @@ export default function FeedbackCoOwner() {
                   <p className='text-sm text-gray-700 leading-relaxed'>{feedback?.reason}</p>
                 </div>
 
-                {/* Admin Note */}
-                <div className='mb-6'>
-                  <label className='block text-sm font-semibold text-gray-900 mb-2'>Ghi chú của Admin</label>
-                  <textarea
-                    rows={4}
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none'
-                    placeholder='Nhập ghi chú về cách xử lý feedback này...'
-                  />
-                </div>
-
                 {/* Action Buttons */}
                 <div className='space-y-2.5'>
-                  <button
-                    className='w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium text-sm flex items-center justify-center gap-2'
-                    onClick={() => handleEditContract(groupId ?? '')}
-                  >
-                    <CheckCircleOutlined />
-                    Sửa Hợp Đồng
-                  </button>
-                  <button className='w-full bg-green-600 text-white py-2.5 px-4 rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors font-medium text-sm flex items-center justify-center gap-2'>
-                    <CheckCircleOutlined />
-                    Chấp nhận Feedback
-                  </button>
+                  {feedback?.lastAdminAction === null ? (
+                    <>
+                      <button
+                        className='w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium text-sm flex items-center justify-center gap-2'
+                        onClick={() =>
+                          handleEditContract({
+                            contractId: feedbacks?.contractId.toString(),
+                            groupId: groupId as string
+                          })
+                        }
+                      >
+                        <CheckCircleOutlined />
+                        Sửa Hợp Đồng
+                      </button>
 
-                  <button className='w-full border-2 border-red-200 text-red-600 py-2.5 px-4 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm flex items-center justify-center gap-2'>
-                    <CloseCircleOutlined />
-                    Từ chối Feedback
-                  </button>
+                      <button
+                        className='w-full bg-green-600 text-white py-2.5 px-4 rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors font-medium text-sm flex items-center justify-center gap-2'
+                        onClick={() =>
+                          handleAcceptFeedback(feedback?.feedbackId.toString(), feedback?.isProcessed, adminNote)
+                        }
+                      >
+                        <CheckCircleOutlined />
+                        Chấp nhận Feedback
+                      </button>
+
+                      <button
+                        className='w-full border-2 border-red-200 text-red-600 py-2.5 px-4 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm flex items-center justify-center gap-2'
+                        onClick={() => handleRejectFeedback(feedback?.feedbackId.toString(), adminNote)}
+                      >
+                        <CloseCircleOutlined />
+                        Từ chối Feedback
+                      </button>
+                    </>
+                  ) : (
+                    <div className='mb-3'>
+                      <h3 className='font-semibold text-gray-900 mb-1'>Ghi chú của Admin</h3>
+                      <div className='text-sm text-gray-700 leading-relaxed'>
+                        {feedback?.reason.split('\n').map((line, index) => (
+                          <p key={index}>{line}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

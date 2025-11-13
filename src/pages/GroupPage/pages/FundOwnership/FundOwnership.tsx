@@ -15,6 +15,7 @@ import {
 } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 import { getGroupIdFromLS, getUserIdFromLS } from '../../../../utils/auth'
+import Skeleton from '../../../../components/Skeleton'
 
 // ============ INTERFACES ============
 
@@ -407,7 +408,7 @@ export default function FundOwnership() {
     queryFn: () => groupApi.showDepositAndFundHistory(groupId as string)
   })
 
-  // console.log(fundSummaryQuery?.data?.data)
+  console.log(fundSummaryQuery?.data?.data)
 
   // Tính tổng thu và chi từ transactions (trong thực tế sẽ lấy từ API)
   const totalFundData = fundSummaryQuery?.data?.data?.operatingBalance
@@ -416,6 +417,10 @@ export default function FundOwnership() {
       setTotalFund(totalFundData)
     }
   }, [totalFundData])
+
+  if (fundSummaryQuery.isLoading) {
+    return <Skeleton />
+  }
   const totalIncome = fundSummaryQuery?.data?.data?.totalIn
   const totalExpense = fundSummaryQuery?.data?.data?.totalOut
   const depositAmount = fundSummaryQuery?.data?.data?.depositBalance

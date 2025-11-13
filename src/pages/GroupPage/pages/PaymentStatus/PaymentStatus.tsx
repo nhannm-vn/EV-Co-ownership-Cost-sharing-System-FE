@@ -13,6 +13,14 @@ export default function PaymentStatus() {
     queryFn: () => groupApi.getDepositHistoryForGroup(searchParams.get('txnRef') || '')
   })
 
+  const handleNavigate = () => {
+    if (searchParams.get('type') === 'fund') {
+      return navigate(`/dashboard/viewGroups/${txnData?.groupId}/fund-ownership`)
+    } else {
+      return navigate(`/dashboard/viewGroups/${txnData?.groupId}/paymentDeposit`)
+    }
+  }
+
   const txnData = txnQuery.data?.data
   const formattedAmount = formatToVND(txnData?.amount || 0)
   const formattedDate = new Date(txnData?.paidAt || '').toLocaleString('vi-VN')
@@ -50,7 +58,7 @@ export default function PaymentStatus() {
 
       <div className='mt-8 flex flex-col gap-3'>
         <button
-          onClick={() => navigate(`/dashboard/viewGroups/${txnData?.groupId}/paymentDeposit`)}
+          onClick={handleNavigate}
           className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition'
         >
           Đóng

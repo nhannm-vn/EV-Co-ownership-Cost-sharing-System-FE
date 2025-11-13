@@ -77,7 +77,7 @@ const groupApi = {
     return http.post(`api/contracts/${groupId}/cancel`, { reason })
   },
   // approve or reject member contract
-  approveMemberContract: (contractId: string, payload: { status: string; reason?: string }) => {
+  approveMemberContract: (contractId: string, payload: { reactionType: string; reason?: string }) => {
     return http.post(`api/contracts/${contractId}/member-feedback`, payload)
   },
   // get deposit for user
