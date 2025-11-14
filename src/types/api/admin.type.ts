@@ -64,28 +64,28 @@ export interface ContractDetail {
 // định nghĩa các kiểu cho feedback của co-owner
 
 export interface FeedbackItem {
+  adminNote: string
   email: string
+  feedbackId: number
   fullName: string
+  isProcessed: boolean
+  lastAdminAction: string | null
+  lastAdminActionAt: string | null
+  reactionType: string
   reason: string
-  status: 'PENDING' | 'ACCEPTED'
+  status: string
   submittedAt: string
   userId: number
-  feedbackId: number
-  rejectCount: number
-  approveCount: number
-  isProcessed: boolean
-  lastAdminAction: 'REJECT' | 'APPROVE'
 }
 export interface FeedbackCoOwnerResponse {
+  acceptedCount: number
   approvedFeedbacksCount: number
 
-  rejectedFeedbacksCount: number
-  contractId: number
   contractStatus: string
+  contractId: number
   feedbacks: FeedbackItem[]
-  totalFeedbacks: number
-  totalMembers: number
-  pendingAgreeCount: number
   pendingDisagreeCount: number
-  rejectedCount: number
+  rejectedFeedbacksCount: number
+  totalEntries: number
+  totalFeedbacks: number
 }

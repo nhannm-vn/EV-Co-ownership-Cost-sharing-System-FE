@@ -28,7 +28,12 @@ export default function EditContract() {
   }
 
   if (allContractQuery.isLoading) return <Skeleton />
-
+  if (allContractQuery?.data?.data.length === 0)
+    return (
+      <div className='min-h-screen flex items-center justify-center'>
+        <h2 className='text-2xl font-semibold text-gray-700'>No contracts available for editing.</h2>
+      </div>
+    )
   return (
     <div className='min-h-screen bg-gray-50 p-8'>
       <div className='max-w-7xl mx-auto'>

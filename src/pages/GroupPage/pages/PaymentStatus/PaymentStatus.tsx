@@ -2,9 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearchParams } from 'react-router'
 import groupApi from '../../../../apis/group.api'
 import { formatToVND } from '../../../../utils/formatPrice'
+import { useEffect } from 'react'
 
 export default function PaymentStatus() {
   const [searchParams] = useSearchParams()
+
   const navigate = useNavigate()
   console.log(searchParams.get('status'), searchParams.get('txnRef'))
 
@@ -12,6 +14,19 @@ export default function PaymentStatus() {
     queryKey: ['deposit-history', searchParams.get('txnRef')],
     queryFn: () => groupApi.getDepositHistoryForGroup(searchParams.get('txnRef') || '')
   })
+
+  useEffect(() => {
+    if (!txnQuery.data) return
+
+    const groupId = txnQuery.data.data.groupId
+    if (!groupId) return
+
+    if (searchParams.get('status') === 'fail' && searchParams.get('type') === 'fund') {
+      navigate(`/dashboard/viewGroups/${groupId}/fund-ownership`)
+    } else if (searchParams.get('status') === 'fail') {
+      navigate(`/dashboard/viewGroups/${groupId}/paymentDeposit`)
+    }
+  }, [txnQuery.data, searchParams, navigate])
 
   const handleNavigate = () => {
     if (searchParams.get('type') === 'fund') {
