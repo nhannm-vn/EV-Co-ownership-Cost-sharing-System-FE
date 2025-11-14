@@ -97,6 +97,20 @@ const userApi = {
   //voting
   voting(body: VotingSubmitPayload) {
     return http.post<VotingSubmitResponse>('api/votings/vote', body)
+  },
+  //edit profile
+  //edit phone
+  editPhoneNumber(userId: string, newPhoneNumber: string) {
+    return http.patch('api/users/profile/phone', {
+      userId,
+      phoneNumber: newPhoneNumber
+    })
+  },
+  editFullName(userId: string, newFullName: string) {
+    return http.patch('api/users/profile/name', {
+      userId,
+      fullName: newFullName
+    })
   }
 }
 

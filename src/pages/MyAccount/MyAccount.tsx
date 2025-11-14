@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { motion } from 'framer-motion'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 import userApi from '../../apis/user.api'
 import Skeleton from '../../components/Skeleton'
 import ActivitiBadge from './Components/ActivityBadge'
@@ -10,9 +11,12 @@ import GroupStatus from './Components/GroupStatus'
 import Icon from './Components/Icon'
 import Username from './Components/Username'
 
-export default function ProfilePage() {
-  // Fetch user profile with React Query
-  //dùng usequery để query dữ liệu
+export default function MyAccount() {
+  const queryClient = useQueryClient()
+  const [editingField, setEditingField] = useState<'phone' | 'name' | null>(null)
+  const [editValue, setEditValue] = useState('')
+
+  // Fetch user profile
   const {
     data: userProfile,
     isLoading,
@@ -24,12 +28,46 @@ export default function ProfilePage() {
 
   const user = userProfile?.data
 
-  // Loading state: nếu như đang fetch api thì để là skeleton
+  // Mutation for phone number
+  const phonemutation = useMutation({
+    mutationFn: (newPhone: string) => userApi.editPhoneNumber(String(user?.userId), newPhone),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-profile'] })
+      setEditingField(null)
+    }
+  })
+
+  // Mutation for full name
+  const nameMutation = useMutation({
+    mutationFn: (newName: string) => userApi.editFullName(String(user?.userId), newName),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-profile'] })
+      setEditingField(null)
+    }
+  })
+
+  const handleEdit = (field: 'phone' | 'name', currentValue: string) => {
+    setEditingField(field)
+    setEditValue(currentValue)
+  }
+
+  const handleSave = () => {
+    if (editingField === 'phone') {
+      phonemutation.mutate(editValue)
+    } else if (editingField === 'name') {
+      nameMutation.mutate(editValue)
+    }
+  }
+
+  const handleCancel = () => {
+    setEditingField(null)
+    setEditValue('')
+  }
+
   if (isLoading) {
     return <Skeleton />
   }
 
-  // Error state: Nếu mà chưa có dữ liệu hoặc là bị lỗi thì sẽ render ra cái component này
   if (isError || !user) {
     return (
       <div className='min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600'>
@@ -49,13 +87,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div
-      className='min-h-screen flex items-center justify-center p-6 font-sans 
-                 bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600 relative overflow-hidden'
-    >
-      {/* Holographic Background Effects: các motion hiệu ứng để cho UI hiện đại và mượt hơn */}
+    <div className='min-h-screen flex items-center justify-center p-6 font-sans bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-600 relative overflow-hidden'>
+      {/* Background Effects */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-        {/* Animated Orbs */}
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity }}
@@ -73,58 +107,110 @@ export default function ProfilePage() {
         />
       </div>
 
-      {/* Premium Liquid Glass Card */}
+      {/* Edit Modal */}
+      <AnimatePresence>
+        {editingField && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className='fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4'
+            onClick={handleCancel}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', duration: 0.5 }}
+              onClick={(e) => e.stopPropagation()}
+              className='bg-white/95 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full border-[3px] border-white shadow-[0_20px_60px_rgba(0,0,0,0.3)]'
+            >
+              <h3 className='text-2xl font-bold text-gray-800 mb-6'>
+                {editingField === 'phone' ? 'Chỉnh sửa số điện thoại' : 'Chỉnh sửa tên'}
+              </h3>
+              <input
+                type='text'
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                className='w-full px-4 py-3 bg-white border-2 border-blue-200 rounded-xl text-gray-800 focus:outline-none focus:border-blue-400 transition-colors mb-6'
+                placeholder={editingField === 'phone' ? 'Nhập số điện thoại mới' : 'Nhập tên mới'}
+                autoFocus
+              />
+              <div className='flex gap-3'>
+                <button
+                  onClick={handleSave}
+                  disabled={phonemutation.isPending || nameMutation.isPending}
+                  className='flex-1 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold py-3 rounded-xl hover:from-cyan-500 hover:to-blue-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed'
+                >
+                  {phonemutation.isPending || nameMutation.isPending ? 'Đang lưu...' : 'Lưu'}
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className='flex-1 bg-gray-200 text-gray-800 font-semibold py-3 rounded-xl hover:bg-gray-300 transition-colors'
+                >
+                  Hủy
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Card */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
-        className='w-full max-w-6xl backdrop-blur-[60px]
-                   bg-gradient-to-br from-white/22 via-white/16 to-white/20
-                   rounded-[2.5rem] 
-                   shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)]
-                   border-[4px] border-white/60
-                   overflow-hidden relative z-10'
+        className='w-full max-w-6xl backdrop-blur-[60px] bg-gradient-to-br from-white/22 via-white/16 to-white/20 rounded-[2.5rem] shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border-[4px] border-white/60 overflow-hidden relative z-10'
       >
-        {/* Premium Top Gradient Bar */}
         <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
 
         <div className='grid lg:grid-cols-3 gap-8 p-8'>
-          {/* Left Section - Avatar & Name */}
+          {/* Left Section */}
           <motion.div
             initial={{ x: -30, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className='lg:col-span-1 flex flex-col items-center justify-center space-y-6 
-                       bg-white/15 backdrop-blur-xl rounded-2xl p-8 
-                       border-[3px] border-white/40
-                       shadow-[0_0_30px_rgba(6,182,212,0.3),inset_0_1px_15px_rgba(255,255,255,0.1)]'
+            className='lg:col-span-1 flex flex-col items-center justify-center space-y-6 bg-white/15 backdrop-blur-xl rounded-2xl p-8 border-[3px] border-white/40 shadow-[0_0_30px_rgba(6,182,212,0.3),inset_0_1px_15px_rgba(255,255,255,0.1)]'
           >
-            {/* Avatar */}
             <Avatar
               avatar={
-                'https://cdn-media.sforum.vn/storage/app/media/HuynhUy/React%20l%C3%A0%20g%C3%ACH%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20chi%20ti%E1%BA%BFt%20cho%20ng%C6%B0%E1%BB%9Di%20m%E1%BB%9Bi%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u/react-la-gi-1.jpg'
+                'https://cdn-media.sforum.vn/storage/app/media/HuynhUy/React%20l%C3%A0%20g%C3%ACh%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20chi%20ti%E1%BA%BFt%20cho%20ng%C6%B0%E1%BB%9Di%20m%E1%BB%9Bi%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u/react-la-gi-1.jpg'
               }
             />
 
-            {/* Username */}
-            <Username username={user?.fullName as string} />
+            {/* Username with Edit Button */}
+            <div className='relative group'>
+              <Username username={user?.fullName as string} />
+              <button
+                onClick={() => handleEdit('name', user?.fullName as string)}
+                className='absolute -right-10 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-2 rounded-lg shadow-lg hover:bg-white'
+                title='Chỉnh sửa tên'
+              >
+                <svg className='w-4 h-4 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z'
+                  />
+                </svg>
+              </button>
+            </div>
 
-            {/* Stats - Groups & Status */}
             <GroupStatus
               totalGroups={user?.statistics.groupsJoined as number}
               status={user?.statistics.accountStatus as string}
             />
 
-            {/* Activity Badge: hiện trạng thái account register và bắt đầu sử dụng khi nào */}
             <ActivitiBadge
               status={user?.statistics.accountStatus as string}
               time={user?.statistics.memberSince as string}
             />
           </motion.div>
 
-          {/* Right Section - Info & Documents: bên đây là phần hiển thị các giấy tờ  */}
+          {/* Right Section */}
           <div className='lg:col-span-2 space-y-6'>
-            {/* Personal Info: đầu tiên là phần info của account */}
             <motion.div
               initial={{ x: 30, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -148,35 +234,43 @@ export default function ProfilePage() {
                   />
                 </svg>
               </Icon>
-              {/* Info Grid */}
+
               <motion.div
                 className='grid md:grid-cols-2 gap-4'
                 initial='hidden'
                 animate='visible'
-                variants={{
-                  hidden: {},
-                  visible: {
-                    transition: {
-                      staggerChildren: 0.1
-                    }
-                  }
-                }}
+                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
               >
-                {[
-                  { label: 'Email', value: user?.email as string, glow: true },
-                  { label: 'Phone', value: user?.phoneNumber as string, glow: true }
-                ].map((field, idx) => (
-                  <motion.div
-                    key={idx}
-                    variants={{
-                      hidden: { opacity: 0, y: 15 },
-                      visible: { opacity: 1, y: 0 }
-                    }}
-                    transition={{ duration: 0.4 }}
+                {/* Email Field - Not Editable */}
+                <motion.div
+                  variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Field label='Email' value={user?.email as string} glow={true} />
+                </motion.div>
+
+                {/* Phone Field - Editable */}
+                <motion.div
+                  variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.4 }}
+                  className='relative group'
+                >
+                  <Field label='Phone' value={user?.phoneNumber as string} glow={true} />
+                  <button
+                    onClick={() => handleEdit('phone', user?.phoneNumber as string)}
+                    className='absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-2 rounded-lg shadow-lg hover:bg-white'
+                    title='Chỉnh sửa số điện thoại'
                   >
-                    <Field {...field} />
-                  </motion.div>
-                ))}
+                    <svg className='w-4 h-4 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z'
+                      />
+                    </svg>
+                  </button>
+                </motion.div>
               </motion.div>
             </motion.div>
 
@@ -210,7 +304,7 @@ export default function ProfilePage() {
                   />
                 </svg>
               </Icon>
-              {/* Documents Grid: hai phần cccd và gplx */}
+
               <div className='grid md:grid-cols-2 gap-4'>
                 <DocCard
                   title='CCCD'
@@ -231,7 +325,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Premium Bottom Gradient Bar */}
         <div className='absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-200 via-sky-100 to-cyan-200 shadow-[0_0_20px_rgba(14,165,233,0.6)]' />
       </motion.div>
     </div>
