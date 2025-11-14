@@ -1,13 +1,13 @@
 import {
   BellOutlined,
   GlobalOutlined,
-  UserOutlined,
   SafetyCertificateOutlined,
   LockOutlined,
   LogoutOutlined,
-  TransactionOutlined
+  TransactionOutlined,
+  UserOutlined
 } from '@ant-design/icons'
-import { Space, Modal } from 'antd'
+import { Space, Modal, Avatar as AvatarIcon } from 'antd'
 import { useContext, useState } from 'react'
 import { Link } from 'react-router'
 import path from '../../constants/path'
@@ -225,11 +225,10 @@ function NavHeader() {
       <div onMouseEnter={handleSetState(setIsAccountOpen)} onMouseLeave={handleSetState(setIsAccountOpen)}>
         <div ref={accountRefs.setReference}>
           <Space className='cursor-pointer'>
-            {/* <Avatar
+            <AvatarIcon
               className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 hover:scale-110 bg-black/60'
               icon={<UserOutlined />}
-            /> */}
-            <Avatar userId={userId} size={40} className='cursor-pointer' />
+            />
             <span className='inline-block text-sm font-semibold text-black/60 truncate max-w-[130px]'>
               {getEmailAccountFromLS()}
             </span>
@@ -247,7 +246,8 @@ function NavHeader() {
             <div className='px-4 py-3 border-b border-gray-200/70 bg-gradient-to-r from-blue-50 to-indigo-50'>
               <div className='flex items-center gap-3'>
                 <div className='w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center'>
-                  <UserOutlined className='text-white text-sm' />
+                  {/* <UserOutlined className='text-white text-sm' /> */}
+                  <Avatar userId={userId} size={40} className='cursor-pointer' />
                 </div>
                 <div>
                   <div className='text-sm font-semibold text-gray-800'>{getEmailAccountFromLS()}</div>
@@ -261,7 +261,7 @@ function NavHeader() {
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.profile} className='flex items-center gap-3'>
                   {/* <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' /> */}
-                  <Avatar userId={userId} size={40} className='cursor-pointer' />
+                  {/* <Avatar userId={userId} size={40} className='cursor-pointer' /> */}
                   <span className='group-hover:text-blue-600 transition-colors'>Tài Khoản Của Tôi</span>
                 </Link>
               </div>
