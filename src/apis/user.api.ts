@@ -99,6 +99,18 @@ const userApi = {
   voting(body: VotingSubmitPayload) {
     return http.post<VotingSubmitResponse>('api/votings/vote', body)
   },
+  //edit profile
+  //edit phone
+  editPhoneNumber(userId: string, newPhoneNumber: string) {
+    return http.patch('api/users/profile/phone', {
+      userId,
+      phoneNumber: newPhoneNumber
+    })
+  },
+  editFullName(userId: string, newFullName: string) {
+    return http.patch('api/users/profile/name', {
+      userId,
+      fullName: newFullName
   //getHistoryPayments
   getHistoryPayments(userId: number, fromDate?: string, toDate?: string) {
     return http.get<PaymentHistory>('api/payments/history', {
