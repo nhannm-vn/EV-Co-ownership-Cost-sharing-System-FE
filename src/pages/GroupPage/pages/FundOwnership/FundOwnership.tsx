@@ -9,7 +9,6 @@ import {
   CalendarOutlined,
   DollarOutlined,
   FundOutlined,
-  TagOutlined,
   UnorderedListOutlined,
   UserOutlined
 } from '@ant-design/icons'
@@ -144,10 +143,6 @@ function TransactionHistory({ transactions }: { transactions: FundDepositHistory
           <thead>
             <tr className='bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200'>
               <th className='px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider'>
-                <TagOutlined className='mr-2' />
-                ID
-              </th>
-              <th className='px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider'>
                 <ArrowUpOutlined className='mr-2' />
                 Loại
               </th>
@@ -177,13 +172,6 @@ function TransactionHistory({ transactions }: { transactions: FundDepositHistory
                 key={`${trans.fundId}-${index}`}
                 className='hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition-all duration-300'
               >
-                {/* Fund ID */}
-                <td className='px-6 py-4 whitespace-nowrap'>
-                  <span className='text-sm font-semibold text-gray-900'>
-                    <TagOutlined className='mr-1 text-gray-500' />#{trans.fundId}
-                  </span>
-                </td>
-
                 {/* Direction */}
                 <td className='px-6 py-4 whitespace-nowrap'>
                   <span

@@ -341,9 +341,9 @@ const CreateContract: React.FC = () => {
                   <p className='text-sm text-amber-800'>
                     <span className='font-bold'>Trưởng nhóm (Admin Group)</span> mới có quyền ký và phê duyệt hợp đồng.
                     Các thành viên khác được xem nội dung hợp đồng và xác nhận sau khi Admin Group ký . Nếu có thắc mắc
-                    không đảm bảo quyền lợi, ghi chú rõ ràng trong phần bình luận. để hệ thống xem xét nếu hợp lý sẽ sửa
-                    lại hợp đồng sau khi các thành viên xác nhận tiến hành đóng cọc và hệ thống sẽ phê duyệt hợp đồng
-                    nếu thành công tiến hành sử dụng các chức năng của hệ thống.
+                    không đảm bảo quyền lợi, ghi chú rõ ràng trong phần bình luận . để hệ thống xem xét nếu hợp lý sẽ
+                    sửa lại hợp đồng sau khi các thành viên xác nhận tiến hành đóng cọc và hệ thống sẽ phê duyệt hợp
+                    đồng nếu thành công tiến hành sử dụng các chức năng của hệ thống.
                   </p>
                 </div>
               </div>

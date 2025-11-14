@@ -137,6 +137,7 @@ export interface ContractResponse {
     plate: string // "66B-123.99"
     vin: string // "SALWR2VF7FA123456"
   }
+  userFeedbackStatus: 'REJECTED'
 }
 
 export interface DepositForUser {
