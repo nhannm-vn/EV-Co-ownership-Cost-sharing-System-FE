@@ -356,7 +356,7 @@ export default function FeedbackCoOwner() {
 
                   {/* Action Buttons or Admin Note Display */}
                   <div className='space-y-2.5'>
-                    {selectedFeedback?.lastAdminAction === null ? (
+                    {selectedFeedback?.lastAdminAction === null && selectedFeedback?.reactionType === 'DISAGREE' ? (
                       <>
                         <button
                           className='w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium text-sm flex items-center justify-center gap-2'
@@ -398,12 +398,14 @@ export default function FeedbackCoOwner() {
                     ) : (
                       <div className='bg-gray-50 rounded-lg p-4 border border-gray-200'>
                         <h3 className='font-semibold text-gray-900 mb-2 flex items-center gap-2'>
-                          {selectedFeedback?.status === 'approved' ? (
+                          {selectedFeedback?.status === 'APPROVED' && selectedFeedback?.reactionType === 'DISAGREE' && (
                             <>
                               <CheckCircleOutlined className='text-green-600' />
                               <span className='text-green-700'>Đã chấp nhận</span>
                             </>
-                          ) : (
+                          )}
+
+                          {selectedFeedback?.status === 'REJECTED' && selectedFeedback?.reactionType === 'DISAGREE' && (
                             <>
                               <CloseCircleOutlined className='text-red-600' />
                               <span className='text-red-700'>Đã từ chối</span>
