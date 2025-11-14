@@ -10,6 +10,7 @@ import Field from './Components/Field'
 import GroupStatus from './Components/GroupStatus'
 import Icon from './Components/Icon'
 import Username from './Components/Username'
+import { toast } from 'react-toastify'
 
 export default function MyAccount() {
   const queryClient = useQueryClient()
@@ -57,6 +58,9 @@ export default function MyAccount() {
     } else if (editingField === 'name') {
       nameMutation.mutate(editValue)
     }
+    toast.success('Edit profile successfully!', {
+      position: 'top-right'
+    })
   }
 
   const handleCancel = () => {
@@ -173,11 +177,7 @@ export default function MyAccount() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className='lg:col-span-1 flex flex-col items-center justify-center space-y-6 bg-white/15 backdrop-blur-xl rounded-2xl p-8 border-[3px] border-white/40 shadow-[0_0_30px_rgba(6,182,212,0.3),inset_0_1px_15px_rgba(255,255,255,0.1)]'
           >
-            <Avatar
-              avatar={
-                'https://cdn-media.sforum.vn/storage/app/media/HuynhUy/React%20l%C3%A0%20g%C3%ACh%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20chi%20ti%E1%BA%BFt%20cho%20ng%C6%B0%E1%BB%9Di%20m%E1%BB%9Bi%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u/react-la-gi-1.jpg'
-              }
-            />
+            <Avatar userId={user.userId.toString()} size={128} className='mx-auto' />
 
             {/* Username with Edit Button */}
             <div className='relative group'>

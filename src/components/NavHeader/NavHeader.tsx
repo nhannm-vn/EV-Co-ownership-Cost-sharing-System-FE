@@ -7,7 +7,7 @@ import {
   LogoutOutlined,
   TransactionOutlined
 } from '@ant-design/icons'
-import { Avatar, Space, Modal } from 'antd'
+import { Space, Modal } from 'antd'
 import { useContext, useState } from 'react'
 import { Link } from 'react-router'
 import path from '../../constants/path'
@@ -15,15 +15,18 @@ import useCustomFloating from '../../hooks/useCustomFloating'
 import formatTimeAgo from '../../utils/caculatimeNotification'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
-import { clearLS, getAccessTokenFromLS, getEmailAccountFromLS } from '../../utils/auth'
+import { clearLS, getAccessTokenFromLS, getEmailAccountFromLS, getUserIdFromLS } from '../../utils/auth'
 import { AppContext } from '../../contexts/app.context'
 import { toast } from 'react-toastify'
 import classNames from 'classnames'
 import type { GetAllNotifications } from '../../types/api/user.type'
 import userApi from '../../apis/user.api'
 import Skeleton from '../Skeleton'
+import Avatar from '../../pages/MyAccount/Components/Avatar/Avatar'
 
 function NavHeader() {
+  const userId = getUserIdFromLS()
+
   // set trạng thái cho ngôn ngữ
   const [lang, setLang] = useState('Tiếng Việt')
   const [isAccountOpen, setIsAccountOpen] = useState(false)
@@ -222,10 +225,11 @@ function NavHeader() {
       <div onMouseEnter={handleSetState(setIsAccountOpen)} onMouseLeave={handleSetState(setIsAccountOpen)}>
         <div ref={accountRefs.setReference}>
           <Space className='cursor-pointer'>
-            <Avatar
+            {/* <Avatar
               className='text-2xl text-gray-300 hover:text-teal-400 transition-all duration-300 hover:scale-110 bg-black/60'
               icon={<UserOutlined />}
-            />
+            /> */}
+            <Avatar userId={userId} size={40} className='cursor-pointer' />
             <span className='inline-block text-sm font-semibold text-black/60 truncate max-w-[130px]'>
               {getEmailAccountFromLS()}
             </span>
@@ -256,7 +260,8 @@ function NavHeader() {
             <div className='py-2'>
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.profile} className='flex items-center gap-3'>
-                  <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' />
+                  {/* <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' /> */}
+                  <Avatar userId={userId} size={40} className='cursor-pointer' />
                   <span className='group-hover:text-blue-600 transition-colors'>Tài Khoản Của Tôi</span>
                 </Link>
               </div>
