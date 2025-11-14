@@ -1,48 +1,42 @@
-import { motion } from 'framer-motion'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useMemo } from 'react'
+import { createAvatar } from '@dicebear/core'
+import { lorelei } from '@dicebear/collection'
 
-function Avatar({ avatar }: { avatar: string }) {
-  return (
-    <motion.div
-      className='relative'
-      whileHover={{ scale: 1.08 }}
-      transition={{ type: 'spring', stiffness: 250, damping: 15 }}
-    >
-      {/* Multi-layer Holographic Glow */}
-      <div
-        className='absolute inset-0 rounded-full bg-gradient-to-r from-cyan-300/50 via-sky-300/50 to-indigo-300/50 blur-2xl opacity-60 animate-pulse'
-        style={{ animationDuration: '3s' }}
-      />
-      <div className='absolute inset-0 rounded-full bg-gradient-to-br from-white/30 to-white/10 blur-xl opacity-40' />
-
-      {/* Premium Avatar Ring */}
-      <div
-        className='relative w-40 h-40 rounded-full overflow-hidden 
-                 shadow-[0_0_35px_rgba(6,182,212,0.6),0_0_60px_rgba(14,165,233,0.4),inset_0_2px_15px_rgba(255,255,255,0.15)]
-                 border-[4px] border-white/70
-                 hover:border-white/90 hover:shadow-[0_0_45px_rgba(6,182,212,0.8),0_0_80px_rgba(14,165,233,0.6)]
-                 transition-all duration-500
-                 backdrop-blur-sm'
-      >
-        <img src={avatar} alt='avatar' className='w-full h-full object-cover' />
-
-        {/* Holographic Overlay */}
-        <div className='absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5 pointer-events-none' />
-      </div>
-
-      {/* Rotating Ring Effect */}
-      <motion.div
-        className='absolute inset-0 rounded-full border-[3px] border-transparent'
-        style={{
-          background: 'linear-gradient(45deg, rgba(6,182,212,0.6), rgba(79,70,229,0.6)) border-box',
-          WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
-          WebkitMaskComposite: 'xor',
-          maskComposite: 'exclude'
-        }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-      />
-    </motion.div>
-  )
+interface AvatarProps {
+  avatar?: string
+  userId?: string
+  size?: number // px
+  className?: string
 }
 
-export default Avatar
+export default function Avatar({ avatar, userId, size = 128, className = '' }: AvatarProps) {
+  const generatedAvatar = useMemo(() => {
+    if (!userId) return ''
+
+    // seed cố định theo userId => mọi nơi / mọi lần F5 đều giống nhau
+    const seed = userId
+
+    return createAvatar(lorelei as any, {
+      size,
+      seed,
+      backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf']
+    }).toDataUri()
+  }, [userId, size])
+
+  const src = avatar || generatedAvatar
+
+  return (
+    <div className={`relative group ${className}`}>
+      <div
+        className='rounded-full overflow-hidden 
+                   border-[4px] border-white/60 
+                   transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_40px_rgba(6,182,212,0.8)]'
+        style={{ width: size, height: size }}
+      >
+        {src && <img src={src} alt='Avatar' className='w-full h-full object-cover' />}
+      </div>
+      {/* ĐÃ BỎ dấu tích xanh ở đây */}
+    </div>
+  )
+}
