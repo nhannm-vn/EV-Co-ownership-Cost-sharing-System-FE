@@ -182,7 +182,7 @@ function Routers() {
                     { path: 'checkContract', element: <CheckContract /> },
                     { path: 'editContract', element: <EditContract /> },
                     { path: 'feedbackCo-Owner/:contractId/:groupId/:groupName', element: <FeedbackCoOwner /> },
-                    { path: 'editContractDetail/:groupId', element: <ModalEditContract /> }
+                    { path: 'editContractDetail/:contractId/:groupId', element: <ModalEditContract /> }
                   ]
                 }
               ]

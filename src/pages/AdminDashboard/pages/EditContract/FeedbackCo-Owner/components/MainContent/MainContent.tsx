@@ -29,26 +29,28 @@ export default function MainContent({ feedBacks }: { feedBacks: FeedbackCoOwnerR
           </div>
         </div>
 
-        <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <p className='text-sm font-medium text-gray-600'>Đã chấp nhận</p>
-              <p className='text-2xl font-bold text-green-600 mt-1'>1</p>
-            </div>
-            <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
-              <CheckCircleOutlined className='text-2xl text-green-600' />
+        <div>
+          <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
+            <div className='flex items-center justify-between'>
+              <div>
+                <p className='text-sm font-medium text-gray-600'>Đã chấp nhận</p>
+                <p className='text-2xl font-bold text-green-600 mt-1'>{feedBacks?.approvedFeedbacksCount}</p>
+              </div>
+              <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
+                <CheckCircleOutlined className='text-2xl text-green-600' />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <p className='text-sm font-medium text-gray-600'>Đã từ chối</p>
-              <p className='text-2xl font-bold text-red-600 mt-1'>1</p>
-            </div>
-            <div className='w-12 h-12 bg-red-100 rounded-full flex items-center justify-center'>
-              <CloseCircleOutlined className='text-2xl text-red-600' />
+          <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
+            <div className='flex items-center justify-between'>
+              <div>
+                <p className='text-sm font-medium text-gray-600'>Đã từ chối</p>
+                <p className='text-2xl font-bold text-red-600 mt-1'>{feedBacks?.rejectedFeedbacksCount}</p>
+              </div>
+              <div className='w-12 h-12 bg-red-100 rounded-full flex items-center justify-center'>
+                <CloseCircleOutlined className='text-2xl text-red-600' />
+              </div>
             </div>
           </div>
         </div>
