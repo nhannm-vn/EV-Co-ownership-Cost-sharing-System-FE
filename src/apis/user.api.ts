@@ -111,6 +111,8 @@ const userApi = {
     return http.patch('api/users/profile/name', {
       userId,
       fullName: newFullName
+    })
+  },
   //getHistoryPayments
   getHistoryPayments(userId: number, fromDate?: string, toDate?: string) {
     return http.get<PaymentHistory>('api/payments/history', {
