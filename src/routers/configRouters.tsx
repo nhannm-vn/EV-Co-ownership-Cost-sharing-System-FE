@@ -49,6 +49,7 @@ import EditContract from '../pages/AdminDashboard/pages/EditContract'
 import FeedbackCoOwner from '../pages/AdminDashboard/pages/EditContract/FeedbackCo-Owner'
 import ModalEditContract from '../pages/AdminDashboard/pages/EditContract/ModalEditContract/ModalEditContract'
 import PaymentHistory from '../pages/PaymentHistory'
+import Maintenance from '../pages/AdminDashboard/pages/Maintenance'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -139,7 +140,13 @@ function Routers() {
               children: [
                 {
                   element: <AdminDashboard />,
-                  children: [{ path: 'checkVehicleReport', element: <CheckVehicleReport /> }]
+                  children: [
+                    { path: 'checkVehicleReport', element: <CheckVehicleReport /> },
+                    {
+                      path: 'maintenance',
+                      element: <Maintenance />
+                    }
+                  ]
                 }
               ]
             }
