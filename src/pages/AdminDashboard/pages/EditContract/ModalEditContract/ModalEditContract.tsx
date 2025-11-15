@@ -26,8 +26,15 @@ export default function ModalEditContract() {
   console.log(showContractData?.data)
   const parseTerms = (termsText: string) => {
     // Tách theo số thứ tự 1. 2. 3. ...
-    const parts = termsText.split(/(?=\d+\.\s+[A-Z])/)
-    return parts.filter((p) => p.trim())
+    const parts = termsText.split(/(?=\d+\.\s*[A-Z])/)
+    const validParts = parts.filter((p) => p.trim())
+    // Kiểm tra và loại bỏ phần tử đầu tiên nếu nó KHÔNG bắt đầu bằng số thứ tự (ví dụ: Term: 1 year...)
+
+    if (validParts.length > 0 && !/^\s*\d+\.\s*[A-Z]/.test(validParts[0])) {
+      validParts.shift()
+    }
+
+    return validParts
   }
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(true)
@@ -66,19 +73,28 @@ export default function ModalEditContract() {
     }
   })
 
+  const reindexTerms = (terms: Term[]) => {
+    return terms.map((t, i) => ({
+      ...t,
+      title: `${i + 1}. ${t.title.replace(/^\d+\.\s*/, '')}`
+    }))
+  }
+
   const handleAddTerm = () => {
-    setEditingTerms([
-      ...editingTerms,
-      { title: `${editingTerms.length + 1}. Điều khoản mới`, content: 'Nội dung điều khoản...' }
-    ])
+    const updated = [...editingTerms, { title: `Điều khoản mới`, content: 'Nội dung điều khoản...' }]
+    setEditingTerms(reindexTerms(updated))
   }
 
   const handleDeleteTerm = (idx: number) => {
-    setEditingTerms(editingTerms.filter((_, i) => i !== idx))
+    const updated = editingTerms.filter((_, i) => i !== idx)
+    setEditingTerms(reindexTerms(updated))
   }
 
   const handleSave = () => {
-    const formattedTerms = editingTerms.map((t) => t.title + '\n' + t.content).join('\n')
+    const formattedTerms = editingTerms
+      .map((t, i) => `${i + 1}. ${t.title.replace(/^\d+\.\s*/, '')}\n${t.content}`)
+      .join('\n\n')
+      .toUpperCase()
     console.log('Lưu thay đổi:', {
       startDate: startDate?.format('YYYY-MM-DD'),
       endDate: endDate?.format('YYYY-MM-DD'),

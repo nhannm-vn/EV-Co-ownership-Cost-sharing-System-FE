@@ -76,6 +76,7 @@ export interface FeedbackItem {
   status: string
   submittedAt: string
   userId: number
+  groupRole: string
 }
 export interface FeedbackCoOwnerResponse {
   acceptedCount: number

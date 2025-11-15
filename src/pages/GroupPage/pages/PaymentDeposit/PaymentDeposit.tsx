@@ -158,6 +158,14 @@ function PaymentDeposit() {
 
         {/* Progress Bar */}
         <ProgressBar completionRate={completionRate} paidMembers={paidMembers} totalMembers={totalMembers} />
+        <div className='mt-3 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100/40 shadow-sm mb-3'>
+          <p className='text-sm text-gray-950 leading-relaxed'>
+            Các thành viên trong nhóm cần hoàn tất khoản tiền đặt cọc trước khi tham gia sử dụng xe chung. Khoản đặt cọc
+            nhằm đảm bảo cam kết và trách nhiệm trong quá trình sử dụng tài sản chung. Khi hợp đồng kết thúc, số tiền
+            này sẽ được hoàn trả theo quy định.Tiền cọc sẽ là 10 % giá trị của xe chia đều theo tỷ lệ sở hữu của mỗi
+            thành viên trong nhóm.
+          </p>
+        </div>
 
         {/* Members Table */}
         <div className='bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 overflow-hidden'>
