@@ -49,6 +49,7 @@ import EditContract from '../pages/AdminDashboard/pages/EditContract'
 import FeedbackCoOwner from '../pages/AdminDashboard/pages/EditContract/FeedbackCo-Owner'
 import ModalEditContract from '../pages/AdminDashboard/pages/EditContract/ModalEditContract/ModalEditContract'
 import PaymentHistory from '../pages/PaymentHistory'
+import GroupExpense from '../pages/GroupPage/pages/GroupExpense'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -116,7 +117,8 @@ function Routers() {
                     { path: path.checkOutResult, element: <CheckOut /> },
                     { path: path.voting, element: <Voting /> },
                     { path: path.pendingCheckout, element: <PendingCheckout /> },
-                    { path: path.fundOwnership, element: <FundOwnership /> }
+                    { path: path.fundOwnership, element: <FundOwnership /> },
+                    { path: path.groupExpense, element: <GroupExpense /> }
                   ]
                 },
                 { path: path.createGroups, element: <CreateGroups /> },
