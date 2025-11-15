@@ -35,6 +35,10 @@ export default function MyAccount() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-profile'] })
       setEditingField(null)
+      toast.success('Update phone successfully!', {
+        autoClose: 2500,
+        position: 'top-right'
+      })
     }
   })
 
@@ -44,6 +48,10 @@ export default function MyAccount() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-profile'] })
       setEditingField(null)
+      toast.success('Update full name successfully!', {
+        autoClose: 2500,
+        position: 'top-right'
+      })
     }
   })
 

@@ -260,7 +260,7 @@ function NavHeader() {
             <div className='py-2'>
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.profile} className='flex items-center gap-3'>
-                  {/* <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' /> */}
+                  <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' />
                   {/* <Avatar userId={userId} size={40} className='cursor-pointer' /> */}
                   <span className='group-hover:text-blue-600 transition-colors'>Tài Khoản Của Tôi</span>
                 </Link>

@@ -58,3 +58,33 @@ export interface Sort {
   empty: boolean
   unsorted: boolean
 }
+
+// maintainance report
+export interface Maintenance {
+  id: number
+  vehicleId: number
+  vehicleModel: string
+  requestedByName: string
+  approvedByName: string
+  liableUserName: string
+  coverageType: 'PERSONAL' | 'COMPANY' | string
+  description: string
+  actualCost: number
+  status: 'PENDING' | 'FUNDED' | 'COMPLETED' | string
+  requestDate: string // ISO datetime
+  approvalDate: string | null
+  nextDueDate: string | null
+  estimatedDurationDays: number
+  maintenanceStartAt: string | null
+  expectedFinishAt: string | null
+  maintenanceCompletedAt: string | null
+  createdAt: string
+  updatedAt: string
+  payerShares: PayerShare[] | null
+}
+
+export interface PayerShare {
+  userId: number
+  userName: string
+  amount: number
+}
