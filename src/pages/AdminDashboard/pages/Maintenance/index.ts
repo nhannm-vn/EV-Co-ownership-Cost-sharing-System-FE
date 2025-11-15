@@ -1,3 +1,3 @@
-import Maintenance from './Maintenance'
+import MaintenanceList from './Maintenance'
 
-export default Maintenance
+export default MaintenanceList
