@@ -7,6 +7,7 @@ import type { ContractResponse, ContractDetail } from '../../../../types/api/adm
 import { formatToVND } from '../../../../utils/formatPrice'
 import { formatVnTime } from '../../../../utils/helper'
 import EmptyState from '../EmptyState'
+import { data } from 'react-router'
 
 function CheckContract() {
   const queryClient = useQueryClient()
@@ -18,6 +19,7 @@ function CheckContract() {
   })
 
   console.log(contracts)
+  console.log(data)
 
   // Query chi tiết hợp đồng - chỉ fetch khi có selectedContract
   const {

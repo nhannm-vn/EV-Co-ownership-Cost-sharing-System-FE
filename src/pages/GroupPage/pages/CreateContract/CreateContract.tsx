@@ -12,8 +12,7 @@ const CreateContract: React.FC = () => {
   const [showCancelModal, setShowCancelModal] = useState(false)
   // trạng thái xác nhận các tành viên trong group
   const [showRejectModal, setShowRejectModal] = useState(false)
-  // lý do từ chối khi admin ký hợp đồng
-  const [cancelReason, setCancelReason] = useState('')
+
   // lý do từ chối khi member từ chối hợp đồng
   const [rejectReason, setRejectReason] = useState('')
   const [openTerm, setOpenTerm] = useState<number | null>(null)
@@ -28,18 +27,6 @@ const CreateContract: React.FC = () => {
     onError: (error) => {
       console.log('Error signing contract', error.message)
       toast.error('Đã có lỗi xảy ra khi ký hợp đồng.')
-    }
-  })
-
-  const cancelContractMutation = useMutation({
-    mutationFn: ({ id, reason }: { id: string; reason: string }) => groupApi.cancelContract(id, reason),
-    onSuccess: () => {
-      console.log('Contract canceled successfully')
-      toast.success('Hợp đồng đã được hủy thành công!')
-      setShowCancelModal(false)
-    },
-    onError: (error) => {
-      console.log('Error canceling contract', error)
     }
   })
 
@@ -58,7 +45,7 @@ const CreateContract: React.FC = () => {
       else toast.success('Đã gửi lý do từ chối hợp đồng!')
 
       setShowRejectModal(false)
-
+      setShowCancelModal(false)
       setRejectReason('')
     }
   })
@@ -93,13 +80,6 @@ const CreateContract: React.FC = () => {
     signContractMutation.mutate(groupId as string)
   }
 
-  const onCancel = () => {
-    if (!groupId) {
-      return
-    }
-    cancelContractMutation.mutate({ id: groupId as string, reason: cancelReason })
-  }
-
   const onApproveMember = () => {
     if (!idContract) {
       return
@@ -129,8 +109,8 @@ const CreateContract: React.FC = () => {
           <div className='bg-white rounded-xl p-6 w-[500px]' onClick={(e) => e.stopPropagation()}>
             <h3 className='text-lg font-bold mb-4'>Lý do hủy hợp đồng</h3>
             <textarea
-              value={cancelReason}
-              onChange={(e) => setCancelReason(e.target.value)}
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
               placeholder='Nhập lý do...'
               rows={4}
               className='w-full border rounded-lg p-3 mb-4'
@@ -140,8 +120,8 @@ const CreateContract: React.FC = () => {
                 Quay lại
               </button>
               <button
-                onClick={onCancel}
-                disabled={!cancelReason.trim()}
+                onClick={onRejectMember}
+                disabled={!rejectReason.trim()}
                 className='flex-1 bg-red-500 text-white rounded-lg py-2 disabled:opacity-50'
               >
                 Xác nhận hủy
@@ -165,7 +145,7 @@ const CreateContract: React.FC = () => {
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder='Ví dụ: Tỷ lệ sở hữu chưa đúng, điều khoản chưa rõ ràng...'
+              placeholder='Ví dụ: thời hạn hợp đồng chưa phù hợp, điều khoản chưa rõ ràng...'
               rows={4}
               className='w-full border-2 border-gray-200 rounded-xl p-3 mb-4 focus:border-orange-500 focus:outline-none'
             />

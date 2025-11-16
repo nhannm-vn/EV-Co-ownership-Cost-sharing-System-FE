@@ -48,7 +48,7 @@ export default function FeedbackCoOwner() {
     )
   }
 
-  const handleRejectFeedback = (feedbackId: string, reason: string) => {
+  const handleRejectFeedback = ({ feedbackId, reason }: { feedbackId: string; reason: string }) => {
     if (reason.trim().length === 0) {
       toast.error('vui lòng nhập lý do trước khi từ chối feedback')
       return
@@ -97,9 +97,11 @@ export default function FeedbackCoOwner() {
         email,
         fullName: firstFeedback.fullName,
         feedbackCount: userFeedbacks.length,
-        pendingCount: userFeedbacks.filter((f) => f.status === 'PENDING').length,
-        approvedCount: userFeedbacks.filter((f) => f.status === 'APPROVED').length,
-        rejectedCount: userFeedbacks.filter((f) => f.status === 'REJECTED').length
+        groupRole: userFeedbacks[0].groupRole,
+        pendingCount: userFeedbacks.filter((f) => f.status === 'PENDING' && f.reactionType === 'DISAGREE').length,
+        approvedCount: userFeedbacks.filter((f) => f.status === 'APPROVED' && f.reactionType === 'DISAGREE').length,
+        rejectedCount: userFeedbacks.filter((f) => f.status === 'REJECTED' && f.reactionType === 'DISAGREE').length,
+        approveAgree: userFeedbacks.filter((f) => f.reactionType === 'AGREE').length
       }
     })
   }, [groupedFeedbacks])
@@ -183,6 +185,9 @@ export default function FeedbackCoOwner() {
                             <div className='flex-1'>
                               <h3 className='font-semibold text-gray-900 text-base'>{user.fullName}</h3>
                               <p className='text-sm text-gray-500'>{user.email}</p>
+                              <p className='inline-flex items-center px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full border border-purple-200 mt-1'>
+                                {user.groupRole}
+                              </p>
                             </div>
                             <div className='flex items-center gap-2'>
                               <span className='inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200'>
@@ -191,6 +196,12 @@ export default function FeedbackCoOwner() {
                             </div>
                           </div>
                           <div className='flex items-center gap-2 text-xs'>
+                            {user.approveAgree > 0 && (
+                              <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200'>
+                                <ClockCircleOutlined />
+                                {user.approveAgree} Đã xác nhận hợp đồng
+                              </span>
+                            )}
                             {user.pendingCount > 0 && (
                               <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200'>
                                 <ClockCircleOutlined />
@@ -261,7 +272,7 @@ export default function FeedbackCoOwner() {
                                 <p className='text-sm text-gray-500'>{feedback?.email}</p>
                               </div>
 
-                              {feedback?.status === 'APPROVED' && feedback?.reactionType === 'AGREE' && (
+                              {feedback?.reactionType === 'AGREE' && (
                                 <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200'>
                                   <ClockCircleOutlined className='text-sm' />
                                   Đã xác nhận kí hợp đồng
@@ -344,10 +355,10 @@ export default function FeedbackCoOwner() {
                       value={adminNote}
                       onChange={(e) => setAdminNote(e.target.value)}
                       rows={4}
-                      disabled={selectedFeedback?.lastAdminAction !== null}
+                      disabled={selectedFeedback?.status !== 'PENDING'}
                       className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed'
                       placeholder={
-                        selectedFeedback?.lastAdminAction !== null
+                        selectedFeedback?.status === 'PENDING'
                           ? 'Feedback này đã được xử lý'
                           : 'Nhập ghi chú về cách xử lý feedback này...'
                       }
@@ -356,7 +367,7 @@ export default function FeedbackCoOwner() {
 
                   {/* Action Buttons or Admin Note Display */}
                   <div className='space-y-2.5'>
-                    {selectedFeedback?.lastAdminAction === null && selectedFeedback?.reactionType === 'DISAGREE' ? (
+                    {selectedFeedback?.status === 'PENDING' && selectedFeedback?.reactionType === 'DISAGREE' ? (
                       <>
                         <button
                           className='w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium text-sm flex items-center justify-center gap-2'
@@ -388,7 +399,12 @@ export default function FeedbackCoOwner() {
 
                         <button
                           className='w-full border-2 border-red-200 text-red-600 py-2.5 px-4 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm flex items-center justify-center gap-2 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed'
-                          onClick={() => handleRejectFeedback(selectedFeedback?.feedbackId.toString(), adminNote)}
+                          onClick={() =>
+                            handleRejectFeedback({
+                              feedbackId: selectedFeedback?.feedbackId.toString(),
+                              reason: adminNote
+                            })
+                          }
                           disabled={rejectFeedback.isPending}
                         >
                           <CloseCircleOutlined />

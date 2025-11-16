@@ -118,6 +118,10 @@ const userApi = {
     return http.get<PaymentHistory>('api/payments/history', {
       params: { userId, fromDate, toDate }
     })
+  },
+  // getAllPaymentMaintance
+  getAllPaymentMaintance() {
+    return http.get(`api/after-checkout/maintenances/my-liabilities`)
   }
 }
 
