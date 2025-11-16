@@ -3,7 +3,11 @@ import http from '../utils/http'
 
 const technicianApi = {
   getAllVehicleCheck() {
-    return http.get<BookingReviewResponse>('/api/vehicle-checks')
+    const page = 1
+    const size = 30
+    return http.get<BookingReviewResponse>('/api/vehicle-checks', {
+      params: { page, size }
+    })
   },
   checkReport(checkId: string, status: 'APPROVED' | 'REJECTED') {
     return http.put(`/api/vehicle-checks/${checkId}/status`, {

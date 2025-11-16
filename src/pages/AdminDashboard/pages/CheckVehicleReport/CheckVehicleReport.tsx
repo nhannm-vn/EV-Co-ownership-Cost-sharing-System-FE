@@ -1,6 +1,5 @@
 // components/technician/CheckVehicleReport.tsx
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
 import Skeleton from '../../../../components/Skeleton'
 import technicianApi from '../../../../apis/technician.api'
 import type { BookingReviewItem, BookingReviewResponse } from '../../../../types/api/technician.type'
@@ -10,39 +9,39 @@ const STATUS_COLORS = {
   PENDING: 'bg-yellow-50 text-yellow-700 animate-pulse',
   APPROVED: 'bg-green-50 text-green-700',
   REJECTED: 'bg-red-50 text-red-700'
-}
+} as const
 
 const CHECK_TYPE_COLORS = {
   POST_USE: 'bg-blue-50 text-blue-700',
   PRE_USE: 'bg-purple-50 text-purple-700'
-}
+} as const
 
 const METRIC_STYLES = {
   odometer: 'from-teal-50 to-teal-100 border-teal-200 text-teal-700',
   battery: 'from-blue-50 to-blue-100 border-blue-200 text-blue-700',
   cleanliness: 'from-purple-50 to-purple-100 border-purple-200 text-purple-700'
-}
+} as const
 
 export function CheckVehicleReport() {
-  const [currentPage, setCurrentPage] = useState(0)
+  // Không cần currentPage nữa vì API cố định page=1,size=30
   const queryClient = useQueryClient()
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ['vehicleChecks', currentPage],
-    queryFn: () => technicianApi.getAllVehicleCheck(),
+    queryKey: ['vehicleChecks-fixed-page'],
+    queryFn: () => technicianApi.getAllVehicleCheck(), // hàm này đã fix cứng page=1,size=30
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10
   })
 
   if (isPending) return <Skeleton />
-  if (isError) return <ErrorState error={error} />
+  if (isError) return <ErrorState error={error as Error} />
 
   const reportData = data?.data as BookingReviewResponse | undefined
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 p-6 lg:p-8'>
       <div className='max-w-5xl mx-auto'>
-        <PageHeader totalReports={reportData?.totalElements || 0} />
+        <PageHeader totalReports={reportData?.content.length || 0} />
 
         <div className='space-y-3'>
           {reportData?.content?.length ? (
@@ -51,7 +50,7 @@ export function CheckVehicleReport() {
                 key={report.id}
                 report={report}
                 index={idx}
-                onStatusChange={() => queryClient.invalidateQueries({ queryKey: ['vehicleChecks'] })}
+                onStatusChange={() => queryClient.invalidateQueries({ queryKey: ['vehicleChecks-fixed-page'] })}
               />
             ))
           ) : (
@@ -59,21 +58,14 @@ export function CheckVehicleReport() {
           )}
         </div>
 
-        {reportData && reportData.totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={reportData.totalPages}
-            isFirst={reportData.first}
-            isLast={reportData.last}
-            onPageChange={setCurrentPage}
-          />
-        )}
+        {/* API đã cố định 1 page, nên không render Pagination nữa */}
       </div>
     </div>
   )
 }
 
-// Sub-components
+// Sub-components giữ nguyên
+
 const PageHeader = ({ totalReports }: { totalReports: number }) => (
   <div className='mb-10'>
     <div className='flex items-center gap-3 mb-2'>
@@ -83,7 +75,7 @@ const PageHeader = ({ totalReports }: { totalReports: number }) => (
       </h1>
     </div>
     <p className='text-gray-500 ml-4 text-sm'>
-      <span className='font-semibold text-gray-700'>{totalReports}</span> báo cáo cần xử lý
+      <span className='font-semibold text-gray-700'>{totalReports}</span> báo cáo ở trang hiện tại
     </p>
   </div>
 )
@@ -105,42 +97,6 @@ const ErrorState = ({ error }: { error: Error | null }) => (
     <div className='bg-white rounded-2xl shadow-lg p-8 border border-red-200 max-w-md text-center'>
       <p className='text-red-700 font-semibold'>{error instanceof Error ? error.message : 'Không thể tải danh sách'}</p>
     </div>
-  </div>
-)
-
-const Pagination = ({
-  currentPage,
-  totalPages,
-  isFirst,
-  isLast,
-  onPageChange
-}: {
-  currentPage: number
-  totalPages: number
-  isFirst: boolean
-  isLast: boolean
-  onPageChange: (page: number) => void
-}) => (
-  <div className='flex justify-center items-center gap-3 mt-12'>
-    <button
-      onClick={() => onPageChange(Math.max(0, currentPage - 1))}
-      disabled={isFirst}
-      className='px-5 py-2.5 bg-white border-2 border-teal-200 text-teal-600 rounded-xl font-medium text-sm hover:border-teal-400 hover:shadow-lg transition-all disabled:opacity-50'
-    >
-      ← Trước
-    </button>
-    <div className='flex items-center gap-2 px-6 py-2.5 bg-white rounded-xl border border-gray-200 shadow-sm text-sm'>
-      <span className='font-semibold text-gray-600'>{currentPage + 1}</span>
-      <span className='text-gray-400'>/</span>
-      <span className='font-semibold text-gray-600'>{totalPages}</span>
-    </div>
-    <button
-      onClick={() => onPageChange(Math.min(totalPages - 1, currentPage + 1))}
-      disabled={isLast}
-      className='px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-xl font-medium text-sm hover:shadow-lg hover:shadow-teal-600/20 transition-all disabled:opacity-50'
-    >
-      Sau →
-    </button>
   </div>
 )
 

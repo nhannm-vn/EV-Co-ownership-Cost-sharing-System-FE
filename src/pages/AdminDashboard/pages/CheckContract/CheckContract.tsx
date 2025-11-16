@@ -18,6 +18,7 @@ function CheckContract() {
     queryFn: () => adminApi.getAllContracts().then((res) => res.data)
   })
 
+  console.log(contracts)
   console.log(data)
 
   // Query chi tiết hợp đồng - chỉ fetch khi có selectedContract
