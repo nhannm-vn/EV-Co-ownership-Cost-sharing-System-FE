@@ -57,7 +57,7 @@ export default function Memberlist({ members, amount, groupId, currentUserRole }
         <div className='px-6 py-5 border-b-[2px] border-white/20 bg-gradient-to-r from-white/10 to-white/5'>
           <h2 className='text-xl font-bold text-white flex items-center gap-3 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]'>
             <TeamOutlined className='text-2xl text-cyan-200 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]' />
-            Danh sách thành viên
+            List member group
             <span className='ml-auto px-3 py-1 bg-cyan-400/25 text-cyan-100 text-sm rounded-full border border-cyan-200/40 font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]'>
               {members.length} / {amount || 0}
             </span>
@@ -92,12 +92,12 @@ export default function Memberlist({ members, amount, groupId, currentUserRole }
                 {/* Nút xóa thành viên */}
                 {member.groupRole !== 'ADMIN' && member.userId !== undefined && (
                   <button
-                    onClick={() => handleOpenModal(member.userId!, member.userName || 'Thành viên')}
+                    onClick={() => handleOpenModal(member.userId!, member.userName || 'Member')}
                     className='px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 bg-gradient-to-r from-red-500/20 to-pink-500/20 hover:from-red-500/30 hover:to-pink-500/30 text-red-200 hover:text-white border-2 border-red-400/40 hover:border-red-300/60 shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] transform hover:scale-105'
                   >
                     <span className='flex items-center gap-2'>
                       <DeleteOutlined className='text-base' />
-                      Xóa
+                      DELETE
                     </span>
                   </button>
                 )}

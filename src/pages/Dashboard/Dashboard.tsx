@@ -8,6 +8,7 @@ import DashboardCardList from './components/DashboardCardList'
 import DashboardTitle from './components/DashboardTitle'
 
 export default function Dashboard() {
+  //
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   const { data: userProfile, isLoading } = useQuery({
