@@ -17,10 +17,11 @@ const adminApi = {
     return http.get<ContractResponse[]>('api/admin/contracts/pending')
   },
 
-  approveContract: (contractId: number, action: string) => {
+  approveContract: (contractId: number, action: string, reason?: string) => {
     return http.put(`api/admin/contracts/approve`, {
       contractId: contractId,
-      action: action
+      action: action,
+      reason: reason
     })
   },
 

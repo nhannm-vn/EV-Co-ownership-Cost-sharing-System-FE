@@ -11,12 +11,13 @@ import { InfoCircleOutlined, RightOutlined, TeamOutlined } from '@ant-design/ico
 
 export default function CheckGroup() {
   const [currentPage, setCurrentPage] = useState(0)
-  const pageSize = 10 // kích thước trang cố định
+  const pageSize = 10 // fixed page size
 
   const [selectedGroup, setSelectedGroup] = useState<groupStaffItem | null>(null)
+
   const groupListQuery = useQuery({
     queryKey: ['groupList', { page: currentPage, size: pageSize }],
-    // vẫn giữ lại dữ liệu trang 1 trong lấy trang 2
+    // keep previous page data while fetching the next one
     queryFn: () => staffApi.getAllGroupStaff(currentPage, pageSize)
   })
 
@@ -24,18 +25,18 @@ export default function CheckGroup() {
 
   const groupData: groupStaffItem[] = groupListQuery.data?.data?.content || []
 
-  // tổng số trang
+  // total pages
   const totalPages: number = groupListQuery.data?.data?.totalPages || 0
-  // pagenumber hiện tại
+  // current page number from backend (0-based)
   const pageNumber: number = groupListQuery.data?.data?.pageable.pageNumber || 0
   console.log(pageNumber)
 
-  //totalElements
+  // total elements
   const totalElements: number = groupListQuery.data?.data?.totalElements || 0
 
-  // hầm chuyển trang
+  // handle page change
   const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage) // Cập nhật state (0, 1, 2...)
+    setCurrentPage(newPage) // update state (0, 1, 2...)
   }
 
   if (groupData.length === 0) {
@@ -48,13 +49,13 @@ export default function CheckGroup() {
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 font-sans'>
       <div className='container mx-auto p-4 md:p-8'>
         <header className='text-center mb-8'>
-          <h1 className='text-3xl md:text-4xl font-bold text-gray-800'>Trang Duyệt Yêu Cầu Nhóm</h1>
-          <p className='text-gray-500 mt-2'>Chọn một nhóm từ danh sách bên dưới để xem thông tin chi tiết.</p>
+          <h1 className='text-3xl md:text-4xl font-bold text-gray-800'>Group Approval Page</h1>
+          <p className='text-gray-500 mt-2'>Choose a group from the list below to view detailed information.</p>
         </header>
 
         <main>
           <div className='bg-white p-6 rounded-lg shadow-lg'>
-            <h2 className='text-xl font-semibold mb-4 border-b pb-2'>Danh sách chờ duyệt</h2>
+            <h2 className='text-xl font-semibold mb-4 border-b pb-2'>Pending groups</h2>
             <div className='divide-y divide-gray-100'>
               {groupData.map((group, index) => (
                 <div
@@ -83,15 +84,13 @@ export default function CheckGroup() {
                         <div className='flex items-center gap-2 text-sm text-gray-600'>
                           <InfoCircleOutlined className='text-gray-400' />
                           <span className='truncate'>
-                            <span className='text-gray-500'>Mô tả:</span>{' '}
+                            <span className='text-gray-500'>Description:</span>{' '}
                             <span className='text-gray-500'>{group.description}</span>
                           </span>
                         </div>
                         <div className='flex items-center gap-2 text-sm'>
                           <TeamOutlined className='text-indigo-600' />
-                          <span className='font-medium text-indigo-600'>
-                            Tổng thành viên: {group.memberCapacity} thành viên
-                          </span>
+                          <span className='font-medium text-indigo-600'>Total members: {group.memberCapacity}</span>
                         </div>
                       </div>
                     </div>
@@ -100,7 +99,7 @@ export default function CheckGroup() {
                     <div className='flex items-center gap-4 flex-shrink-0'>
                       <StatusBadge status={group.status} />
                       <div className='flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium shadow-md group-hover:bg-blue-700 group-hover:shadow-lg transform group-hover:scale-105 transition-all duration-200'>
-                        <span className='text-sm'>Xem chi tiết</span>
+                        <span className='text-sm'>View details</span>
                         <RightOutlined className='text-xs' />
                       </div>
                     </div>
@@ -114,7 +113,7 @@ export default function CheckGroup() {
         <div className='mt-6 pt-4 border-t flex flex-col items-center'>
           <PaginationButton currentPage={pageNumber + 1} totalPages={totalPages} onPageChange={handlePageChange} />
           <div className='text-sm text-gray-500 mt-2'>
-            Trang {pageNumber + 1} / {totalPages} (Tổng {totalElements} mục)
+            Page {pageNumber + 1} / {totalPages} (Total {totalElements} items)
           </div>
         </div>
       </div>
