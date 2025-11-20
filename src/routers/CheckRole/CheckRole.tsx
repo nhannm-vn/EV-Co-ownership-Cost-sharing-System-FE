@@ -11,7 +11,6 @@ interface RoleCheckProps {
 
 export default function RoleCheck({ allowedRoles }: RoleCheckProps) {
   const role = getRoleFromLS()
-  console.log(role)
 
   if (!role) {
     return <Navigate to={path.login} replace />

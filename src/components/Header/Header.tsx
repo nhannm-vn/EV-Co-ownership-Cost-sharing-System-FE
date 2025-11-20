@@ -5,6 +5,7 @@ import NavHeader from '../NavHeader'
 import { LOGO_URL } from '../../constants/images'
 
 export default function Header() {
+  // booleam  để mô tả nếu là dường dẫn khi bấm vào nhóm thì hiên thị sidebar các chức năng của đồng sở hữu
   const isMatch = useMatch('/dashboard/viewGroups/:groupId/*')
 
   return (

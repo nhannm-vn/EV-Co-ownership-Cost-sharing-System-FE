@@ -282,3 +282,19 @@ export interface PaymentItem {
   transactionCode: string
   paymentDate: string // dạng ISO hoặc "YYYY-MM-DD HH:mm:ss"
 }
+
+// payment maintenance
+export interface MaintenancePaymentResponse {
+  amount: number
+  groupId: number
+  message: string
+  paidAt: string
+  paymentId: number
+  paymentMethod: string
+  requiredAmount: number | null
+  status: string
+
+  transactionCode: string
+  userId: number
+  vnpayUrl: string | null
+}

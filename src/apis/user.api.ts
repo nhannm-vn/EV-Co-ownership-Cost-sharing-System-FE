@@ -5,6 +5,7 @@ import type {
   CreateVotingPayload,
   CreateVotingResponse,
   GetAllNotifications,
+  MaintenancePaymentResponse,
   PaymentHistory,
   UploadImage,
   UserGetProfile,
@@ -122,6 +123,10 @@ const userApi = {
   // getAllPaymentMaintance
   getAllPaymentMaintance() {
     return http.get(`api/after-checkout/maintenances/my-liabilities`)
+  },
+  // payment maintenance
+  paymentMaintenance(maintenanceId: string) {
+    return http.post<MaintenancePaymentResponse>(`api/maintenances/payments/create/${maintenanceId}`)
   }
 }
 

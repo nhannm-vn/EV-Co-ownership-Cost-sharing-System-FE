@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
@@ -7,6 +7,7 @@ import Skeleton from '../../../../components/Skeleton'
 import { ClockCircleOutlined } from '@ant-design/icons'
 
 const CreateContract: React.FC = () => {
+  const queryClient = useQueryClient()
   const { groupId } = useParams()
   // trạng thái thi khi addmin ký
   const [showCancelModal, setShowCancelModal] = useState(false)
@@ -22,11 +23,12 @@ const CreateContract: React.FC = () => {
     mutationFn: (id: string) => groupApi.signContract(id),
     onSuccess: () => {
       console.log('Contract signed successfully')
-      toast.success('Hợp đồng đã được ký thành công!')
+      toast.success('Contract signed successfully')
     },
     onError: (error) => {
       console.log('Error signing contract', error.message)
-      toast.error('Đã có lỗi xảy ra khi ký hợp đồng.')
+      toast.error('An error occurred while signing the contract.')
+      queryClient.invalidateQueries({ queryKey: ['contractData', groupId] })
     }
   })
 
@@ -41,9 +43,9 @@ const CreateContract: React.FC = () => {
       reason?: string
     }) => groupApi.approveMemberContract(contractId, { reactionType: reactionType, reason }),
     onSuccess: (_, variables) => {
-      if (variables.reactionType === 'AGREE') toast.success('Hợp đồng đã được phê duyệt!')
-      else toast.success('Đã gửi lý do từ chối hợp đồng!')
-
+      if (variables.reactionType === 'AGREE') toast.success('Contract confirmed!')
+      else toast.success('Rejection reason sent!')
+      queryClient.invalidateQueries({ queryKey: ['contractData', groupId] })
       setShowRejectModal(false)
       setShowCancelModal(false)
       setRejectReason('')
@@ -107,7 +109,7 @@ const CreateContract: React.FC = () => {
           onClick={() => setShowCancelModal(false)}
         >
           <div className='bg-white rounded-xl p-6 w-[500px]' onClick={(e) => e.stopPropagation()}>
-            <h3 className='text-lg font-bold mb-4'>Lý do hủy hợp đồng</h3>
+            <h3 className='text-lg font-bold mb-4'>Reason for contract cancellation</h3>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
@@ -117,14 +119,14 @@ const CreateContract: React.FC = () => {
             />
             <div className='flex gap-3'>
               <button onClick={() => setShowCancelModal(false)} className='flex-1 border rounded-lg py-2'>
-                Quay lại
+                Go back
               </button>
               <button
                 onClick={onRejectMember}
                 disabled={!rejectReason.trim()}
                 className='flex-1 bg-red-500 text-white rounded-lg py-2 disabled:opacity-50'
               >
-                Xác nhận hủy
+                Confirm rejection
               </button>
             </div>
           </div>
@@ -150,7 +152,7 @@ const CreateContract: React.FC = () => {
               className='w-full border-2 border-gray-200 rounded-xl p-3 mb-4 focus:border-orange-500 focus:outline-none'
             />
             {rejectReason.trim().length > 0 && rejectReason.trim().length < 10 && (
-              <p className='text-red-500 text-sm mb-2'>Lý do từ chối phải có ít nhất 10 ký tự.</p>
+              <p className='text-red-500 text-sm mb-2'>Rejection reason must be at least 10 characters long.</p>
             )}
             <div className='flex gap-3'>
               <button
@@ -165,7 +167,7 @@ const CreateContract: React.FC = () => {
                 disabled={rejectReason.trim().length < 10 || approveMemberMutation.isPending}
                 className='flex-1 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl py-2.5 font-semibold disabled:brightness-90 disabled:cursor-not-allowed hover:bg-orange-600'
               >
-                {approveMemberMutation.isPending ? 'Đang gửi...' : 'Gửi từ chối'}
+                {approveMemberMutation.isPending ? 'Sending...' : 'Send Rejection'}
               </button>
             </div>
           </div>
@@ -180,51 +182,55 @@ const CreateContract: React.FC = () => {
             <div className='flex justify-between items-center mb-6 pb-6 border-b'>
               <div>
                 <h2 className='text-xl font-bold'>EVShare</h2>
-                <p className='text-sm text-gray-600'>Hệ thống đồng sở hữu xe điện</p>
+                <p className='text-sm text-gray-600'>Electric Vehicle Co-ownership System</p>
               </div>
               <div>
                 <span className='bg-cyan-100 text-cyan-700 text-xs px-3 py-1 rounded-lg'>
-                  Trạng thái hợp đồng: {dataContract?.contract?.status}
+                  Contract Status: {dataContract?.contract?.status}
                 </span>
-                <p className='text-xs text-gray-500 mt-3 ml-2'>Số: {dataContract?.contractNumber}</p>
+                <p className='text-xs text-gray-500 mt-3 ml-2'>Contract Number: {dataContract?.contractNumber}</p>
               </div>
             </div>
 
             {/* Title */}
-            <h1 className='text-2xl font-bold mb-2'>HỢP ĐỒNG SỞ HỮU XE CHUNG</h1>
+            <h1 className='text-2xl font-bold mb-2'>SHARED VEHICLE OWNERSHIP CONTRACT</h1>
             <p className='text-sm text-gray-600 mb-6'>
-              Căn cứ theo thỏa thuận giữa các Bên thuộc Nhóm sở hữu{' '}
+              Based on the agreement among the Parties belonging to the Ownership Group{' '}
               <span className='font-bold text-cyan-600'>EVShare – {dataContract?.group.name}</span>
             </p>
 
             {/* Vehicle Info */}
             <div className='grid grid-cols-2 gap-6 mb-6 p-4 bg-cyan-50 rounded-xl'>
               <div>
-                <h3 className='font-bold mb-2'>Thông tin phương tiện</h3>
+                <h3 className='font-bold mb-2'>Vehicle information</h3>
                 <div className='space-y-1 text-sm'>
                   <div className='flex justify-between'>
-                    <span>Biển số</span>
+                    <span>License plate</span>
                     <span className='font-bold'>{dataContract?.vehicle?.plate}</span>
                   </div>
                   <div className='flex justify-between'>
-                    <span>Số VIN</span>
+                    <span>Vehicle Identification Number</span>
                     <span className='font-bold text-xs'>{dataContract?.vehicle?.vin}</span>
+                  </div>
+                  <div className='flex justify-between'>
+                    <span>brand</span>
+                    <span className='font-bold text-xs'>{dataContract?.vehicle?.model}</span>
                   </div>
                 </div>
               </div>
               <div>
-                <h3 className='font-bold mb-2'>Hiệu lực hợp đồng</h3>
+                <h3 className='font-bold mb-2'>Contract Duration</h3>
                 <div className='space-y-1 text-sm'>
                   <div className='flex justify-between'>
-                    <span>Ngày hiệu lực</span>
+                    <span>Effective Date</span>
                     <span className='font-bold'>{dataContract?.contract?.effectiveDate}</span>
                   </div>
                   <div className='flex justify-between'>
-                    <span>Ngày kết thúc</span>
+                    <span>End Date</span>
                     <span className='font-bold'>{dataContract?.contract?.endDate}</span>
                   </div>
                   <div className='flex justify-between'>
-                    <span>Kỳ hạn</span>
+                    <span>Term</span>
                     <span className='font-bold'>{dataContract?.contract?.termLabel}</span>
                   </div>
                 </div>
@@ -233,14 +239,14 @@ const CreateContract: React.FC = () => {
 
             {/* Shareholders Table */}
             <div className='mb-6'>
-              <h3 className='font-bold mb-3'>1. Các Bên đồng sở hữu</h3>
+              <h3 className='font-bold mb-3'>1. Shareholders</h3>
               <table className='w-full text-sm border rounded-xl overflow-hidden'>
                 <thead className='bg-cyan-100'>
                   <tr>
                     <th className='border-b px-3 py-2 text-left'>#</th>
-                    <th className='border-b px-3 py-2 text-left'>Họ tên</th>
-                    <th className='border-b px-3 py-2 text-left'>Liên hệ</th>
-                    <th className='border-b px-3 py-2 text-left'>Tỷ lệ (%)</th>
+                    <th className='border-b px-3 py-2 text-left'>Full Name</th>
+                    <th className='border-b px-3 py-2 text-left'>Contact</th>
+                    <th className='border-b px-3 py-2 text-left'>Share (%)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -259,27 +265,24 @@ const CreateContract: React.FC = () => {
                   ))}
                 </tbody>
               </table>
-              <p className='text-sm mt-2'>
-                Tổng tỷ lệ: <span className='font-bold text-cyan-600'>100%</span>
-              </p>
             </div>
 
             {/* Fund Info */}
             <div className='mb-6 p-4 bg-cyan-50 rounded-xl'>
-              <h3 className='font-bold mb-3'>2. Góp vốn & Quỹ vận hành</h3>
+              <h3 className='font-bold mb-3'>2. Fund Info</h3>
               <div className='space-y-2 text-sm'>
                 <div className='flex justify-between'>
-                  <span>Giá trị xe</span>
+                  <span>Vehicle Price</span>
                   <span className='font-bold'>{dataContract?.finance?.vehiclePrice?.toLocaleString('vi-VN')} đ</span>
                 </div>
                 <div className='flex justify-between'>
-                  <span>Tiền cọc</span>
+                  <span>Deposit Amount</span>
                   <span className='font-bold'>{dataContract?.finance?.depositAmount?.toLocaleString('vi-VN')} đ</span>
                 </div>
 
                 <div className='flex justify-between'>
-                  <span>Nguyên tắc góp</span>
-                  <span className='font-bold'>Theo Tỷ lệ Sở Hữu</span>
+                  <span>Contribution Principle</span>
+                  <span className='font-bold'>According to Ownership Percentage</span>
                 </div>
               </div>
             </div>
@@ -287,7 +290,7 @@ const CreateContract: React.FC = () => {
             {/* Terms - Accordion */}
             {termsList.length > 0 && (
               <div className='mb-6'>
-                <h3 className='font-bold mb-3'>3. Điều khoản hợp đồng</h3>
+                <h3 className='font-bold mb-3'>3. Contract Terms</h3>
                 <div className='space-y-2'>
                   {termsList.map((term, idx) => {
                     const lines = term.split('\n')
@@ -317,13 +320,14 @@ const CreateContract: React.FC = () => {
             <div className='mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl'>
               <div className='flex items-start gap-3'>
                 <div>
-                  <h4 className='font-bold text-amber-900 mb-1'>Lưu ý về ký hợp đồng</h4>
+                  <h4 className='font-bold text-amber-900 mb-1'> Contract Signing Notice:</h4>
                   <p className='text-sm text-amber-800'>
-                    <span className='font-bold'>Trưởng nhóm (Admin Group)</span> mới có quyền ký và phê duyệt hợp đồng.
-                    Các thành viên khác được xem nội dung hợp đồng và xác nhận sau khi Admin Group ký . Nếu có thắc mắc
-                    không đảm bảo quyền lợi, ghi chú rõ ràng trong phần bình luận . để hệ thống xem xét nếu hợp lý sẽ
-                    sửa lại hợp đồng sau khi các thành viên xác nhận tiến hành đóng cọc và hệ thống sẽ phê duyệt hợp
-                    đồng nếu thành công tiến hành sử dụng các chức năng của hệ thống.
+                    <span className='font-bold'>Only the Group Leader (Admin Group)</span> {''}
+                    has the right to sign and approve the contract. Other members can only view the contract and confirm
+                    after the Admin Group has signed. If any member has questions or feels their rights are unclear,
+                    leave a note in the comments. The system will review and adjust the contract if reasonable. Once all
+                    members confirm and pay the deposit, the system will approve the contract. After approval, the group
+                    can start using the system’s features.
                   </p>
                 </div>
               </div>
@@ -337,14 +341,14 @@ const CreateContract: React.FC = () => {
                   onClick={() => setShowCancelModal(true)}
                   className='flex-1 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600'
                 >
-                  Hủy hợp đồng
+                  Cancel Contract
                 </button>
                 <button
                   onClick={onSubmit}
                   disabled={signContractMutation.isPending}
                   className='flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-xl hover:bg-cyan-600 disabled:opacity-50'
                 >
-                  {signContractMutation.isPending ? 'Đang xử lý...' : 'Ký hợp đồng'}
+                  {signContractMutation.isPending ? 'Processing...' : 'Sign Contract'}
                 </button>
               </div>
             )}

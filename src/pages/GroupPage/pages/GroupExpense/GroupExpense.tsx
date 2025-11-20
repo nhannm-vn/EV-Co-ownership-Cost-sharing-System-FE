@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import userApi from '../../../../apis/user.api'
 import { useState } from 'react'
 import Skeleton from '../../../../components/Skeleton'
 import { FaCheckCircle } from 'react-icons/fa'
+import { ClockCircleOutlined, CloseOutlined, RightOutlined } from '@ant-design/icons'
 
 interface MaintenancePayment {
   id: number
@@ -19,6 +20,19 @@ export default function GroupExpense() {
     queryKey: ['payment-maintance'],
     queryFn: () => userApi.getAllPaymentMaintance()
   })
+
+  const paymentMaintenanceMutation = useMutation({
+    mutationFn: (maintenanceId: string) => userApi.paymentMaintenance(maintenanceId),
+    onSuccess: (response) => {
+      console.log('Payment successful', response)
+      window.open(`${response?.data?.vnpayUrl}`, '_blank')
+    }
+  })
+
+  const handlePayment = (maintenanceId: string) => {
+    // Implement payment logic here
+    paymentMaintenanceMutation.mutate(maintenanceId)
+  }
 
   const [selectedItem, setSelectedItem] = useState<MaintenancePayment | null>(null)
 
@@ -93,14 +107,7 @@ export default function GroupExpense() {
                   <div className='flex items-center gap-3 flex-wrap'>
                     {getStatusBadge(item.status)}
                     <span className='text-xs text-gray-500 flex items-center gap-1'>
-                      <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'
-                        />
-                      </svg>
+                      <ClockCircleOutlined className='text-gray-500 w-4 h-4' />
                       {item.estimatedDurationDays} ngày
                     </span>
                   </div>
@@ -116,9 +123,7 @@ export default function GroupExpense() {
 
               {/* Arrow indicator */}
               <div className='absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300'>
-                <svg className='w-6 h-6 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-                </svg>
+                <RightOutlined className='text-blue-600 text-xl' />
               </div>
             </div>
           ))}
@@ -145,9 +150,7 @@ export default function GroupExpense() {
                     onClick={() => setSelectedItem(null)}
                     className='w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors'
                   >
-                    <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
-                    </svg>
+                    <CloseOutlined className='!text-white' />
                   </button>
                 </div>
               </div>
@@ -190,12 +193,19 @@ export default function GroupExpense() {
               </div>
 
               {/* Modal Footer */}
-              <div className='p-6 bg-gray-50 border-t'>
+              <div className='p-6 bg-gray-50 border-t flex gap-3'>
                 <button
                   onClick={() => setSelectedItem(null)}
                   className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl'
                 >
                   Đóng
+                </button>
+
+                <button
+                  onClick={() => handlePayment(selectedItem?.id.toString() || '')}
+                  className='w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg'
+                >
+                  Thanh toán
                 </button>
               </div>
             </div>
