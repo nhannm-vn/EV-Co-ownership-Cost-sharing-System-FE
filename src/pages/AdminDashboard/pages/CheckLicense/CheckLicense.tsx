@@ -30,8 +30,8 @@ interface Member {
 }
 
 const DOC_CONFIG = {
-  cccd: { title: 'Căn cước công dân', shortTitle: 'CCCD', accent: '#3B82F6' },
-  gplx: { title: 'Giấy phép lái xe', shortTitle: 'GPLX', accent: '#10B981' }
+  cccd: { title: 'Citizen ID card', shortTitle: 'CCCD', accent: '#3B82F6' },
+  gplx: { title: 'Driver license', shortTitle: 'DL', accent: '#10B981' }
 }
 
 function mapUserToMember(user: any): Member {
@@ -128,7 +128,7 @@ export default function CheckLicense() {
         <div className='p-3 space-y-3'>
           <ImageCard
             image={doc.frontImage}
-            alt='Mặt trước'
+            alt='Front side'
             status={doc.frontStatus}
             documentId={doc.frontId}
             setSelected={setSelected}
@@ -137,7 +137,7 @@ export default function CheckLicense() {
           />
           <ImageCard
             image={doc.backImage}
-            alt='Mặt sau'
+            alt='Back side'
             status={doc.backStatus}
             documentId={doc.backId}
             setSelected={setSelected}
@@ -153,7 +153,7 @@ export default function CheckLicense() {
     if (!doc) {
       return (
         <div className='bg-gray-50 rounded-lg p-4 text-center'>
-          <p className='text-sm text-gray-500'>Không có dữ liệu {title}</p>
+          <p className='text-sm text-gray-500'>No {title} data</p>
         </div>
       )
     }
@@ -187,7 +187,7 @@ export default function CheckLicense() {
             </div>
             {doc.documentNumber && (
               <div>
-                <span className='text-red-600 background-color: #ffe5e5; font-medium'>Document Number:</span>
+                <span className='text-red-600 font-medium'>Document Number:</span>
                 <p className='text-gray-900 mt-1'>{doc.documentNumber}</p>
               </div>
             )}
@@ -222,19 +222,19 @@ export default function CheckLicense() {
     <div className='min-h-screen bg-gray-50'>
       <div className='bg-white border-b shadow-sm p-4'>
         <div className='max-w-6xl mx-auto flex items-center justify-between'>
-          <h1 className='text-xl font-bold'>Xác minh giấy tờ ({members.length})</h1>
+          <h1 className='text-xl font-bold'>Document verification ({members.length})</h1>
           <div className='flex gap-2'>
             <button
               onClick={() => setExpandedMembers(new Set(members.map((m) => m.id)))}
               className='px-3 py-1.5 bg-blue-50 text-blue-700 rounded text-xs font-medium'
             >
-              Mở tất cả
+              Expand all
             </button>
             <button
               onClick={() => setExpandedMembers(new Set())}
               className='px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-xs font-medium'
             >
-              Thu gọn
+              Collapse all
             </button>
           </div>
         </div>
@@ -260,7 +260,7 @@ export default function CheckLicense() {
                   onClick={() => handleViewDetail(member.id)}
                   className='px-4 py-2 bg-blue-600 text-white text-sm rounded'
                 >
-                  Chi tiết
+                  Details
                 </button>
                 <button onClick={() => toggleMember(member.id)} className='p-2'>
                   <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -308,7 +308,7 @@ export default function CheckLicense() {
               {loadingDetail ? (
                 <div className='p-12 text-center'>
                   <div className='w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto'></div>
-                  <p className='mt-4 text-gray-600'>Đang tải...</p>
+                  <p className='mt-4 text-gray-600'>Loading...</p>
                 </div>
               ) : (
                 detailData && (
@@ -321,17 +321,17 @@ export default function CheckLicense() {
                     </div>
                     <div className='p-6 space-y-6'>
                       <div>
-                        <h3 className='text-lg font-bold mb-3'>CCCD</h3>
+                        <h3 className='text-lg font-bold mb-3'>Citizen ID</h3>
                         <div className='grid md:grid-cols-2 gap-4'>
-                          <DocumentDetailCard doc={detailData.documents.citizenIdImages.front} title='Mặt trước' />
-                          <DocumentDetailCard doc={detailData.documents.citizenIdImages.back} title='Mặt sau' />
+                          <DocumentDetailCard doc={detailData.documents.citizenIdImages.front} title='Front side' />
+                          <DocumentDetailCard doc={detailData.documents.citizenIdImages.back} title='Back side' />
                         </div>
                       </div>
                       <div>
-                        <h3 className='text-lg font-bold mb-3'>GPLX</h3>
+                        <h3 className='text-lg font-bold mb-3'>Driver license</h3>
                         <div className='grid md:grid-cols-2 gap-4'>
-                          <DocumentDetailCard doc={detailData.documents.driverLicenseImages.front} title='Mặt trước' />
-                          <DocumentDetailCard doc={detailData.documents.driverLicenseImages.back} title='Mặt sau' />
+                          <DocumentDetailCard doc={detailData.documents.driverLicenseImages.front} title='Front side' />
+                          <DocumentDetailCard doc={detailData.documents.driverLicenseImages.back} title='Back side' />
                         </div>
                       </div>
                     </div>

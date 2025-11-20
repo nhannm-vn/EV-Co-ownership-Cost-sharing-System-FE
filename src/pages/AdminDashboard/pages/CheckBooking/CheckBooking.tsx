@@ -32,17 +32,15 @@ export default function CheckBooking() {
   const total = Math.ceil(data.length / ITEMS_PER_PAGE)
 
   // Fetch groups
-  // function call api
   const handleExpand = async (userId: number | undefined) => {
     if (!userId) return
 
-    // Nếu đã fetch rồi → toggle expand/collapse
+    // If already fetched → just toggle expand/collapse
     if (groups[userId]) {
       setExpanded(expanded === userId ? null : userId)
       return
     }
 
-    // Fetch API
     try {
       const res = await staffApi.getAllGroupsByUserId(userId)
       setGroups((prev) => ({

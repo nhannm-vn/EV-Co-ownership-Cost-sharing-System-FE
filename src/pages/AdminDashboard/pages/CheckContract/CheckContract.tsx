@@ -7,21 +7,22 @@ import type { ContractResponse, ContractDetail } from '../../../../types/api/adm
 import { formatToVND } from '../../../../utils/formatPrice'
 import { formatVnTime } from '../../../../utils/helper'
 import EmptyState from '../EmptyState'
-import { data } from 'react-router'
 
 function CheckContract() {
   const queryClient = useQueryClient()
   const [selectedContract, setSelectedContract] = useState<ContractResponse | null>(null)
+
+  // state for reject reason
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
+  const [rejectReason, setRejectReason] = useState('')
+  const [rejectingContractId, setRejectingContractId] = useState<number | null>(null)
 
   const { data: contracts = [], isLoading } = useQuery<ContractResponse[]>({
     queryKey: ['contracts'],
     queryFn: () => adminApi.getAllContracts().then((res) => res.data)
   })
 
-  console.log(contracts)
-  console.log(data)
-
-  // Query chi tiết hợp đồng - chỉ fetch khi có selectedContract
+  // Contract detail query
   const {
     data: contractDetail,
     isLoading: isLoadingDetail,
@@ -29,46 +30,68 @@ function CheckContract() {
   } = useQuery<ContractDetail>({
     queryKey: ['contractDetail', selectedContract?.groupId],
     queryFn: () => adminApi.getContractDetailByGroupId(selectedContract!.groupId).then((res) => res.data),
-    enabled: !!selectedContract, // Chỉ fetch khi selectedContract tồn tại
-    staleTime: 30000 // Cache 30 giây
+    enabled: !!selectedContract,
+    staleTime: 30000
   })
 
+  // APPROVE
   const approveMutation = useMutation({
     mutationFn: (id: number) => adminApi.approveContract(id, 'APPROVE'),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contracts'] })
-      toast.success('Duyệt hợp đồng thành công!', { autoClose: 1500 })
+      toast.success('Approve contract successfully!', { autoClose: 1500 })
     },
     onError: () => {
-      toast.error('Duyệt hợp đồng thất bại!', { autoClose: 1500 })
+      toast.error('Approve contract failed!', { autoClose: 1500 })
     }
   })
 
+  // REJECT with reason
   const rejectMutation = useMutation({
-    mutationFn: (id: number) => adminApi.approveContract(id, 'REJECT'),
+    mutationFn: ({ id, reason }: { id: number; reason: string }) => adminApi.approveContract(id, 'REJECT', reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contracts'] })
-      toast.success('Từ chối hợp đồng thành công!', { autoClose: 1500 })
+      toast.success('Reject contract successfully!', { autoClose: 1500 })
+      // reset state
+      setIsRejectModalOpen(false)
+      setRejectReason('')
+      setRejectingContractId(null)
     },
     onError: () => {
-      toast.error('Từ chối hợp đồng thất bại!', { autoClose: 1500 })
+      toast.error('Reject contract failed!', { autoClose: 1500 })
     }
   })
 
   const handleAction = (id: number, type: 'APPROVE' | 'REJECT') => {
-    const confirmText = type === 'APPROVE' ? 'Xác nhận duyệt hợp đồng này?' : 'Xác nhận từ chối hợp đồng này?'
-    const isConfirmed = window.confirm(confirmText)
-    if (!isConfirmed) return
-
     if (type === 'APPROVE') {
+      const isConfirmed = window.confirm('Confirm approving this contract?')
+      if (!isConfirmed) return
       approveMutation.mutate(id)
     } else {
-      rejectMutation.mutate(id)
+      // open modal to type reject reason
+      setRejectingContractId(id)
+      setIsRejectModalOpen(true)
     }
   }
 
+  const handleConfirmReject = () => {
+    if (!rejectingContractId) return
+    if (!rejectReason.trim()) {
+      toast.warn('Please enter a reject reason')
+      return
+    }
+    rejectMutation.mutate({ id: rejectingContractId, reason: rejectReason.trim() })
+  }
+
+  const handleCloseRejectModal = () => {
+    if (rejectMutation.isPending) return
+    setIsRejectModalOpen(false)
+    setRejectReason('')
+    setRejectingContractId(null)
+  }
+
   useEffect(() => {
-    // Side effect handling if needed
+    // you can use these flags to disable UI if needed
   }, [approveMutation.isPending, rejectMutation.isPending])
 
   if (isLoading) return <Skeleton />
@@ -82,7 +105,7 @@ function CheckContract() {
           ? 'bg-green-100 text-green-800'
           : 'bg-red-100 text-red-800'
 
-    const label = status === 'SIGNED' ? 'Chờ duyệt' : status === 'APPROVED' ? 'Đã duyệt' : 'Từ chối'
+    const label = status === 'SIGNED' ? 'Pending approval' : status === 'APPROVED' ? 'Approved' : 'Rejected'
 
     return <span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyle}`}>{label}</span>
   }
@@ -95,26 +118,24 @@ function CheckContract() {
           ? 'bg-red-100 text-red-800'
           : 'bg-yellow-100 text-yellow-800'
 
-    const label = status === 'PAID' ? 'Đã thanh toán' : status === 'UNPAID' ? 'Chưa thanh toán' : 'Đang chờ'
+    const label = status === 'PAID' ? 'Paid' : status === 'UNPAID' ? 'Unpaid' : 'Pending'
 
     return <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${statusStyle}`}>{label}</span>
   }
 
   return (
     <div className='p-8 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>
-      <h1 className='text-2xl font-bold mb-6 text-gray-800'>Duyệt Hợp Đồng</h1>
+      <h1 className='text-2xl font-bold mb-6 text-gray-800'>Contract Approval</h1>
 
       <div className='bg-white rounded-xl shadow-md overflow-hidden border border-gray-100'>
         <table className='w-full text-sm text-gray-700'>
           <thead className='bg-gray-100 text-gray-700 uppercase text-xs'>
             <tr>
-              {['ID', 'Nhóm', 'Ngày bắt đầu', 'Ngày kết thúc', 'Tiền đặt cọc', 'Trạng thái', 'Hành động'].map(
-                (header) => (
-                  <th key={header} className='px-4 py-3 text-left font-semibold'>
-                    {header}
-                  </th>
-                )
-              )}
+              {['ID', 'Group', 'Start date', 'End date', 'Deposit amount', 'Status', 'Actions'].map((header) => (
+                <th key={header} className='px-4 py-3 text-left font-semibold'>
+                  {header}
+                </th>
+              ))}
             </tr>
           </thead>
 
@@ -122,7 +143,7 @@ function CheckContract() {
             {contracts.map((c) => (
               <tr key={c.id} className='hover:bg-gray-50 transition-colors'>
                 <td className='px-4 py-3 font-medium'>#{c.id}</td>
-                <td className='px-4 py-3'>Nhóm {c.groupId}</td>
+                <td className='px-4 py-3'>Group {c.groupId}</td>
                 <td className='px-4 py-3'>{formatVnTime(c.startDate)}</td>
                 <td className='px-4 py-3'>{formatVnTime(c.endDate)}</td>
                 <td className='px-4 py-3 font-semibold'>{formatToVND(c.requiredDepositAmount)}</td>
@@ -147,7 +168,7 @@ function CheckContract() {
                           d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'
                         />
                       </svg>
-                      Chi tiết
+                      Details
                     </button>
                     {c.approvalStatus === 'SIGNED' && (
                       <>
@@ -156,14 +177,14 @@ function CheckContract() {
                           disabled={approveMutation.isPending}
                           className='px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all text-xs font-medium shadow-sm disabled:opacity-50'
                         >
-                          {approveMutation.isPending ? 'Đang duyệt...' : 'Duyệt'}
+                          {approveMutation.isPending ? 'Approving...' : 'Approve'}
                         </button>
                         <button
                           onClick={() => handleAction(c.id, 'REJECT')}
                           disabled={rejectMutation.isPending}
                           className='px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all text-xs font-medium shadow-sm disabled:opacity-50'
                         >
-                          {rejectMutation.isPending ? 'Đang xử lý...' : 'Từ chối'}
+                          {rejectMutation.isPending ? 'Processing...' : 'Reject'}
                         </button>
                       </>
                     )}
@@ -175,7 +196,7 @@ function CheckContract() {
         </table>
       </div>
 
-      {/* Modal Chi tiết */}
+      {/* Detail Modal */}
       {selectedContract && (
         <div
           className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'
@@ -187,7 +208,7 @@ function CheckContract() {
           >
             <div className='sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl z-10'>
               <div className='flex justify-between items-center'>
-                <h2 className='text-2xl font-bold'>Chi tiết Hợp đồng #{selectedContract.id}</h2>
+                <h2 className='text-2xl font-bold'>Contract details #{selectedContract.id}</h2>
                 <button
                   onClick={() => setSelectedContract(null)}
                   className='text-white hover:bg-white/20 rounded-full p-2 transition-colors'
@@ -206,11 +227,11 @@ function CheckContract() {
                 </div>
               ) : detailError ? (
                 <div className='text-center py-12'>
-                  <p className='text-red-600 font-semibold'>Không thể tải thông tin chi tiết</p>
+                  <p className='text-red-600 font-semibold'>Failed to load contract details</p>
                 </div>
               ) : contractDetail ? (
                 <div className='space-y-6'>
-                  {/* Thông tin hợp đồng */}
+                  {/* Contract info */}
                   <div>
                     <h3 className='text-lg font-bold text-gray-800 mb-3 flex items-center gap-2'>
                       <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -221,49 +242,49 @@ function CheckContract() {
                           d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
                         />
                       </svg>
-                      Thông tin Hợp đồng
+                      Contract information
                     </h3>
                     <div className='grid grid-cols-2 gap-4'>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>ID Hợp đồng</p>
+                        <p className='text-xs text-gray-500 mb-1'>Contract ID</p>
                         <p className='text-lg font-semibold text-gray-800'>#{contractDetail.contract.contractId}</p>
                       </div>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>Trạng thái</p>
+                        <p className='text-xs text-gray-500 mb-1'>Status</p>
                         {getStatusBadge(contractDetail.contract.approvalStatus)}
                       </div>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>Ngày bắt đầu</p>
+                        <p className='text-xs text-gray-500 mb-1'>Start date</p>
                         <p className='text-base font-semibold text-gray-800'>
                           {formatVnTime(contractDetail.contract.startDate)}
                         </p>
                       </div>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>Ngày kết thúc</p>
+                        <p className='text-xs text-gray-500 mb-1'>End date</p>
                         <p className='text-base font-semibold text-gray-800'>
                           {formatVnTime(contractDetail.contract.endDate)}
                         </p>
                       </div>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>Hạn đặt cọc</p>
+                        <p className='text-xs text-gray-500 mb-1'>Deposit deadline</p>
                         <p className='text-base font-semibold text-orange-600'>
                           {formatVnTime(contractDetail.contract.depositDeadline)}
                         </p>
                       </div>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>Tiền đặt cọc yêu cầu</p>
+                        <p className='text-xs text-gray-500 mb-1'>Required deposit amount</p>
                         <p className='text-xl font-bold text-green-600'>
                           {formatToVND(contractDetail.contract.requiredDepositAmount)}
                         </p>
                       </div>
                       <div className='bg-gray-50 p-4 rounded-lg col-span-2'>
-                        <p className='text-xs text-gray-500 mb-1'>Điều khoản</p>
+                        <p className='text-xs text-gray-500 mb-1'>Terms</p>
                         <p className='text-sm text-gray-700 whitespace-pre-wrap'>{contractDetail.contract.terms}</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Thông tin nhóm */}
+                  {/* Group info */}
                   <div>
                     <h3 className='text-lg font-bold text-gray-800 mb-3 flex items-center gap-2'>
                       <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -274,15 +295,15 @@ function CheckContract() {
                           d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
                         />
                       </svg>
-                      Thông tin Nhóm
+                      Group information
                     </h3>
                     <div className='grid grid-cols-2 gap-4'>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>Tên nhóm</p>
+                        <p className='text-xs text-gray-500 mb-1'>Group name</p>
                         <p className='text-lg font-semibold text-gray-800'>{contractDetail.group.groupName}</p>
                       </div>
                       <div className='bg-gray-50 p-4 rounded-lg'>
-                        <p className='text-xs text-gray-500 mb-1'>Trạng thái nhóm</p>
+                        <p className='text-xs text-gray-500 mb-1'>Group status</p>
                         <span
                           className={`px-3 py-1 text-xs font-semibold rounded-full ${
                             contractDetail.group.status === 'ACTIVE'
@@ -290,13 +311,13 @@ function CheckContract() {
                               : 'bg-gray-100 text-gray-800'
                           }`}
                         >
-                          {contractDetail.group.status === 'ACTIVE' ? 'Hoạt động' : 'Không hoạt động'}
+                          {contractDetail.group.status === 'ACTIVE' ? 'Active' : 'Inactive'}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Danh sách thành viên */}
+                  {/* Members list */}
                   <div>
                     <h3 className='text-lg font-bold text-gray-800 mb-3 flex items-center gap-2'>
                       <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -307,17 +328,17 @@ function CheckContract() {
                           d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
                         />
                       </svg>
-                      Danh sách Thành viên ({contractDetail.members.length})
+                      Members ({contractDetail.members.length})
                     </h3>
                     <div className='bg-white border border-gray-200 rounded-lg overflow-hidden'>
                       <table className='w-full text-sm'>
                         <thead className='bg-gray-50 text-gray-700 text-xs'>
                           <tr>
-                            <th className='px-4 py-3 text-left font-semibold'>Họ tên</th>
+                            <th className='px-4 py-3 text-left font-semibold'>Full name</th>
                             <th className='px-4 py-3 text-left font-semibold'>Email</th>
-                            <th className='px-4 py-3 text-left font-semibold'>Vai trò</th>
-                            <th className='px-4 py-3 text-left font-semibold'>Tỷ lệ sở hữu</th>
-                            <th className='px-4 py-3 text-left font-semibold'>Trạng thái cọc</th>
+                            <th className='px-4 py-3 text-left font-semibold'>Role</th>
+                            <th className='px-4 py-3 text-left font-semibold'>Ownership</th>
+                            <th className='px-4 py-3 text-left font-semibold'>Deposit status</th>
                           </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-200'>
@@ -336,10 +357,10 @@ function CheckContract() {
                                   }`}
                                 >
                                   {member.userRole === 'ADMIN'
-                                    ? 'Quản trị'
+                                    ? 'Admin'
                                     : member.userRole === 'CO_OWNER'
-                                      ? 'Đồng sở hữu'
-                                      : 'Thành viên'}
+                                      ? 'Co-owner'
+                                      : 'Member'}
                                 </span>
                               </td>
                               <td className='px-4 py-3 font-semibold text-gray-800'>{member.ownershipPercentage}%</td>
@@ -351,7 +372,7 @@ function CheckContract() {
                     </div>
                   </div>
 
-                  {/* Nút hành động */}
+                  {/* Actions inside detail modal */}
                   {contractDetail.contract.approvalStatus === 'PENDING' && (
                     <div className='flex gap-3 pt-4 border-t'>
                       <button
@@ -361,7 +382,7 @@ function CheckContract() {
                         }}
                         className='flex-1 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-all shadow-md'
                       >
-                        Duyệt hợp đồng
+                        Approve contract
                       </button>
                       <button
                         onClick={() => {
@@ -370,12 +391,50 @@ function CheckContract() {
                         }}
                         className='flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-all shadow-md'
                       >
-                        Từ chối hợp đồng
+                        Reject contract
                       </button>
                     </div>
                   )}
                 </div>
               ) : null}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject reason modal */}
+      {isRejectModalOpen && (
+        <div
+          className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'
+          onClick={handleCloseRejectModal}
+        >
+          <div className='bg-white rounded-2xl shadow-2xl max-w-md w-full p-6' onClick={(e) => e.stopPropagation()}>
+            <h3 className='text-lg font-bold text-gray-800 mb-4'>Enter reject reason</h3>
+            <textarea
+              className='w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400'
+              rows={4}
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              placeholder='For example: Contract information is incomplete, missing documents...'
+              disabled={rejectMutation.isPending}
+            />
+            <div className='flex justify-end gap-3 mt-4'>
+              <button
+                type='button'
+                onClick={handleCloseRejectModal}
+                className='px-4 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm hover:bg-gray-50'
+                disabled={rejectMutation.isPending}
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                onClick={handleConfirmReject}
+                className='px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-semibold disabled:opacity-50'
+                disabled={rejectMutation.isPending}
+              >
+                {rejectMutation.isPending ? 'Processing...' : 'Confirm reject'}
+              </button>
             </div>
           </div>
         </div>

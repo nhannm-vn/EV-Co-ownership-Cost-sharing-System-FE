@@ -41,7 +41,7 @@ export function CheckVehicleReport() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 p-6 lg:p-8'>
       <div className='max-w-5xl mx-auto'>
-        <PageHeader totalReports={reportData?.content.length || 0} />
+        <PageHeader totalReports={reportData?.content?.length || 0} />
 
         <div className='space-y-3'>
           {reportData?.content?.length ? (
