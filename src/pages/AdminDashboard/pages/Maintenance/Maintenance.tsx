@@ -7,9 +7,6 @@ import Skeleton from '../../../../components/Skeleton'
 import { toast } from 'react-toastify'
 
 // ================== STATUS TYPES ==================
-// In Maintenance type you should have:
-// export type MaintenanceStatus = 'PENDING' | 'FUNDED' | 'COMPLETED'
-// export type Maintenance = { status: MaintenanceStatus; ... }
 
 type MaintenanceStatus = Maintenance['status']
 
@@ -27,7 +24,6 @@ const STATUS_COLOR_CLASS: Record<MaintenanceStatus, string> = {
   COMPLETED: 'bg-emerald-50 text-emerald-700'
 }
 
-// Pill badge, no wrapping, wide enough for English text
 const STATUS_BASE_CLASS =
   'inline-flex items-center justify-center rounded-full px-4 py-1.5 text-xs md:text-sm font-semibold whitespace-nowrap min-w-[120px] text-center'
 
@@ -106,6 +102,15 @@ const validateForm = (values: CreateForm): CreateFormErrors => {
   return errors
 }
 
+// Helper: pick error message from API error
+const getErrorMessage = (error: unknown): string => {
+  const e = error as any
+  // axios error shape
+  const apiMessage = e?.response?.data?.message || e?.response?.data?.error || e?.message
+
+  return apiMessage || 'Failed to create maintenance. Please try again.'
+}
+
 // ================== COMPONENT ==================
 
 function MaintenanceList() {
@@ -119,6 +124,9 @@ function MaintenanceList() {
       return res.data
     }
   })
+
+  // local state for create API error
+  const [createErrorMessage, setCreateErrorMessage] = useState<string | null>(null)
 
   // MUTATION: complete maintenance
   const completeMutation = useMutation({
@@ -149,10 +157,13 @@ function MaintenanceList() {
         estimatedDurationDays: ''
       })
       setFormErrors({})
+      setCreateErrorMessage(null)
       setShowForm(false)
     },
-    onError: () => {
-      toast.error('Failed to create maintenance. Please try again.')
+    onError: (err) => {
+      const msg = getErrorMessage(err)
+      setCreateErrorMessage(msg)
+      toast.error(msg)
     }
   })
 
@@ -168,6 +179,7 @@ function MaintenanceList() {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
     setFormErrors((prev) => ({ ...prev, [name]: undefined }))
+    setCreateErrorMessage(null)
   }
 
   const list = data ?? []
@@ -185,16 +197,19 @@ function MaintenanceList() {
       return
     }
 
-    // Lấy vehicleId từ list get được (ví dụ: xe đầu tiên trong list)
     const firstItem = list[0]
     if (!firstItem) {
-      toast.error('No vehicle available to attach maintenance.')
+      const msg = 'No vehicle available to attach maintenance.'
+      setCreateErrorMessage(msg)
+      toast.error(msg)
       return
     }
 
     const vehicleId = Number(firstItem.vehicleId)
     if (!Number.isFinite(vehicleId)) {
-      toast.error('Invalid vehicle ID.')
+      const msg = 'Invalid vehicle ID.'
+      setCreateErrorMessage(msg)
+      toast.error(msg)
       return
     }
 
@@ -232,7 +247,11 @@ function MaintenanceList() {
               </div>
               <button
                 type='button'
-                onClick={() => setShowForm((prev) => !prev)}
+                onClick={() => {
+                  setShowForm((prev) => !prev)
+                  setCreateErrorMessage(null)
+                  setFormErrors({})
+                }}
                 className='inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50/95 px-4 py-2 text-xs md:text-sm font-semibold text-emerald-800 hover:bg-emerald-100 transition'
               >
                 <span className='text-base leading-none'>+</span>
@@ -250,6 +269,14 @@ function MaintenanceList() {
                 className='rounded-2xl border border-emerald-100 bg-white px-5 md:px-6 py-5 md:py-6 space-y-4'
               >
                 <h2 className='text-base md:text-lg font-semibold text-slate-900'>New maintenance request</h2>
+
+                {/* Global error for create API */}
+                {createErrorMessage && (
+                  <div className='rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs md:text-sm text-rose-700'>
+                    {createErrorMessage}
+                  </div>
+                )}
+
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                   {/* DESCRIPTION */}
                   <div className='md:col-span-3'>
@@ -313,7 +340,11 @@ function MaintenanceList() {
                 <div className='flex justify-end gap-3 pt-2'>
                   <button
                     type='button'
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      setShowForm(false)
+                      setCreateErrorMessage(null)
+                      setFormErrors({})
+                    }}
                     className='rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:bg-slate-50'
                     disabled={createMutation.isPending}
                   >

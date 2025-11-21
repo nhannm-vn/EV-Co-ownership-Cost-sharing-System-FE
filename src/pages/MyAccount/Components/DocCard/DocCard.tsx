@@ -17,7 +17,7 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
   const currentStatus = isFlipped ? statusBack : statusFront
   const isApproved = currentStatus === 'APPROVED'
   const isRejected = currentStatus === 'REJECTED'
-  const currentSide = isFlipped ? 'Mặt sau' : 'Mặt trước'
+  const currentSide = isFlipped ? 'Back side' : 'Front side'
 
   return (
     <div className='relative w-full'>
@@ -42,8 +42,7 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
             </div>
 
             <div className='flex items-center gap-2 flex-shrink-0'>
-              {/* Status Badge: cho hiển thị lại cục active hoặc màu khác chứ đừng
-              để active nó sẽ trùng với lại mấy thằng cũ */}
+              {/* Status Badge */}
               <div
                 className={classNames('flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-md', {
                   'bg-green-400/20 border-[2px] border-green-300/50': isApproved,
@@ -71,10 +70,10 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
               <button
                 onClick={() => setIsFlipped(!isFlipped)}
                 className='p-2 rounded-lg bg-white/15 border-[2px] border-white/30 
-                         hover:bg-white/25 hover:border-white/50
-                         hover:shadow-[0_0_15px_rgba(6,182,212,0.5)]
-                         transition-all duration-400 group'
-                title={`Xem ${isFlipped ? 'mặt trước' : 'mặt sau'}`}
+                        hover:bg-white/25 hover:border-white/50
+                        hover:shadow-[0_0_15px_rgba(6,182,212,0.5)]
+                        transition-all duration-400 group'
+                title={`View ${isFlipped ? 'front side' : 'back side'}`}
               >
                 <svg
                   width='20'
@@ -131,21 +130,21 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
             {/* Gradient Overlay */}
             <div
               className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent 
-                          group-hover:from-black/40 transition-all duration-400'
+                              group-hover:from-black/40 transition-all duration-400'
             />
 
             {/* Holographic Glass Overlay */}
             <div
               className='absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 
-                          opacity-0 group-hover:opacity-100 transition-opacity duration-400'
+                              opacity-0 group-hover:opacity-100 transition-opacity duration-400'
             />
 
             {/* Side Indicator Badge */}
             <div
               className='absolute bottom-3 left-3 px-3 py-1.5 
-                          bg-white/20 backdrop-blur-md rounded-full 
-                          border-[2px] border-white/40
-                          shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                              bg-white/20 backdrop-blur-md rounded-full 
+                              border-[2px] border-white/40
+                              shadow-[0_0_15px_rgba(6,182,212,0.3)]'
             >
               <span className='text-white text-xs font-bold drop-shadow-[0_0_6px_rgba(255,255,255,0.5)]'>
                 {currentSide}
@@ -182,9 +181,9 @@ function DocCard({ title, imageFront, imageBack, statusFront, statusBack }: IDoc
               <line x1='12' y1='3' x2='12' y2='15' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
             </svg>
             <div className='text-center'>
-              <p className='text-white/70 text-sm font-semibold'>Chưa có {currentSide.toLowerCase()}</p>
+              <p className='text-white/70 text-sm font-semibold'>No {currentSide.toLowerCase()} yet</p>
               <p className='text-white/50 text-xs mt-1'>
-                Vui lòng tải lên {title} {currentSide.toLowerCase()}
+                Please upload {title} {currentSide.toLowerCase()}
               </p>
             </div>
           </div>

@@ -12,12 +12,12 @@ function Button({ isReady, uploadedCount, currentStep, isUploading }: IButton) {
 
   const getButtonText = () => {
     if (isUploading) {
-      return 'Đang upload...'
+      return 'Uploading...'
     }
     if (isReady) {
-      return isLastStep ? '✓ Upload & Hoàn thành' : 'Upload & Tiếp tục →'
+      return isLastStep ? '✓ Upload & Complete' : 'Upload & Continue →'
     }
-    return `Còn thiếu ${2 - uploadedCount} mặt`
+    return `Missing ${2 - uploadedCount} side(s)`
   }
 
   return (

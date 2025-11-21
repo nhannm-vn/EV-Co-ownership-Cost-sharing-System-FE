@@ -8,9 +8,11 @@ import DashboardCardElement from './DashboardCardElement'
 
 export default function DashboardCardList({ allowAccess }: { allowAccess: boolean }) {
   const otp = useRef<HTMLInputElement>(null)
+
   const inviteMutation = useMutation({
     mutationFn: (otp: string) => groupApi.verifyMember(otp)
   })
+
   const navigate = useNavigate()
 
   const handleVerify = (otp: string) => {
@@ -27,6 +29,7 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
       }
     })
   }
+
   return (
     <motion.div
       initial='hidden'
@@ -55,7 +58,7 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
         moveLink={path.createGroups}
         content={{
           title: 'Create Group',
-          body: 'Tạo nhóm mới để quản lý và chia sẻ thông tin về xe điện.',
+          body: 'Create a new group to manage and share information about your EV.',
           button: 'Create'
         }}
       />
@@ -73,7 +76,7 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
         moveLink={path.viewGroups}
         content={{
           title: 'View Groups',
-          body: 'Xem danh sách các nhóm xe điện mà bạn đã tham gia.',
+          body: 'View the list of EV groups you have joined.',
           button: 'View'
         }}
       />
@@ -92,7 +95,7 @@ export default function DashboardCardList({ allowAccess }: { allowAccess: boolea
         moveLink=''
         content={{
           title: 'Enter Code',
-          body: 'Nhập mã nhóm để tham gia vào cộng đồng EV của bạn.',
+          body: 'Enter a group code to join your EV community.',
           button: 'Join'
         }}
       >

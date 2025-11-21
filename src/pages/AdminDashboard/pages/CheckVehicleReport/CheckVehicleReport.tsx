@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Skeleton from '../../../../components/Skeleton'
 import technicianApi from '../../../../apis/technician.api'
-import type { BookingReviewItem, BookingReviewResponse } from '../../../../types/api/technician.type'
+import type { VehicleCheck } from '../../../../types/api/technician.type'
 
 // Color constants
 const STATUS_COLORS = {
@@ -23,12 +23,11 @@ const METRIC_STYLES = {
 } as const
 
 export function CheckVehicleReport() {
-  // Không cần currentPage nữa vì API cố định page=1,size=30
   const queryClient = useQueryClient()
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ['vehicleChecks-fixed-page'],
-    queryFn: () => technicianApi.getAllVehicleCheck(), // hàm này đã fix cứng page=1,size=30
+    queryKey: ['vehicleChecks'],
+    queryFn: () => technicianApi.getAllVehicleCheck(),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10
   })
@@ -36,46 +35,42 @@ export function CheckVehicleReport() {
   if (isPending) return <Skeleton />
   if (isError) return <ErrorState error={error as Error} />
 
-  const reportData = data?.data as BookingReviewResponse | undefined
+  const reportData = data?.data ?? []
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 p-6 lg:p-8'>
       <div className='max-w-5xl mx-auto'>
-        <PageHeader totalReports={reportData?.content?.length || 0} />
+        <PageHeader totalReports={reportData.length} />
 
         <div className='space-y-3'>
-          {reportData?.content?.length ? (
-            reportData.content.map((report, idx) => (
+          {reportData.length ? (
+            reportData.map((report, idx) => (
               <ReportCard
                 key={report.id}
                 report={report}
                 index={idx}
-                onStatusChange={() => queryClient.invalidateQueries({ queryKey: ['vehicleChecks-fixed-page'] })}
+                onStatusChange={() => queryClient.invalidateQueries({ queryKey: ['vehicleChecks'] })}
               />
             ))
           ) : (
             <EmptyState />
           )}
         </div>
-
-        {/* API đã cố định 1 page, nên không render Pagination nữa */}
       </div>
     </div>
   )
 }
-
-// Sub-components giữ nguyên
 
 const PageHeader = ({ totalReports }: { totalReports: number }) => (
   <div className='mb-10'>
     <div className='flex items-center gap-3 mb-2'>
       <div className='w-1 h-8 bg-gradient-to-b from-teal-500 to-teal-600 rounded-full'></div>
       <h1 className='text-4xl font-bold bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent'>
-        Duyệt Kiểm Tra Xe
+        Vehicle Inspection Approval
       </h1>
     </div>
     <p className='text-gray-500 ml-4 text-sm'>
-      <span className='font-semibold text-gray-700'>{totalReports}</span> báo cáo ở trang hiện tại
+      <span className='font-semibold text-gray-700'>{totalReports}</span> reports on this page
     </p>
   </div>
 )
@@ -87,15 +82,17 @@ const EmptyState = () => (
         <span className='text-2xl font-bold text-teal-600'>OK</span>
       </div>
     </div>
-    <p className='text-gray-500 text-lg font-medium'>Không có báo cáo chờ duyệt</p>
-    <p className='text-gray-400 text-sm mt-1'>Tất cả báo cáo đã được xử lý</p>
+    <p className='text-gray-500 text-lg font-medium'>No pending reports</p>
+    <p className='text-gray-400 text-sm mt-1'>All reports have been processed</p>
   </div>
 )
 
 const ErrorState = ({ error }: { error: Error | null }) => (
   <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6 flex items-center justify-center'>
     <div className='bg-white rounded-2xl shadow-lg p-8 border border-red-200 max-w-md text-center'>
-      <p className='text-red-700 font-semibold'>{error instanceof Error ? error.message : 'Không thể tải danh sách'}</p>
+      <p className='text-red-700 font-semibold'>
+        {error instanceof Error ? error.message : 'Failed to load report list'}
+      </p>
     </div>
   </div>
 )
@@ -105,14 +102,14 @@ function ReportCard({
   index,
   onStatusChange
 }: {
-  report: BookingReviewItem
+  report: VehicleCheck
   index: number
   onStatusChange: () => void
 }) {
   const isPending = report.status === 'PENDING'
 
   const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('vi-VN', {
+    new Date(date).toLocaleDateString('en-GB', {
       month: 'short',
       day: '2-digit',
       hour: '2-digit',
@@ -125,7 +122,7 @@ function ReportCard({
       onStatusChange()
     },
     onError: (error) => {
-      console.error('Lỗi khi cập nhật trạng thái:', error)
+      console.error('Error updating status:', error)
     }
   })
 
@@ -150,9 +147,9 @@ function ReportCard({
 
         <div className='flex-1'>
           <div className='flex items-center gap-2'>
-            <h3 className='font-semibold text-gray-900'>Báo cáo #{report.id}</h3>
+            <h3 className='font-semibold text-gray-900'>Report #{report.id}</h3>
             <span className={`px-2 py-1 text-xs font-medium rounded-full ${CHECK_TYPE_COLORS[report.checkType]}`}>
-              {report.checkType === 'POST_USE' ? 'Sau' : 'Trước'}
+              {report.checkType === 'POST_USE' ? 'After use' : 'Before use'}
             </span>
           </div>
           <p className='text-xs text-gray-500 mt-1'>{formatDate(report.createdAt)}</p>
@@ -161,29 +158,29 @@ function ReportCard({
         <span
           className={`px-2.5 py-1 text-xs font-bold rounded-full whitespace-nowrap ${STATUS_COLORS[report.status]}`}
         >
-          {report.status === 'PENDING' ? 'Chờ xử lý' : report.status === 'APPROVED' ? 'Phê duyệt' : 'Từ chối'}
+          {report.status === 'PENDING' ? 'Pending' : report.status === 'APPROVED' ? 'Approved' : 'Rejected'}
         </span>
       </div>
 
       {/* Metrics */}
       <div className='grid grid-cols-3 gap-2 mb-4'>
         <MetricCard label='Km' value={report.odometer} style={METRIC_STYLES.odometer} />
-        <MetricCard label='Pin' value={`${report.batteryLevel}%`} style={METRIC_STYLES.battery} />
-        <MetricCard label='Sạch' value={report.cleanliness ?? '—'} style={METRIC_STYLES.cleanliness} />
+        <MetricCard label='Battery' value={`${report.batteryLevel}%`} style={METRIC_STYLES.battery} />
+        <MetricCard label='Cleanliness' value={report.cleanliness ?? '—'} style={METRIC_STYLES.cleanliness} />
       </div>
 
       {/* Notes & Issues */}
       {(report.issues || report.notes) && (
         <div className='mb-4 space-y-2'>
           {report.issues && (
-            <div className='bg-red-50 border-l-3 border-red-400 px-3 py-2 rounded-r text-sm'>
-              <span className='font-bold text-red-700'>Vấn đề:</span>
+            <div className='bg-red-50 border-l-4 border-red-400 px-3 py-2 rounded-r text-sm'>
+              <span className='font-bold text-red-700'>Issues:</span>
               <span className='ml-2 text-red-600'>{report.issues}</span>
             </div>
           )}
           {report.notes && (
-            <div className='bg-blue-50 border-l-3 border-blue-400 px-3 py-2 rounded-r text-sm'>
-              <span className='font-bold text-blue-700'>Ghi chú:</span>
+            <div className='bg-blue-50 border-l-4 border-blue-400 px-3 py-2 rounded-r text-sm'>
+              <span className='font-bold text-blue-700'>Notes:</span>
               <span className='ml-2 text-blue-600'>{report.notes}</span>
             </div>
           )}
@@ -198,14 +195,14 @@ function ReportCard({
             disabled={isSubmitting}
             className='flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all bg-gradient-to-r from-red-50 to-red-100 text-red-700 border-2 border-red-300 hover:from-red-100 hover:to-red-200 hover:shadow-lg hover:shadow-red-500/10 disabled:opacity-50'
           >
-            {isSubmitting ? 'Đang xử lý...' : 'Từ chối'}
+            {isSubmitting ? 'Processing...' : 'Reject'}
           </button>
           <button
             onClick={() => checkReport('APPROVED')}
             disabled={isSubmitting}
             className='flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:from-teal-700 hover:to-teal-800 hover:shadow-lg hover:shadow-teal-600/20 disabled:opacity-50'
           >
-            {isSubmitting ? 'Đang xử lý...' : 'Phê duyệt'}
+            {isSubmitting ? 'Processing...' : 'Approve'}
           </button>
         </div>
       )}

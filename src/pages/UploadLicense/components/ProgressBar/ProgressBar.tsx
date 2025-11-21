@@ -9,9 +9,9 @@ function ProgressBar({ uploadedCount, maxCount }: IProgressBar) {
   return (
     <div className='max-w-md mx-auto pt-2'>
       <div className='flex justify-between text-xs text-teal-300 mb-2'>
-        <span>Tiến độ bước này</span>
+        <span>Step progress</span>
         <span>
-          {uploadedCount}/{maxCount} mặt
+          {uploadedCount}/{maxCount} sides
         </span>
       </div>
       <div className='w-full bg-slate-700/50 rounded-full h-2 overflow-hidden'>

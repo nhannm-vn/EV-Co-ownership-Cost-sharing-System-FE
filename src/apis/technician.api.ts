@@ -1,13 +1,9 @@
-import type { BookingReviewResponse, Maintenance } from '../types/api/technician.type'
+import type { Maintenance, VehicleCheck } from '../types/api/technician.type'
 import http from '../utils/http'
 
 const technicianApi = {
   getAllVehicleCheck() {
-    const page = 1
-    const size = 30
-    return http.get<BookingReviewResponse>('/api/vehicle-checks', {
-      params: { page, size }
-    })
+    return http.get<VehicleCheck[]>('/api/vehicle-checks')
   },
   checkReport(checkId: string, status: 'APPROVED' | 'REJECTED') {
     return http.put(`/api/vehicle-checks/${checkId}/status`, {

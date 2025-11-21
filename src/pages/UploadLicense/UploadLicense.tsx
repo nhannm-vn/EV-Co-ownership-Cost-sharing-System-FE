@@ -22,6 +22,7 @@ export default function UploadLicense() {
     cccd: false
   })
 
+  // State to hold uploaded document files
   const [docs, setDocs] = useState<Record<DocType, DocFiles>>({
     gplx: { front: null, back: null },
     cccd: { front: null, back: null }
@@ -31,13 +32,13 @@ export default function UploadLicense() {
     mutationFn: ({ frontFile, backFile }: { frontFile: File; backFile: File }) =>
       userApi.uploadLicense(frontFile, backFile),
     onSuccess: (data) => {
-      console.log('Upload GPLX thành công:', data)
+      console.log('Upload driver license successfully:', data)
       setUploadSuccess((prev) => ({ ...prev, gplx: true }))
-      toast.success('Upload GPLX successfully!', { autoClose: 1500 })
+      toast.success('Upload driver license successfully!', { autoClose: 1500 })
     },
     onError: (error) => {
-      console.error('Lỗi upload GPLX:', error)
-      toast.error('Upload GPLX thất bại, vui lòng thử lại!')
+      console.error('Failed to upload driver license:', error)
+      toast.error('Upload driver license failed, please try again!')
     }
   })
 
@@ -45,13 +46,13 @@ export default function UploadLicense() {
     mutationFn: ({ frontFile, backFile }: { frontFile: File; backFile: File }) =>
       userApi.uploadCitizenId(frontFile, backFile),
     onSuccess: (data) => {
-      console.log('Upload CCCD thành công:', data)
+      console.log('Upload citizen ID successfully:', data)
       setUploadSuccess((prev) => ({ ...prev, cccd: true }))
-      toast.success('Upload CCCD successfully!', { autoClose: 1500 })
+      toast.success('Upload citizen ID successfully!', { autoClose: 1500 })
     },
     onError: (error) => {
-      console.error('Lỗi upload CCCD:', error)
-      toast.error('Upload CCCD thất bại, vui lòng thử lại!')
+      console.error('Failed to upload citizen ID:', error)
+      toast.error('Upload citizen ID failed, please try again!')
     }
   })
 
@@ -82,7 +83,7 @@ export default function UploadLicense() {
 
     if (activeTab === 'gplx') {
       if (!docs.gplx.front || !docs.gplx.back) {
-        toast.warning('Vui lòng upload đủ 2 mặt GPLX!')
+        toast.warning('Please upload both front and back of your driver license!')
         return
       }
       uploadLicenseMutation.mutate({
@@ -91,7 +92,7 @@ export default function UploadLicense() {
       })
     } else {
       if (!docs.cccd.front || !docs.cccd.back) {
-        toast.warning('Vui lòng upload đủ 2 mặt CCCD!')
+        toast.warning('Please upload both front and back of your citizen ID!')
         return
       }
       uploadCitizenIdMutation.mutate({
@@ -134,8 +135,8 @@ export default function UploadLicense() {
 
         {/* Header */}
         <div className='text-center space-y-3'>
-          <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>Upload Giấy tờ</h1>
-          <p className='text-white/75 text-sm font-medium'>Tải lên GPLX và CCCD theo thứ tự bất kỳ</p>
+          <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>Upload Documents</h1>
+          <p className='text-white/75 text-sm font-medium'>Upload your driver license and citizen ID in any order</p>
         </div>
 
         {/* Tabs */}
@@ -166,7 +167,7 @@ export default function UploadLicense() {
                     d='M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z'
                   />
                 </svg>
-                <span>{tab.toUpperCase()}</span>
+                <span>{tab === 'gplx' ? 'Driver License' : 'Citizen ID'}</span>
                 {uploadSuccess[tab] && (
                   <span className='ml-1 flex items-center justify-center w-5 h-5 rounded-full bg-green-400 text-white text-xs font-bold shadow-[0_0_15px_rgba(74,222,128,0.8)]'>
                     ✓
@@ -205,13 +206,13 @@ export default function UploadLicense() {
                   d='M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z'
                 />
               </svg>
-              {activeTab === 'gplx' ? 'Giấy phép lái xe (GPLX)' : 'Căn cước công dân (CCCD)'}
+              {activeTab === 'gplx' ? 'Driver License (GPLX)' : 'Citizen ID (CCCD)'}
             </h3>
             <div className='grid md:grid-cols-2 gap-4'>
               <Field
                 type={activeTab}
                 side='front'
-                label='Mặt trước'
+                label='Front side'
                 handleFileChange={handleFileChange}
                 docs={docs}
                 disabled={isUploading}
@@ -219,7 +220,7 @@ export default function UploadLicense() {
               <Field
                 type={activeTab}
                 side='back'
-                label='Mặt sau'
+                label='Back side'
                 handleFileChange={handleFileChange}
                 docs={docs}
                 disabled={isUploading}
@@ -234,7 +235,7 @@ export default function UploadLicense() {
               className='flex items-center justify-center gap-3 bg-cyan-400/20 backdrop-blur-lg border-[2px] border-cyan-300/40 rounded-xl p-4 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
             >
               <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-200' />
-              <span className='text-white font-semibold'>Đang upload...</span>
+              <span className='text-white font-semibold'>Uploading...</span>
             </motion.div>
           )}
 
@@ -258,7 +259,7 @@ export default function UploadLicense() {
                   d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
                 />
               </svg>
-              <span className='text-red-200 font-semibold'>Upload thất bại, vui lòng thử lại!</span>
+              <span className='text-red-200 font-semibold'>Upload failed, please try again!</span>
             </motion.div>
           )}
 
@@ -279,7 +280,7 @@ export default function UploadLicense() {
                 <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 12.75l6 6 9-13.5' />
               </svg>
               <span className='text-green-200 font-semibold'>
-                Upload {activeTab === 'gplx' ? 'GPLX' : 'CCCD'} thành công!
+                Upload {activeTab === 'gplx' ? 'driver license' : 'citizen ID'} successfully!
               </span>
             </motion.div>
           )}
@@ -302,9 +303,11 @@ export default function UploadLicense() {
                   : 'bg-white/10 border-[2px] border-white/20'
               }`}
             >
-              <span className='text-sm text-white font-medium'>{type.toUpperCase()}:</span>
+              <span className='text-sm text-white font-medium'>
+                {type === 'gplx' ? 'Driver License' : 'Citizen ID'}:
+              </span>
               <span className={`text-sm font-bold ${uploadSuccess[type] ? 'text-green-200' : 'text-white/60'}`}>
-                {uploadSuccess[type] ? '✓ Hoàn thành' : 'Chưa upload'}
+                {uploadSuccess[type] ? '✓ Completed' : 'Not uploaded'}
               </span>
             </div>
           ))}

@@ -8,21 +8,43 @@ import { formatToVND } from '../../../../utils/formatPrice'
 import { formatVnTime } from '../../../../utils/helper'
 import EmptyState from '../EmptyState'
 
+// Lấy message từ axios error (bắt luôn kiểu message là array như NestJS)
+const getServerMessage = (error: unknown): string | null => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const err = error as any
+  const data = err?.response?.data
+
+  if (!data) {
+    return typeof err?.message === 'string' ? err.message : null
+  }
+
+  // NestJS / class-validator: { message: string[] }
+  if (Array.isArray(data.message) && data.message.length > 0) {
+    const first = data.message[0]
+    return typeof first === 'string' ? first : JSON.stringify(first)
+  }
+
+  const msg = (typeof data === 'string' && data) || data?.message || data?.error || err?.message
+
+  return typeof msg === 'string' && msg.trim() ? msg : null
+}
+
 function CheckContract() {
   const queryClient = useQueryClient()
   const [selectedContract, setSelectedContract] = useState<ContractResponse | null>(null)
 
-  // state for reject reason
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
   const [rejectReason, setRejectReason] = useState('')
   const [rejectingContractId, setRejectingContractId] = useState<number | null>(null)
+  const [rejectReasonError, setRejectReasonError] = useState<string | null>(null)
 
+  // List contracts
   const { data: contracts = [], isLoading } = useQuery<ContractResponse[]>({
     queryKey: ['contracts'],
     queryFn: () => adminApi.getAllContracts().then((res) => res.data)
   })
 
-  // Contract detail query
+  // Contract detail
   const {
     data: contractDetail,
     isLoading: isLoadingDetail,
@@ -41,46 +63,55 @@ function CheckContract() {
       queryClient.invalidateQueries({ queryKey: ['contracts'] })
       toast.success('Approve contract successfully!', { autoClose: 1500 })
     },
-    onError: () => {
-      toast.error('Approve contract failed!', { autoClose: 1500 })
+    onError: (error) => {
+      toast.error(getServerMessage(error) ?? 'Approve contract failed!', { autoClose: 2000 })
     }
   })
 
-  // REJECT with reason
+  // REJECT
   const rejectMutation = useMutation({
     mutationFn: ({ id, reason }: { id: number; reason: string }) => adminApi.approveContract(id, 'REJECT', reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contracts'] })
       toast.success('Reject contract successfully!', { autoClose: 1500 })
-      // reset state
       setIsRejectModalOpen(false)
       setRejectReason('')
       setRejectingContractId(null)
+      setRejectReasonError(null)
     },
-    onError: () => {
-      toast.error('Reject contract failed!', { autoClose: 1500 })
+    onError: (error) => {
+      const msg = getServerMessage(error)
+      if (msg) setRejectReasonError(msg)
+      toast.error(msg ?? 'Reject contract failed!', { autoClose: 2000 })
     }
   })
 
   const handleAction = (id: number, type: 'APPROVE' | 'REJECT') => {
     if (type === 'APPROVE') {
-      const isConfirmed = window.confirm('Confirm approving this contract?')
-      if (!isConfirmed) return
+      if (!window.confirm('Confirm approving this contract?')) return
       approveMutation.mutate(id)
-    } else {
-      // open modal to type reject reason
-      setRejectingContractId(id)
-      setIsRejectModalOpen(true)
+      return
     }
+
+    // REJECT
+    setRejectingContractId(id)
+    setIsRejectModalOpen(true)
+    setRejectReasonError(null)
   }
 
   const handleConfirmReject = () => {
     if (!rejectingContractId) return
-    if (!rejectReason.trim()) {
-      toast.warn('Please enter a reject reason')
+    const trimmed = rejectReason.trim()
+
+    // client-side validate
+    if (!trimmed) {
+      setRejectReasonError('Reject reason is required.')
+      toast.warn('Please enter a reject reason', { autoClose: 1800 })
       return
     }
-    rejectMutation.mutate({ id: rejectingContractId, reason: rejectReason.trim() })
+
+    setRejectReasonError(null)
+    rejectMutation.mutate({ id: rejectingContractId, reason: trimmed })
   }
 
   const handleCloseRejectModal = () => {
@@ -88,30 +119,30 @@ function CheckContract() {
     setIsRejectModalOpen(false)
     setRejectReason('')
     setRejectingContractId(null)
+    setRejectReasonError(null)
   }
 
   useEffect(() => {
-    // you can use these flags to disable UI if needed
+    void (approveMutation.isPending || rejectMutation.isPending)
   }, [approveMutation.isPending, rejectMutation.isPending])
 
   if (isLoading) return <Skeleton />
   if (contracts.length === 0) return <EmptyState />
 
   const getStatusBadge = (status: string) => {
-    const statusStyle =
+    const style =
       status === 'SIGNED'
         ? 'bg-yellow-100 text-yellow-800'
         : status === 'APPROVED'
           ? 'bg-green-100 text-green-800'
           : 'bg-red-100 text-red-800'
 
-    const label = status === 'SIGNED' ? 'Pending approval' : status === 'APPROVED' ? 'Approved' : 'Rejected'
-
-    return <span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyle}`}>{label}</span>
+    const label = status === 'SIGNED' ? 'Pending' : status === 'APPROVED' ? 'Approved' : 'Rejected'
+    return <span className={`px-3 py-1 text-xs font-semibold rounded-full ${style}`}>{label}</span>
   }
 
   const getDepositStatusBadge = (status: string) => {
-    const statusStyle =
+    const style =
       status === 'PAID'
         ? 'bg-green-100 text-green-800'
         : status === 'UNPAID'
@@ -119,14 +150,14 @@ function CheckContract() {
           : 'bg-yellow-100 text-yellow-800'
 
     const label = status === 'PAID' ? 'Paid' : status === 'UNPAID' ? 'Unpaid' : 'Pending'
-
-    return <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${statusStyle}`}>{label}</span>
+    return <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${style}`}>{label}</span>
   }
 
   return (
     <div className='p-8 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>
       <h1 className='text-2xl font-bold mb-6 text-gray-800'>Contract Approval</h1>
 
+      {/* TABLE */}
       <div className='bg-white rounded-xl shadow-md overflow-hidden border border-gray-100'>
         <table className='w-full text-sm text-gray-700'>
           <thead className='bg-gray-100 text-gray-700 uppercase text-xs'>
@@ -152,22 +183,8 @@ function CheckContract() {
                   <div className='flex gap-2 items-center'>
                     <button
                       onClick={() => setSelectedContract(c)}
-                      className='px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all text-xs font-medium shadow-sm flex items-center gap-1.5'
+                      className='px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all text-xs font-medium shadow-sm'
                     >
-                      <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
-                        />
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'
-                        />
-                      </svg>
                       Details
                     </button>
                     {c.approvalStatus === 'SIGNED' && (
@@ -213,9 +230,7 @@ function CheckContract() {
                   onClick={() => setSelectedContract(null)}
                   className='text-white hover:bg-white/20 rounded-full p-2 transition-colors'
                 >
-                  <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
-                  </svg>
+                  ✕
                 </button>
               </div>
             </div>
@@ -223,7 +238,7 @@ function CheckContract() {
             <div className='p-6'>
               {isLoadingDetail ? (
                 <div className='flex justify-center items-center py-12'>
-                  <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600'></div>
+                  <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600' />
                 </div>
               ) : detailError ? (
                 <div className='text-center py-12'>
@@ -233,17 +248,7 @@ function CheckContract() {
                 <div className='space-y-6'>
                   {/* Contract info */}
                   <div>
-                    <h3 className='text-lg font-bold text-gray-800 mb-3 flex items-center gap-2'>
-                      <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-                        />
-                      </svg>
-                      Contract information
-                    </h3>
+                    <h3 className='text-lg font-bold text-gray-800 mb-3'>Contract information</h3>
                     <div className='grid grid-cols-2 gap-4'>
                       <div className='bg-gray-50 p-4 rounded-lg'>
                         <p className='text-xs text-gray-500 mb-1'>Contract ID</p>
@@ -286,17 +291,7 @@ function CheckContract() {
 
                   {/* Group info */}
                   <div>
-                    <h3 className='text-lg font-bold text-gray-800 mb-3 flex items-center gap-2'>
-                      <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
-                        />
-                      </svg>
-                      Group information
-                    </h3>
+                    <h3 className='text-lg font-bold text-gray-800 mb-3'>Group information</h3>
                     <div className='grid grid-cols-2 gap-4'>
                       <div className='bg-gray-50 p-4 rounded-lg'>
                         <p className='text-xs text-gray-500 mb-1'>Group name</p>
@@ -319,17 +314,7 @@ function CheckContract() {
 
                   {/* Members list */}
                   <div>
-                    <h3 className='text-lg font-bold text-gray-800 mb-3 flex items-center gap-2'>
-                      <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
-                        />
-                      </svg>
-                      Members ({contractDetail.members.length})
-                    </h3>
+                    <h3 className='text-lg font-bold text-gray-800 mb-3'>Members ({contractDetail.members.length})</h3>
                     <div className='bg-white border border-gray-200 rounded-lg overflow-hidden'>
                       <table className='w-full text-sm'>
                         <thead className='bg-gray-50 text-gray-700 text-xs'>
@@ -342,29 +327,25 @@ function CheckContract() {
                           </tr>
                         </thead>
                         <tbody className='divide-y divide-gray-200'>
-                          {contractDetail.members.map((member) => (
-                            <tr key={member.userId} className='hover:bg-gray-50'>
-                              <td className='px-4 py-3 font-medium text-gray-800'>{member.fullName}</td>
-                              <td className='px-4 py-3 text-gray-600'>{member.email}</td>
+                          {contractDetail.members.map((m) => (
+                            <tr key={m.userId} className='hover:bg-gray-50'>
+                              <td className='px-4 py-3 font-medium text-gray-800'>{m.fullName}</td>
+                              <td className='px-4 py-3 text-gray-600'>{m.email}</td>
                               <td className='px-4 py-3'>
                                 <span
                                   className={`px-2 py-1 text-xs font-semibold rounded ${
-                                    member.userRole === 'ADMIN'
+                                    m.userRole === 'ADMIN'
                                       ? 'bg-purple-100 text-purple-800'
-                                      : member.userRole === 'CO_OWNER'
+                                      : m.userRole === 'CO_OWNER'
                                         ? 'bg-blue-100 text-blue-800'
                                         : 'bg-gray-100 text-gray-800'
                                   }`}
                                 >
-                                  {member.userRole === 'ADMIN'
-                                    ? 'Admin'
-                                    : member.userRole === 'CO_OWNER'
-                                      ? 'Co-owner'
-                                      : 'Member'}
+                                  {m.userRole === 'ADMIN' ? 'Admin' : m.userRole === 'CO_OWNER' ? 'Co-owner' : 'Member'}
                                 </span>
                               </td>
-                              <td className='px-4 py-3 font-semibold text-gray-800'>{member.ownershipPercentage}%</td>
-                              <td className='px-4 py-3'>{getDepositStatusBadge(member.depositStatus)}</td>
+                              <td className='px-4 py-3 font-semibold text-gray-800'>{m.ownershipPercentage}%</td>
+                              <td className='px-4 py-3'>{getDepositStatusBadge(m.depositStatus)}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -372,7 +353,7 @@ function CheckContract() {
                     </div>
                   </div>
 
-                  {/* Actions inside detail modal */}
+                  {/* Actions in detail modal */}
                   {contractDetail.contract.approvalStatus === 'PENDING' && (
                     <div className='flex gap-3 pt-4 border-t'>
                       <button
@@ -411,13 +392,16 @@ function CheckContract() {
           <div className='bg-white rounded-2xl shadow-2xl max-w-md w-full p-6' onClick={(e) => e.stopPropagation()}>
             <h3 className='text-lg font-bold text-gray-800 mb-4'>Enter reject reason</h3>
             <textarea
-              className='w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400'
+              className={`w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 ${
+                rejectReasonError ? 'border-red-400 focus:ring-red-400' : 'border-gray-300 focus:ring-red-400'
+              }`}
               rows={4}
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
               placeholder='For example: Contract information is incomplete, missing documents...'
               disabled={rejectMutation.isPending}
             />
+            {rejectReasonError && <p className='mt-1 text-xs text-red-600'>{rejectReasonError}</p>}
             <div className='flex justify-end gap-3 mt-4'>
               <button
                 type='button'

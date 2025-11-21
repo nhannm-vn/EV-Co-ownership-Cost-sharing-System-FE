@@ -13,10 +13,13 @@ export default function Header({ members, isAdmin, amount, setShowModal }: IHead
   // amont là số lượng thành viên tối đa trong group
   // isAdmin là người dùng hiện tại có phải admin không
   // setShowModal là hàm để hiển thị modal mời thành viên
+  console.log(members?.length, amount)
+
   return (
     <div className='flex justify-between items-center mb-8'>
       <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)]'>Member Group</h1>
       {/* đủ rồi không cho mờivà admin group mới hiện*/}
+
       {members.length < amount && isAdmin && (
         <button
           onClick={() => setShowModal(true)}
