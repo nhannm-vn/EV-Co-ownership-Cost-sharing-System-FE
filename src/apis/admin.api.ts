@@ -7,6 +7,8 @@ import type {
 import type { BookingResponse } from '../types/api/staff.type'
 import http from '../utils/http'
 
+type ContractApproveAction = 'APPROVE' | 'REJECT'
+
 // Gom thành obj cho tiện dễ xài
 const adminApi = {
   getAllContracts: () => {
@@ -17,11 +19,11 @@ const adminApi = {
     return http.get<ContractResponse[]>('api/admin/contracts/pending')
   },
 
-  approveContract: (contractId: number, action: string, reason?: string) => {
-    return http.put(`api/admin/contracts/approve`, {
-      contractId: contractId,
-      action: action,
-      reason: reason
+  approveContract: (contractId: number, action: ContractApproveAction, reason?: string) => {
+    return http.put('/api/admin/contracts/approve', {
+      contractId,
+      action,
+      reason
     })
   },
 

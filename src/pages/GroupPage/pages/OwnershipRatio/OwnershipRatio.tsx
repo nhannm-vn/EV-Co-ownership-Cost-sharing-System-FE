@@ -20,7 +20,6 @@ export interface Member {
 
 export default function OwnershipRatio() {
   const { groupId } = useParams<{ groupId: string }>()
-
   const navigate = useNavigate()
 
   const handleViewContract = () => {
@@ -55,7 +54,7 @@ export default function OwnershipRatio() {
       <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
 
       <div className='max-w-7xl mt-10 mx-auto'>
-        {/* Header với Button căn giữa */}
+        {/* Header with centered button */}
         <div className='flex items-center justify-center gap-4 mb-8 ml-72'>
           <HeaderTitle />
 
@@ -109,17 +108,15 @@ export default function OwnershipRatio() {
             className='lg:col-span-2 space-y-3'
           >
             <div className='flex items-center justify-between mb-4'>
-              <h3 className='text-xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]'>
-                Danh Sách Thành Viên
-              </h3>
+              <h3 className='text-xl font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]'>Members</h3>
               {/* Allocation Status Badge */}
               {responseData?.groupSummary?.fullyAllocated ? (
                 <span className='px-3 py-1 bg-green-400/20 text-green-100 text-xs font-bold rounded-full border border-green-300/40'>
-                  ✓ Đã phân bổ 100%
+                  ✓ Fully allocated 100%
                 </span>
               ) : (
                 <span className='px-3 py-1 bg-yellow-400/20 text-yellow-100 text-xs font-bold rounded-full border border-yellow-300/40'>
-                  Còn {responseData?.groupSummary?.remainingPercentage || 0}%
+                  Remaining {responseData?.groupSummary?.remainingPercentage || 0}%
                 </span>
               )}
             </div>
@@ -133,8 +130,7 @@ export default function OwnershipRatio() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 + i * 0.1 }}
                     whileHover={{ scale: 1.01 }}
-                    className={`backdrop-blur-xl rounded-xl p-4 border-[2px] transition-all duration-400 shadow-[0_0_20px_rgba(6,182,212,0.2),
-                      inset_0_1px_10px_rgba(255,255,255,0.08)] bg-cyan-400/15 border-cyan-300/60`}
+                    className='backdrop-blur-xl rounded-xl p-4 border-[2px] transition-all duration-400 shadow-[0_0_20px_rgba(6,182,212,0.2),inset_0_1px_10px_rgba(255,255,255,0.08)] bg-cyan-400/15 border-cyan-300/60'
                   >
                     <div className='flex items-start justify-between mb-2'>
                       <div className='flex-1'>
@@ -159,9 +155,9 @@ export default function OwnershipRatio() {
                   </svg>
                 </div>
                 <p className='text-white font-semibold drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-2'>
-                  Chưa có thành viên nào
+                  No members yet
                 </p>
-                <p className='text-white/70 text-sm'>Mời thành viên để bắt đầu phân bổ tỷ lệ sở hữu</p>
+                <p className='text-white/70 text-sm'>Invite members to start allocating ownership</p>
               </div>
             )}
           </motion.div>

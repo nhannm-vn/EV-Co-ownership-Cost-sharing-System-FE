@@ -41,7 +41,7 @@ export default function HeaderSection() {
         <h2 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)] mb-2'>
           Change Password
         </h2>
-        <p className='text-white/75 text-sm font-medium'>Bảo mật tài khoản của bạn</p>
+        <p className='text-white/75 text-sm font-medium'>Keep your account secure</p>
       </motion.div>
     </div>
   )

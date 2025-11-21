@@ -9,6 +9,7 @@ import { setGroupIdToLS } from '../../../../utils/auth'
 export default function DashboardGP() {
   const { groupId } = useParams<{ groupId: string }>()
   setGroupIdToLS(groupId as string)
+
   return (
     <div className='w-full max-w-5xl rounded-[2rem] backdrop-blur-[60px] bg-gradient-to-br from-white/22 via-white/16 to-white/20 shadow-[0_15px_70px_rgba(6,182,212,0.5),0_30px_100px_rgba(14,165,233,0.4),0_0_150px_rgba(79,70,229,0.3),inset_0_1px_0_rgba(255,255,255,0.3)] border-[4px] border-white/60 p-10 space-y-8 m-12 relative overflow-hidden'>
       {/* Top Gradient Bar */}
@@ -26,20 +27,25 @@ export default function DashboardGP() {
           <div className='absolute -inset-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-all duration-400' />
           <div className='relative rounded-3xl bg-white/15 backdrop-blur-xl border-[3px] border-white/40 p-8 shadow-[0_0_30px_rgba(16,185,129,0.3),inset_0_1px_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all duration-400'>
             <h2 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(16,185,129,0.7)] mb-8'>
-              Cần hoàn tất 3 bước
+              Complete these 3 steps
             </h2>
             <div className='space-y-5'>
               <StepCard
                 num='1'
-                title='Upload bằng lái (GPLX)'
-                desc='Ảnh rõ nét, ≤ 2MB'
+                title='Upload Driver License (GPLX)'
+                desc='Clear image, ≤ 2MB'
                 color='from-green-400 to-emerald-500'
               />
-              <StepCard num='2' title='Upload CCCD' desc='Ảnh rõ nét, ≤ 2MB' color='from-emerald-400 to-teal-500' />
+              <StepCard
+                num='2'
+                title='Upload Citizen ID'
+                desc='Clear image, ≤ 2MB'
+                color='from-emerald-400 to-teal-500'
+              />
               <StepCard
                 num='3'
-                title='Nhập tỉ lệ sở hữu'
-                desc='Tổng = 100% cho tất cả thành viên'
+                title='Set ownership percentage'
+                desc='Total = 100% across all members'
                 color='from-teal-400 to-cyan-500'
               />
             </div>
@@ -51,12 +57,16 @@ export default function DashboardGP() {
           <div className='absolute -inset-1 bg-gradient-to-r from-cyan-400 to-sky-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-all duration-400' />
           <div className='relative rounded-3xl bg-white/15 backdrop-blur-xl border-[3px] border-white/40 p-8 shadow-[0_0_30px_rgba(6,182,212,0.3),inset_0_1px_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] transition-all duration-400'>
             <h2 className='text-3xl font-bold text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.7)] mb-8'>
-              Có hợp đồng làm gì?
+              Why sign a contract?
             </h2>
             <div className='space-y-5'>
-              <BenefitCard icon={<CalendarOutlined />} title='Đặt lịch sử dụng xe' desc='Booking' />
-              <BenefitCard icon={<WalletOutlined />} title='Quản lý quỹ chung' desc='Nạp/Rút' />
-              <BenefitCard icon={<BarChartOutlined />} title='Chia chi phí theo tỉ lệ sở hữu' desc='Tự động tính' />
+              <BenefitCard icon={<CalendarOutlined />} title='Schedule vehicle usage' desc='Booking' />
+              <BenefitCard icon={<WalletOutlined />} title='Manage shared fund' desc='Top-up / Withdraw' />
+              <BenefitCard
+                icon={<BarChartOutlined />}
+                title='Split costs by ownership'
+                desc='Automatically calculated'
+              />
             </div>
           </div>
         </div>
@@ -64,7 +74,7 @@ export default function DashboardGP() {
 
       {/* Footer note */}
       <p className='text-center text-white/75 text-base font-medium'>
-        Hợp đồng cần được duyệt trước khi sử dụng các tính năng trên
+        The contract must be approved before using these features
       </p>
 
       {/* Bottom Gradient Bar */}

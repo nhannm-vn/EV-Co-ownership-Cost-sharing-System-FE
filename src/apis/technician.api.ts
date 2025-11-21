@@ -1,30 +1,33 @@
-import type { BookingReviewResponse, Maintenance } from '../types/api/technician.type'
+import type { MaintenanceReport, MaintenanceRequest, VehicleCheck } from '../types/api/technician.type'
 import http from '../utils/http'
 
 const technicianApi = {
   getAllVehicleCheck() {
-    const page = 1
-    const size = 30
-    return http.get<BookingReviewResponse>('/api/vehicle-checks', {
-      params: { page, size }
-    })
+    return http.get<VehicleCheck[]>('/api/vehicle-checks')
   },
   checkReport(checkId: string, status: 'APPROVED' | 'REJECTED') {
     return http.put(`/api/vehicle-checks/${checkId}/status`, {
       status: status
     })
   },
-  //mantainance report
-  getAllMantainance() {
-    return http.get<Maintenance[]>('api/after-checkout/maintenances/my-requests')
+  //lấy tất cả user report
+  getAllUserReport() {
+    return http.get<MaintenanceReport[]>('api/after-checkout/maintenances/rejected-users')
   },
   //Complete Mantainance: chỉ complete khi mà co-owner đã đóng tiền(funded)
   completeMantainance(maintainanceId: string) {
     return http.put(`api/after-checkout/maintenances/${maintainanceId}/complete`)
   },
   //Create Mantainance
-  createMantainance(data: { description: string; cost: number; estimatedDurationDays: number }, vehicleId: number) {
-    return http.post<Maintenance>(`api/after-checkout/maintenances/vehicles/${vehicleId}`, data)
+  createMantainance(
+    data: { userId: number; description: string; cost: number; estimatedDurationDays: number },
+    vehicleId: number
+  ) {
+    return http.post<MaintenanceRequest>(`api/after-checkout/maintenances/vehicles/${vehicleId}`, data)
+  },
+  //get all maintance
+  getAllMaintance() {
+    return http.get<MaintenanceRequest[]>('api/after-checkout/maintenances/my-requests')
   }
 }
 

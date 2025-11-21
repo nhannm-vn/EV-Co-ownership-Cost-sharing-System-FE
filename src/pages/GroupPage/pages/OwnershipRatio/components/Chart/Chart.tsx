@@ -26,7 +26,7 @@ export default function Chart({ memberList }: { memberList: Member[] }) {
       className='bg-white/10 backdrop-blur-xl rounded-xl p-6 border-[2px] border-white/30 mb-6 shadow-[0_0_20px_rgba(6,182,212,0.2),inset_0_1px_10px_rgba(255,255,255,0.08)]'
     >
       <h3 className='text-lg font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-6 text-center'>
-        Biểu Đồ Phân Bổ Sở Hữu
+        Ownership Allocation Chart
       </h3>
 
       <div className='flex justify-center mb-6'>

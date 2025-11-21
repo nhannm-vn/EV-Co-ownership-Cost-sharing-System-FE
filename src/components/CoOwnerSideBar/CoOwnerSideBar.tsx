@@ -43,6 +43,8 @@ export default function CoOwnerSideBar() {
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
     { to: `viewGroups/${group?.groupId}/createContract`, label: 'Contract' },
     { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Deposit' }
+    { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Deposit' },
+    { to: `viewGroups/${group?.groupId}/group-expense`, label: 'Vehicle Billing' }
   ]
   const navApprovedItems = [
     { to: `viewGroups/${group?.groupId}/booking`, label: 'Booking Car' },

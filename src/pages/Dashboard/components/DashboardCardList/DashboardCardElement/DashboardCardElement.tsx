@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+
 interface Props {
   children?: ReactNode
   moveLink: string
@@ -41,11 +42,10 @@ export default function DashboardCardElement({ color, content, children, moveLin
         {/* Description */}
         <p className='text-slate-100 text-sm leading-relaxed mb-5 flex-grow'>{content.body}</p>
 
-        {/* Children (input field nếu có) */}
+        {/* Children (e.g. input field) */}
         {children}
 
         {/* Button */}
-
         {allowAccess ? (
           <Link to={moveLink} className='mt-auto'>
             <motion.button

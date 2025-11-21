@@ -18,6 +18,8 @@ export default function PaymentHistory() {
     retry: 2
   })
 
+  console.log(data)
+
   if (isError) {
     return (
       <div className='min-h-screen flex items-center justify-center p-8 bg-gradient-to-br from-sky-50 via-blue-50 to-cyan-50'>
@@ -32,15 +34,15 @@ export default function PaymentHistory() {
               />
             </svg>
           </div>
-          <h2 className='text-xl font-bold text-gray-900 mb-2'>Đã xảy ra lỗi</h2>
+          <h2 className='text-xl font-bold text-gray-900 mb-2'>An error occurred</h2>
           <p className='text-gray-600 mb-6 text-sm'>
-            {error instanceof Error ? error.message : 'Không thể tải lịch sử giao dịch. Vui lòng thử lại.'}
+            {error instanceof Error ? error.message : 'Unable to load payment history. Please try again.'}
           </p>
           <button
             onClick={() => window.location.reload()}
             className='rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors shadow-sm'
           >
-            Thử lại
+            Retry
           </button>
         </div>
       </div>
@@ -64,21 +66,21 @@ export default function PaymentHistory() {
                   />
                 </svg>
               </div>
-              <h1 className='text-2xl md:text-3xl font-bold text-white'>Lịch sử giao dịch</h1>
+              <h1 className='text-2xl md:text-3xl font-bold text-white'>Payment history</h1>
             </div>
-            <p className='text-blue-100 text-sm'>Theo dõi toàn bộ giao dịch của bạn</p>
+            <p className='text-blue-100 text-sm'>Track all of your transactions</p>
           </div>
           {data && (
             <div className='px-6 md:px-8 pb-8'>
               <div className='grid grid-cols-2 gap-4'>
                 <div className='rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-4'>
-                  <div className='text-blue-100 text-xs font-medium mb-1'>Tổng đã thanh toán</div>
+                  <div className='text-blue-100 text-xs font-medium mb-1'>Total paid</div>
                   <div className='text-white text-xl md:text-2xl font-bold'>
                     {formatToVND(data.totalCompletedAmount)}
                   </div>
                 </div>
                 <div className='rounded-xl bg-white/10 backdrop-blur-md border border-white/20 p-4'>
-                  <div className='text-blue-100 text-xs font-medium mb-1'>Tổng giao dịch</div>
+                  <div className='text-blue-100 text-xs font-medium mb-1'>Total transactions</div>
                   <div className='text-white text-xl md:text-2xl font-bold'>{data.items.length}</div>
                 </div>
               </div>
@@ -89,7 +91,7 @@ export default function PaymentHistory() {
         {/* Transaction List with Scroll */}
         <div className='rounded-2xl bg-white shadow-sm border border-gray-100 overflow-hidden'>
           <div className='px-6 md:px-8 py-4 bg-gray-50 border-b border-gray-100 sticky top-0 z-10'>
-            <h2 className='text-sm font-semibold text-gray-700'>Danh sách giao dịch</h2>
+            <h2 className='text-sm font-semibold text-gray-700'>Transaction list</h2>
           </div>
           <div
             className='p-4 md:p-6'
@@ -128,8 +130,8 @@ export default function PaymentHistory() {
                     />
                   </svg>
                 </div>
-                <p className='text-gray-500 font-medium'>Chưa có giao dịch nào</p>
-                <p className='text-gray-400 text-sm mt-1'>Các giao dịch của bạn sẽ hiển thị tại đây</p>
+                <p className='text-gray-500 font-medium'>No transactions yet</p>
+                <p className='text-gray-400 text-sm mt-1'>Your transactions will appear here</p>
               </div>
             )}
 
@@ -158,7 +160,12 @@ export default function PaymentHistory() {
                               viewBox='0 0 24 24'
                               stroke='currentColor'
                             >
-                              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' />
+                              <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                strokeWidth={2}
+                                d='M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z'
+                              />
                             </svg>
                           ) : (
                             <svg
@@ -227,9 +234,9 @@ function StatusBadge({ status }: { status: PaymentItem['status'] }) {
     FAILED: 'bg-red-50 text-red-700 border-red-200'
   }
   const labels = {
-    COMPLETED: 'Hoàn tất',
-    PENDING: 'Đang xử lý',
-    FAILED: 'Thất bại'
+    COMPLETED: 'Completed',
+    PENDING: 'Processing',
+    FAILED: 'Failed'
   }
   const icons = {
     COMPLETED: (
@@ -280,7 +287,7 @@ function TypeBadge({ type }: { type: PaymentItem['paymentType'] }) {
           : 'bg-purple-50 text-purple-700 border-purple-200'
       }`}
     >
-      {type === 'DEPOSIT' ? 'Nạp tiền' : 'Đóng góp'}
+      {type === 'DEPOSIT' ? 'Deposit' : 'Contribution'}
     </span>
   )
 }
@@ -293,8 +300,8 @@ function MethodBadge({ method }: { method: PaymentItem['paymentMethod'] }) {
   }
   const labels = {
     VNPAY: 'VNPay',
-    BANK_TRANSFER: 'Chuyển khoản',
-    CASH: 'Tiền mặt'
+    BANK_TRANSFER: 'Bank transfer',
+    CASH: 'Cash'
   }
 
   return (

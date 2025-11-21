@@ -1,47 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export interface BookingReviewResponse {
-  content: BookingReviewItem[]
-  pageable: Pageable
-  last: boolean
-  totalElements: number
-  totalPages: number
-  first: boolean
-  size: number
-  number: number
-  sort: Sort
-  numberOfElements: number
-  empty: boolean
-}
-
-export interface BookingReviewItem {
+export interface VehicleCheck {
   id: number
-  booking: Booking
-  checkType: 'POST_USE' | 'PRE_USE'
+  bookingId: number
+  checkType: 'PRE_USE' | 'POST_USE' // hoặc string nếu bạn không chắc
   odometer: number
   batteryLevel: number
-  cleanliness: number | null
+  cleanliness: string | null
   notes: string | null
   issues: string | null
-  status: 'PENDING' | 'APPROVED' | 'REJECTED'
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' // tùy hệ thống bạn dùng
   createdAt: string
-}
-
-export interface Booking {
-  id: number
-  startDateTime: string
-  endDateTime: string
-  status: string
-  totalDuration: number | null
-  priority: number | null
-  createdAt: string
-  updatedAt: string
-  qrCodeCheckin: string | null
-  qrCodeCheckout: string | null
-  checkinStatus: boolean
-  checkoutStatus: boolean
-  checkinTime: string | null
-  checkoutTime: string | null
-  incidents: any[] // nếu có cấu trúc cố định thì định nghĩa riêng
 }
 
 export interface Pageable {
@@ -60,18 +28,32 @@ export interface Sort {
 }
 
 // maintainance report
-export interface Maintenance {
+export interface MaintenanceReport {
+  userId: number
+  userName: string
+  vehicleId: number
+  vehicleModel: string
+  licensePlate: string
+}
+
+export interface PayerShare {
+  userId: number
+  userName: string
+  amount: number
+}
+
+export interface MaintenanceRequest {
   id: number
   vehicleId: number
   vehicleModel: string
   requestedByName: string
-  approvedByName: string
+  approvedByName: string | null
   liableUserName: string
-  coverageType: 'PERSONAL' | 'COMPANY' | string
+  coverageType: 'PERSONAL' | 'COMMERCIAL' | string // nếu có nhiều loại khác
   description: string
   actualCost: number
-  status: 'PENDING' | 'FUNDED' | 'COMPLETED' | string
-  requestDate: string // ISO datetime
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | string
+  requestDate: string // ISO date string
   approvalDate: string | null
   nextDueDate: string | null
   estimatedDurationDays: number
@@ -80,11 +62,5 @@ export interface Maintenance {
   maintenanceCompletedAt: string | null
   createdAt: string
   updatedAt: string
-  payerShares: PayerShare[] | null
-}
-
-export interface PayerShare {
-  userId: number
-  userName: string
-  amount: number
+  payerShares: number | null
 }
