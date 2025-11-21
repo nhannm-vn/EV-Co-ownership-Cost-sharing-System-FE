@@ -20,7 +20,7 @@ const technicianApi = {
   },
   //Create Mantainance
   createMantainance(
-    data: { userId: number; description: string; cost: number; estimatedDurationDays: number },
+    data: { userId: number; vehicleId: number; description: string; cost: number; estimatedDurationDays: number }, // CHỈNH: phải có vehicleId
     vehicleId: number
   ) {
     return http.post<MaintenanceRequest>(`api/after-checkout/maintenances/vehicles/${vehicleId}`, data)
