@@ -1,6 +1,12 @@
 import { CloseCircleOutlined } from '@ant-design/icons'
+import { useNavigate, useParams } from 'react-router'
 
 export default function RejectedComponent() {
+  const { groupId } = useParams()
+  const navigate = useNavigate()
+  const handleBack = () => {
+    navigate(`/dashboard/viewGroups/${groupId}/check-in`)
+  }
   return (
     <div className='min-h-screen bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 flex items-center justify-center p-6'>
       <div className='max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden'>
@@ -21,11 +27,11 @@ export default function RejectedComponent() {
             </div>
           </div>
           <div className='flex gap-4'>
-            <button className='flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 rounded-xl font-bold hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl'>
-              Liên hệ kỹ thuật viên
-            </button>
-            <button className='flex-1 bg-white border-2 border-gray-300 text-gray-700 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all'>
-              Về trang chủ
+            <button
+              onClick={handleBack}
+              className='flex-1 bg-white border-2 border-gray-300 text-gray-700 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all'
+            >
+              Về trang kiểm tra
             </button>
           </div>
         </div>

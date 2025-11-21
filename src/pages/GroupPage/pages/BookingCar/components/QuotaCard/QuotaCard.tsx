@@ -38,7 +38,7 @@ export default function QuotaCard({ quotaUser }: { quotaUser: QuotaInfo }) {
                 <div className='text-white/90 text-xs font-bold uppercase tracking-wide'>đã đặt</div>
               </div>
               <div className='bg-white/25 backdrop-blur-md rounded-2xl p-4 text-center shadow-lg ring-1 ring-white/30 hover:bg-white/30 transition-all'>
-                <div className='text-white font-black text-2xl'>{quotaUser.remainingSlots}</div>
+                <div className='text-white font-black text-2xl'>{quotaUser.remainingSlots} slot/week</div>
                 <div className='text-white/90 text-xs font-bold uppercase tracking-wide'>còn lại</div>
               </div>
             </div>
