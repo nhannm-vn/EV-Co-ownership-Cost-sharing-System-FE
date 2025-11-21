@@ -20,7 +20,7 @@ function Field({ type, side, label, handleFileChange, docs, disabled = false }: 
         {hasFile && (
           <span className='text-xs text-green-400 flex items-center gap-1'>
             <span className='w-2 h-2 bg-green-500 rounded-full' />
-            Đã chọn
+            Selected
           </span>
         )}
       </div>
@@ -61,7 +61,7 @@ function Field({ type, side, label, handleFileChange, docs, disabled = false }: 
         <span
           className={`text-sm font-medium ${disabled ? 'text-gray-400' : hasFile ? 'text-green-200' : 'text-teal-200'}`}
         >
-          {hasFile ? file?.name : 'Chọn hoặc kéo thả ảnh'}
+          {hasFile ? file?.name : 'Choose or drag-and-drop image'}
         </span>
         <span className='text-xs text-gray-400 mt-1'>PNG, JPG (Max 5MB)</span>
 

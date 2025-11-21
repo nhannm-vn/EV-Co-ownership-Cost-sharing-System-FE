@@ -38,21 +38,21 @@ export default function ChangePassword() {
   })
 
   const onSubmit = handleSubmit((data) => {
-    console.log('Payload gửi lên:', data)
+    console.log('Change password payload:', data)
 
     changePasswordMutation.mutate(data, {
       onSuccess: (response) => {
-        console.log('Change password thành công:', response)
+        console.log('Change password success:', response)
         toast.success('Change password successful', {
           autoClose: 1000
         })
         navigate(path.dashBoard)
       },
       onError: (error) => {
+        console.log('Change password failed:', error)
         toast.error('Change password failed', {
           autoClose: 1000
         })
-        console.log('Change password thất bại:', error)
       }
     })
   })

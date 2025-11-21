@@ -66,9 +66,6 @@ export default function MyAccount() {
     } else if (editingField === 'name') {
       nameMutation.mutate(editValue)
     }
-    toast.success('Edit profile successfully!', {
-      position: 'top-right'
-    })
   }
 
   const handleCancel = () => {
@@ -90,9 +87,9 @@ export default function MyAccount() {
             </svg>
           </div>
           <p className='text-white font-bold text-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-2'>
-            Không thể tải thông tin
+            Cannot load information
           </p>
-          <p className='text-white/70'>Vui lòng thử lại sau</p>
+          <p className='text-white/70'>Please try again later</p>
         </div>
       </div>
     )
@@ -138,14 +135,14 @@ export default function MyAccount() {
               className='bg-white/95 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full border-[3px] border-white shadow-[0_20px_60px_rgba(0,0,0,0.3)]'
             >
               <h3 className='text-2xl font-bold text-gray-800 mb-6'>
-                {editingField === 'phone' ? 'Chỉnh sửa số điện thoại' : 'Chỉnh sửa tên'}
+                {editingField === 'phone' ? 'Edit phone number' : 'Edit name'}
               </h3>
               <input
                 type='text'
                 value={editValue}
                 onChange={(e) => setEditValue(e.target.value)}
                 className='w-full px-4 py-3 bg-white border-2 border-blue-200 rounded-xl text-gray-800 focus:outline-none focus:border-blue-400 transition-colors mb-6'
-                placeholder={editingField === 'phone' ? 'Nhập số điện thoại mới' : 'Nhập tên mới'}
+                placeholder={editingField === 'phone' ? 'Enter new phone number' : 'Enter new name'}
                 autoFocus
               />
               <div className='flex gap-3'>
@@ -154,13 +151,13 @@ export default function MyAccount() {
                   disabled={phonemutation.isPending || nameMutation.isPending}
                   className='flex-1 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold py-3 rounded-xl hover:from-cyan-500 hover:to-blue-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed'
                 >
-                  {phonemutation.isPending || nameMutation.isPending ? 'Đang lưu...' : 'Lưu'}
+                  {phonemutation.isPending || nameMutation.isPending ? 'Saving...' : 'Save'}
                 </button>
                 <button
                   onClick={handleCancel}
                   className='flex-1 bg-gray-200 text-gray-800 font-semibold py-3 rounded-xl hover:bg-gray-300 transition-colors'
                 >
-                  Hủy
+                  Cancel
                 </button>
               </div>
             </motion.div>
@@ -193,7 +190,7 @@ export default function MyAccount() {
               <button
                 onClick={() => handleEdit('name', user?.fullName as string)}
                 className='absolute -right-10 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-2 rounded-lg shadow-lg hover:bg-white'
-                title='Chỉnh sửa tên'
+                title='Edit name'
               >
                 <svg className='w-4 h-4 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path
@@ -224,7 +221,7 @@ export default function MyAccount() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
-              <Icon title={'Personal Information'}>
+              <Icon title='Personal Information'>
                 <svg
                   width='20'
                   height='20'
@@ -267,7 +264,7 @@ export default function MyAccount() {
                   <button
                     onClick={() => handleEdit('phone', user?.phoneNumber as string)}
                     className='absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-2 rounded-lg shadow-lg hover:bg-white'
-                    title='Chỉnh sửa số điện thoại'
+                    title='Edit phone number'
                   >
                     <svg className='w-4 h-4 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                       <path
@@ -288,7 +285,7 @@ export default function MyAccount() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.6 }}
             >
-              <Icon title={'License'}>
+              <Icon title='License'>
                 <svg
                   width='20'
                   height='20'
@@ -315,14 +312,14 @@ export default function MyAccount() {
 
               <div className='grid md:grid-cols-2 gap-4'>
                 <DocCard
-                  title='CCCD'
+                  title='Citizen ID'
                   imageFront={user?.documents.citizenIdImages?.front?.imageUrl || ''}
                   imageBack={user?.documents.citizenIdImages?.back?.imageUrl || ''}
                   statusFront={user?.documents.citizenIdImages?.front?.status || ''}
                   statusBack={user?.documents.citizenIdImages?.back?.status || ''}
                 />
                 <DocCard
-                  title='GPLX'
+                  title='Driver License'
                   imageFront={user?.documents.driverLicenseImages?.front?.imageUrl || ''}
                   imageBack={user?.documents.driverLicenseImages?.back?.imageUrl || ''}
                   statusFront={user?.documents.driverLicenseImages?.front?.status || ''}

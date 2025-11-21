@@ -24,8 +24,7 @@ export default function DashboardTitle() {
           repeat: Infinity,
           ease: 'easeInOut'
         }}
-        className='relative text-4xl sm:text-5xl font-extrabold text-center tracking-wide
-          drop-shadow-[0_2px_5px_rgba(0,0,0,0.2)]'
+        className='relative text-4xl sm:text-5xl font-extrabold text-center tracking-wide drop-shadow-[0_2px_5px_rgba(0,0,0,0.2)]'
       >
         <span className='relative inline-block bg-gradient-to-r from-white via-sky-50 to-white bg-clip-text text-transparent'>
           EV Tech Dashboard

@@ -27,24 +27,22 @@ import Avatar from '../../pages/MyAccount/Components/Avatar/Avatar'
 function NavHeader() {
   const userId = getUserIdFromLS()
 
-  // set trạng thái cho ngôn ngữ
-  const [lang, setLang] = useState('Tiếng Việt')
+  // language state
+  const [lang, setLang] = useState('English')
   const [isAccountOpen, setIsAccountOpen] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const [enableNotificationScroll, setEnableNotificationScroll] = useState(false)
 
   // Modal state
-  // thằng này dùng để tắt mở Modal
   const [isModalOpen, setIsModalOpen] = useState(false)
-  // thằng này dùng để lưu notification nào bị click
   const [selectedNotification, setSelectedNotification] = useState<GetAllNotifications | null>(null)
 
-  // lấy state global từ contextApi
+  // global state from context
   const { setIsAuthenticated } = useContext(AppContext)
 
-  //hook này để gọi queryClient
   const queryClient = useQueryClient()
 
+  //call api get all notification
   const { data: notifications = [], isPending } = useQuery({
     queryKey: ['notifications'],
     queryFn: () => userApi.getAllNotification().then((res) => res.data),
@@ -52,12 +50,10 @@ function NavHeader() {
     refetchOnWindowFocus: false
   })
 
-  //viết userMutation cho api put notification
-  // useMutation đánh dấu notification đã đọc
+  // call api dùng để đánh dấu đã đọc notification khi bấm vào notification
   const readNotificationMutation = useMutation({
     mutationFn: (notificationId: number) => userApi.readNotification(notificationId.toString()),
     onSuccess: () => {
-      // Sau khi thành công, yêu cầu React Query refetch lại query 'notifications'
       queryClient.invalidateQueries({ queryKey: ['notifications'] })
     },
     onError: (error) => {
@@ -71,7 +67,9 @@ function NavHeader() {
     func((prev) => !prev)
   }
 
+  //count những notification chưa đọc
   const notificationCount = notifications.filter((n) => !n.isRead).length
+  //mặc định lấy 5 thằng đầu tiên
   const getDisplayedNotifications = () => (enableNotificationScroll ? notifications : notifications.slice(0, 5))
 
   // floating account
@@ -88,11 +86,12 @@ function NavHeader() {
     placement: 'bottom-start'
   })
 
-  // call api logout
+  // logout
   const logoutMutation = useMutation({
     mutationFn: authApi.logout
   })
 
+  //func giúp có thể logout
   const handleLogout = () => {
     const accessToken = getAccessTokenFromLS()
     logoutMutation.mutate(accessToken, {
@@ -106,7 +105,7 @@ function NavHeader() {
     })
   }
 
-  // Modal logic
+  // notification modal click
   const handleNotificationClick = ({
     notification,
     notificationId
@@ -153,7 +152,10 @@ function NavHeader() {
                   <div
                     key={notification.id.toString()}
                     onClick={() =>
-                      handleNotificationClick({ notification: notification, notificationId: notification.id })
+                      handleNotificationClick({
+                        notification: notification,
+                        notificationId: notification.id
+                      })
                     }
                     className={`px-4 py-3 hover:bg-gray-300 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0 ${
                       !notification.isRead ? 'bg-blue-50 text-gray-900' : 'text-gray-800'
@@ -176,7 +178,7 @@ function NavHeader() {
                       onClick={handleSetState(setEnableNotificationScroll)}
                       className='text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors'
                     >
-                      Xem thêm {notifications.length - 5} thông báo
+                      View {notifications.length - 5} more notifications
                     </button>
                   </div>
                 )}
@@ -186,7 +188,7 @@ function NavHeader() {
                       onClick={handleSetState(setEnableNotificationScroll)}
                       className='text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors'
                     >
-                      Ẩn bớt
+                      Show less
                     </button>
                   </div>
                 )}
@@ -196,7 +198,7 @@ function NavHeader() {
         )}
       </div>
 
-      {/* Modal hiện thông báo chi tiết */}
+      {/* Notification detail Modal */}
       <Modal
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
@@ -205,7 +207,7 @@ function NavHeader() {
         title={
           <div className='flex items-center gap-2'>
             <BellOutlined className='text-teal-500 text-xl' />
-            <span className='text-lg font-bold text-teal-700'>Chi tiết thông báo</span>
+            <span className='text-lg font-bold text-teal-700'>Notification details</span>
           </div>
         }
         className='custom-notification-modal'
@@ -246,12 +248,11 @@ function NavHeader() {
             <div className='px-4 py-3 border-b border-gray-200/70 bg-gradient-to-r from-blue-50 to-indigo-50'>
               <div className='flex items-center gap-3'>
                 <div className='w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center'>
-                  {/* <UserOutlined className='text-white text-sm' /> */}
                   <Avatar userId={userId} size={40} className='cursor-pointer' />
                 </div>
                 <div>
                   <div className='text-sm font-semibold text-gray-800'>{getEmailAccountFromLS()}</div>
-                  <div className='text-xs text-gray-500'>Thành viên</div>
+                  <div className='text-xs text-gray-500'>Member</div>
                 </div>
               </div>
             </div>
@@ -261,29 +262,30 @@ function NavHeader() {
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.profile} className='flex items-center gap-3'>
                   <UserOutlined className='text-blue-500 group-hover:text-blue-600 transition-colors' />
-                  {/* <Avatar userId={userId} size={40} className='cursor-pointer' /> */}
-                  <span className='group-hover:text-blue-600 transition-colors'>Tài Khoản Của Tôi</span>
+                  <span className='group-hover:text-blue-600 transition-colors'>My Account</span>
                 </Link>
               </div>
 
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.uploadLicense} className='flex items-center gap-3'>
                   <SafetyCertificateOutlined className='text-green-500 group-hover:text-green-600 transition-colors' />
-                  <span className='group-hover:text-green-600 transition-colors'>Cập nhật GPLX & CCCD</span>
+                  <span className='group-hover:text-green-600 transition-colors'>
+                    Update Driver License & Citizen ID
+                  </span>
                 </Link>
               </div>
 
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-purple-100 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.paymentHistory} className='flex items-center gap-3'>
                   <TransactionOutlined className='text-purple-500 group-hover:text-purple-600 transition-colors' />
-                  <span className='group-hover:text-purple-600 transition-colors'>Lịch sử thanh toán</span>
+                  <span className='group-hover:text-purple-600 transition-colors'>Payment history</span>
                 </Link>
               </div>
 
               <div className='px-4 py-3 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-yellow-100 cursor-pointer transition-all duration-200 text-gray-700 font-medium group'>
                 <Link to={path.changePassword} className='flex items-center gap-3'>
                   <LockOutlined className='text-orange-500 group-hover:text-orange-600 transition-colors' />
-                  <span className='group-hover:text-orange-600 transition-colors'>Đổi mật khẩu</span>
+                  <span className='group-hover:text-orange-600 transition-colors'>Change password</span>
                 </Link>
               </div>
             </div>
@@ -298,7 +300,7 @@ function NavHeader() {
                   })}
                 >
                   <LogoutOutlined className='text-red-500 group-hover:text-red-600 transition-colors' />
-                  <span className='group-hover:text-red-600 transition-colors'>Đăng Xuất</span>
+                  <span className='group-hover:text-red-600 transition-colors'>Logout</span>
                 </div>
               </div>
             </div>
@@ -309,7 +311,7 @@ function NavHeader() {
       {/* Language */}
       <Space
         className='cursor-pointer'
-        onClick={() => setLang((prev) => (prev === 'Tiếng Việt' ? 'English' : 'Tiếng Việt'))}
+        onClick={() => setLang((prev) => (prev === 'English' ? 'Tiếng Việt' : 'English'))}
       >
         <GlobalOutlined className='text-2xl text-black/90 hover:text-teal-400 transition-all duration-300 hover:scale-110' />
         <span className='text-black/90 font-medium w-24 inline-block'>{lang}</span>

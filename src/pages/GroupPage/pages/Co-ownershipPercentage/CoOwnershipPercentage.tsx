@@ -12,8 +12,6 @@ export default function CoOwnershipPercentage() {
   const [percentage, setPercentage] = useState('')
   const [error, setError] = useState('')
 
-  console.log(percentage)
-
   const { groupId } = useParams<{ groupId: string }>()
 
   // Fetch current percentage from API
@@ -23,13 +21,13 @@ export default function CoOwnershipPercentage() {
     enabled: !!groupId
   })
 
-  // Set initial percentage khi data load xong - FIX
+  // Set initial percentage when data is loaded
   useEffect(() => {
     const currentPercentage = ownershipData?.data?.userOwnership?.ownershipPercentage
     if (currentPercentage !== undefined && currentPercentage !== null) {
       setPercentage(currentPercentage.toString())
     }
-  }, [ownershipData?.data?.userOwnership?.ownershipPercentage]) // Dependency cụ thể
+  }, [ownershipData?.data?.userOwnership?.ownershipPercentage])
 
   const updateMutation = useMutation({
     mutationFn: (body: { percentage: number; groupId: string }) =>
@@ -42,7 +40,7 @@ export default function CoOwnershipPercentage() {
 
     // Check if empty
     if (!percentage || percentage.trim() === '') {
-      setError('Vui lòng nhập tỷ lệ sở hữu')
+      setError('Please enter your ownership percentage')
       return
     }
 
@@ -50,13 +48,13 @@ export default function CoOwnershipPercentage() {
 
     // Check if valid number
     if (isNaN(value)) {
-      setError('Giá trị không hợp lệ')
+      setError('Invalid value')
       return
     }
 
     // Check range
     if (value < 0 || value > 100) {
-      setError('Tỷ lệ phải từ 0% đến 100%')
+      setError('Percentage must be between 0% and 100%')
       return
     }
 
@@ -64,11 +62,11 @@ export default function CoOwnershipPercentage() {
       { groupId: groupId as string, percentage: value },
       {
         onSuccess: () => {
-          toast.success('Update percentage ratio successful', { autoClose: 1000 })
+          toast.success('Update ownership percentage successful', { autoClose: 1000 })
           setError('')
         },
         onError: () => {
-          setError('Có lỗi xảy ra khi lưu tỷ lệ sở hữu')
+          setError('An error occurred while saving ownership percentage')
         }
       }
     )
@@ -91,6 +89,7 @@ export default function CoOwnershipPercentage() {
         {/* Top Gradient Bar */}
         <div className='absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-200 via-sky-100 to-indigo-200 shadow-[0_0_20px_rgba(6,182,212,0.6)]' />
         <GroupHeader groupId={groupId} />
+
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className='text-center mb-8'>
           <div className='inline-block mb-4'>
@@ -124,7 +123,7 @@ export default function CoOwnershipPercentage() {
           <h1 className='text-3xl font-bold text-white drop-shadow-[0_0_20px_rgba(6,182,212,0.7)] mb-2'>
             Enter Your Ownership
           </h1>
-          <p className='text-white/75 text-sm font-medium'>Nhập tỷ lệ sở hữu của bạn</p>
+          <p className='text-white/75 text-sm font-medium'>Enter your ownership percentage</p>
         </motion.div>
 
         {/* Input Card */}
@@ -179,7 +178,7 @@ export default function CoOwnershipPercentage() {
           {/* Helper Text */}
           <div className='bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20'>
             <p className='text-white/70 text-xs text-center font-medium'>
-              Tỷ lệ phải từ <span className='text-white font-bold'>0%</span> đến{' '}
+              Percentage must be between <span className='text-white font-bold'>0%</span> and{' '}
               <span className='text-white font-bold'>100%</span>
             </p>
           </div>
@@ -198,7 +197,7 @@ export default function CoOwnershipPercentage() {
           {updateMutation.isPending ? (
             <>
               <div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin' />
-              <span>Đang xử lý...</span>
+              <span>Processing...</span>
             </>
           ) : (
             'Submit Ownership'
