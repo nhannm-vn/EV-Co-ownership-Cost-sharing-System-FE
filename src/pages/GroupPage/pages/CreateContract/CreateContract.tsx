@@ -1,13 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import groupApi from '../../../../apis/group.api'
 import Skeleton from '../../../../components/Skeleton'
 import { ClockCircleOutlined } from '@ant-design/icons'
+import userApi from '../../../../apis/user.api'
 
 const CreateContract: React.FC = () => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const { groupId } = useParams()
   // trạng thái thi khi addmin ký
   const [showCancelModal, setShowCancelModal] = useState(false)
@@ -29,6 +31,17 @@ const CreateContract: React.FC = () => {
       console.log('Error signing contract', error.message)
       toast.error('An error occurred while signing the contract.')
       queryClient.invalidateQueries({ queryKey: ['contractData', groupId] })
+    }
+  })
+
+  const groupAdminRejectFeedbackMutation = useMutation({
+    mutationFn: ({ groupId, reason }: { groupId: string; reason: string }) =>
+      userApi.groupAdminRejectFeedback({ groupId, reason }),
+    onSuccess: () => {
+      toast.success('Feedback rejected successfully')
+      queryClient.invalidateQueries({ queryKey: ['contractData', groupId] })
+      setShowCancelModal(false)
+      setRejectReason('')
     }
   })
 
@@ -82,6 +95,13 @@ const CreateContract: React.FC = () => {
     signContractMutation.mutate(groupId as string)
   }
 
+  const groupAdminRejectFeedback = () => {
+    if (!groupId) {
+      return
+    }
+    groupAdminRejectFeedbackMutation.mutate({ groupId: groupId, reason: rejectReason })
+  }
+
   const onApproveMember = () => {
     if (!idContract) {
       return
@@ -102,6 +122,10 @@ const CreateContract: React.FC = () => {
     return <Skeleton />
   }
 
+  const handleViewFeedback = () => {
+    navigate(`/dashboard/viewGroups/${groupId}/feedbackAdmin/${idContract}`)
+  }
+
   return (
     <>
       {/* Cancel Modal */}
@@ -115,7 +139,7 @@ const CreateContract: React.FC = () => {
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder='Nhập lý do...'
+              placeholder='write reason...'
               rows={4}
               className='w-full border rounded-lg p-3 mb-4'
             />
@@ -124,7 +148,7 @@ const CreateContract: React.FC = () => {
                 Go back
               </button>
               <button
-                onClick={onRejectMember}
+                onClick={groupAdminRejectFeedback}
                 // nếu form lý do từ chối chưa đủ 10 ký tự thì disable
                 disabled={rejectReason.trim().length < 10 || approveMemberMutation.isPending}
                 className='flex-1 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl py-2.5 font-semibold disabled:brightness-90 disabled:cursor-not-allowed hover:bg-orange-600'
@@ -352,6 +376,17 @@ const CreateContract: React.FC = () => {
                   className='flex-1 px-6 py-3 bg-cyan-500 text-white font-bold rounded-xl hover:bg-cyan-600 disabled:opacity-50'
                 >
                   {signContractMutation.isPending ? 'Processing...' : 'Sign Contract'}
+                </button>
+              </div>
+            )}
+            {/* sau khi admin kí thì có thể duyệt các feedback của member */}
+            {isAdmin && dataContract?.contract?.status === 'PENDING_MEMBER_APPROVAL' && (
+              <div className='flex gap-4 mt-6 pt-6 border-t'>
+                <button
+                  onClick={handleViewFeedback}
+                  className='flex-1 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600'
+                >
+                  Review feedback member
                 </button>
               </div>
             )}

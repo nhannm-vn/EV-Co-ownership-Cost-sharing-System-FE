@@ -63,7 +63,7 @@ export default function ModalEditContract() {
       terms: string
     }) => adminApi.updateContract({ contractId, startDate, endDate, terms }),
     onSuccess: () => {
-      toast.success('Cập nhật hợp đồng thành công')
+      toast.success('UPDATE CONTRACT SUCCESS')
       navigate(-1)
       setIsEditModalOpen(false)
       setEditingTerms([])
@@ -236,28 +236,28 @@ export default function ModalEditContract() {
             {/* THỜI HẠN HỢP ĐỒNG - CÓ THỂ EDIT */}
             <div className='mb-6 p-4 bg-emerald-50 rounded-xl border-2 border-emerald-500'>
               <h4 className='font-bold mb-3 text-emerald-700 flex items-center gap-2'>
-                <ClockCircleOutlined /> Thời hạn hợp đồng{' '}
-                <span className='text-xs font-normal text-emerald-600'>(Có thể chỉnh sửa)</span>
+                <ClockCircleOutlined /> Duration{' '}
+                <span className='text-xs font-normal text-emerald-600'>(can edit)</span>
               </h4>
               <div className='grid grid-cols-2 gap-4'>
                 <div>
-                  <label className='block text-sm font-semibold text-gray-700 mb-2'>Ngày bắt đầu</label>
+                  <label className='block text-sm font-semibold text-gray-700 mb-2'>Start Date</label>
                   <DatePicker
                     value={startDate}
                     onChange={(date) => setStartDate(date!)}
                     format='DD/MM/YYYY'
                     className='w-full h-10 rounded-lg'
-                    placeholder='Chọn ngày bắt đầu'
+                    placeholder='Select start date'
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-semibold text-gray-700 mb-2'>Ngày kết thúc</label>
+                  <label className='block text-sm font-semibold text-gray-700 mb-2'>End Date</label>
                   <DatePicker
                     value={endDate}
                     onChange={(date) => setEndDate(date!)}
                     format='DD/MM/YYYY'
                     className='w-full h-10 rounded-lg'
-                    placeholder='Chọn ngày kết thúc'
+                    placeholder='Select end date'
                   />
                 </div>
               </div>
@@ -267,11 +267,11 @@ export default function ModalEditContract() {
             <div className='mb-4 p-4 bg-amber-50 rounded-xl border-2 border-amber-500'>
               <div className='flex justify-between items-center mb-3'>
                 <h4 className='font-bold text-amber-700 m-0 flex items-center gap-2'>
-                  <FileTextOutlined /> Điều khoản hợp đồng{' '}
-                  <span className='text-xs font-normal text-amber-600'>(Có thể chỉnh sửa)</span>
+                  <FileTextOutlined /> Contract Terms{' '}
+                  <span className='text-xs font-normal text-amber-600'>(Can edit)</span>
                 </h4>
                 <Button type='primary' size='small' onClick={handleAddTerm} className='rounded-lg'>
-                  + Thêm điều khoản
+                  + Add Term
                 </Button>
               </div>
 
@@ -296,7 +296,7 @@ export default function ModalEditContract() {
                               handleDeleteTerm(index)
                             }}
                           >
-                            Xóa
+                            Delete
                           </Button>
                           <span
                             className='transition-transform duration-200 text-amber-700'
@@ -352,10 +352,10 @@ export default function ModalEditContract() {
                 }}
                 className='px-6'
               >
-                Hủy
+                Cancel
               </Button>
               <Button type='primary' size='large' onClick={handleSave} className='px-6 font-semibold'>
-                Lưu thay đổi
+                Save Changes
               </Button>
             </div>
           </div>
