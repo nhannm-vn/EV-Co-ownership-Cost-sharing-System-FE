@@ -127,6 +127,18 @@ const userApi = {
   // payment maintenance
   paymentMaintenance(maintenanceId: string) {
     return http.post<MaintenancePaymentResponse>(`api/maintenances/payments/create/${maintenanceId}`)
+  },
+  // đồng ý feedback
+  acceptFeedback: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) => {
+    return http.put(`api/admin/contracts/feedbacks/${feedbackId}/approve`, { adminNote })
+  },
+  // từ chối feedback
+  rejectFeedback: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) => {
+    return http.put(`api/admin/contracts/feedbacks/${feedbackId}/reject`, { adminNote })
+  },
+  // admin group send feedback status approve
+  groupAdminRejectFeedback: ({ groupId, reason }: { groupId: string; reason: string }) => {
+    return http.post(`api/contracts/${groupId}/cancel`, { reason })
   }
 }
 

@@ -1,18 +1,67 @@
-import { CheckCircleOutlined, ClockCircleOutlined, LeftOutlined } from '@ant-design/icons'
-import { useQuery } from '@tanstack/react-query'
+import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, LeftOutlined } from '@ant-design/icons'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import adminApi from '../../../../../apis/admin.api'
-import type { FeedbackItem } from '../../../../../types/api/admin.type'
-import MainContent from './components/MainContent'
+import { toast } from 'react-toastify'
 
-export default function FeedbackCoOwner() {
-  const { contractId, groupName, groupId } = useParams()
+import MainContent from './components/MainContent'
+import adminApi from '../../../../apis/admin.api'
+import type { FeedbackItem } from '../../../../types/api/admin.type'
+import userApi from '../../../../apis/user.api'
+
+export default function FeedBackAdmin() {
+  const queryClient = useQueryClient()
+  const { contractId, groupName } = useParams()
 
   const [selectedFeedback, setSelectedFeedback] = useState<FeedbackItem | null>(null)
   const [selectedUserEmail, setSelectedUserEmail] = useState<string | null>(null)
-
+  const [adminNote, setAdminNote] = useState('')
   const navigate = useNavigate()
+
+  // chấp nhận feedback
+  const accepctFeedback = useMutation({
+    mutationFn: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) =>
+      userApi.acceptFeedback({ feedbackId, adminNote })
+  })
+
+  const rejectFeedback = useMutation({
+    mutationFn: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) =>
+      userApi.rejectFeedback({ feedbackId, adminNote })
+  })
+
+  const handleAcceptFeedback = (feedbackId: string, adminNote: string) => {
+    if (adminNote.trim().length === 0) {
+      toast.error('vui lòng nhập thông tin hợp đồng sửa đổi trước khi chấp nhận feedback')
+      return
+    }
+    accepctFeedback.mutate(
+      { feedbackId, adminNote },
+      {
+        onSuccess: () => {
+          toast.success('đã chấp nhận feedback thành công')
+          setAdminNote('')
+          queryClient.invalidateQueries({ queryKey: ['feedback-by-contract-id', contractId] })
+        }
+      }
+    )
+  }
+
+  const handleRejectFeedback = ({ feedbackId, reason }: { feedbackId: string; reason: string }) => {
+    if (reason.trim().length === 0) {
+      toast.error('vui lòng nhập lý do trước khi từ chối feedback')
+      return
+    }
+    rejectFeedback.mutate(
+      { feedbackId, adminNote: reason },
+      {
+        onSuccess: () => {
+          toast.success('đã từ chối feedback thành công')
+          setAdminNote('')
+          queryClient.invalidateQueries({ queryKey: ['feedback-by-contract-id', contractId] })
+        }
+      }
+    )
+  }
 
   const feedContractQuery = useQuery({
     queryKey: ['feedback-by-contract-id', contractId],
@@ -25,13 +74,12 @@ export default function FeedbackCoOwner() {
   const feedbacks = feedContractQuery?.data?.data
 
   const groupedFeedbacks = useMemo(() => {
-    const allFeedbacks =
-      feedbacks?.feedbacks?.filter((f) => f.reactionType === 'DISAGREE' && f.status === 'APPROVED') || []
-
+    const allFeedbacks = feedbacks?.feedbacks || []
     const grouped: Record<string, FeedbackItem[]> = {}
 
     allFeedbacks.forEach((feedback) => {
       if (!grouped[feedback.email]) {
+        // tạo  string email là là mảng feedback theo record
         grouped[feedback.email] = []
       }
       grouped[feedback.email].push(feedback)
@@ -39,6 +87,7 @@ export default function FeedbackCoOwner() {
 
     return grouped
   }, [feedbacks?.feedbacks])
+  console.log(groupedFeedbacks)
 
   const users = useMemo(() => {
     return Object.keys(groupedFeedbacks).map((email) => {
@@ -65,21 +114,18 @@ export default function FeedbackCoOwner() {
   const handleUserClick = (email: string) => {
     setSelectedUserEmail(email)
     setSelectedFeedback(null)
+    setAdminNote('')
   }
 
   const handleFeedbackClick = (feedback: FeedbackItem) => {
     setSelectedFeedback(feedback)
-  }
-
-  const handleEditContract = ({ contractId, groupId }: { contractId: string; groupId: string }) => {
-    if (!feedbacks?.contractId || !groupId) return
-    navigate(`/manager/editContractDetail/${contractId}/${groupId}`)
+    setAdminNote('')
   }
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen bg-gray-50 mt-9 mb-9 shadow-sm rounded-2xl'>
       {/* Header */}
-      <div className='bg-white border-b border-gray-200 sticky top-0 z-10'>
+      <div className='bg-white border-b border-gray-200 sticky top-0 z-10 '>
         <div className='max-w-7xl mx-auto px-6 py-4'>
           <div className='flex items-center gap-4'>
             <button
@@ -145,10 +191,28 @@ export default function FeedbackCoOwner() {
                             </div>
                           </div>
                           <div className='flex items-center gap-2 text-xs'>
+                            {user.approveAgree > 0 && (
+                              <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200'>
+                                <ClockCircleOutlined />
+                                {user.approveAgree} Đã xác nhận hợp đồng
+                              </span>
+                            )}
+                            {user.pendingCount > 0 && (
+                              <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200'>
+                                <ClockCircleOutlined />
+                                {user.pendingCount} chờ xử lý
+                              </span>
+                            )}
                             {user.approvedCount > 0 && (
                               <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-800 border border-green-200'>
                                 <CheckCircleOutlined />
                                 {user.approvedCount} đã chấp nhận
+                              </span>
+                            )}
+                            {user.rejectedCount > 0 && (
+                              <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-100 text-red-800 border border-red-200'>
+                                <CloseCircleOutlined />
+                                {user.rejectedCount} đã từ chối
                               </span>
                             )}
                           </div>
@@ -203,10 +267,29 @@ export default function FeedbackCoOwner() {
                                 <p className='text-sm text-gray-500'>{feedback?.email}</p>
                               </div>
 
+                              {feedback?.reactionType === 'AGREE' && (
+                                <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200'>
+                                  <ClockCircleOutlined className='text-sm' />
+                                  Đã xác nhận kí hợp đồng
+                                </span>
+                              )}
+
+                              {feedback?.status === 'PENDING' && feedback?.reactionType === 'DISAGREE' && (
+                                <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200'>
+                                  <ClockCircleOutlined className='text-sm' />
+                                  Chờ xử lý
+                                </span>
+                              )}
                               {feedback?.status === 'APPROVED' && feedback?.reactionType === 'DISAGREE' && (
                                 <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200'>
                                   <CheckCircleOutlined className='text-sm' />
                                   Đã chấp nhận
+                                </span>
+                              )}
+                              {feedback?.status === 'REJECTED' && feedback?.reactionType === 'DISAGREE' && (
+                                <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200'>
+                                  <CloseCircleOutlined className='text-sm' />
+                                  Đã từ chối
                                 </span>
                               )}
                             </div>
@@ -260,22 +343,72 @@ export default function FeedbackCoOwner() {
                     <p className='text-sm text-gray-700 leading-relaxed'>{selectedFeedback?.reason}</p>
                   </div>
 
+                  {/* Admin Note - Read Only */}
+                  <div className='mb-6'>
+                    <label className='block text-sm font-semibold text-gray-900 mb-2'>Ghi chú của Admin</label>
+                    <textarea
+                      value={adminNote}
+                      onChange={(e) => setAdminNote(e.target.value)}
+                      rows={4}
+                      disabled={selectedFeedback?.status !== 'PENDING'}
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed'
+                      placeholder={
+                        selectedFeedback?.status === 'PENDING'
+                          ? 'Feedback này đã được xử lý'
+                          : 'Nhập ghi chú về cách xử lý feedback này...'
+                      }
+                    />
+                  </div>
+
                   {/* Action Buttons or Admin Note Display */}
                   <div className='space-y-2.5'>
-                    <>
-                      <button
-                        className='w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium text-sm flex items-center justify-center gap-2'
-                        onClick={() =>
-                          handleEditContract({
-                            contractId: feedbacks?.contractId.toString() as string,
-                            groupId: groupId as string
-                          })
-                        }
-                      >
-                        <CheckCircleOutlined />
-                        Sửa Hợp Đồng
-                      </button>
-                    </>
+                    {selectedFeedback?.status === 'PENDING' && selectedFeedback?.reactionType === 'DISAGREE' ? (
+                      <>
+                        <button
+                          className='w-full bg-green-600 text-white py-2.5 px-4 rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors font-medium text-sm flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed'
+                          onClick={() => handleAcceptFeedback(selectedFeedback?.feedbackId.toString(), adminNote)}
+                          disabled={accepctFeedback.isPending}
+                        >
+                          <CheckCircleOutlined />
+                          {accepctFeedback.isPending ? 'Đang xử lý...' : 'Chấp nhận Feedback'}
+                        </button>
+
+                        <button
+                          className='w-full border-2 border-red-200 text-red-600 py-2.5 px-4 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm flex items-center justify-center gap-2 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed'
+                          onClick={() =>
+                            handleRejectFeedback({
+                              feedbackId: selectedFeedback?.feedbackId.toString(),
+                              reason: adminNote
+                            })
+                          }
+                          disabled={rejectFeedback.isPending}
+                        >
+                          <CloseCircleOutlined />
+                          {rejectFeedback.isPending ? 'Đang xử lý...' : 'Từ chối Feedback'}
+                        </button>
+                      </>
+                    ) : (
+                      <div className='bg-gray-50 rounded-lg p-4 border border-gray-200'>
+                        <h3 className='font-semibold text-gray-900 mb-2 flex items-center gap-2'>
+                          {selectedFeedback?.status === 'APPROVED' && selectedFeedback?.reactionType === 'DISAGREE' && (
+                            <>
+                              <CheckCircleOutlined className='text-green-600' />
+                              <span className='text-green-700'>Đã chấp nhận</span>
+                            </>
+                          )}
+
+                          {selectedFeedback?.status === 'REJECTED' && selectedFeedback?.reactionType === 'DISAGREE' && (
+                            <>
+                              <CloseCircleOutlined className='text-red-600' />
+                              <span className='text-red-700'>Đã từ chối</span>
+                            </>
+                          )}
+                        </h3>
+                        <div className='text-sm text-gray-700 leading-relaxed bg-white p-3 rounded border border-gray-200'>
+                          {selectedFeedback?.adminNote || 'Không có ghi chú'}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

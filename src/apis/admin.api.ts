@@ -43,14 +43,7 @@ const adminApi = {
   getFeedbackByContractId: (contractId: string) => {
     return http.get<FeedbackCoOwnerResponse>(`api/contracts/${contractId}/member-feedbacks`)
   },
-  // đồng ý feedback
-  acceptFeedback: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) => {
-    return http.put(`api/admin/contracts/feedbacks/${feedbackId}/approve`, { adminNote })
-  },
-  // từ chối feedback
-  rejectFeedback: ({ feedbackId, adminNote }: { feedbackId: string; adminNote: string }) => {
-    return http.put(`api/admin/contracts/feedbacks/${feedbackId}/reject`, { adminNote })
-  },
+
   // update contract
   updateContract: ({
     contractId,

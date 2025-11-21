@@ -51,6 +51,7 @@ import ModalEditContract from '../pages/AdminDashboard/pages/EditContract/ModalE
 import PaymentHistory from '../pages/PaymentHistory'
 import GroupExpense from '../pages/GroupPage/pages/GroupExpense'
 import MaintenanceList from '../pages/AdminDashboard/pages/Maintenance'
+import FeedBackAdmin from '../pages/GroupPage/pages/FeedbackAdminGroupCheck'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -119,7 +120,8 @@ function Routers() {
                     { path: path.voting, element: <Voting /> },
                     { path: path.pendingCheckout, element: <PendingCheckout /> },
                     { path: path.fundOwnership, element: <FundOwnership /> },
-                    { path: path.groupExpense, element: <GroupExpense /> }
+                    { path: path.groupExpense, element: <GroupExpense /> },
+                    { path: path.feedbackAdmin, element: <FeedBackAdmin /> }
                   ]
                 },
                 { path: path.createGroups, element: <CreateGroups /> },

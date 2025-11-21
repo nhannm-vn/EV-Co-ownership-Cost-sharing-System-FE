@@ -62,7 +62,7 @@ export default function GroupExpense() {
           <FaCheckCircle className='w-8 h-8' />
         </div>
         <div className='flex-1 min-w-0'>
-          <p className='font-semibold text-blue-800 text-lg'>No maintenance requests available</p>
+          <p className='font-semibold text-gray-900'>No maintenance requests available</p>
         </div>
       </div>
     )
