@@ -160,10 +160,10 @@ function PaymentDeposit() {
         <ProgressBar completionRate={completionRate} paidMembers={paidMembers} totalMembers={totalMembers} />
         <div className='mt-3 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100/40 shadow-sm mb-3'>
           <p className='text-sm text-gray-950 leading-relaxed'>
-            Các thành viên trong nhóm cần hoàn tất khoản tiền đặt cọc trước khi tham gia sử dụng xe chung. Khoản đặt cọc
-            nhằm đảm bảo cam kết và trách nhiệm trong quá trình sử dụng tài sản chung. Khi hợp đồng kết thúc, số tiền
-            này sẽ được hoàn trả theo quy định.Tiền cọc sẽ là 10 % giá trị của xe chia đều theo tỷ lệ sở hữu của mỗi
-            thành viên trong nhóm.
+            Group members need to complete the deposit before participating in using the shared car. The deposit is to
+            ensure commitment and responsibility during the use of the shared property. When the contract ends, this
+            amount will be refunded according to the regulations. The deposit will be 10% of the value of the car
+            divided equally according to the ownership ratio of each member in the group
           </p>
         </div>
 

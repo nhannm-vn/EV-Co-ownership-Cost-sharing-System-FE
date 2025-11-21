@@ -50,6 +50,13 @@ export default function DetailStatusBooking() {
                 border: '',
                 label: 'Đang sử dụng',
                 description: 'có người đang sử dụng xe  '
+              },
+              {
+                icon: <UserOutlined style={{ fontSize: '24px', color: '#22c55e' }} />,
+                bg: 'bg-gradient-to-br from-green-100 to-teal-100 border-2 border-green-300 shadow-lg ring-2 ring-green-200/50',
+                border: '',
+                label: 'Hoàn thành',
+                description: 'Hoàn thành booking'
               }
             ].map((item, idx) => (
               <div
