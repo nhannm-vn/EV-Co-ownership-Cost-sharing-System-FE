@@ -90,6 +90,8 @@ const CreateContract: React.FC = () => {
   }
 
   const onRejectMember = () => {
+    console.log(idContract)
+
     if (!idContract) {
       return
     }
@@ -123,10 +125,11 @@ const CreateContract: React.FC = () => {
               </button>
               <button
                 onClick={onRejectMember}
-                disabled={!rejectReason.trim()}
-                className='flex-1 bg-red-500 text-white rounded-lg py-2 disabled:opacity-50'
+                // nếu form lý do từ chối chưa đủ 10 ký tự thì disable
+                disabled={rejectReason.trim().length < 10 || approveMemberMutation.isPending}
+                className='flex-1 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl py-2.5 font-semibold disabled:brightness-90 disabled:cursor-not-allowed hover:bg-orange-600'
               >
-                Confirm rejection
+                {approveMemberMutation.isPending ? 'Sending...' : 'Send Rejection'}
               </button>
             </div>
           </div>
@@ -159,7 +162,7 @@ const CreateContract: React.FC = () => {
                 onClick={() => setShowRejectModal(false)}
                 className='flex-1 border-2 border-gray-300 rounded-xl py-2.5 font-semibold hover:bg-gray-50'
               >
-                Quay lại
+                Go back
               </button>
               <button
                 onClick={onRejectMember}
@@ -323,11 +326,11 @@ const CreateContract: React.FC = () => {
                   <h4 className='font-bold text-amber-900 mb-1'> Contract Signing Notice:</h4>
                   <p className='text-sm text-amber-800'>
                     <span className='font-bold'>Only the Group Leader (Admin Group)</span> {''}
-                    has the right to sign and approve the contract. Other members can only view the contract and confirm
-                    after the Admin Group has signed. If any member has questions or feels their rights are unclear,
-                    leave a note in the comments. The system will review and adjust the contract if reasonable. Once all
-                    members confirm and pay the deposit, the system will approve the contract. After approval, the group
-                    can start using the system’s features.
+                    has the right to sign the contract. Other members can only view the contract and confirm after the
+                    Admin Group has signed. If any member has questions or feels their rights are unclear, leave a note
+                    in the comments. The system will review and adjust the contract if reasonable. Once all members
+                    confirm and pay the deposit, the system will approve the contract. After approval, the group can
+                    start using the system’s features.
                   </p>
                 </div>
               </div>

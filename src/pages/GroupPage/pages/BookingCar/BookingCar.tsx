@@ -91,6 +91,7 @@ const BookingCar = () => {
             licensePlate={groupSummary?.licensePlate || ''}
             weekStart={data?.weekStart || ''}
             weekEnd={data?.weekEnd || ''}
+            model={groupSummary?.model || ''}
           />
           {/* Quota Card */}
           <QuotaCard quotaUser={quotaUser} />

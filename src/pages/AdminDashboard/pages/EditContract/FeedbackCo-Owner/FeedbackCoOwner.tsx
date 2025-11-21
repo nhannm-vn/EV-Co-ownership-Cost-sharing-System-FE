@@ -81,6 +81,7 @@ export default function FeedbackCoOwner() {
 
     allFeedbacks.forEach((feedback) => {
       if (!grouped[feedback.email]) {
+        // tạo  string email là là mảng feedback theo record
         grouped[feedback.email] = []
       }
       grouped[feedback.email].push(feedback)

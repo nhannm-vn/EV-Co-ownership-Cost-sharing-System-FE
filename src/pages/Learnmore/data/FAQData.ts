@@ -17,7 +17,8 @@ const faqs: FagSection = {
     },
     {
       question: 'How does EV-Share work?',
-      answer: 'Users can book electric vehicles based on ownership percentage through the EV-Share app.'
+      answer:
+        'Users can create a group and invite members to enter ownership percentages to form a contract. Once the contract is set up and vehicles can be booked, a technician will inspect the vehicle at checkout. They can also create a voting fund to make decisions on how to use that fund'
     },
     {
       question: 'Can I add or remove co-owners later?',
@@ -30,8 +31,9 @@ const faqs: FagSection = {
       answer: 'EV-Share cost based on duration of usage and owner ship percentage.'
     },
     {
-      question: 'Do I only pay when I use the car?',
-      answer: 'No, co-owners share fixed ownership costs. However, additional usage-based fees like charging may apply.'
+      question: 'How much does EV-Share cost to use',
+      answer:
+        'The cost of EV-Share depends on the duration of usage and ownership percentage. Users also need to pay a security deposit to cover cases where a co-owner fails to pay for damages. The use of the fund is decided by co-owners through voting without system intervention. When checking out a damaged vehicle, a technician will inspect it and provide a revised cost estimate.'
     },
     {
       question: 'Are there any hidden charges?',
@@ -41,11 +43,11 @@ const faqs: FagSection = {
   'Car-Delivery': [
     {
       question: 'When will I get the car?',
-      answer: 'The car will be delivered when you book the car and the owner approve your request'
+      answer: 'You will receive the car only after your booking is confirmed and you successfully check in.'
     },
     {
       question: 'How is the EV delivered to co-owners?',
-      answer: 'Once purchased, the EV is delivered to a designated location agreed upon by the co-owners.'
+      answer: 'The EV will be kept at the operator’s location for easier management.'
     },
     {
       question: 'Is the EV inspected before handover?',

@@ -1,6 +1,6 @@
-import React from 'react'
 import { CheckCircleOutlined, CloseCircleOutlined, HomeOutlined, ScanOutlined } from '@ant-design/icons'
 import { Button, Card } from 'antd'
+import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import path from '../../../../constants/path'
 
@@ -96,7 +96,10 @@ const CheckInResult: React.FC = () => {
               <b>Trạng thái:</b> <span className='text-green-600'>Success</span>
             </p>
             <p>
-              <b>Thời gian:</b> {startTime} → {endTime}
+              <b>
+                Thời gian: {new Date(startTime as string).toLocaleTimeString('vi-VN')}
+                {'    '} - {new Date(endTime as string).toLocaleTimeString('vi-VN')}
+              </b>
             </p>
           </Card>
 
