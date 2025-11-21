@@ -19,11 +19,11 @@ export default function Statsbar({ totalBookings, quotaUser }: StatsBarsProps) {
             <Statistic
               title={
                 <span className='text-xs font-black text-gray-600 uppercase tracking-wider'>
-                  Tổng booking trong tuần{' '}
+                  total booking of group in the week{' '}
                 </span>
               }
               value={totalBookings || 0}
-              suffix='lượt'
+              suffix='slot'
               valueStyle={{ color: '#06B6D4', fontWeight: 900, fontSize: '36px' }}
               prefix={<CalendarOutlined style={{ fontSize: '24px' }} />}
             />
@@ -32,11 +32,11 @@ export default function Statsbar({ totalBookings, quotaUser }: StatsBarsProps) {
             <Statistic
               title={
                 <span className='text-xs font-black text-gray-600 uppercase tracking-wider'>
-                  Số Slot Của bạn đã sử dụng
+                  Number of slots you have used
                 </span>
               }
               value={quotaUser.usedSlots}
-              suffix='lượt'
+              suffix='slot'
               valueStyle={{ color: '#0EA5E9', fontWeight: 900, fontSize: '36px' }}
               prefix={<UserOutlined style={{ fontSize: '24px' }} />}
             />
@@ -44,7 +44,9 @@ export default function Statsbar({ totalBookings, quotaUser }: StatsBarsProps) {
           <div className='px-10 py-6 text-center hover:bg-gradient-to-br hover:from-blue-50/50 hover:to-transparent transition-all duration-300'>
             <Statistic
               title={
-                <span className='text-xs font-black text-gray-600 uppercase tracking-wider'>Tỷ lệ số slot đã dùng</span>
+                <span className='text-xs font-black text-gray-600 uppercase tracking-wider'>
+                  Percentage of slots used
+                </span>
               }
               value={(quotaUser.usedSlots / quotaUser.totalSlots) * 100}
               precision={0}

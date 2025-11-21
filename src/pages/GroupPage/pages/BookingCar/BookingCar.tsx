@@ -5,18 +5,27 @@ import { Card, Tag } from 'antd'
 import { useParams } from 'react-router'
 import groupApi from '../../../../apis/group.api'
 
+import { setGroupIdToLS } from '../../../../utils/auth'
 import BookingSlotCell from './components/BookingSlotCell'
 import DetailStatusBooking from './components/DetailStatusBooking'
-import MaintenanceCard from './components/MaintenanceCard'
 import QuotaCard from './components/QuotaCard'
 import Statsbar from './components/StatsBar'
 import StatusCard from './components/StatusCard'
 import VehicleInforCard from './components/VehicleInforCard'
-import { setGroupIdToLS } from '../../../../utils/auth'
 
 // ============= INTERFACES (giữ nguyên) =============
 type SlotStatus = 'AVAILABLE' | 'LOCKED' | 'CONFIRMED' | 'CANCELLED' | ''
-type SlotType = 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | 'AWAITING_REVIEW' | ''
+type SlotType =
+  | 'AVAILABLE'
+  | 'MAINTENANCE'
+  | 'BOOKED_SELF'
+  | 'BOOKED_OTHER'
+  | 'LOCKED'
+  | 'AWAITING_REVIEW'
+  | ''
+  | 'COMPLETED'
+  | 'CHECKED_IN_OTHER'
+  | 'CHECKED_IN_SELF'
 
 interface TimeSlot {
   time: string
@@ -84,7 +93,7 @@ const BookingCar = () => {
     <div className='min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-blue-50/40 p-8 my-5 rounded-2xl'>
       <div className='max-w-[96vw] mx-auto'>
         {/* Header Section - giữ nguyên như code trước */}
-        <div className='grid grid-cols-4 gap-6 mb-8'>
+        <div className='grid grid-cols-3 gap-6 mb-8'>
           {/* Vehicle Info Card */}
           <VehicleInforCard
             brand={groupSummary?.brand || ''}
@@ -100,12 +109,6 @@ const BookingCar = () => {
             vehicleStatus={groupSummary?.vehicleStatus || ''}
             batteryPercent={groupSummary?.batteryPercent || 0}
             odometer={groupSummary?.odometer || 0}
-          />
-          {/* Maintenance Card */}
-          <MaintenanceCard
-            lastMaintenanceDate={groupSummary?.lastMaintenanceDate || ''}
-            nextMaintenanceDate={groupSummary?.nextMaintenanceDate || ''}
-            maintenanceStatus={groupSummary?.maintenanceStatus || ''}
           />
         </div>
 
@@ -166,7 +169,7 @@ const BookingCar = () => {
                               color: 'white'
                             }}
                           >
-                            Bảo dưỡng
+                            maintenance
                           </Tag>
                         )}
                       </div>
@@ -182,7 +185,7 @@ const BookingCar = () => {
                                 <div className='bg-white/60 backdrop-blur-sm p-2 rounded-xl'>
                                   <ToolOutlined style={{ fontSize: '20px' }} className='text-slate-700' />
                                 </div>
-                                <span className='text-xs font-bold text-slate-700'>Bảo dưỡng</span>
+                                <span className='text-xs font-bold text-slate-700'>maintenance</span>
                               </div>
                             </div>
                           ) : (

@@ -24,7 +24,7 @@ export default function VehicleInforCard({ brand, licensePlate, weekStart, weekE
               <div className='flex-1'>
                 <div className='flex items-center gap-2 mb-2'>
                   <CalendarOutlined style={{ fontSize: '20px', color: 'white' }} />
-                  <h2 className='text-xl font-black text-white uppercase tracking-wide'>Lịch Đặt Xe</h2>
+                  <h2 className='text-xl font-black text-white uppercase tracking-wide'>Calendar booking car</h2>
                 </div>
               </div>
             </div>

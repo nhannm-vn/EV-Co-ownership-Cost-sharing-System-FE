@@ -56,8 +56,9 @@ const FundSummaryCard: React.FC<FundSummaryCardProps> = ({
           <div>
             <h3 className='font-bold text-blue-700 text-sm mb-1'>About the Group Shared Fund and Security Deposit</h3>
             <p className='text-gray-700 text-xs leading-relaxed'>
-              The shared fund is used to pay regular expenses such as vehicle maintenance, repair, and other group
-              operational costs. When an expense occurs, the amount will automatically be deducted from the shared fund.
+              The shared fund is used to pay regular expenses such as upgrade the car and other but except maintenance
+              and checkout fail operational costs. When an expense occurs, the amount will automatically be deducted
+              from the shared fund and and deposit
             </p>
           </div>
         </div>

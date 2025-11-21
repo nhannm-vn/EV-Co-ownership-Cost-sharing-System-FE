@@ -18,6 +18,7 @@ interface ModalConfirmProps {
   bookingId?: number | null
   isLoadingConfirm?: boolean
   isLoadingCancel?: boolean
+  type?: string
 }
 
 export default function ModalConfirm({
@@ -29,33 +30,42 @@ export default function ModalConfirm({
   bookingId,
   isLoadingConfirm,
   isLoadingCancel,
-  onClose
+  onClose,
+  type
 }: ModalConfirmProps) {
   const actionButtons = bookingId
-    ? [
-        // TRƯỜNG HỢP 1: ĐÃ ĐẶT (BOOKED_SELF)
-        // 1. Nút Hủy Đóng Modal
-        <button
-          key='close'
-          onClick={onClose}
-          className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
-        >
-          Đóng
-        </button>,
-        // 2. Nút Hủy Đặt Xe (Call API)
-        <button
-          key='cancelBooking'
-          disabled={isLoadingCancel}
-          // Đảm bảo bookingId tồn tại trước khi gọi onCancel
-          onClick={() => onCancel(bookingId as number)}
-          className='bg-red-500 text-white font-bold text-base h-12 px-6 rounded-xl hover:bg-red-600 transition'
-        >
-          Xác nhận HỦY đặt xe
-        </button>
-      ]
+    ? type !== 'CHECKED_IN_SELF' && type !== 'CHECKED_IN_OTHER'
+      ? [
+          // ĐÃ ĐẶT + ĐƯỢC PHÉP HỦY
+          <button
+            key='close'
+            onClick={onClose}
+            className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
+          >
+            Đóng
+          </button>,
+
+          <button
+            key='cancelBooking'
+            disabled={isLoadingCancel}
+            onClick={() => onCancel(bookingId as number)}
+            className='bg-red-500 text-white font-bold text-base h-12 px-6 rounded-xl hover:bg-red-600 transition'
+          >
+            Xác nhận HỦY đặt xe
+          </button>
+        ]
+      : [
+          // ĐÃ ĐẶT + KHÔNG ĐƯỢC HỦY (CHECKED_IN_OTHER)
+          <button
+            key='closeOnly'
+            onClick={onClose}
+            className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
+          >
+            Đóng
+          </button>
+        ]
     : [
-        // TRƯỜNG HỢP 2: CHƯA ĐẶT (AVAILABLE)
-        // 1. Nút Hủy Đóng Modal
+        // CHƯA ĐẶT (AVAILABLE)
         <button
           key='cancel'
           onClick={onClose}
@@ -63,7 +73,7 @@ export default function ModalConfirm({
         >
           Hủy
         </button>,
-        // 2. Nút Xác Nhận Đặt Xe (Call API)
+
         <button
           key='confirm'
           onClick={onConfirm}
@@ -73,7 +83,6 @@ export default function ModalConfirm({
           Xác nhận ĐẶT xe
         </button>
       ]
-
   return (
     <Modal
       title={

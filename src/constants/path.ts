@@ -28,10 +28,9 @@ const path = {
   booking: 'booking', // Relative path
   mybooking: 'mybooking', // Relative path
   depositHistory: 'payment-result', // Relative path
-  checkIn: 'check-in', // Relative path
+  checkQR: 'check-QR', // Relative path
   checkInResult: 'check-in-result/:status/:startTime/:endTime/:brand/:licensePlate',
-  checkInResultFail: 'check-in-result/:status',
-  checkOutResultFail: 'check-out-result/:status',
+  checkQRFail: 'check-QR-fail',
   checkOutResult: 'check-out-result/:status/:bookingId',
   voting: 'voting',
   pendingCheckout: 'pending-checkout/:bookingId',

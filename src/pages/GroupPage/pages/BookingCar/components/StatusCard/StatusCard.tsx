@@ -1,4 +1,4 @@
-import { Card, Progress } from 'antd'
+import { Card } from 'antd'
 
 import { DashboardOutlined, ThunderboltOutlined } from '@ant-design/icons'
 import getConditionConfig from '../BookingSlotCell/utils/getConditionconfig'
@@ -32,7 +32,7 @@ export default function StatusCard({ vehicleStatus, batteryPercent, odometer }: 
                   }
                 </div>
                 <div>
-                  <div className='text-white/95 text-xl font-bold uppercase tracking-wide'>Trạng thái của xe </div>
+                  <div className='text-white/95 text-xl font-bold uppercase tracking-wide'>status of the vehicle</div>
                   <div className='text-white text-2xl font-black'>
                     {
                       getConditionConfig({
@@ -48,20 +48,9 @@ export default function StatusCard({ vehicleStatus, batteryPercent, odometer }: 
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-2'>
                   <ThunderboltOutlined style={{ fontSize: '26px', color: 'white' }} />
-                  <span className='text-white text-sm font-bold'>Pin</span>
+                  <span className='text-white text-sm font-bold'>Battery</span>
                 </div>
                 <div className='text-white text-3xl font-black'>{batteryPercent}%</div>
-              </div>
-              <div className='relative'>
-                <Progress
-                  percent={batteryPercent || 0}
-                  strokeColor='#fafafa' // Màu trắng hoàn toàn
-                  trailColor='rgba(255, 255, 255, 0.9)'
-                  showInfo={false}
-                  size={12}
-                  className='rounded-full border-2 border-white/90'
-                />
-                <div className='absolute inset-0 blur-lg bg-white/10 rounded-full'></div>
               </div>
             </div>
 

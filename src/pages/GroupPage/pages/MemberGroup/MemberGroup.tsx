@@ -82,7 +82,13 @@ export default function MemberGroup() {
 
         <Header members={members} isAdmin={isAdmin} amount={amount} setShowModal={setShowModal} />
         {/* Member List Card */}
-        <Memberlist members={members} amount={amount} groupId={groupId as string} currentUserRole={currentUserRole} />
+        <Memberlist
+          members={members}
+          amount={amount}
+          groupId={groupId as string}
+          currentUserRole={currentUserRole}
+          contractStatus={membersQuery.data?.data.groupSummary?.contractStatus}
+        />
 
         {/* Bottom Gradient Bar */}
         <div className='absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-indigo-200 via-sky-100 to-cyan-200 shadow-[0_0_20px_rgba(14,165,233,0.6)]' />

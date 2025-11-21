@@ -12,7 +12,7 @@ interface CameraError extends Error {
   message: string
 }
 
-export default function CheckIn() {
+export default function CheckQR() {
   const groupId = getGroupIdFromLS()
   // kiểm tra coi có đang quét hay không
   const [isScanning, setIsScanning] = useState(false)
@@ -28,30 +28,30 @@ export default function CheckIn() {
       return groupApi.verifyCheckIn(qrCode)
     },
     onSuccess: (response) => {
+      console.log(response)
+
       if (response?.data?.responseType === 'CHECKIN') {
         const startTime = response?.data?.bookingInfo?.startTime
         const endTime = response?.data?.bookingInfo?.endTime
         const brand = response?.data?.vehicleInfo?.brand || ''
         const licensePlate = response?.data?.vehicleInfo?.licensePlate || ''
-        toast.success('Quét mã QR thành công')
+        toast.success('Scan QR Successful!')
         console.log(response?.data?.bookingId)
 
         if (response?.data?.status === 'success') {
           navigate(
             `/dashboard/viewGroups/${groupId}/check-in-result/${response?.data?.status}/${startTime}/${endTime}/${brand}/${licensePlate}`
           )
-        } else {
-          navigate(`/dashboard/viewGroups/${groupId}/check-in-result/${response?.data?.status}`)
         }
         //  nếu là checkout xuống chuyển đến trang check out
-      } else {
+      } else if (response?.data?.responseType === 'CHECKOUT') {
         if (response?.data?.status === 'success') {
           navigate(
             `/dashboard/viewGroups/${groupId}/check-out-result/${response?.data?.status}/${response?.data?.bookingId}`
           )
-        } else {
-          navigate(`/dashboard/viewGroups/${groupId}/check-out-result/${response?.data?.status}`)
         }
+      } else if (response?.data?.status === 'fail') {
+        navigate(`/dashboard/viewGroups/${groupId}/check-QR-fail`)
       }
     }
   })

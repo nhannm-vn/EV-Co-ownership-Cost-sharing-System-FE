@@ -13,7 +13,17 @@ export interface Slot {
   date: string
   time: string
   bookedBy: string | null
-  type: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | 'AWAITING_REVIEW' | '' | 'COMPLETED'
+  type:
+    | 'AVAILABLE' // can book
+    | 'MAINTENANCE' // maintenance
+    | 'BOOKED_SELF'
+    | 'BOOKED_OTHER'
+    | 'LOCKED'
+    | 'AWAITING_REVIEW'
+    | ''
+    | 'COMPLETED'
+    | 'CHECKED_IN_OTHER'
+    | 'CHECKED_IN_SELF'
   vehicleId: number
 
   vehicleStatus: 'Good' | 'Under Maintenance' | 'Has Issues' | ''
@@ -56,7 +66,7 @@ export default function BookingSlotCell({
     onSuccess: (response) => {
       console.log(response)
       mutateQuery.invalidateQueries({ queryKey: ['vehicle-bookings'] })
-      toast.success('Hủy đặt xe thành công!')
+      toast.success('Cancel booking successful!')
       setIsModalVisible(false)
     },
     onError: (response) => {
@@ -68,17 +78,17 @@ export default function BookingSlotCell({
       return
     }
     if (quotaUser.remainingSlots <= 0) {
-      toast.error('Bạn đã hết quota tuần này!')
+      toast.error('You have used up your quota for this week!')
       return
     }
 
     if (vehicleStatus === 'Has Issues') {
-      toast.error('Xe đang hư, không thể đặt!')
+      toast.error('The vehicle is currently damaged and cannot be booked!')
       return
     }
 
     if (vehicleStatus === 'Under Maintenance') {
-      toast.warning('Xe đang bảo dưỡng, vui lòng đặt sau!')
+      toast.warning('The vehicle is currently under maintenance, please book later!')
       return
     }
     const { startDateTime, endDateTime } = convertIsoString({ date, time })
@@ -118,7 +128,7 @@ export default function BookingSlotCell({
                 <div className='bg-gradient-to-br from-cyan-500 to-blue-500 p-2 rounded-xl shadow-lg'>
                   <PlusOutlined style={{ fontSize: '20px', color: 'white' }} />
                 </div>
-                <span className='text-xs text-cyan-700 font-bold'>Đặt xe</span>
+                <span className='text-xs text-cyan-700 font-bold'>Book Car</span>
               </div>
             )}
             {type === 'BOOKED_SELF' && (
@@ -126,7 +136,7 @@ export default function BookingSlotCell({
                 <div className='bg-white/20 backdrop-blur-sm p-2 rounded-xl'>
                   <UserOutlined style={{ fontSize: '20px' }} />
                 </div>
-                <div className='text-xs font-bold'>Bạn đã đặt</div>
+                <div className='text-xs font-bold'>You booked</div>
               </div>
             )}
             {type === 'BOOKED_OTHER' && (
@@ -134,8 +144,8 @@ export default function BookingSlotCell({
                 <div className='bg-white/20 backdrop-blur-sm p-2 rounded-xl'>
                   <UserOutlined style={{ fontSize: '20px' }} />
                 </div>
-                <div className='text-xs font-bold'>Đã đặt</div>
-                <div className='text-xs opacity-90'>Người khác</div>
+                <div className='text-xs font-bold'>Booked</div>
+                <div className='text-xs opacity-90'>Someone else booked</div>
               </div>
             )}
             {type === 'LOCKED' && (
@@ -143,15 +153,45 @@ export default function BookingSlotCell({
                 <div className='bg-white/20 backdrop-blur-sm p-2 rounded-xl'>
                   <LockOutlined style={{ fontSize: '20px' }} />
                 </div>
-                <div className='text-xs font-bold'>Đã khóa</div>
+                <div className='text-xs font-bold'>Locked</div>
               </div>
             )}
             {type === 'COMPLETED' && (
               <div className='flex flex-col items-center gap-2'>
-                <div className='bg-gradient-to-br from-green-100 to-teal-100 p-2 rounded-xl shadow-md border border-green-300'>
+                <div className='bg-gradient-to-br from--100 to-teal-100 p-2 rounded-xl shadow-md border border-green-300'>
                   <UserOutlined style={{ fontSize: '20px', color: '#22c55e' }} />
                 </div>
                 <div className='text-xs font-bold text-green-700 tracking-wide drop-shadow-md'>Completed Booking</div>
+              </div>
+            )}
+
+            {type === 'CHECKED_IN_OTHER' && (
+              <div className='flex flex-col items-center gap-2'>
+                <div className='bg-gradient-to-br from-purple-100 to-purple-500-100 p-2 rounded-xl shadow-md border border-purple-50'>
+                  <UserOutlined style={{ fontSize: '20px', color: '#c222c5' }} />
+                </div>
+                <div className='text-xs font-bold text-purple-300 tracking-wide drop-shadow-md'>Check-In Other</div>
+              </div>
+            )}
+
+            {type === 'CHECKED_IN_SELF' && (
+              <div className='flex flex-col items-center gap-2'>
+                <div className='bg-gradient-to-br from-pink-200 to-pink-300 p-4 rounded-xl shadow-md border border-yellow-50'>
+                  <UserOutlined style={{ fontSize: '20px', color: '#c522b2' }} />
+                </div>
+                <div className='ml-5 text-xs font-bold text-white-600 tracking-wide drop-shadow-md'>
+                  Check-In Success
+                </div>
+              </div>
+            )}
+            {type === 'AWAITING_REVIEW' && (
+              <div className='flex flex-col items-center gap-2'>
+                <div className='bg-gradient-to-br from-red-200 to-red-500 p-4 rounded-xl shadow-md border border-yellow-50'>
+                  <UserOutlined style={{ fontSize: '20px', color: '#c522b2' }} />
+                </div>
+                <div className='ml-5 text-xs font-bold text-white-600 tracking-wide drop-shadow-md'>
+                  Techician check
+                </div>
               </div>
             )}
           </div>
@@ -167,6 +207,7 @@ export default function BookingSlotCell({
         onConfirm={handleConfirm}
         quotaUser={quotaUser}
         bookingId={bookingId ?? null}
+        type={type}
       />
     </>
   )

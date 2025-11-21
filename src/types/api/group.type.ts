@@ -30,6 +30,7 @@ export interface groupSummary {
     members?: Member[]
     memberCapacity?: number
     currentUserRole: 'ADMIN' | 'MEMBER' | string
+    contractStatus?: string
   }
   userOwnership?: {
     userId: number

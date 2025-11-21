@@ -42,14 +42,13 @@ export default function CoOwnerSideBar() {
     { to: `viewGroups/${group?.groupId}/ownershipPercentage`, label: 'Percentage' },
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
     { to: `viewGroups/${group?.groupId}/createContract`, label: 'Contract' },
-    { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Deposit' },
-    { to: `viewGroups/${group?.groupId}/group-expense`, label: 'Vehicle Billing' }
+    { to: `viewGroups/${group?.groupId}/paymentDeposit`, label: 'Deposit' }
   ]
   const navApprovedItems = [
     { to: `viewGroups/${group?.groupId}/booking`, label: 'Booking Car' },
     { to: `viewGroups/${group?.groupId}/mybooking`, label: 'My Booking' },
     { to: `viewGroups/${group?.groupId}/ownershipRatio`, label: 'Ownership Ratio' },
-    { to: `viewGroups/${group?.groupId}/check-in`, label: 'QR Check' },
+    { to: `viewGroups/${group?.groupId}/check-QR`, label: 'QR Check' },
     { to: `viewGroups/${group?.groupId}/voting`, label: 'Voting' },
     { to: `viewGroups/${group?.groupId}/fund-ownership`, label: 'Fund and deposit' },
     { to: `viewGroups/${group?.groupId}/group-expense`, label: 'Vehicle Billing' }

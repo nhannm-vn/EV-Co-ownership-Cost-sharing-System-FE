@@ -5,53 +5,54 @@ import MainLayout from '../layouts/MainLayout'
 import ManagerLayout from '../layouts/ManagerLayout'
 import RegisterLayout from '../layouts/RegisterLayout'
 import AdminDashboard from '../pages/AdminDashboard'
+import BookingQr from '../pages/AdminDashboard/pages/BookingQr'
+import CheckBooking from '../pages/AdminDashboard/pages/CheckBooking'
 import CheckContract from '../pages/AdminDashboard/pages/CheckContract'
 import CheckGroup from '../pages/AdminDashboard/pages/CheckGroup'
 import CheckLicense from '../pages/AdminDashboard/pages/CheckLicense'
+import CheckVehicleReport from '../pages/AdminDashboard/pages/CheckVehicleReport'
+import EditContract from '../pages/AdminDashboard/pages/EditContract'
+import FeedbackCoOwner from '../pages/AdminDashboard/pages/EditContract/FeedbackCo-Owner'
+import ModalEditContract from '../pages/AdminDashboard/pages/EditContract/ModalEditContract/ModalEditContract'
+import MaintenanceList from '../pages/AdminDashboard/pages/Maintenance'
 import ChangePassword from '../pages/ChangePassword'
 import CreateGroups from '../pages/Creategroups'
 import Dashboard from '../pages/Dashboard'
 import ForgotPassword from '../pages/Forgot-password'
 import GroupPage from '../pages/GroupPage'
 import BookingCar from '../pages/GroupPage/pages/BookingCar'
+import CheckInResult from '../pages/GroupPage/pages/CheckInResult'
+import CheckQR from '../pages/GroupPage/pages/CheckQR'
 import CoOwnershipPercentage from '../pages/GroupPage/pages/Co-ownershipPercentage/CoOwnershipPercentage'
 import CreateContract from '../pages/GroupPage/pages/CreateContract'
 import DashboardGP from '../pages/GroupPage/pages/DashboardGP'
+import FeedBackAdmin from '../pages/GroupPage/pages/FeedbackAdminGroupCheck'
+import FundOwnership from '../pages/GroupPage/pages/FundOwnership'
+import GroupExpense from '../pages/GroupPage/pages/GroupExpense'
 import MemberGroup from '../pages/GroupPage/pages/MemberGroup'
+import MyBooking from '../pages/GroupPage/pages/MyBooking'
 import OwnershipRatio from '../pages/GroupPage/pages/OwnershipRatio'
 import PaymentDeposit from '../pages/GroupPage/pages/PaymentDeposit'
+import PaymentStatus from '../pages/GroupPage/pages/PaymentStatus'
+import PendingCheckout from '../pages/GroupPage/pages/PendingCheckout'
+import Voting from '../pages/GroupPage/pages/Voting'
 import Home from '../pages/Home'
 import IssueReport from '../pages/IssueReport'
 import Learnmore from '../pages/Learnmore'
 import Login from '../pages/Login'
 import MyAccount from '../pages/MyAccount'
 import NotFound from '../pages/NotFound'
+import PaymentHistory from '../pages/PaymentHistory'
 import Register from '../pages/Register'
 import ResetPassword from '../pages/ResetPassword'
 import OTPInput from '../pages/UI-OTP'
 import UploadLicense from '../pages/UploadLicense'
 import Viewgroups from '../pages/Viewgroups'
 import RoleCheck from './CheckRole/CheckRole'
-import RejectedRoute from './PrivateRouters/RejectedRoute'
 import ProtectedRoute from './PrivateRouters/ProtectedRoute'
-import PaymentStatus from '../pages/GroupPage/pages/PaymentStatus'
-import MyBooking from '../pages/GroupPage/pages/MyBooking'
-import CheckIn from '../pages/GroupPage/pages/CheckIn'
-import CheckBooking from '../pages/AdminDashboard/pages/CheckBooking'
-import BookingQr from '../pages/AdminDashboard/pages/BookingQr'
-import CheckInResult from '../pages/GroupPage/pages/CheckInResult'
-import CheckVehicleReport from '../pages/AdminDashboard/pages/CheckVehicleReport'
-import CheckOut from '../pages/GroupPage/pages/CheckOut'
-import Voting from '../pages/GroupPage/pages/Voting'
-import PendingCheckout from '../pages/GroupPage/pages/PendingCheckout'
-import FundOwnership from '../pages/GroupPage/pages/FundOwnership'
-import EditContract from '../pages/AdminDashboard/pages/EditContract'
-import FeedbackCoOwner from '../pages/AdminDashboard/pages/EditContract/FeedbackCo-Owner'
-import ModalEditContract from '../pages/AdminDashboard/pages/EditContract/ModalEditContract/ModalEditContract'
-import PaymentHistory from '../pages/PaymentHistory'
-import GroupExpense from '../pages/GroupPage/pages/GroupExpense'
-import MaintenanceList from '../pages/AdminDashboard/pages/Maintenance'
-import FeedBackAdmin from '../pages/GroupPage/pages/FeedbackAdminGroupCheck'
+import RejectedRoute from './PrivateRouters/RejectedRoute'
+import CheckOutResult from '../pages/GroupPage/pages/CheckOutResult'
+import CheckQRFail from '../pages/GroupPage/pages/CheckQRFail/CheckQRFail'
 
 function Routers() {
   const routers = createBrowserRouter([
@@ -112,11 +113,10 @@ function Routers() {
                     { path: path.depositHistory, element: <PaymentStatus /> },
                     { path: path.booking, element: <BookingCar /> },
                     { path: path.mybooking, element: <MyBooking /> },
-                    { path: path.checkIn, element: <CheckIn /> },
+                    { path: path.checkQR, element: <CheckQR /> },
                     { path: path.checkInResult, element: <CheckInResult /> },
-                    { path: path.checkInResultFail, element: <CheckInResult /> },
-                    { path: path.checkOutResultFail, element: <CheckOut /> },
-                    { path: path.checkOutResult, element: <CheckOut /> },
+                    { path: path.checkQRFail, element: <CheckQRFail /> },
+                    { path: path.checkOutResult, element: <CheckOutResult /> },
                     { path: path.voting, element: <Voting /> },
                     { path: path.pendingCheckout, element: <PendingCheckout /> },
                     { path: path.fundOwnership, element: <FundOwnership /> },

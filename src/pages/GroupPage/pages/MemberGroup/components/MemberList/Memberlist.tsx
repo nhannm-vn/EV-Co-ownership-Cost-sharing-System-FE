@@ -92,7 +92,7 @@ export default function Memberlist({ members, amount, groupId, currentUserRole, 
 
                 {/* Nút xóa thành viên */}
                 {/* nếu không phải  admin và hiện tại là member và hợp đông chưa kí thì hiện nút xóa */}
-                {member.groupRole !== 'ADMIN' && currentUserRole !== 'MEMBER' && contractStatus === null && (
+                {member?.groupRole === 'MEMBER' && currentUserRole === 'ADMIN' && !contractStatus && (
                   <button
                     onClick={() => handleOpenModal(member.userId!, member.userName || 'Member')}
                     className='ml-6 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 bg-gradient-to-r from-red-500/20 to-pink-500/20 hover:from-red-500/30 hover:to-pink-500/30 text-red-200 hover:text-white border-2 border-red-400/40 hover:border-red-300/60 shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] transform hover:scale-105'
