@@ -93,11 +93,11 @@ export default function CheckIn() {
       const cameraError = error as CameraError
 
       if (cameraError.name === 'NotAllowedError') {
-        toast.error('Bạn đã từ chối quyền truy cập camera')
+        toast.error('You have denied camera access')
       } else if (cameraError.name === 'NotFoundError') {
-        toast.error('Không tìm thấy camera trên thiết bị')
+        toast.error('Camera not found on device')
       } else if (cameraError.name === 'NotReadableError') {
-        toast.error('Camera đang được sử dụng bởi ứng dụng khác')
+        toast.error('Camera is being used by another app')
       } else {
         toast.error(`Lỗi: ${cameraError.message}`)
       }
@@ -162,7 +162,7 @@ export default function CheckIn() {
         console.log(' QR Code:', code.data)
         QRVerify.mutate(code.data)
       } else {
-        toast.error('Không tìm thấy QR code trong ảnh')
+        toast.error('QR code not found in image')
       }
       // giải phóng URL tạm thời để tránh rò rỉ bộ nhớ
       URL.revokeObjectURL(imageUrl)
@@ -170,7 +170,7 @@ export default function CheckIn() {
 
     img.onerror = () => {
       // nếu lỗi thông báo không thể load ảnh
-      toast.error('Không thể load ảnh')
+      toast.error('Unable to load image')
       URL.revokeObjectURL(imageUrl)
     }
 
@@ -186,7 +186,7 @@ export default function CheckIn() {
   return (
     <div className='w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-8 md:p-10 space-y-6'>
       <header className='flex items-center space-x-4 mb-6'>
-        <h1 className='text-2xl font-bold text-gray-800 flex-grow'>Quét mã QR Check-in / Check-out</h1>
+        <h1 className='text-2xl font-bold text-gray-800 flex-grow'> Scan QR code: Check-in/Check-out </h1>
         <div className='p-2 rounded-md bg-indigo-50'>
           <QrcodeOutlined className='text-xl text-indigo-600' />
         </div>
@@ -198,7 +198,7 @@ export default function CheckIn() {
             <div className='p-4 rounded-full bg-gray-800 mb-4'>
               <CameraOutlined className='text-6xl text-gray-400' />
             </div>
-            <p className='text-gray-400 text-base leading-relaxed'>Bấm "Bắt đầu Quét" để mở camera</p>
+            <p className='text-gray-400 text-base leading-relaxed'>Click "Start Scan" to open the camera</p>
           </div>
         )}
 
@@ -224,7 +224,7 @@ export default function CheckIn() {
           className='w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:bg-indigo-700 hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center space-x-2 text-lg'
         >
           <QrcodeOutlined className='text-xl' />
-          <span>Bắt đầu Quét QR</span>
+          <span>Start Scanning QR</span>
         </button>
       ) : (
         <>
@@ -233,7 +233,7 @@ export default function CheckIn() {
             className='w-full bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:bg-gray-700 hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center space-x-2 text-lg'
           >
             <StopOutlined className='text-xl' />
-            <span>Tắt Camera</span>
+            <span>Turn off Camera</span>
           </button>
 
           <div className='relative'>
@@ -245,7 +245,7 @@ export default function CheckIn() {
               className='w-full bg-green-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center space-x-2 text-lg'
             >
               <PictureOutlined className='text-xl' />
-              <span>Tải Ảnh QR Lên</span>
+              <span>Upload QR Image</span>
             </button>
           </div>
         </>

@@ -13,7 +13,7 @@ export interface Slot {
   date: string
   time: string
   bookedBy: string | null
-  type: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | 'AWAITING_REVIEW' | ''
+  type: 'AVAILABLE' | 'MAINTENANCE' | 'BOOKED_SELF' | 'BOOKED_OTHER' | 'LOCKED' | 'AWAITING_REVIEW' | '' | 'COMPLETED'
   vehicleId: number
 
   vehicleStatus: 'Good' | 'Under Maintenance' | 'Has Issues' | ''
@@ -111,7 +111,8 @@ export default function BookingSlotCell({
     <>
       <div className={`py-6 px-4 rounded-2xl ${getSlotStyle(type)}`} onClick={confirmBooking}>
         <Tooltip title={getTooltip({ type, bookedBy })} placement='top'>
-          <div className='flex items-center justify-center min-h-[80px]'>
+          {/* Thêm min-h và flex để căn giữa */}
+          <div className='flex items-center justify-center h-[120px]'>
             {type === 'AVAILABLE' && (
               <div className='flex flex-col items-center gap-2'>
                 <div className='bg-gradient-to-br from-cyan-500 to-blue-500 p-2 rounded-xl shadow-lg'>
@@ -145,12 +146,12 @@ export default function BookingSlotCell({
                 <div className='text-xs font-bold'>Đã khóa</div>
               </div>
             )}
-            {type === 'AWAITING_REVIEW' && (
-              <div className='flex flex-col items-center gap-2  border-green-300'>
-                <div className='bg-white/20 backdrop-blur-sm p-2 rounded-xl'>
-                  <UserOutlined style={{ fontSize: '20px' }} />
+            {type === 'COMPLETED' && (
+              <div className='flex flex-col items-center gap-2'>
+                <div className='bg-gradient-to-br from-green-100 to-teal-100 p-2 rounded-xl shadow-md border border-green-300'>
+                  <UserOutlined style={{ fontSize: '20px', color: '#22c55e' }} />
                 </div>
-                <div className='text-xs font-bold'>Đang sử dụng</div>
+                <div className='text-xs font-bold text-green-700 tracking-wide drop-shadow-md'>Completed Booking</div>
               </div>
             )}
           </div>

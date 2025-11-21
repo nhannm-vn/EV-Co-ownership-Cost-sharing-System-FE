@@ -41,12 +41,12 @@ export default function CreateGroups() {
     mutationFn: (body: FormData) => groupApi.CreateGroup(body),
     onSuccess: (response) => {
       console.log('Create group successful:', response?.data)
-      toast.success('đăng kí tạo group thành công!')
+      toast.success('Group registration successful!')
       const fullPath = `${path.dashBoard}/${path.viewGroups}`
       navigate(fullPath)
     },
     onError: (error) => {
-      toast.error('đăng kí tạo group thất bại. Vui lòng thử lại!')
+      toast.error('Group creation failed. Please try again!')
       console.error('Create group failed:', error)
     }
   })
@@ -129,14 +129,14 @@ export default function CreateGroups() {
               {/* Group Info */}
               <div className='grid grid-cols-2 gap-4'>
                 <TextInput
-                  label='Tên Group'
-                  placeholder='Nhập tên group'
+                  label='Group name'
+                  placeholder='Enter group name'
                   register={register('groupName')}
                   error={errors.groupName?.message}
                 />
                 <PriceInput
-                  label='Nhập giá trị tài sản'
-                  placeholder='Nhập giá tiền (VNĐ)'
+                  label='Enter asset value'
+                  placeholder='Enter price (VND)'
                   register={register('assetValue')}
                   error={errors.assetValue?.message}
                   formatNumber={true}
@@ -146,13 +146,13 @@ export default function CreateGroups() {
               {/* License Info */}
               <div className='grid grid-cols-2 gap-4'>
                 <TextInput
-                  label='Biển số xe'
+                  label='License plate number'
                   placeholder='29A-123.45'
                   register={register('licensePlate')}
                   error={errors.licensePlate?.message}
                 />
                 <TextInput
-                  label='Số khung xe'
+                  label='Chassis number'
                   placeholder='RLHRE7EXXXXXXXX'
                   register={register('chassisNumber')}
                   error={errors.chassisNumber?.message}
@@ -162,7 +162,7 @@ export default function CreateGroups() {
               {/* Image Uploads */}
               <div className='grid grid-cols-2 gap-4'>
                 <FileUpload
-                  label='Hình ảnh xe'
+                  label='Vehicle image'
                   file={vehicleImage || null}
                   register={register('vehicleImage')}
                   onRemove={(file) => {
@@ -178,7 +178,7 @@ export default function CreateGroups() {
                   error={errors.vehicleImage?.message}
                 />
                 <FileUpload
-                  label='Hình cà vẹt xe'
+                  label='Car parrot shape'
                   file={registrationImage || null}
                   register={register('registrationImage')}
                   onRemove={(file) => {
@@ -197,16 +197,16 @@ export default function CreateGroups() {
 
               {/* Member Count */}
               <NumberInput
-                label='Số thành viên'
-                placeholder='Nhập số thành viên'
+                label='Number of members'
+                placeholder='Enter member number'
                 register={register('maxMembers')}
                 error={errors.maxMembers?.message}
               />
 
               {/* Description */}
               <TextAreaInput
-                label='Mô tả'
-                placeholder='Nhập mô tả về group (tùy chọn)'
+                label='Describe'
+                placeholder='Enter a description of the group (optional)'
                 register={register('description')}
                 error={errors.description?.message}
               />
@@ -223,7 +223,7 @@ export default function CreateGroups() {
                 transition={{ type: 'spring', stiffness: 300 }}
                 className='w-full bg-gradient-to-r from-cyan-400 to-sky-500 text-white py-3.5 rounded-xl font-bold text-lg tracking-wide shadow-[0_8px_32px_rgba(6,182,212,0.6),0_0_20px_rgba(6,182,212,0.4)] border-[2px] border-white/40 hover:border-white/60 transition-all duration-400 disabled:opacity-50 disabled:cursor-not-allowed'
               >
-                {groupMutation.isPending ? 'Đang xử lý...' : 'Tạo Group'}
+                {groupMutation.isPending ? 'Pending...' : 'Create Group'}
               </motion.button>
             </motion.form>
 

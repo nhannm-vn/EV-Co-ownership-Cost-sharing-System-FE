@@ -9,27 +9,27 @@ import Skeleton from '../../../../components/Skeleton'
 import EmptyVoting from './components/EmptyVoting'
 
 export default function Voting() {
-  //state đóng mở modal create voting
+  // State for opening/closing create voting modal
   const [showModal, setShowModal] = useState(false)
-  //lấy groupId từ localstorage
+  // Get groupId from localstorage
   const groupId = getGroupIdFromLS()
   const queryClient = useQueryClient()
 
-  //useQuery dùng để call api lấy all voting
+  // useQuery to fetch all votings
   const { data: votes = [], isLoading } = useQuery<Voting[]>({
     queryKey: ['votings', groupId],
     queryFn: async () => (await userApi.getAllVoting(Number(groupId))).data
   })
 
-  //dùng thằng này để thực hiện call api tạo các voting
+  // useMutation to create voting
   const createMutation = useMutation({
     mutationFn: (payload: CreateVotingPayload) => userApi.createVoting(payload),
     onSuccess: async () => {
       await queryClient.refetchQueries({ queryKey: ['votings', groupId] })
       setShowModal(false)
-      toast.success('Tạo cuộc bỏ phiếu thành công!')
+      toast.success('Voting created successfully!')
     },
-    onError: (error: any) => toast.error(error.response?.data?.message || 'Không thể tạo voting')
+    onError: (error: any) => toast.error(error.response?.data?.message || 'Unable to create voting')
   })
 
   if (isLoading) return <Skeleton />
@@ -43,18 +43,18 @@ export default function Voting() {
             <h1 className='text-4xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent'>
               Voting
             </h1>
-            <p className='text-gray-500 mt-2'>{votes.length} cuộc bỏ phiếu</p>
+            <p className='text-gray-500 mt-2'>{votes.length} voting session(s)</p>
           </div>
           <button
             onClick={() => setShowModal(true)}
             className='px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all font-medium'
           >
-            + Tạo mới
+            + Create new
           </button>
         </div>
 
         {/* Content */}
-        {/* nếu là chưa có vote nào thì hiển thị thằng này ra */}
+        {/* If there are no votes, show this */}
         {votes.length === 0 ? (
           <EmptyVoting setShowModal={setShowModal} />
         ) : (
@@ -67,14 +67,14 @@ export default function Voting() {
           </div>
         )}
       </div>
-      {/* Nếu mà modal true thì mở thằng này ra  */}
+      {/* If modal is true, open this */}
       {showModal && (
         <CreateModal
-          // thằng này tiến hành đóng mở modal
+          // This toggles modal open/close
           onClose={() => setShowModal(false)}
-          // thằng này cho phép tạo voting
+          // This allows creating voting
           onCreate={(data) => createMutation.mutate(data)}
-          // thằng này coi trạng thái tạo đang là gì
+          // Show loading state
           isLoading={createMutation.isPending}
           groupId={Number(groupId)}
         />
@@ -96,10 +96,10 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
   const voteMutation = useMutation({
     mutationFn: (payload: VotingSubmitPayload) => userApi.voting(payload),
     onSuccess: () => {
-      toast.success('Bỏ phiếu thành công!')
+      toast.success('Vote submitted successfully!')
       setTimeout(() => window.location.reload(), 500)
     },
-    onError: (error: any) => toast.error(error.response?.data?.message || 'Không thể bỏ phiếu')
+    onError: (error: any) => toast.error(error.response?.data?.message || 'Unable to submit vote')
   })
 
   const handleVote = () => {
@@ -119,13 +119,13 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
               isActive ? 'bg-teal-100 text-teal-700' : 'bg-gray-200 text-gray-600'
             }`}
           >
-            {isActive ? vote.timeRemaining : 'Đã đóng'}
+            {isActive ? vote.timeRemaining : 'Closed'}
           </span>
         </div>
         <p className='text-sm text-gray-600 line-clamp-2 mb-3'>{vote.description}</p>
         <div className='flex items-center gap-2 text-xs text-gray-500'>
           <span className='font-medium'>
-            {vote.totalVotes}/{vote.totalMembers} đã bỏ phiếu
+            {vote.totalVotes}/{vote.totalMembers} voted
           </span>
           <span>•</span>
           <span>{vote.createdByName}</span>
@@ -156,7 +156,7 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
               )}
               <div className='relative flex items-center justify-between gap-2 w-full'>
                 <span className='font-medium text-gray-900 flex-1'>{opt.text}</span>
-                {vote.hasVoted && <span className='text-sm font-bold text-teal-600'>{opt.votes} phiếu</span>}
+                {vote.hasVoted && <span className='text-sm font-bold text-teal-600'>{opt.votes} votes</span>}
               </div>
             </button>
           )
@@ -168,8 +168,8 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
         {vote.estimatedAmount && vote.estimatedAmount > 0 && (
           <div className='mb-3'>
             <span className='text-xs text-gray-600'>
-              Dự kiến:{' '}
-              <span className='font-semibold text-teal-600'>{vote.estimatedAmount.toLocaleString('vi-VN')}đ</span>
+              Estimated:{' '}
+              <span className='font-semibold text-teal-600'>{vote.estimatedAmount.toLocaleString('en-US')}$</span>
             </span>
           </div>
         )}
@@ -180,15 +180,15 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
             disabled={!selected || voteMutation.isPending}
             className='w-full px-5 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium rounded-lg hover:shadow-md disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all'
           >
-            {voteMutation.isPending ? 'Đang bỏ phiếu...' : 'Bỏ phiếu'}
+            {voteMutation.isPending ? 'Voting...' : 'Submit vote'}
           </button>
         ) : vote.hasVoted ? (
           <div className='w-full px-4 py-2.5 bg-green-50 text-green-700 text-sm font-semibold rounded-lg text-center'>
-            ✓ Đã bỏ phiếu
+            ✓ Voted
           </div>
         ) : (
           <div className='w-full px-4 py-2.5 bg-gray-100 text-gray-600 text-sm font-medium rounded-lg text-center'>
-            Đã kết thúc
+            Ended
           </div>
         )}
       </div>
@@ -213,11 +213,11 @@ function CreateModal({
   const [options, setOptions] = useState(['', ''])
 
   const handleSubmit = () => {
-    if (!title.trim()) return toast.warning('Vui lòng nhập tiêu đề')
+    if (!title.trim()) return toast.warning('Please enter a title')
 
     const validOptions = options.filter((o) => o.trim())
-    if (validOptions.length < 2) return toast.warning('Vui lòng nhập ít nhất 2 lựa chọn')
-    if (!deadline) return toast.warning('Vui lòng chọn thời gian kết thúc')
+    if (validOptions.length < 2) return toast.warning('Please enter at least 2 options')
+    if (!deadline) return toast.warning('Please select an end time')
 
     onCreate({
       groupId,
@@ -239,18 +239,18 @@ function CreateModal({
         className='bg-white rounded-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto shadow-2xl'
       >
         <h2 className='text-2xl font-bold mb-6 bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent'>
-          Tạo cuộc bỏ phiếu mới
+          Create new voting session
         </h2>
 
         <div className='space-y-4'>
           {/* Title */}
           <div>
-            <label className='block text-sm font-semibold mb-2'>Tiêu đề *</label>
+            <label className='block text-sm font-semibold mb-2'>Title *</label>
             <input
               type='text'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder='Nhập tiêu đề'
+              placeholder='Enter title'
               maxLength={100}
               className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 outline-none transition-colors'
             />
@@ -258,11 +258,11 @@ function CreateModal({
 
           {/* Description */}
           <div>
-            <label className='block text-sm font-semibold mb-2'>Mô tả</label>
+            <label className='block text-sm font-semibold mb-2'>Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder='Thêm mô tả...'
+              placeholder='Add a description...'
               rows={2}
               maxLength={200}
               className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 outline-none resize-none transition-colors'
@@ -271,7 +271,7 @@ function CreateModal({
 
           {/* Deadline */}
           <div>
-            <label className='block text-sm font-semibold mb-2'>Thời gian kết thúc *</label>
+            <label className='block text-sm font-semibold mb-2'>End time *</label>
             <input
               type='datetime-local'
               value={deadline}
@@ -283,7 +283,7 @@ function CreateModal({
 
           {/* Options */}
           <div>
-            <label className='block text-sm font-semibold mb-2'>Lựa chọn * (tối thiểu 2)</label>
+            <label className='block text-sm font-semibold mb-2'>Options * (at least 2)</label>
             <div className='space-y-2'>
               {options.map((opt, i) => (
                 <div key={i} className='flex gap-2'>
@@ -295,7 +295,7 @@ function CreateModal({
                       newOpts[i] = e.target.value
                       setOptions(newOpts)
                     }}
-                    placeholder={`Lựa chọn ${i + 1}`}
+                    placeholder={`Option ${i + 1}`}
                     maxLength={50}
                     className='flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 outline-none transition-colors'
                   />
@@ -315,7 +315,7 @@ function CreateModal({
                 onClick={() => setOptions([...options, ''])}
                 className='mt-3 text-teal-600 text-sm font-semibold hover:underline'
               >
-                + Thêm lựa chọn
+                + Add option
               </button>
             )}
           </div>
@@ -328,14 +328,14 @@ function CreateModal({
             disabled={isLoading}
             className='flex-1 px-5 py-3 border-2 border-gray-200 rounded-xl font-semibold hover:bg-gray-50 disabled:opacity-50 transition-colors'
           >
-            Hủy
+            Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={isLoading}
             className='flex-1 px-5 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-semibold hover:shadow-lg disabled:from-gray-300 disabled:to-gray-300 transition-all'
           >
-            {isLoading ? 'Đang tạo...' : 'Tạo'}
+            {isLoading ? 'Creating...' : 'Create'}
           </button>
         </div>
       </div>
