@@ -1,4 +1,4 @@
-import type { Maintenance, VehicleCheck } from '../types/api/technician.type'
+import type { MaintenanceReport, MaintenanceRequest, VehicleCheck } from '../types/api/technician.type'
 import http from '../utils/http'
 
 const technicianApi = {
@@ -10,17 +10,24 @@ const technicianApi = {
       status: status
     })
   },
-  //mantainance report
-  getAllMantainance() {
-    return http.get<Maintenance[]>('api/after-checkout/maintenances/my-requests')
+  //lấy tất cả user report
+  getAllUserReport() {
+    return http.get<MaintenanceReport[]>('api/after-checkout/maintenances/rejected-users')
   },
   //Complete Mantainance: chỉ complete khi mà co-owner đã đóng tiền(funded)
   completeMantainance(maintainanceId: string) {
     return http.put(`api/after-checkout/maintenances/${maintainanceId}/complete`)
   },
   //Create Mantainance
-  createMantainance(data: { description: string; cost: number; estimatedDurationDays: number }, vehicleId: number) {
-    return http.post<Maintenance>(`api/after-checkout/maintenances/vehicles/${vehicleId}`, data)
+  createMantainance(
+    data: { userId: number; description: string; cost: number; estimatedDurationDays: number },
+    vehicleId: number
+  ) {
+    return http.post<MaintenanceRequest>(`api/after-checkout/maintenances/vehicles/${vehicleId}`, data)
+  },
+  //get all maintance
+  getAllMaintance() {
+    return http.get<MaintenanceRequest[]>('api/after-checkout/maintenances/my-requests')
   }
 }
 
