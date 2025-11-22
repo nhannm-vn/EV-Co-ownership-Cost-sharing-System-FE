@@ -319,7 +319,7 @@ const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose }) =>
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm'>
       <div className='bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all'>
-        <div className='px-6 py-5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-t-2xl'>
+        <div className='px-6 py-5 bg-gradient-to-r from-blue-500 to-blue-500 rounded-t-2xl'>
           <h3 className='text-2xl font-bold text-white flex items-center gap-2'>Contribute to Shared Fund</h3>
         </div>
 
@@ -333,7 +333,7 @@ const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose }) =>
               inputMode='numeric'
               value={amount}
               onChange={handleAmountChange}
-              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all text-lg font-semibold'
+              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-lg font-semibold'
               placeholder='Enter amount'
               required
             />
@@ -346,7 +346,7 @@ const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose }) =>
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all resize-none'
+              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all resize-none'
               rows={3}
               placeholder='Add a note...'
             />
@@ -362,7 +362,7 @@ const ContributeModal: React.FC<ContributeModalProps> = ({ isOpen, onClose }) =>
             </button>
             <button
               type='submit'
-              className='flex-1 py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105'
+              className='flex-1 py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105'
             >
               Confirm
             </button>

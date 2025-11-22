@@ -40,14 +40,14 @@ export default function Voting() {
         {/* Header */}
         <div className='flex items-center justify-between mb-8 flex-shrink-0'>
           <div>
-            <h1 className='text-4xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent'>
+            <h1 className='text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent'>
               Voting
             </h1>
             <p className='text-gray-500 mt-2'>{votes.length} voting session(s)</p>
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className='px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all font-medium'
+            className='px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transition-all font-medium'
           >
             + Create new
           </button>
@@ -116,7 +116,7 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
           <h3 className='font-bold text-gray-900 flex-1 line-clamp-2 leading-snug'>{vote.title}</h3>
           <span
             className={`px-3 py-1 text-xs font-semibold rounded-full whitespace-nowrap ${
-              isActive ? 'bg-teal-100 text-teal-700' : 'bg-gray-200 text-gray-600'
+              isActive ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-600'
             }`}
           >
             {isActive ? vote.timeRemaining : 'Closed'}
@@ -145,18 +145,18 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
               onClick={() => canClick && setSelected(opt.id)}
               disabled={!canClick}
               className={`w-full min-h-[52px] p-3.5 rounded-xl text-sm text-left relative transition-all flex items-center ${
-                isSelected ? 'ring-2 ring-teal-500 bg-white shadow-md' : 'bg-white hover:bg-gray-50 hover:shadow-sm'
+                isSelected ? 'ring-2 ring-blue-500 bg-white shadow-md' : 'bg-white hover:bg-gray-50 hover:shadow-sm'
               } ${canClick ? 'cursor-pointer' : 'cursor-default'} ${voteMutation.isPending ? 'opacity-50' : ''}`}
             >
               {vote.hasVoted && (
                 <div
-                  className='absolute inset-0 bg-gradient-to-r from-teal-100/40 to-transparent rounded-xl transition-all duration-500'
+                  className='absolute inset-0 bg-gradient-to-r from-blue-100/40 to-transparent rounded-xl transition-all duration-500'
                   style={{ width: `${percent}%` }}
                 />
               )}
               <div className='relative flex items-center justify-between gap-2 w-full'>
                 <span className='font-medium text-gray-900 flex-1'>{opt.text}</span>
-                {vote.hasVoted && <span className='text-sm font-bold text-teal-600'>{opt.votes} votes</span>}
+                {vote.hasVoted && <span className='text-sm font-bold text-blue-600'>{opt.votes} votes</span>}
               </div>
             </button>
           )
@@ -169,7 +169,7 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
           <div className='mb-3'>
             <span className='text-xs text-gray-600'>
               Estimated:{' '}
-              <span className='font-semibold text-teal-600'>{vote.estimatedAmount.toLocaleString('en-US')}$</span>
+              <span className='font-semibold text-blue-600'>{vote.estimatedAmount.toLocaleString('en-US')}$</span>
             </span>
           </div>
         )}
@@ -178,12 +178,12 @@ function VoteCard({ vote, groupId }: { vote: Voting; groupId: number }) {
           <button
             onClick={handleVote}
             disabled={!selected || voteMutation.isPending}
-            className='w-full px-5 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium rounded-lg hover:shadow-md disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all'
+            className='w-full px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-lg hover:shadow-md disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all'
           >
             {voteMutation.isPending ? 'Voting...' : 'Submit vote'}
           </button>
         ) : vote.hasVoted ? (
-          <div className='w-full px-4 py-2.5 bg-green-50 text-green-700 text-sm font-semibold rounded-lg text-center'>
+          <div className='w-full px-4 py-2.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-lg text-center'>
             ✓ Voted
           </div>
         ) : (
@@ -238,7 +238,7 @@ function CreateModal({
         onClick={(e) => e.stopPropagation()}
         className='bg-white rounded-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto shadow-2xl'
       >
-        <h2 className='text-2xl font-bold mb-6 bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent'>
+        <h2 className='text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent'>
           Create new voting session
         </h2>
 
@@ -252,7 +252,7 @@ function CreateModal({
               onChange={(e) => setTitle(e.target.value)}
               placeholder='Enter title'
               maxLength={100}
-              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 outline-none transition-colors'
+              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 outline-none transition-colors'
             />
           </div>
 
@@ -265,7 +265,7 @@ function CreateModal({
               placeholder='Add a description...'
               rows={2}
               maxLength={200}
-              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 outline-none resize-none transition-colors'
+              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 outline-none resize-none transition-colors'
             />
           </div>
 
@@ -277,7 +277,7 @@ function CreateModal({
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               min={new Date().toISOString().slice(0, 16)}
-              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 outline-none transition-colors'
+              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 outline-none transition-colors'
             />
           </div>
 
@@ -297,7 +297,7 @@ function CreateModal({
                     }}
                     placeholder={`Option ${i + 1}`}
                     maxLength={50}
-                    className='flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 outline-none transition-colors'
+                    className='flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 outline-none transition-colors'
                   />
                   {options.length > 2 && (
                     <button
@@ -313,7 +313,7 @@ function CreateModal({
             {options.length < 10 && (
               <button
                 onClick={() => setOptions([...options, ''])}
-                className='mt-3 text-teal-600 text-sm font-semibold hover:underline'
+                className='mt-3 text-blue-600 text-sm font-semibold hover:underline'
               >
                 + Add option
               </button>
@@ -333,7 +333,7 @@ function CreateModal({
           <button
             onClick={handleSubmit}
             disabled={isLoading}
-            className='flex-1 px-5 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl font-semibold hover:shadow-lg disabled:from-gray-300 disabled:to-gray-300 transition-all'
+            className='flex-1 px-5 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg disabled:from-gray-300 disabled:to-gray-300 transition-all'
           >
             {isLoading ? 'Creating...' : 'Create'}
           </button>
