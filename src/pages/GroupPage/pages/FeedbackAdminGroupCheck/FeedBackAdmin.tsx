@@ -137,8 +137,8 @@ export default function FeedBackAdmin() {
             </button>
             <div className='border-l border-gray-300 h-6'></div>
             <div>
-              <h1 className='text-2xl font-bold text-gray-900'>Quản Lý Feedback Hợp Đồng - {groupName}</h1>
-              <p className='text-sm text-gray-600'>Xem và xử lý các phản hồi từ co-owner về hợp đồng</p>
+              <h1 className='text-2xl font-bold text-gray-900'>Manage Contract Feedback - {groupName}</h1>
+              <p className='text-sm text-gray-600'>View and manage feedback from co-owners about the contract</p>
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@ export default function FeedBackAdmin() {
               {!selectedUserEmail ? (
                 <>
                   {/* User List */}
-                  <h2 className='text-lg font-bold text-gray-900 mb-4'>Danh sách người dùng</h2>
+                  <h2 className='text-lg font-bold text-gray-900 mb-4'>User List</h2>
                   <div
                     className='max-h-[calc(100vh-380px)] overflow-y-auto space-y-3 pr-2 scroll-smooth
                     [&::-webkit-scrollbar]:w-2
@@ -194,25 +194,25 @@ export default function FeedBackAdmin() {
                             {user.approveAgree > 0 && (
                               <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200'>
                                 <ClockCircleOutlined />
-                                {user.approveAgree} Đã xác nhận hợp đồng
+                                {user.approveAgree} Contract Confirmed
                               </span>
                             )}
                             {user.pendingCount > 0 && (
                               <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200'>
                                 <ClockCircleOutlined />
-                                {user.pendingCount} chờ xử lý
+                                {user.pendingCount} Pending
                               </span>
                             )}
                             {user.approvedCount > 0 && (
                               <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-800 border border-green-200'>
                                 <CheckCircleOutlined />
-                                {user.approvedCount} đã chấp nhận
+                                {user.approvedCount} Accepted
                               </span>
                             )}
                             {user.rejectedCount > 0 && (
                               <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-100 text-red-800 border border-red-200'>
                                 <CloseCircleOutlined />
-                                {user.rejectedCount} đã từ chối
+                                {user.rejectedCount} Rejected
                               </span>
                             )}
                           </div>
@@ -230,10 +230,10 @@ export default function FeedBackAdmin() {
                       className='flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors'
                     >
                       <LeftOutlined />
-                      Quay lại
+                      Go back
                     </button>
                     <h2 className='text-lg font-bold text-gray-900'>
-                      Feedback của {selectedUserFeedbacks[0]?.fullName}
+                      Feedback from {selectedUserFeedbacks[0]?.fullName}
                     </h2>
                   </div>
                   <div
@@ -270,26 +270,26 @@ export default function FeedBackAdmin() {
                               {feedback?.reactionType === 'AGREE' && (
                                 <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200'>
                                   <ClockCircleOutlined className='text-sm' />
-                                  Đã xác nhận kí hợp đồng
+                                  Contract confirmed
                                 </span>
                               )}
 
                               {feedback?.status === 'PENDING' && feedback?.reactionType === 'DISAGREE' && (
                                 <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200'>
                                   <ClockCircleOutlined className='text-sm' />
-                                  Chờ xử lý
+                                  Pending
                                 </span>
                               )}
                               {feedback?.status === 'APPROVED' && feedback?.reactionType === 'DISAGREE' && (
                                 <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200'>
                                   <CheckCircleOutlined className='text-sm' />
-                                  Đã chấp nhận
+                                  Accepted
                                 </span>
                               )}
                               {feedback?.status === 'REJECTED' && feedback?.reactionType === 'DISAGREE' && (
                                 <span className='inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200'>
                                   <CloseCircleOutlined className='text-sm' />
-                                  Đã từ chối
+                                  Rejected
                                 </span>
                               )}
                             </div>
@@ -316,7 +316,7 @@ export default function FeedBackAdmin() {
             {selectedFeedback ? (
               <div className='bg-white rounded-lg border border-gray-200 shadow-sm sticky top-24'>
                 <div className='p-6 border-b border-gray-200'>
-                  <h2 className='text-lg font-bold text-gray-900'>Chi tiết Feedback</h2>
+                  <h2 className='text-lg font-bold text-gray-900'>Feedback Details</h2>
                 </div>
 
                 <div className='p-6'>
@@ -333,19 +333,19 @@ export default function FeedBackAdmin() {
                     </div>
                     <div className='flex items-center gap-2 text-xs text-gray-500'>
                       <ClockCircleOutlined />
-                      <span>Gửi lúc: {new Date(selectedFeedback?.submittedAt).toLocaleString('vi-VN')}</span>
+                      <span>Sent at: {new Date(selectedFeedback?.submittedAt).toLocaleString('en-US')}</span>
                     </div>
                   </div>
 
                   {/* Content */}
                   <div className='mb-6 pb-6 border-b border-gray-100'>
-                    <h3 className='font-semibold text-gray-900 mb-3'>Lý do phản hồi</h3>
+                    <h3 className='font-semibold text-gray-900 mb-3'>Reason for Feedback</h3>
                     <p className='text-sm text-gray-700 leading-relaxed'>{selectedFeedback?.reason}</p>
                   </div>
 
                   {/* Admin Note - Read Only */}
                   <div className='mb-6'>
-                    <label className='block text-sm font-semibold text-gray-900 mb-2'>Ghi chú của Admin</label>
+                    <label className='block text-sm font-semibold text-gray-900 mb-2'>Admin Note</label>
                     <textarea
                       value={adminNote}
                       onChange={(e) => setAdminNote(e.target.value)}
@@ -393,19 +393,19 @@ export default function FeedBackAdmin() {
                           {selectedFeedback?.status === 'APPROVED' && selectedFeedback?.reactionType === 'DISAGREE' && (
                             <>
                               <CheckCircleOutlined className='text-green-600' />
-                              <span className='text-green-700'>Đã chấp nhận</span>
+                              <span className='text-green-700'>Accepted</span>
                             </>
                           )}
 
                           {selectedFeedback?.status === 'REJECTED' && selectedFeedback?.reactionType === 'DISAGREE' && (
                             <>
                               <CloseCircleOutlined className='text-red-600' />
-                              <span className='text-red-700'>Đã từ chối</span>
+                              <span className='text-red-700'>Rejected</span>
                             </>
                           )}
                         </h3>
                         <div className='text-sm text-gray-700 leading-relaxed bg-white p-3 rounded border border-gray-200'>
-                          {selectedFeedback?.adminNote || 'Không có ghi chú'}
+                          {selectedFeedback?.adminNote || 'No notes available'}
                         </div>
                       </div>
                     )}
@@ -414,7 +414,7 @@ export default function FeedBackAdmin() {
               </div>
             ) : (
               <div className='bg-white rounded-lg border border-gray-200 shadow-sm p-8 text-center'>
-                <p className='text-gray-600'>bấm vào feedback nào để xem chi tiết</p>
+                <p className='text-gray-600'>Click on a feedback to view details</p>
               </div>
             )}
           </div>

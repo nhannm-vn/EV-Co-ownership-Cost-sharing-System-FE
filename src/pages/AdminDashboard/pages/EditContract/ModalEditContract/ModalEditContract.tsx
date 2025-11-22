@@ -81,7 +81,7 @@ export default function ModalEditContract() {
   }
 
   const handleAddTerm = () => {
-    const updated = [...editingTerms, { title: `Điều khoản mới`, content: 'Nội dung điều khoản...' }]
+    const updated = [...editingTerms, { title: `New Term`, content: 'New term content...' }]
     setEditingTerms(reindexTerms(updated))
   }
 
@@ -146,9 +146,9 @@ export default function ModalEditContract() {
               <EditOutlined className='text-blue-500 text-lg' />
             </div>
             <div className='flex-1'>
-              <h3 className='text-lg font-bold text-gray-800 m-0'>Chỉnh sửa hợp đồng</h3>
+              <h3 className='text-lg font-bold text-gray-800 m-0'>Edit Contract</h3>
               <p className='text-sm text-gray-500 m-0'>
-                {`Hợp đồng #${showContractData.data?.data.contractId} - Nhóm: ${showContractData.data?.data.group?.name}`}
+                {`Contract #${showContractData.data?.data.contractId} - Group: ${showContractData.data?.data.group?.name}`}
               </p>
             </div>
             <span className='bg-yellow-100 text-yellow-700 text-xs px-3 py-1 rounded-lg font-semibold'>
@@ -161,25 +161,25 @@ export default function ModalEditContract() {
             {/* THÔNG TIN HỢP ĐỒNG - CHỈ XEM */}
             <div className='mb-6 p-4 bg-gray-50 rounded-xl'>
               <h4 className='font-bold mb-3 text-gray-700 flex items-center gap-2'>
-                Thông tin hợp đồng <span className='text-xs font-normal text-gray-500'>(Chỉ xem)</span>
+                Contract Information <span className='text-xs font-normal text-gray-500'>(View Only)</span>
               </h4>
 
               {/* Vehicle Info Grid */}
               <div className='grid grid-cols-2 gap-4 mb-4'>
                 <div className='bg-white p-3 rounded-lg border border-gray-200'>
-                  <div className='text-xs text-gray-500 mb-1'>Phương tiện</div>
+                  <div className='text-xs text-gray-500 mb-1'>Vehicle</div>
                   {showContractData?.data?.data?.vehicle?.model}
                 </div>
                 <div className='bg-white p-3 rounded-lg border border-gray-200'>
-                  <div className='text-xs text-gray-500 mb-1'>Biển số</div>
+                  <div className='text-xs text-gray-500 mb-1'>License Plate</div>
                   {showContractData?.data?.data?.vehicle?.plate}
                 </div>
                 <div className='bg-white p-3 rounded-lg border border-gray-200'>
-                  <div className='text-xs text-gray-500 mb-1'>Số VIN</div>
+                  <div className='text-xs text-gray-500 mb-1'>VIN Number</div>
                   {showContractData?.data?.data?.vehicle?.vin}
                 </div>
                 <div className='bg-white p-3 rounded-lg border border-gray-200'>
-                  <div className='text-xs text-gray-500 mb-1'>Giá trị xe</div>
+                  <div className='text-xs text-gray-500 mb-1'>Vehicle Price</div>
                   <div className='font-bold text-emerald-600'>
                     {showContractData?.data?.data?.finance?.vehiclePrice?.toLocaleString('vi-VN')} đ
                   </div>
@@ -190,7 +190,7 @@ export default function ModalEditContract() {
               <div className='bg-gradient-to-r from-emerald-50 to-cyan-50 p-3 rounded-lg mb-4 border border-emerald-200'>
                 <div className='grid grid-cols-2 gap-4 text-sm'>
                   <div>
-                    <span className='text-gray-600'>Tiền cọc:</span>
+                    <span className='text-gray-600'>Deposit security:</span>
                     <span className='font-bold text-emerald-700 ml-2'>
                       {showContractData?.data?.data?.finance?.depositAmount?.toLocaleString('vi-VN')} đ
                     </span>
@@ -200,7 +200,7 @@ export default function ModalEditContract() {
 
               {/* Owners List */}
               <div className='mt-4'>
-                <div className='text-sm text-gray-600 mb-2 font-semibold'>Các bên đồng sở hữu</div>
+                <div className='text-sm text-gray-600 mb-2 font-semibold'>Co-owners</div>
                 {showContractData?.data?.data?.owners?.map((owner) => (
                   <div
                     key={owner?.userId}

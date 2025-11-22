@@ -8,7 +8,7 @@ export default function MainContent({ feedBacks }: { feedBacks: FeedbackCoOwnerR
         <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-sm font-medium text-gray-600'>Tổng thành viên gửi feedback</p>
+              <p className='text-sm font-medium text-gray-600'>total member send feedback</p>
               <p className='text-2xl font-bold text-gray-900 mt-1'>{feedBacks?.totalFeedbacks}</p>
             </div>
             <div className='w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center'>
@@ -20,7 +20,7 @@ export default function MainContent({ feedBacks }: { feedBacks: FeedbackCoOwnerR
         <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-sm font-medium text-gray-600'>Tổng feedback</p>
+              <p className='text-sm font-medium text-gray-600'>total feedback</p>
               <p className='text-2xl font-bold text-gray-900 mt-1'>{feedBacks?.totalFeedbacks}</p>
             </div>
             <div className='w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center'>
@@ -32,7 +32,7 @@ export default function MainContent({ feedBacks }: { feedBacks: FeedbackCoOwnerR
         <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-sm font-medium text-gray-600'>Đã chấp nhận</p>
+              <p className='text-sm font-medium text-gray-600'>Accepted</p>
               <p className='text-2xl font-bold text-gray-900 mt-1'>{feedBacks?.approvedFeedbacksCount ?? 0}</p>
             </div>
             <div className='w-12 h-12 bg-green-100 rounded-full flex items-center justify-center'>
@@ -44,7 +44,7 @@ export default function MainContent({ feedBacks }: { feedBacks: FeedbackCoOwnerR
         <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-5'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-sm font-medium text-gray-600'>Đã từ chối</p>
+              <p className='text-sm font-medium text-gray-600'>Rejected</p>
               <p className='text-2xl font-bold text-gray-900 mt-1'>{feedBacks?.rejectedFeedbacksCount ?? 0}</p>
             </div>
             <div className='w-12 h-12 bg-red-100 rounded-full flex items-center justify-center'>
@@ -55,7 +55,7 @@ export default function MainContent({ feedBacks }: { feedBacks: FeedbackCoOwnerR
       </div>
 
       <div className='mb-6 flex items-center gap-2'>
-        <span className='text-sm font-medium text-gray-600'>Trạng thái hợp đồng:</span>
+        <span className='text-sm font-medium text-gray-600'>Contract Status:</span>
         <span className='px-3 py-1.5 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-800'>
           {feedBacks?.contractStatus}
         </span>

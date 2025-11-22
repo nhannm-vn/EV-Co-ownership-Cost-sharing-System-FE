@@ -167,14 +167,14 @@ const CreateContract: React.FC = () => {
           onClick={() => setShowRejectModal(false)}
         >
           <div className='bg-white rounded-2xl p-6 w-[500px] shadow-2xl' onClick={(e) => e.stopPropagation()}>
-            <h3 className='text-xl font-bold mb-4 text-orange-600'> Lý do từ chối hợp đồng</h3>
+            <h3 className='text-xl font-bold mb-4 text-orange-600'> reason reject contract</h3>
             <p className='text-sm text-gray-600 mb-3'>
-              Vui lòng nêu rõ lý do từ chối để hệ thống có thể xem xét và điều chỉnh hợp đồng.
+              Please clearly state the reason for rejection so that the system can review and adjust the contract.
             </p>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              placeholder='Ví dụ: thời hạn hợp đồng chưa phù hợp, điều khoản chưa rõ ràng...'
+              placeholder='For example: contract duration is not suitable, terms are unclear...'
               rows={4}
               className='w-full border-2 border-gray-200 rounded-xl p-3 mb-4 focus:border-orange-500 focus:outline-none'
             />
