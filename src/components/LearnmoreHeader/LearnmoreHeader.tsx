@@ -1,14 +1,13 @@
 import { Link, NavLink } from 'react-router'
 import path from '../../constants/path'
 import classNames from 'classnames'
-import { LOGO_URL } from '../../constants/images'
 
 export default function LearnmoreHeader() {
   return (
     <header className='bg-black top-0 z-50 overflow-x-auto '>
       <div className='flex justify-between items-center px-6'>
         <Link to={path.home} className='flex w-28 h-28 items-center mr-24 hover:scale-90 transition-transform'>
-          <img src={LOGO_URL.black} alt='logo' className='block w-full h-full object-contain' />
+          <img src='src/assets/black.png' alt='logo' className='block w-full h-full object-contain' />
           <div className='ml-2 text-lg font-semibold text-slate-100 text-[14px]'>EVShare</div>
         </Link>
 
