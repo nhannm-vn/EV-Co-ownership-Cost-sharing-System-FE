@@ -42,7 +42,7 @@ export default function ModalConfirm({
             onClick={onClose}
             className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
           >
-            Đóng
+            close
           </button>,
 
           <button
@@ -51,7 +51,7 @@ export default function ModalConfirm({
             onClick={() => onCancel(bookingId as number)}
             className='bg-red-500 text-white font-bold text-base h-12 px-6 rounded-xl hover:bg-red-600 transition'
           >
-            Xác nhận HỦY đặt xe
+            Confirm Cancel Booking
           </button>
         ]
       : [
@@ -61,7 +61,7 @@ export default function ModalConfirm({
             onClick={onClose}
             className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
           >
-            Đóng
+            Close
           </button>
         ]
     : [
@@ -71,7 +71,7 @@ export default function ModalConfirm({
           onClick={onClose}
           className='bg-gray-100 text-gray-800 font-semibold text-base h-12 px-6 rounded-xl hover:bg-gray-200 transition'
         >
-          Hủy
+          close
         </button>,
 
         <button
@@ -80,7 +80,7 @@ export default function ModalConfirm({
           disabled={isLoadingConfirm}
           className='bg-gradient-to-br from-[#06B6D4] to-[#0EA5E9] text-white font-bold text-base h-12 px-6 rounded-xl hover:opacity-90 transition'
         >
-          Xác nhận ĐẶT xe
+          confirm booking car
         </button>
       ]
   return (
@@ -104,13 +104,13 @@ export default function ModalConfirm({
             { icon: <CarOutlined />, label: 'Xe', value: 'VinFast VF8 Plus (30A-123.45)' },
             {
               icon: <ClockCircleOutlined />,
-              label: 'Thời gian',
+              label: 'Time',
               value: `${selectedSlot.day} - ${selectedSlot.timeRange}`
             },
             {
               icon: <UserOutlined />,
-              label: 'Quota sau',
-              value: `${quotaUser.usedSlots + 1}/${quotaUser.totalSlots} (còn ${quotaUser.remainingSlots - 1})`
+              label: 'Quota after',
+              value: `${quotaUser.usedSlots + 1}/${quotaUser.totalSlots} (remaining ${quotaUser.remainingSlots - 1})`
             }
           ].map((item, idx) => (
             <div

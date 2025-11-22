@@ -64,30 +64,30 @@ export default function PaymentStatus() {
           <div className='flex justify-center mb-4'>
             <div className='bg-green-100 text-green-600 rounded-full p-4 text-5xl'>✔</div>
           </div>
-          <h1 className='text-2xl font-bold text-gray-800 mb-2'>Thanh toán thành công!</h1>
+          <h1 className='text-2xl font-bold text-gray-800 mb-2'>Payment Successful</h1>
           <p className='text-gray-600 mb-6'>
-            Cảm ơn bạn đã thanh toán qua <span className='font-semibold'>{txnData?.paymentMethod}</span>.
+            Thank you for your payment via <span className='font-semibold'>{txnData?.paymentMethod}</span>.
           </p>
 
           <div className='text-left text-gray-700 space-y-2 border-t border-gray-200 pt-4'>
             <p>
-              <strong>Số tiền:</strong> {formattedAmount}
+              <strong>Amount:</strong> {formattedAmount}
             </p>
             <p>
-              <strong>Phương thức:</strong> {txnData?.paymentMethod}
+              <strong>Payment Method:</strong> {txnData?.paymentMethod}
             </p>
             <p>
-              <strong>Mã giao dịch:</strong> {txnData?.transactionCode}
+              <strong>Transaction Code:</strong> {txnData?.transactionCode}
             </p>
             <p>
-              <strong>Ngày thanh toán:</strong> {formattedDate}
+              <strong>Payment Date:</strong> {formattedDate}
             </p>
             <p>
-              <strong>Nhóm:</strong> #{txnData?.groupId}
+              <strong>Group:</strong> #{txnData?.groupId}
             </p>
 
             <p>
-              <strong>Ghi chú:</strong> Thanh toán của bạn đã được ghi nhận thành công.
+              <strong>Notes:</strong> Your payment has been successfully recorded.
             </p>
           </div>
 
@@ -96,7 +96,7 @@ export default function PaymentStatus() {
               onClick={handleNavigate}
               className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition'
             >
-              Đóng
+              close
             </button>
           </div>
         </>
