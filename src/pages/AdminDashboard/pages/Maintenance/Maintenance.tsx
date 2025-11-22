@@ -50,7 +50,7 @@ type CreateFormErrors = {
   estimatedDurationDays?: string
 }
 
-// TYPE cho mutation input
+// TYPE for mutation input
 type CreateMaintenanceInput = {
   userId: number
   vehicleId: number
@@ -64,41 +64,42 @@ const validateForm = (values: CreateForm): CreateFormErrors => {
   const description = values.description.trim()
   const costNumber = Number(values.cost)
   const durationNumber = Number(values.estimatedDurationDays)
+
   if (!description) {
-    errors.description = 'Mô tả không được để trống.'
+    errors.description = 'Description is required.'
   } else if (description.length < 5) {
-    errors.description = 'Mô tả phải ít nhất 5 ký tự.'
+    errors.description = 'Description must be at least 5 characters.'
   }
+
   if (!values.cost) {
-    errors.cost = 'Chi phí ước tính bắt buộc.'
+    errors.cost = 'Estimated cost is required.'
   } else if (!Number.isFinite(costNumber) || costNumber <= 0) {
-    errors.cost = 'Chi phí phải là số dương.'
+    errors.cost = 'Cost must be a positive number.'
   }
+
   if (!values.estimatedDurationDays) {
-    errors.estimatedDurationDays = 'Thời gian dự kiến bắt buộc.'
+    errors.estimatedDurationDays = 'Expected duration is required.'
   } else if (!Number.isFinite(durationNumber) || durationNumber <= 0) {
-    errors.estimatedDurationDays = 'Thời gian phải là số nguyên dương.'
+    errors.estimatedDurationDays = 'Duration must be a positive number.'
   } else if (!Number.isInteger(durationNumber)) {
-    errors.estimatedDurationDays = 'Thời gian phải là số nguyên (ngày).'
+    errors.estimatedDurationDays = 'Duration must be an integer (days).'
   }
+
   return errors
 }
 
-// Modal dùng Tailwind hiệu ứng chuyển đổi
+// Modal using Tailwind transition
 function Modal({ show, onClose, children }: { show: boolean; onClose: () => void; children: React.ReactNode }) {
   if (!show) return null
+
   return (
-    <div
-      className={`fixed inset-0 z-30 bg-black/40 flex justify-center items-center transition-opacity duration-300 ${show ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-    >
-      <div
-        className={`bg-white p-6 rounded-2xl shadow-2xl border-2 border-teal-500/20 max-w-md w-full relative transition-transform transition-opacity duration-300 ${show ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
-      >
+    <div className='fixed inset-0 z-30 bg-black/40 flex justify-center items-center transition-opacity duration-300'>
+      <div className='bg-white p-6 rounded-2xl shadow-2xl border-2 border-teal-500/20 max-w-md w-full relative transition-transform duration-300 scale-100 opacity-100'>
         <button
           className='absolute top-2 right-2 text-teal-700 text-xl rounded-full hover:bg-teal-50 p-1'
           onClick={onClose}
-          aria-label='Đóng'
-          tabIndex={0}
+          aria-label='Close'
+          type='button'
         >
           ×
         </button>
@@ -111,7 +112,7 @@ function Modal({ show, onClose, children }: { show: boolean; onClose: () => void
 function MaintenanceList() {
   const queryClient = useQueryClient()
 
-  // Query danh sách xe/người dùng
+  // Query user/vehicle list
   const {
     data: userVehicleList = [],
     isLoading: loadingUser,
@@ -122,7 +123,9 @@ function MaintenanceList() {
     queryFn: () => technicianApi.getAllUserReport().then((res) => res.data)
   })
 
-  // Query maintenance đã tạo
+  console.log(userVehicleList)
+
+  // Query created maintenances
   const {
     data: maintenances = [],
     isLoading: loadingMaint,
@@ -133,7 +136,7 @@ function MaintenanceList() {
     queryFn: () => technicianApi.getAllMaintance().then((res) => res.data)
   })
 
-  // State cho modal và form
+  // State for modal and form
   const [showModal, setShowModal] = useState(false)
   const [form, setForm] = useState<CreateForm>({
     userId: null,
@@ -145,11 +148,11 @@ function MaintenanceList() {
   const [formErrors, setFormErrors] = useState<CreateFormErrors>({})
   const [createErrorMessage, setCreateErrorMessage] = useState<string | null>(null)
 
-  // Mutation tạo yêu cầu bảo trì
+  // Mutation to create maintenance request
   const createMutation = useMutation<unknown, unknown, CreateMaintenanceInput>({
     mutationFn: (data) => technicianApi.createMantainance(data, data.vehicleId),
     onSuccess: () => {
-      toast.success('Tạo yêu cầu bảo trì thành công!')
+      toast.success('Maintenance request created successfully!')
       setShowModal(false)
       setFormErrors({})
       setCreateErrorMessage(null)
@@ -164,19 +167,19 @@ function MaintenanceList() {
       queryClient.invalidateQueries({ queryKey: ['technician', 'myMaintenances'] })
     },
     onError: () => {
-      setCreateErrorMessage('Không thể tạo yêu cầu bảo trì. Vui lòng thử lại.')
+      setCreateErrorMessage('Failed to create maintenance request. Please try again.')
     }
   })
 
-  // Mutation đánh dấu hoàn thành, chỉ dùng khi status là FUNDED
+  // Mutation to mark as complete (only when status = FUNDED)
   const completeMutation = useMutation<unknown, unknown, { id: number }>({
     mutationFn: (data) => technicianApi.completeMantainance(String(data.id)),
     onSuccess: () => {
-      toast.success('Đã đánh dấu hoàn thành!')
+      toast.success('Marked as completed!')
       queryClient.invalidateQueries({ queryKey: ['technician', 'myMaintenances'] })
     },
     onError: () => {
-      toast.error('Không thể cập nhật trạng thái. Thử lại sau.')
+      toast.error('Unable to update status. Please try again later.')
     }
   })
 
@@ -206,13 +209,16 @@ function MaintenanceList() {
   const handleCreate = (e: FormEvent) => {
     e.preventDefault()
     if (createMutation.isPending) return
+
     if (!form.userId || !form.vehicleId) {
-      setCreateErrorMessage('Thiếu thông tin xe hoặc người dùng!')
+      setCreateErrorMessage('Missing vehicle or user information!')
       return
     }
+
     const errors = validateForm(form)
     setFormErrors(errors)
     if (Object.keys(errors).length > 0) return
+
     createMutation.mutate({
       userId: form.userId,
       vehicleId: form.vehicleId,
@@ -226,41 +232,51 @@ function MaintenanceList() {
   if (errorUser) return <div className='text-rose-600 p-6'>{errorUserMsg?.message}</div>
   if (errorMaint) return <div className='text-rose-600 p-6'>{errorMaintMsg?.message}</div>
 
+  const selectedVehicle =
+    form.vehicleId && form.userId
+      ? userVehicleList.find((u) => u.vehicleId === form.vehicleId && u.userId === form.userId)
+      : null
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-teal-50 via-slate-50 to-white flex flex-col px-2 md:px-10 py-8'>
       <div className='w-full max-w-4xl mx-auto space-y-10'>
-        {/* Danh sách card xe/người */}
+        {/* List of vehicles/users needing maintenance */}
         <div>
-          <h2 className='text-xl font-bold text-teal-700 mb-4'>Danh sách xe/người cần bảo trì</h2>
-          <div className='flex flex-wrap gap-6'>
-            {userVehicleList.length === 0 && <div className='text-slate-500'>Không có xe nào cần bảo trì.</div>}
-            {userVehicleList.map((vehicle) => (
+          <h2 className='text-xl font-bold text-teal-700 mb-4'>List of Vehicles/Users Needing Maintenance</h2>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+            {userVehicleList.length === 0 && (
+              <div className='text-slate-500 col-span-full'>No vehicles require maintenance.</div>
+            )}
+            {userVehicleList.map((vehicle, index) => (
               <div
-                key={vehicle.vehicleId}
-                className='flex flex-col flex-1 min-w-[250px] max-w-[310px] bg-white border border-teal-200 rounded-2xl shadow-md hover:shadow-lg transition p-4 group'
+                key={`${vehicle.userId}-${vehicle.vehicleId}-${index}`}
+                className='flex flex-col bg-white border border-teal-200 rounded-2xl shadow-md hover:shadow-lg transition p-4 group'
               >
                 <div>
                   <span className='block font-bold text-slate-900 text-base'>{vehicle.vehicleModel}</span>
                   <span className='block text-teal-600 text-sm mb-1'>{vehicle.licensePlate}</span>
                   <span className='text-slate-700 text-sm'>
-                    Chủ xe: <span className='font-medium'>{vehicle.userName}</span>
+                    Owner: <span className='font-medium'>{vehicle.userName}</span>
                   </span>
                 </div>
                 <button
-                  className='w-full mt-4 rounded-xl bg-teal-600 text-white font-semibold py-2 shadow hover:bg-teal-700 transition'
+                  type='button'
+                  className='w-full mt-4 rounded-xl bg-teal-600 text-white font-semibold py-2 shadow hover:bg-teal-700 transition disabled:opacity-60'
                   onClick={() => handleOpenCreate(vehicle)}
+                  disabled={createMutation.isPending}
                 >
-                  Tạo yêu cầu bảo trì
+                  Create Maintenance Request
                 </button>
               </div>
             ))}
           </div>
         </div>
-        {/* Danh sách maintenance */}
+
+        {/* List of existing maintenance requests */}
         <div>
-          <h2 className='text-xl font-bold text-teal-700 mb-4'>Yêu cầu bảo trì đã gửi</h2>
+          <h2 className='text-xl font-bold text-teal-700 mb-4'>Submitted Maintenance Requests</h2>
           <div className='bg-white border border-teal-200 rounded-2xl shadow px-2 py-4 max-h-[400px] overflow-y-auto'>
-            {maintenances.length === 0 && <div className='text-slate-500 px-4'>Chưa có yêu cầu nào.</div>}
+            {maintenances.length === 0 && <div className='text-slate-500 px-4'>No requests yet.</div>}
             <ul className='space-y-2'>
               {maintenances.map((item) => (
                 <li
@@ -283,12 +299,12 @@ function MaintenanceList() {
                         disabled={completeMutation.isPending}
                         onClick={() => completeMutation.mutate({ id: item.id })}
                       >
-                        {completeMutation.isPending ? 'Đang lưu...' : 'Đánh dấu hoàn thành'}
+                        {completeMutation.isPending ? 'Saving...' : 'Mark as Completed'}
                       </button>
                     )}
                     {item.status === 'COMPLETED' && (
                       <span className='text-xs px-3 py-1 rounded-xl bg-emerald-200 text-emerald-800 font-medium'>
-                        Hoàn thành
+                        Completed
                       </span>
                     )}
                     <span className='text-xs text-slate-400'>{new Date(item.createdAt).toLocaleDateString()}</span>
@@ -298,23 +314,16 @@ function MaintenanceList() {
             </ul>
           </div>
         </div>
-        {/* Modal tạo mới */}
+
+        {/* Modal for creating new requests */}
         <Modal show={showModal} onClose={() => setShowModal(false)}>
-          <h3 className='text-lg font-bold text-teal-700 mb-2'>Tạo yêu cầu bảo trì</h3>
-          {form.vehicleId && form.userId && (
+          <h3 className='text-lg font-bold text-teal-700 mb-2'>Create Maintenance Request</h3>
+          {selectedVehicle && (
             <div className='mb-3 text-slate-600 text-sm'>
-              Xe:{' '}
-              <span className='font-semibold text-black'>
-                {userVehicleList.find((u) => u.vehicleId === form.vehicleId && u.userId === form.userId)?.vehicleModel}
-              </span>
-              <span className='ml-2 text-teal-700'>
-                {userVehicleList.find((u) => u.vehicleId === form.vehicleId && u.userId === form.userId)?.licensePlate}
-              </span>
+              Vehicle: <span className='font-semibold text-black'>{selectedVehicle.vehicleModel}</span>
+              <span className='ml-2 text-teal-700'>{selectedVehicle.licensePlate}</span>
               <br />
-              Chủ xe:{' '}
-              <span className='font-semibold text-black'>
-                {userVehicleList.find((u) => u.vehicleId === form.vehicleId && u.userId === form.userId)?.userName}
-              </span>
+              Owner: <span className='font-semibold text-black'>{selectedVehicle.userName}</span>
             </div>
           )}
           {createErrorMessage && (
@@ -324,7 +333,7 @@ function MaintenanceList() {
           )}
           <form onSubmit={handleCreate} className='space-y-3' autoComplete='off'>
             <div>
-              <label className='block text-xs font-medium text-teal-700 mb-1.5'>Mô tả bảo trì</label>
+              <label className='block text-xs font-medium text-teal-700 mb-1.5'>Maintenance Description</label>
               <textarea
                 name='description'
                 rows={2}
@@ -333,14 +342,14 @@ function MaintenanceList() {
                     ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500'
                     : 'border-slate-200 focus:border-teal-600 focus:ring-teal-600'
                 }`}
-                placeholder='VD: Thay nhớt, kiểm tra phanh...'
+                placeholder='e.g., Oil change, brake inspection...'
                 value={form.description}
                 onChange={handleChange}
               />
               {formErrors.description && <div className='mt-1 text-[12px] text-rose-600'>{formErrors.description}</div>}
             </div>
             <div>
-              <label className='block text-xs font-medium text-teal-700 mb-1.5'>Chi phí ước tính</label>
+              <label className='block text-xs font-medium text-teal-700 mb-1.5'>Estimated Cost</label>
               <input
                 type='number'
                 name='cost'
@@ -349,14 +358,14 @@ function MaintenanceList() {
                     ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500'
                     : 'border-slate-200 focus:border-teal-600 focus:ring-teal-600'
                 }`}
-                placeholder='VD: 500000'
+                placeholder='e.g., 500000'
                 value={form.cost}
                 onChange={handleChange}
               />
               {formErrors.cost && <div className='mt-1 text-[12px] text-rose-600'>{formErrors.cost}</div>}
             </div>
             <div>
-              <label className='block text-xs font-medium text-teal-700 mb-1.5'>Thời gian dự kiến (ngày)</label>
+              <label className='block text-xs font-medium text-teal-700 mb-1.5'>Expected Duration (days)</label>
               <input
                 type='number'
                 name='estimatedDurationDays'
@@ -365,7 +374,7 @@ function MaintenanceList() {
                     ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500'
                     : 'border-slate-200 focus:border-teal-600 focus:ring-teal-600'
                 }`}
-                placeholder='VD: 3'
+                placeholder='e.g., 3'
                 value={form.estimatedDurationDays}
                 onChange={handleChange}
               />
@@ -380,14 +389,14 @@ function MaintenanceList() {
                 className='rounded-xl border border-teal-200 bg-white px-4 py-2 text-xs md:text-sm font-medium text-teal-700 hover:bg-teal-50'
                 disabled={createMutation.isPending}
               >
-                Hủy
+                Cancel
               </button>
               <button
                 type='submit'
                 disabled={createMutation.isPending || !form.userId || !form.vehicleId}
                 className='rounded-xl bg-teal-600 px-5 py-2 text-xs md:text-sm font-semibold text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 focus:ring-offset-white disabled:opacity-60 disabled:cursor-not-allowed'
               >
-                {createMutation.isPending ? 'Đang tạo...' : 'Tạo yêu cầu'}
+                {createMutation.isPending ? 'Creating...' : 'Create Request'}
               </button>
             </div>
           </form>
