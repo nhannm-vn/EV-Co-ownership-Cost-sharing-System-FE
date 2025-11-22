@@ -4,8 +4,7 @@ const categories: Category[] = [
   { id: 1, name: 'Understanding EV-Share', key: 'Understanding-EV-Share' },
   { id: 2, name: 'Pricing', key: 'Pricing' },
   { id: 3, name: 'Car Delivery', key: 'Car-Delivery' },
-  { id: 4, name: 'Car Usage Policy', key: 'Car-Usage-Policy' },
-  { id: 5, name: 'Challans / Accident / Thefts', key: 'Challans-Accident-Thefts' }
+  { id: 4, name: 'Car Usage Policy', key: 'Car-Usage-Policy' }
 ]
 
 const faqs: FagSection = {
@@ -61,28 +60,12 @@ const faqs: FagSection = {
     },
     {
       question: 'Are there mileage or usage limits?',
-      answer: 'Each co-ownership plan may include limits, which can be adjusted based on group needs.'
+      answer:
+        'Each co-ownership plan may include limits, which can be adjusted based on  quota have been caculate by percentage ownership.'
     },
     {
       question: 'Can I track my usage history?',
       answer: 'Yes, each co-owner can view their driving time, mileage, and associated costs in the platform dashboard.'
-    }
-  ],
-  'Challans-Accident-Thefts': [
-    {
-      question: 'Who pays for traffic fines (challans)?',
-      answer:
-        'Each co-owner is responsible for fines incurred during their usage period, as tracked by the booking system.'
-    },
-    {
-      question: 'What happens if the EV is involved in an accident?',
-      answer:
-        'Insurance covers most damages, but the responsible co-owner may need to cover deductibles or non-insured costs.'
-    },
-    {
-      question: 'How does EV-Share handle theft',
-      answer:
-        'In case of theft, the insurance claim process is managed by EV-Share, and co-owners are kept informed throughout.'
     }
   ]
 }
