@@ -1,13 +1,13 @@
 const getTooltip = ({ type, bookedBy }: { type: string; bookedBy: string | null }) => {
   switch (type) {
     case 'AVAILABLE':
-      return 'Chỗ trống, bạn có thể đặt'
+      return 'you can booked'
     case 'BOOKED_SELF':
-      return 'Bạn đã đặt slot này, click để hủy'
+      return 'you have been booked, click to cancel'
     case 'BOOKED_OTHER':
-      return bookedBy ? `Đã được đặt bởi ${bookedBy}` : 'Đã được đặt'
+      return bookedBy ? ` have been booked by ${bookedBy}` : 'booked'
     case 'MAINTENANCE':
-      return 'Đang bảo trì, không thể đặt'
+      return 'maintenance can not booking'
     default:
       return ''
   }
