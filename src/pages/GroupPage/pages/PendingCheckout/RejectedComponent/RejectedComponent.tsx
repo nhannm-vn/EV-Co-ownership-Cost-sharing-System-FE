@@ -12,8 +12,8 @@ export default function RejectedComponent() {
       <div className='max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden'>
         <div className='bg-gradient-to-r from-red-500 to-rose-600 px-8 py-10 text-white text-center'>
           <CloseCircleOutlined className='text-7xl mb-4' />
-          <h1 className='text-4xl font-bold mb-2'>Kiểm Tra Thất Bại</h1>
-          <p className='text-red-100 text-lg'>Xe của bạn chưa đạt yêu cầu</p>
+          <h1 className='text-4xl font-bold mb-2'>Inspection Failed</h1>
+          <p className='text-red-100 text-lg'>Your vehicle did not pass the inspection</p>
         </div>
 
         <div className='p-8 space-y-6'>
@@ -21,8 +21,8 @@ export default function RejectedComponent() {
             <div className='flex items-start gap-3'>
               <CloseCircleOutlined className='text-red-600 text-2xl flex-shrink-0 mt-1' />
               <div>
-                <p className='font-bold text-red-800 text-lg mb-2'>Xe chưa đạt yêu cầu kiểm tra</p>
-                <p className='text-red-700'>Vui lòng liên hệ với kỹ thuật viên để được hỗ trợ khắc phục các vấn đề.</p>
+                <p className='font-bold text-red-800 text-lg mb-2'>Vehicle did not pass inspection</p>
+                <p className='text-red-700'>Please contact the technician for assistance in resolving the issues.</p>
               </div>
             </div>
           </div>
@@ -31,7 +31,7 @@ export default function RejectedComponent() {
               onClick={handleBack}
               className='flex-1 bg-white border-2 border-gray-300 text-gray-700 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all'
             >
-              Về trang kiểm tra
+              Back to CHECKQR Page
             </button>
           </div>
         </div>
