@@ -399,21 +399,21 @@ const CreateContract: React.FC = () => {
                   disabled={approveMemberMutation.isPending}
                   className='flex-1 px-6 py-3 bg-orange text-white font-bold rounded-xl border-2 border-orange-500 hover:bg-orange-50 disabled:opacity-50 transition-colors'
                 >
-                  {approveMemberMutation.isPending ? ' Đang gửi...' : 'Từ chối'}
+                  {approveMemberMutation.isPending ? ' Sending...' : 'Reject'}
                 </button>
                 <button
                   onClick={onApproveMember}
                   disabled={approveMemberMutation.isPending}
                   className='flex-1 px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 disabled:opacity-50 transition-colors'
                 >
-                  {approveMemberMutation.isPending ? ' Đang xử lý...' : ' Xác nhận'}
+                  {approveMemberMutation.isPending ? ' Processing...' : ' Confirmed'}
                 </button>
               </div>
             )}
             {dataContract?.contract?.status === 'SIGNED' && (
               <div className='inline-flex items-center gap-2 bg-yellow-50 text-yellow-700 px-4 py-2 rounded-xl border border-yellow-200'>
                 <ClockCircleOutlined className='text-yellow-500 text-lg' />
-                <span className='font-medium'>Đang chờ hệ thống phê duyệt hợp đồng</span>
+                <span className='font-medium'>Waiting for system to approve the contract</span>
               </div>
             )}
           </div>
