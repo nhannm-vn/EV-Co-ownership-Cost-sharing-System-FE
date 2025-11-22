@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, UserOutlined } from '@ant-design/icons'
-import type { FeedbackCoOwnerResponse } from '../../../../../../../types/api/admin.type'
+import type { FeedbackCoOwnerResponse } from '../../../../../../types/api/admin.type'
 
 export default function MainContent({ feedBacks }: { feedBacks: FeedbackCoOwnerResponse }) {
   return (

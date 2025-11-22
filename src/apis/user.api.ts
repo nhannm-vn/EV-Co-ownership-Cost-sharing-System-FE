@@ -1,6 +1,6 @@
 // file chứa những method call api cho user/co-owner
 
-import type { CheckoutForm } from '../pages/GroupPage/pages/CheckOut/CheckOut'
+import type { CheckoutForm } from '../pages/GroupPage/pages/CheckOutResult/CheckOutResult'
 import type {
   CreateVotingPayload,
   CreateVotingResponse,
